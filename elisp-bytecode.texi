@@ -66,22 +66,14 @@ Binds a variable
 
 Calls a function.  The opcode argument specifies the number of
 arguments to pass to the function from the stack, excluding the
-function itself.  Thus, (exchange-point-and-mark) generates:
+function itself.  Thus, @code{exchange-point-and-mark)} generates:
 
-@multitable @columnfractions .16 .16 .66
-@item PC
-@tab byte
-@tab Instruction
-@item     0
-@tab 192
-@tab (byte-constant exchange-point-and-mark)
-@item     1
-@tab  32
-@tab (byte-call . 0)
-@item     2
-@tab 135
-@tab (byte-return . 0)
-@end multitable
+@verbatim
+PC byte Instruction
+0  192  (byte-constant exchange-point-and-mark)
+1   32  (byte-call . 0)
+2  135  (byte-return . 0)
+@end verbatim
 
 @item byte-unbind (40--47)
 @kindex byte-unbind
@@ -102,7 +94,8 @@ instruction 129.
 
 @item byte-constant (192--255)
 @kindex byte-constant
-A constant reference
+A constant reference, usually greater than 63; there are special instructions
+to load constants from 0 to 63.
 
 @end table
 
@@ -172,217 +165,242 @@ Make a binding recording buffer, point, and mark.
 
 @multitable @columnfractions .06 .30 .55
 @item Code @tab Instruction @tab Description
-@item 000
+@item @verb{|  0|}
 @tab Not used; see @code{dup}
 @tab
-@item 001
+@item @verb{|  1|}
 @tab @code{byte-stack-ref 1}
 @tab stack reference 1
-@item 002
+@item @verb{|  2|}
 @tab @code{byte-stack-ref 2}
 @tab stack reference 2
-@item 003
+@item @verb{|  3|}
 @tab @code{byte-stack-ref 3}
 @tab stack reference 3
-@item 004
+@item @verb{|  4|}
 @tab @code{byte-stack-ref 4}
 @tab stack reference 4
-@item 005
+@item @verb{|  5|}
 @tab @code{byte-stack-ref 5}
 @tab stack reference 5
-@item 006
+@item @verb{|  6|}
 @tab @code{byte-stack-ref 6}
 @tab stack reference 0--255
-@item 007
+@item @verb{|  7|}
 @tab @code{byte-stack-ref 7}
 @tab stack reference 0--65535
-@item 008
+@item @verb{|  8|}
 @tab @code{byte-varref 0}
 @tab variable reference 0
-@item 009
+@item @verb{|  9|}
 @tab @code{byte-varref 1}
 @tab variable reference 1
-@item 010
+@item @verb{| 10|}
 @tab @code{byte-varref 2}
 @tab variable reference 2
-@item 011
+@item @verb{| 11|}
 @tab @code{byte-varref 3}
 @tab variable reference 3
-@item 012
+@item @verb{| 12|}
 @tab @code{byte-varref 4}
 @tab variable reference 4
-@item 013
+@item @verb{| 13|}
 @tab @code{byte-varref 5}
 @tab variable reference 5
-@item 014
+@item @verb{| 14|}
 @tab @code{byte-varref 6}
-@tab variable reference 0--255
-@item 015
+@tab variable reference 0--255 (usually greater than 5)
+@item @verb{| 15|}
 @tab @code{byte-varref 7}
-@tab variable reference 0--65535
-@item 016
+@tab variable reference 0--65535 (usually greater than 255)
+@item @verb{| 16|}
 @tab @code{byte-varset 0}
 @tab Sets a variable
-@item 017
+@item @verb{| 17|}
 @tab @code{byte-varset 1}
 @tab Sets a variable
-@item 018
+@item @verb{| 18|}
 @tab @code{byte-varset 2}
 @tab Sets a variable
-@item 019
+@item @verb{| 19|}
 @tab @code{byte-varset 3}
 @tab Sets a variable
-@item 020
+@item @verb{| 20|}
 @tab @code{byte-varset 4}
 @tab Sets a variable
-@item 021
+@item @verb{| 21|}
 @tab @code{byte-varset 5}
 @tab Sets a variable
-@item 022
+@item @verb{| 22|}
 @tab @code{byte-varset 6}
 @tab Sets a variable
-@item 023
+@item @verb{| 23|}
 @tab @code{byte-varset 7}
 @tab Sets a variable
-@item 024
+@item @verb{| 24|}
 @tab @code{byte-varbind}
 @tab Binds a variable
-@item 032
+@item @verb{| 32|}
 @tab @code{byte-call}
 @tab Calls a function
-@item 040
+@item @verb{| 40|}
 @tab @code{byte-unbind}
 @tab Unbinds special bindings
-@item 129
+@item @verb{| 51|}
+@tab @tab Unused
+@item @verb{| 52|}
+@tab @tab Unused
+@item @verb{| 53|}
+@tab @tab Unused
+@item @verb{| 54|}
+@tab @tab Unused
+@item @verb{| 55|}
+@tab @tab Unused
+@item @verb{| 56|}
+@tab @code{byte-nth}
+@tab Call @code{nth} with two arguments.
+@item @verb{| 57|}
+@tab @code{byte-symbolp}
+@tab Call @code{symbolp} with one argument.
+@item @verb{|129|}
 @tab @code{byte-constant}
 @tab Load a constant 0--65535 (but generally greater than 63)
-@item 192
+@item @verb{|136|}
+@tab @code{byte-discard}
+@tab Discard top stack value
+@item @verb{|137|}
+@tab @code{byte-discard}
+@tab Duplicate top stack value
+@item @verb{|138|}
+@tab @code{byte-save-excursion}
+@tab Make a binding recording buffer, point, and mark.
+@item @verb{|192|}
 @tab @code{byte-constant 0}
-@item 193
+@item @verb{|193|}
 @tab @code{byte-constant 1}
-@item 194
+@item @verb{|194|}
 @tab @code{byte-constant 2}
-@item 195
+@item @verb{|195|}
 @tab @code{byte-constant 3}
-@item 196
+@item @verb{|196|}
 @tab @code{byte-constant 4}
-@item 197
+@item @verb{|197|}
 @tab @code{byte-constant 5}
-@item 198
+@item @verb{|198|}
 @tab @code{byte-constant 6}
-@item 199
+@item @verb{|199|}
 @tab @code{byte-constant 7}
-@item 200
+@item @verb{|200|}
 @tab @code{byte-constant 8}
-@item 201
+@item @verb{|201|}
 @tab @code{byte-constant 9}
-@item 202
+@item @verb{|202|}
 @tab @code{byte-constant 10}
-@item 203
+@item @verb{|203|}
 @tab @code{byte-constant 11}
-@item 204
+@item @verb{|204|}
 @tab @code{byte-constant 12}
-@item 205
+@item @verb{|205|}
 @tab @code{byte-constant 13}
-@item 206
+@item @verb{|206|}
 @tab @code{byte-constant 14}
-@item 207
+@item @verb{|207|}
 @tab @code{byte-constant 15}
-@item 208
+@item @verb{|208|}
 @tab @code{byte-constant 16}
-@item 209
+@item @verb{|209|}
 @tab @code{byte-constant 17}
-@item 210
+@item @verb{|210|}
 @tab @code{byte-constant 18}
-@item 211
+@item @verb{|211|}
 @tab @code{byte-constant 19}
-@item 212
+@item @verb{|212|}
 @tab @code{byte-constant 20}
-@item 213
+@item @verb{|213|}
 @tab @code{byte-constant 21}
-@item 214
+@item @verb{|214|}
 @tab @code{byte-constant 22}
-@item 215
+@item @verb{|215|}
 @tab @code{byte-constant 23}
-@item 216
+@item @verb{|216|}
 @tab @code{byte-constant 24}
-@item 217
+@item @verb{|217|}
 @tab @code{byte-constant 25}
-@item 218
+@item @verb{|218|}
 @tab @code{byte-constant 26}
-@item 219
+@item @verb{|219|}
 @tab @code{byte-constant 27}
-@item 220
+@item @verb{|220|}
 @tab @code{byte-constant 28}
-@item 221
+@item @verb{|221|}
 @tab @code{byte-constant 29}
-@item 222
+@item @verb{|222|}
 @tab @code{byte-constant 30}
-@item 223
+@item @verb{|223|}
 @tab @code{byte-constant 31}
-@item 224
+@item @verb{|224|}
 @tab @code{byte-constant 32}
-@item 225
+@item @verb{|225|}
 @tab @code{byte-constant 33}
-@item 226
+@item @verb{|226|}
 @tab @code{byte-constant 34}
-@item 227
+@item @verb{|227|}
 @tab @code{byte-constant 35}
-@item 228
+@item @verb{|228|}
 @tab @code{byte-constant 36}
-@item 229
+@item @verb{|229|}
 @tab @code{byte-constant 37}
-@item 230
+@item @verb{|230|}
 @tab @code{byte-constant 38}
-@item 231
+@item @verb{|231|}
 @tab @code{byte-constant 39}
-@item 232
+@item @verb{|232|}
 @tab @code{byte-constant 40}
-@item 233
+@item @verb{|233|}
 @tab @code{byte-constant 41}
-@item 234
+@item @verb{|234|}
 @tab @code{byte-constant 42}
-@item 235
+@item @verb{|235|}
 @tab @code{byte-constant 43}
-@item 236
+@item @verb{|236|}
 @tab @code{byte-constant 44}
-@item 237
+@item @verb{|237|}
 @tab @code{byte-constant 45}
-@item 238
+@item @verb{|238|}
 @tab @code{byte-constant 46}
-@item 239
+@item @verb{|239|}
 @tab @code{byte-constant 47}
-@item 240
+@item @verb{|240|}
 @tab @code{byte-constant 48}
-@item 241
+@item @verb{|241|}
 @tab @code{byte-constant 49}
-@item 242
+@item @verb{|242|}
 @tab @code{byte-constant 50}
-@item 243
+@item @verb{|243|}
 @tab @code{byte-constant 51}
-@item 244
+@item @verb{|244|}
 @tab @code{byte-constant 52}
-@item 245
+@item @verb{|245|}
 @tab @code{byte-constant 53}
-@item 246
+@item @verb{|246|}
 @tab @code{byte-constant 54}
-@item 247
+@item @verb{|247|}
 @tab @code{byte-constant 55}
-@item 248
+@item @verb{|248|}
 @tab @code{byte-constant 56}
-@item 249
+@item @verb{|249|}
 @tab @code{byte-constant 57}
-@item 250
+@item @verb{|250|}
 @tab @code{byte-constant 58}
-@item 251
+@item @verb{|251|}
 @tab @code{byte-constant 59}
-@item 252
+@item @verb{|252|}
 @tab @code{byte-constant 60}
-@item 253
+@item @verb{|253|}
 @tab @code{byte-constant 61}
-@item 254
+@item @verb{|254|}
 @tab @code{byte-constant 62}
-@item 255
+@item @verb{|255|}
 @tab @code{byte-constant 63}
 @end multitable
 
