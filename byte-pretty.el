@@ -102,10 +102,15 @@ for texinfo input."
   "Recalculate the examples in elisp-bytecode.texi"
   (interactive)
   (goto-char (point-min))
-  (while (search-forward-regexp "@code{\\(.*\\)} generates:$" nil t)
-    (let* ((code (read (match-string 1)))
+  (while (search-forward-regexp "@code{\\([^}]*\\)} generates:$" nil t)
+    (let* ((lexical (save-excursion
+                      (beginning-of-line)
+                      (while (not (looking-at-p ".*@code"))
+                        (forward-line -1))
+                      (looking-at-p ".*lexical")))
+           (code (read (match-string 1)))
            (form (cond ((eq (car-safe code) 'defun)
-                        (eval code))
+                        (eval code lexical))
                        (t
                         `(lambda () ,code))))
            (comments nil))
