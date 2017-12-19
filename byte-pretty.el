@@ -90,8 +90,9 @@ for texinfo input."
     res))
 
 (defun byte-insert-comments (beg end comments)
+  (setq end (copy-marker end))
   (goto-char beg)
-  (while (search-forward-regexp "^ *\\([0-9]+\\).*$" end t)
+  (while (search-forward-regexp "^ *\\([0-9]+\\) +[0-9].*$" end t)
     (let ((comment (alist-get (read (match-string 1)) comments)))
       (when comment
         (insert comment))))
