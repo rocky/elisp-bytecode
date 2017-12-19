@@ -48,7 +48,9 @@ for texinfo input."
          (rbc (reverse bytecode))
          (pc (length bytes))
          (str "@end verbatim\n")
-	 (pc-width (format "%%%dd " (ceiling (log pc 10))))
+	 (width (max 2 (ceiling (log pc 10))))
+	 (pc-width (format "%%%dd  " width))
+	 (str-width (format "%%%ds " width))
 	 )
     (while (> pc 0)
       (if (eq (caar rbc) 'TAG)
@@ -61,7 +63,7 @@ for texinfo input."
             (setq lstr (concat (format "%S:\n" npc) lstr))
             (setq npc (cadr rbc)))
           (while (< (1+ npc) pc)
-            (setq str (concat "      "
+            (setq str (concat "         "
                               (byte--pretty-bytes (substring bytes (1- pc) pc))
                               "\n"
                               str))
@@ -69,12 +71,11 @@ for texinfo input."
           (setq str (concat lstr
                             (format pc-width npc)
                             (byte--pretty-bytes (substring bytes npc (1+ npc)))
-                            " "
+                            "   "
                             (format "%S\n" op)
                             str))
           (setq rbc (if (eq (car-safe op) 'TAG) (cdr rbc) (cddr rbc)))
           (setq pc npc))))
-    (setq str (concat "@verbatim\n"
-                      "PC byte Instruction\n"
-                      str))
+    (setq str (format "@verbatim\n%s Byte  Instruction\n%s"
+		      (format str-width "PC") str))
     str))
