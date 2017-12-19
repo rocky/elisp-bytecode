@@ -59,11 +59,11 @@ A stack reference
 @node byte-varref
 @unnumberedsubsec @code{byte-varref} (8--15)
 @kindex byte-varref
-Loads the value of a variable reference on the the evaluation stack.
+Loads the value of a variable reference on the evaluation stack.
 
 @subsubsection Example
 
-With dynamic binding is in effect, @code{(defun en(n) n)} generates:
+When dynamic binding is in effect, @code{(defun en(n) n)} generates:
 @verbatim
 PC byte Instruction
 0     8 (byte-varref n)  ;; loads variable n onto the stack
@@ -79,7 +79,7 @@ of the stack.
 
 @subsubsection Example
 
-With dynamic binding is in effect, @code{(defun en(n5) (setq n 5)} generates:
+When dynamic binding is in effect, @code{(defun n5(n) (setq n 5))} generates:
 @verbatim
 PC byte Instruction
 0   193 (byte-constant 5)
@@ -159,8 +159,32 @@ stack.
 @menu
 * byte-nth::
 * byte-symbolp::
+* byte-consp::
+* byte-stringp::
+* byte-listp::
+* byte-eq::
+* byte-memq::
+* byte-not::
+* byte-car::
+* byte-cdr::
+* byte-cons::
+* byte-list1::
+* byte-list2::
+* byte-list3::
+* byte-list4::
+* byte-length::
+* byte-aref::
+* byte-aset::
+* byte-symbol-value::
+* byte-symbol-function::
+* byte-set::
+* byte-fset::
+* byte-get::
+* byte-substring::
+* byte-concat2::
+* byte-concat3::
+* byte-concat4::
 @end menu
-
 
 @node byte-nth
 @unnumberedsubsec @code{byte-nth} (56)
@@ -170,111 +194,130 @@ Call @code{nth} with two arguments.
 @node byte-symbolp
 @unnumberedsubsec @code{byte-symbolp} (57)
 
-@table @asis
-@kindex byte-symbolp
-Call @code{symbolp} with one argument.
-
-@item byte-consp (58)
+@node byte-consp
+@unnumberedsubsec @code{byte-consp} (58)
 @kindex byte-consp
 Call @code{consp} with one argument.
 
-@item byte-stringp (59)
+@node byte-stringp
+@unnumberedsubsec @code{byte-stringp} (59)
 @kindex byte-stringp
 Call @code{stringp} with one argument.
 
-@item byte-listp (60)
+@node byte-listp
+@unnumberedsubsec @code{byte-listp} (60)
 @kindex byte-listp
 Call @code{listp} with one argument.
 
-@item byte-eq (61)
+@node byte-eq
+@unnumberedsubsec @code{byte-eq} (61)
 @kindex byte-eq
 Call @code{eq} with two arguments.
 
-@item byte-memq (62)
+@node byte-memq
+@unnumberedsubsec @code{byte-memq} (62)
 @kindex byte-memq
 Call @code{memq} with two arguments.
 
-@item byte-not (63)
+@node byte-not
+@unnumberedsubsec @code{byte-not} (63)
 @kindex byte-not
 Call @code{not} with one argument.
 
-@item byte-car (64)
+@node byte-car
+@unnumberedsubsec @code{byte-car} (64)
 @kindex byte-car
 Call @code{car} with one argument.
 
-@item byte-cdr (65)
+@node byte-cdr
+@unnumberedsubsec @code{byte-cdr} (65)
 @kindex byte-cdr
 Call @code{cdr} with one argument.
 
-@item byte-cons (66)
+@node byte-cons
+@unnumberedsubsec @code{byte-cons} (66)
 @kindex byte-cons
 Call @code{cons} with two arguments.
 
-@item byte-list1 (67)
+@node byte-list1
+@unnumberedsubsec @code{byte-list1} (67)
 @kindex byte-list1
 Call @code{list} with one argument.
 
-@item byte-list2 (68)
+@node byte-list2
+@unnumberedsubsec @code{byte-list2} (68)
 @kindex byte-list2
 Call @code{list} with two arguments.
 
-@item byte-list3 (69)
+@node byte-list3
+@unnumberedsubsec @code{byte-list3} (69)
 @kindex byte-list3
 Call @code{list} with three arguments.
 
-@item byte-list4 (70)
+@node byte-list4
+@unnumberedsubsec @code{byte-list4} (70)
 @kindex byte-list4
 Call @code{list} with four arguments.
 
-@item byte-length (71)
+@node byte-length
+@unnumberedsubsec @code{byte-length} (71)
 @kindex byte-length
 Call @code{length} with one argument.
 
-@item byte-aref (72)
+@node byte-aref
+@unnumberedsubsec @code{byte-aref} (72)
 @kindex byte-aref
 Call @code{aref} with two arguments.
 
-@item byte-aset (73)
+@node byte-aset
+@unnumberedsubsec @code{byte-aset} (73)
 @kindex byte-aset
 Call @code{aset} with three arguments.
 
-@item byte-symbol-value (74)
+@node byte-symbol-value
+@unnumberedsubsec @code{byte-symbol-value} (74)
 @kindex byte-symbol-value
 Call @code{symbol-value} with one argument.
 
-@item byte-symbol-function (75)
+@node byte-symbol-function
+@unnumberedsubsec @code{byte-symbol-function} (75)
 @kindex byte-symbol-function
 Call @code{symbol-function} with one argument.
 
-@item byte-set (76)
+@node byte-set
+@unnumberedsubsec @code{byte-set} (76)
 @kindex byte-set
 Call @code{set} with two arguments.
 
-@item byte-fset (77)
+@node byte-fset
+@unnumberedsubsec @code{byte-fset} (77)
 @kindex byte-fset
 Call @code{fset} with two arguments.
 
-@item byte-get (78)
+@node byte-get
+@unnumberedsubsec @code{byte-get} (78)
 @kindex byte-get
 Call @code{get} with two arguments.
 
-@item byte-substring (79)
+@node byte-substring
+@unnumberedsubsec @code{byte-substring} (79)
 @kindex byte-substring
 Call @code{substring} with three arguments.
 
-@item byte-concat2 (80)
+@node byte-concat2
+@unnumberedsubsec @code{byte-concat2} (80)
 @kindex byte-concat2
 Call @code{concat} with two arguments.
 
-@item byte-concat3 (81)
+@node byte-concat3
+@unnumberedsubsec @code{byte-concat3} (81)
 @kindex byte-concat3
 Call @code{concat} with three arguments.
 
-@item byte-concat4 (82)
+@node byte-concat4
+@unnumberedsubsec @code{byte-concat4} (82)
 @kindex byte-concat4
 Call @code{concat} with four arguments.
-
-@end table
 
 @node Stack Manipulation Instructions
 @section Stack Manipulation Instructions
