@@ -1,7 +1,7 @@
 checkout:
   post:
     - sudo apt-get update
-    - sudo apt-get -y --fix-missing install texinfo
+    - sudo apt-get -y --fix-missing install texinfo texlive
 
 test:
   override:
