@@ -1,0 +1,37 @@
+(defun byte--pretty-bytes (bytes)
+  (mapconcat (lambda (x) (format "%3d" x)) bytes " "))
+
+(defun byte-compile-decompile-pretty (form)
+  (let* ((v (byte-compile form))
+         (constvec (aref v 2))
+         (bytes (aref v 1))
+         (bytecode (byte-decompile-bytecode bytes constvec))
+         (rbc (reverse bytecode))
+         (pc (length bytes))
+         (str ""))
+    (while (> pc 0)
+      (if (eq (caar rbc) 'TAG)
+          (setq rbc (cdr rbc))
+        (let* ((op (car rbc))
+               (npc (cadr rbc))
+               (lstr ""))
+          (while (eq (car-safe npc) 'TAG)
+            (setq rbc (cdr rbc))
+            (setq lstr (concat (format "%S:\n" npc) lstr))
+            (setq npc (cadr rbc)))
+          (while (< (1+ npc) pc)
+            (setq str (concat "      "
+                              (byte--pretty-bytes (substring bytes (1- pc) pc))
+                              "\n"
+                              str))
+            (setq pc (1- pc)))
+          (setq str (concat lstr
+                            (format "%5d " npc)
+                            (byte--pretty-bytes (substring bytes npc (1+ npc)))
+                            " "
+                            (format "%S\n" op)
+                            str))
+          (setq rbc (if (eq (car-safe op) 'TAG) (cdr rbc) (cddr rbc)))
+          (setq pc npc))))
+    str))
+
