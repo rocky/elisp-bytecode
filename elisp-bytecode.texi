@@ -65,9 +65,9 @@ Loads the value of a variable reference on the evaluation stack.
 
 When dynamic binding is in effect, @code{(defun en(n) n)} generates:
 @verbatim
-PC byte Instruction
-0     8 (byte-varref n)  ;; loads variable n onto the stack
-1   135 (byte-return . 0)
+PC  Byte  Instruction
+ 0    8   (byte-varref n)  ;; loads variable n onto the stack
+ 1  135   (byte-return . 0)
 @end verbatim
 
 @node byte-varset
@@ -81,13 +81,12 @@ of the stack.
 
 When dynamic binding is in effect, @code{(defun n5(n) (setq n 5))} generates:
 @verbatim
-PC byte Instruction
-0   193 (byte-constant 5)
-1   137 (byte-dup . 0)
-2    16 (byte-varset n) ;; sets variable n
-3   135 (byte-return . 0)
+PC  Byte  Instruction
+ 0  193   (byte-constant 5)
+ 1  137   (byte-dup . 0)
+ 2   16   (byte-varset n) ;; sets variable n
+ 3  135   (byte-return . 0)
 @end verbatim
-
 
 @node byte-varbind
 @unnumberedsubsec @code{byte-varbind} (24--31)
@@ -107,10 +106,10 @@ function itself.
 
 @code{(exchange-point-and-mark)} generates:
 @verbatim
-PC byte Instruction
-0  192  (byte-constant exchange-point-and-mark)
-1   32  (byte-call . 0)
-2  135  (byte-return . 0)
+PC  Byte  Instruction
+ 0  192   (byte-constant exchange-point-and-mark)
+ 1   32   (byte-call . 0)
+ 2  135   (byte-return . 0)
 @end verbatim
 
 @node byte-unbind
@@ -142,9 +141,9 @@ bytecode sequence. The top value on the evaluation stack is the return value.
 @subsubsection Example
 @code{(defun one(n) 1)} generates:
 @verbatim
-PC byte Instruction
-0   192 (byte-constant 1)
-1   135 (byte-return . 0)
+PC  Byte  Instruction
+ 0  192   (byte-constant 1)
+ 1  135   (byte-return . 0)
 @end verbatim
 
 @node Simple Instructions
