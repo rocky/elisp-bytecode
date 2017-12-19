@@ -26,7 +26,7 @@ bytecode and LAP-code side-by-side."
                               (byte--pretty-bytes (substring bytes (1- pc) pc))
                               "\n"
                               str))
-n            (setq pc (1- pc)))
+            (setq pc (1- pc)))
           (setq str (concat lstr
                             (format "%5d " npc)
                             (byte--pretty-bytes (substring bytes npc (1+ npc)))
