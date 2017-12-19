@@ -62,7 +62,24 @@ Binds a variable
 @item byte-call (32--39)
 @kindex byte-call
 
-calls a function
+Calls a function.  The opcode argument specifies the number of
+arguments to pass to the function from the stack, excluding the
+function itself.  Thus, (exchange-point-and-mark) generates:
+
+@multitable @columnfractions .16 .16 .66
+@item PC
+@tab byte
+@tab Instruction
+@item     0
+@tab 192
+@tab (byte-constant exchange-point-and-mark)
+@item     1
+@tab  32
+@tab (byte-call . 0)
+@item     2
+@tab 135
+@tab (byte-return . 0)
+@end multitable
 
 @item byte-unbind (40--47)
 @kindex byte-unbind
