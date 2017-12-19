@@ -1,4 +1,4 @@
-.PHONY: info dvi html pdf ps all
+.PHONY: info dvi html pdf ps all mostlyclean
 
 SHELL = /bin/bash
 srcdir = .
@@ -18,7 +18,7 @@ PS_TARGETS = elisp-bytecode.ps
 srcdir = .
 buildinfodir = .
 
-all: elisp-bytecode.pdf
+all: elisp-bytecode.pdf elisp-bytecode.info
 
 info: $(buildinfodir)/elisp-bytecode.info
 dvi: $(DVI_TARGETS)
@@ -29,6 +29,15 @@ ps: $(PS_TARGETS)
 ENVADD = \
   MAKEINFO="$(MAKEINFO) $(MAKEINFO_OPTS)"
 
+mostlyclean:
+	rm -f *.aux *.log *.toc *.cp *.cps *.fn *.fns *.ky *.kys \
+	  *.op *.ops *.pg *.pgs *.tp *.tps *.vr *.vrs *.info
+
+clean: mostlyclean
+	rm -f $(DVI_TARGETS) $(HTML_TARGETS) $(PDF_TARGETS) $(PS_TARGETS)
+
 
 elisp-bytecode.pdf: $(srcs)
 	$(ENVADD) $(TEXI2PDF) $<
+
+clean:

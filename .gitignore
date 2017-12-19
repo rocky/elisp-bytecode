@@ -1,9 +1,8 @@
 *~
-/Makefile~
-/lap.aux
-/lap.info
-/lap.ky
-/lap.kys
-/lap.log
-/lap.pdf
-/lap.toc
+/*.aux
+/*.ky
+/*.kys
+/*.log
+/*.pdf
+/*.toc
+/elisp-bytecode.info
