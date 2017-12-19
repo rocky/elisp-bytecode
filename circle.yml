@@ -1,0 +1,7 @@
+checkout:
+  post:
+    - sudo apt-get -y install texinfo
+
+test:
+  override:
+    - make
