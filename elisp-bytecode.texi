@@ -24,6 +24,10 @@
 @menu
 * Argument-Packing Instructions::
 * Constant Instructions::
+* Return Instruction::
+* Simple Instructions::
+* Stack Manipulation Instructions::
+* Binding Instructions::
 @end menu
 
 @node Argument-Packing Instructions
@@ -80,6 +84,67 @@ instruction 129.
 @item byte-constant (192--255)
 @kindex byte-constant
 A constant reference
+
+@end table
+
+@node Return Instruction
+@section Return Instruction
+
+@table @asis
+
+@item byte-return (135)
+@kindex byte-return
+Return from function.  This is the last instruction in a function's
+bytecode sequence.
+
+@end table
+
+@node Simple Instructions
+@section Simple Instructions
+
+These instructions use up one byte, and are followed by the next
+instruction directly.  They are equivalent to calling an Emacs Lisp
+function with a fixed number of arguments.
+
+@table @asis
+
+@item byte-nth (56)
+@kindex byte-nth
+Call @code{nth} with two arguments.
+
+@item byte-symbolp (57)
+@kindex byte-symbolp
+Call @code{symbolp} with one argument.
+
+@end table
+
+@node Stack Manipulation Instructions
+@section Stack Manipulation Instructions
+
+@table @asis
+
+@item byte-discard (136)
+@kindex byte-discard
+Discard one value.
+
+@item byte-dup (137)
+@kindex byte-dup
+Duplicate one value.
+
+@end table
+
+@node Binding Instructions
+@section Binding Instructions
+
+These instructions manipulate the special-bindings stack by creating a
+new binding when executed.  They need to be balanced with
+@code{byte-unbind} instructions.
+
+@table @asis
+
+@item byte-save-excursion (138)
+@kindex byte-save-excursion
+Make a binding recording buffer, point, and mark.
 
 @end table
 
