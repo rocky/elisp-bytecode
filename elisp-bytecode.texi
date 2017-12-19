@@ -79,7 +79,7 @@ of the stack.
 
 @subsubsection Example
 
-With dynamic binding is in effect, @code{(defun en(n5) (setq n 5))} generates:
+With dynamic binding is in effect, @code{(defun n5(n) (setq n 5))} generates:
 @verbatim
 PC byte Instruction
 0   193 (byte-constant 5)
