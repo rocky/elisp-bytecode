@@ -58,7 +58,7 @@ Binds a variable
 
 calls a function
 
-@item byte-unbind (40-27)
+@item byte-unbind (40-47)
 @kindex byte-unbind
 
 Unbinds special bindings
