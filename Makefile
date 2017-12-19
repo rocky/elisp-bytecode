@@ -18,7 +18,7 @@ PS_TARGETS = elisp-bytecode.ps
 srcdir = .
 buildinfodir = .
 
-all: elisp-bytecode.pdf
+all: elisp-bytecode.pdf elisp-bytecode.info
 
 info: $(buildinfodir)/elisp-bytecode.info
 dvi: $(DVI_TARGETS)
