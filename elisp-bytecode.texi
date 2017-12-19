@@ -41,27 +41,40 @@ operand value is the byte following the opcode.  If the encoded value
 is 7, the actual operand value is the two-byte number following the
 opcode, in little-endian byte order.
 
-@table @asis
+@menu
+* byte-stack-ref::
+* byte-varref::
+* byte-varset::
+* byte-varbind::
+* byte-call::
+* byte-unbind::
+@end menu
 
-@item byte-stack-ref (1--7)
+@node byte-stack-ref
+@unnumberedsubsec @code{byte-stack-ref} (1--7)
 @kindex byte-stack-ref
+
 A stack reference
 
-@item byte-varref (8--15)
+@node byte-varref
+@unnumberedsubsec @code{byte-var-ref} (8--15)
 @kindex byte-varref
 A variable reference
 
-@item byte-varset (16--23)
+@node byte-varset
+@unnumberedsubsec @code{byte-varset} (16--23)
 @kindex byte-varset
 
 Sets a variable
 
-@item byte-varbind (24--31)
+@node byte-varbind
+@unnumberedsubsec @code{byte-varbind} (24--31)
 @kindex byte-varbind
 
 Binds a variable
 
-@item byte-call (32--39)
+@node byte-call
+@unnumberedsubsec @code{byte-call} (32--39)
 @kindex byte-call
 
 Calls a function.  The opcode argument specifies the number of
@@ -75,13 +88,11 @@ PC byte Instruction
 2  135  (byte-return . 0)
 @end verbatim
 
-@item byte-unbind (40--47)
+@node byte-unbind
+@unnumberedsubsec @code{byte-unbind} (40--47)
 @kindex byte-unbind
 
 Unbinds special bindings
-
-@end table
-
 
 @node Constant Instructions
 @section Constant Instructions
@@ -90,26 +101,18 @@ The instructions from opcode 192 to 255 encode a constant index from 0
 to 63 as part of the opcode.  For constants outside of that range, see
 instruction 129.
 
-@table @asis
-
-@item byte-constant (192--255)
+@unnumberedsubsec @code{byte-constant} (192--255)
 @kindex byte-constant
 A constant reference, usually greater than 63; there are special instructions
 to load constants from 0 to 63.
 
-@end table
-
 @node Return Instruction
 @section Return Instruction
 
-@table @asis
-
-@item byte-return (135)
+@unnumberedsubsec @code{byte-return} (135)
 @kindex byte-return
 Return from function.  This is the last instruction in a function's
 bytecode sequence.
-
-@end table
 
 @node Simple Instructions
 @section Simple Instructions
@@ -120,13 +123,21 @@ function with a fixed number of arguments: the arguments are popped
 from the stack, and a single return value is pushed back onto the
 stack.
 
-@table @asis
+@menu
+* byte-nth::
+* byte-symbolp::
+@end menu
 
-@item byte-nth (56)
+
+@node byte-nth
+@unnumberedsubsec @code{byte-nth} (56)
 @kindex byte-nth
 Call @code{nth} with two arguments.
 
-@item byte-symbolp (57)
+@node byte-symbolp
+@unnumberedsubsec @code{byte-symbolp} (57)
+
+@table @asis
 @kindex byte-symbolp
 Call @code{symbolp} with one argument.
 
@@ -235,17 +246,20 @@ Call @code{concat} with four arguments.
 @node Stack Manipulation Instructions
 @section Stack Manipulation Instructions
 
-@table @asis
+@menu
+* byte-discard::
+* byte-dup::
+@end menu
 
-@item byte-discard (136)
+@node byte-discard
+@unnumberedsubsec @code{byte-discard} (136)
 @kindex byte-discard
 Discard one value.
 
-@item byte-dup (137)
+@node byte-dup
+@unnumberedsubsec @code{byte-dup} (137)
 @kindex byte-dup
 Duplicate one value.
-
-@end table
 
 @node Binding Instructions
 @section Binding Instructions
@@ -254,13 +268,9 @@ These instructions manipulate the special-bindings stack by creating a
 new binding when executed.  They need to be balanced with
 @code{byte-unbind} instructions.
 
-@table @asis
-
-@item byte-save-excursion (138)
+@unnumberedsubsec @code{byte-save-excursion} (138)
 @kindex byte-save-excursion
 Make a binding recording buffer, point, and mark.
-
-@end table
 
 @node Opcode Table
 @chapter Opcode Table
@@ -586,16 +596,16 @@ Make a binding recording buffer, point, and mark.
 @chapter References
 
 @itemize
-@item @uref{http://git.savannah.gnu.org/cgit/emacs.git/tree/src/bytecode.c Execution of byte code produced by bytecomp.el}
-@item @uref{http://git.savannah.gnu.org/cgit/emacs.git/tree/lisp/emacs-lisp/bytecomp.el bytecomp.el --- compilation of Lisp code into byte code}
-@item @uref{http://git.savannah.gnu.org/cgit/emacs.git/tree/src/data.c data.c --- Primitive operations on Lisp data types}
-@item @uref{http://nullprogram.com/blog/2014/01/04/ Emacs Byte-code Internals}
+@item @uref{http://git.savannah.gnu.org/cgit/emacs.git/tree/src/bytecode.c, Execution of byte code produced by bytecomp.el}
+@item @uref{http://git.savannah.gnu.org/cgit/emacs.git/tree/lisp/emacs-lisp/bytecomp.el, bytecomp.el --- compilation of Lisp code into byte code}
+@item @uref{http://git.savannah.gnu.org/cgit/emacs.git/tree/src/data.c, data.c --- Primitive operations on Lisp data types}
+@item @uref{http://nullprogram.com/blog/2014/01/04/, Emacs Byte-code Internals}
 @item @uref{https://www.emacswiki.org/emacs/ByteCodeEngineering, Emacs Wiki ByteCodeEngineering}
-@item @uref{https://groups.google.com/forum/#!topic/gnu.emacs.sources/oMfZT_4Oxrc easm.el --- Assembler for Emacs' bytecode interpreter}
+@item @uref{https://groups.google.com/forum/#!topic/gnu.emacs.sources/oMfZT_4Oxrc easm.el, Assembler for Emacs' bytecode interpreter}
+@item @uref{https://github.com/rocky/elisp-decompile, Emacs Lisp Decompiler}
 @end itemize
 
 @node Instruction Index
-@chapter Index
 @unnumbered Instruction Index
 @printindex ky
 
