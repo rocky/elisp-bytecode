@@ -116,7 +116,9 @@ bytecode sequence.
 
 These instructions use up one byte, and are followed by the next
 instruction directly.  They are equivalent to calling an Emacs Lisp
-function with a fixed number of arguments.
+function with a fixed number of arguments: the arguments are popped
+from the stack, and a single return value is pushed back onto the
+stack.
 
 @table @asis
 
@@ -127,6 +129,106 @@ Call @code{nth} with two arguments.
 @item byte-symbolp (57)
 @kindex byte-symbolp
 Call @code{symbolp} with one argument.
+
+@item byte-consp (58)
+@kindex byte-consp
+Call @code{consp} with one argument.
+
+@item byte-stringp (59)
+@kindex byte-stringp
+Call @code{stringp} with one argument.
+
+@item byte-listp (60)
+@kindex byte-listp
+Call @code{listp} with one argument.
+
+@item byte-eq (61)
+@kindex byte-eq
+Call @code{eq} with two arguments.
+
+@item byte-memq (62)
+@kindex byte-memq
+Call @code{memq} with two arguments.
+
+@item byte-not (63)
+@kindex byte-not
+Call @code{not} with one argument.
+
+@item byte-car (64)
+@kindex byte-car
+Call @code{car} with one argument.
+
+@item byte-cdr (65)
+@kindex byte-cdr
+Call @code{cdr} with one argument.
+
+@item byte-cons (66)
+@kindex byte-cons
+Call @code{cons} with two arguments.
+
+@item byte-list1 (67)
+@kindex byte-list1
+Call @code{list} with one argument.
+
+@item byte-list2 (68)
+@kindex byte-list2
+Call @code{list} with two arguments.
+
+@item byte-list3 (69)
+@kindex byte-list3
+Call @code{list} with three arguments.
+
+@item byte-list4 (70)
+@kindex byte-list4
+Call @code{list} with four arguments.
+
+@item byte-length (71)
+@kindex byte-length
+Call @code{length} with one argument.
+
+@item byte-aref (72)
+@kindex byte-aref
+Call @code{aref} with two arguments.
+
+@item byte-aset (73)
+@kindex byte-aset
+Call @code{aset} with three arguments.
+
+@item byte-symbol-value (74)
+@kindex byte-symbol-value
+Call @code{symbol-value} with one argument.
+
+@item byte-symbol-function (75)
+@kindex byte-symbol-function
+Call @code{symbol-function} with one argument.
+
+@item byte-set (76)
+@kindex byte-set
+Call @code{set} with two arguments.
+
+@item byte-fset (77)
+@kindex byte-fset
+Call @code{fset} with two arguments.
+
+@item byte-get (78)
+@kindex byte-get
+Call @code{get} with two arguments.
+
+@item byte-substring (79)
+@kindex byte-substring
+Call @code{substring} with three arguments.
+
+@item byte-concat2 (80)
+@kindex byte-concat2
+Call @code{concat} with two arguments.
+
+@item byte-concat3 (81)
+@kindex byte-concat3
+Call @code{concat} with three arguments.
+
+@item byte-concat4 (82)
+@kindex byte-concat4
+Call @code{concat} with four arguments.
 
 @end table
 
@@ -262,6 +364,81 @@ Make a binding recording buffer, point, and mark.
 @item @verb{| 57|}
 @tab @code{byte-symbolp}
 @tab Call @code{symbolp} with one argument.
+@item @verb{| 58|}
+@tab @code{byte-consp}
+@tab Call @code{consp} with one argument.
+@item @verb{| 59|}
+@tab @code{byte-stringp}
+@tab Call @code{stringp} with one argument.
+@item @verb{| 60|}
+@tab @code{byte-listp}
+@tab Call @code{listp} with one argument.
+@item @verb{| 61|}
+@tab @code{byte-eq}
+@tab Call @code{eq} with two arguments.
+@item @verb{| 62|}
+@tab @code{byte-memq}
+@tab Call @code{memq} with two arguments.
+@item @verb{| 63|}
+@tab @code{byte-not}
+@tab Call @code{not} with one argument.
+@item @verb{| 64|}
+@tab @code{byte-car}
+@tab Call @code{car} with one argument.
+@item @verb{| 65|}
+@tab @code{byte-cdr}
+@tab Call @code{cdr} with one argument.
+@item @verb{| 66|}
+@tab @code{byte-cons}
+@tab Call @code{cons} with two arguments.
+@item @verb{| 67|}
+@tab @code{byte-list1}
+@tab Call @code{list} with one argument.
+@item @verb{| 68|}
+@tab @code{byte-list2}
+@tab Call @code{list} with two arguments.
+@item @verb{| 69|}
+@tab @code{byte-list3}
+@tab Call @code{list} with three arguments.
+@item @verb{| 70|}
+@tab @code{byte-list4}
+@tab Call @code{list} with four arguments.
+@item @verb{| 71|}
+@tab @code{byte-length}
+@tab Call @code{length} with one argument.
+@item @verb{| 72|}
+@tab @code{byte-aref}
+@tab Call @code{aref} with two arguments.
+@item @verb{| 73|}
+@tab @code{byte-aset}
+@tab Call @code{aset} with three arguments.
+@item @verb{| 74|}
+@tab @code{byte-symbol-value}
+@tab Call @code{symbol-value} with one argument.
+@item @verb{| 75|}
+@tab @code{byte-symbol-function}
+@tab Call @code{symbol-function} with one argument.
+@item @verb{| 76|}
+@tab @code{byte-set}
+@tab Call @code{set} with two arguments.
+@item @verb{| 77|}
+@tab @code{byte-fset}
+@tab Call @code{fset} with two arguments.
+@item @verb{| 78|}
+@tab @code{byte-get}
+@tab Call @code{get} with two argumments.
+@item @verb{| 79|}
+@tab @code{byte-substring}
+@tab Call @code{substring} with three arguments.
+@item @verb{| 80|}
+@tab @code{byte-concat2}
+@tab Call @code{concat} with two arguments.
+@item @verb{| 81|}
+@tab @code{byte-concat3}
+@tab Call @code{concat} with three arguments.
+@item @verb{| 82|}
+@tab @code{byte-concat4}
+@tab Call @code{concat} with four arguments.
 @item @verb{|129|}
 @tab @code{byte-constant}
 @tab Load a constant 0--65535 (but generally greater than 63)
