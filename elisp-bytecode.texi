@@ -12,7 +12,7 @@
 @top Emacs Lisp Bytecode Manual
 
 @menu
-* Lisp Bytecode Instructions::  Description all Emacs Lisp Bytecode Instructions
+* Lisp Bytecode Instructions::  Description of all Emacs Lisp Bytecode Instructions
 * Opcode Table::                Table of Bytecode Instruction ordered by Opcode Number
 * References::
 * Instruction Index::
@@ -23,6 +23,7 @@
 
 @menu
 * Argument-Packing Instructions::
+* Constant Instructions::
 @end menu
 
 @node Argument-Packing Instructions
@@ -36,30 +37,30 @@ opcode, in little-endian byte order.
 
 @table @asis
 
-@item byte-stack-ref (1-7)
+@item byte-stack-ref (1--7)
 @kindex byte-stack-ref
 A stack reference
 
-@item byte-varref (8-15)
+@item byte-varref (8--15)
 @kindex byte-varref
 A variable reference
 
-@item byte-varset (16-23)
+@item byte-varset (16--23)
 @kindex byte-varset
 
 Sets a variable
 
-@item byte-varbind (24-31)
+@item byte-varbind (24--31)
 @kindex byte-varbind
 
 Binds a variable
 
-@item byte-call (32-39)
+@item byte-call (32--39)
 @kindex byte-call
 
 calls a function
 
-@item byte-unbind (40-47)
+@item byte-unbind (40--47)
 @kindex byte-unbind
 
 Unbinds special bindings
@@ -67,13 +68,28 @@ Unbinds special bindings
 @end table
 
 
+@node Constant Instructions
+@section Constant Instructions
+
+The instructions from opcode 192 to 255 encode a constant index from 0
+to 63 as part of the opcode.  For constants outside of that range, see
+instruction 129.
+
+@table @asis
+
+@item byte-constant (192--255)
+@kindex byte-constant
+A constant reference
+
+@end table
+
 @node Opcode Table
 @chapter Opcode Table
 
 @multitable @columnfractions .06 .30 .55
 @item Code @tab Instruction @tab Description
 @item 00
-@tab Not used see @code{dup}
+@tab Not used; see @code{dup}
 @tab
 @item 01
 @tab @code{byte-stack-ref 1}
@@ -153,6 +169,9 @@ Unbinds special bindings
 @item 40
 @tab @code{byte-unbind}
 @tab Unbinds special bindings
+@item 192
+@tab @code{byte-constant}
+@tab Constant reference
 @end multitable
 
 @node References
