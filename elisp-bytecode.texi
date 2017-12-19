@@ -59,7 +59,16 @@ A stack reference
 @node byte-varref
 @unnumberedsubsec @code{byte-var-ref} (8--15)
 @kindex byte-varref
-A variable reference
+A variable reference.
+
+@subsubsection Example
+
+@code{(defun en(n) n)} generates:
+@verbatim
+PC byte Instruction
+0   8 (byte-varref n)
+1 135 (byte-return . 0)
+@end verbatim
 
 @node byte-varset
 @unnumberedsubsec @code{byte-varset} (16--23)
@@ -79,8 +88,11 @@ Binds a variable
 
 Calls a function.  The opcode argument specifies the number of
 arguments to pass to the function from the stack, excluding the
-function itself.  Thus, @code{(exchange-point-and-mark)} generates:
+function itself.
 
+@subsubsection Example
+
+@code{(exchange-point-and-mark)} generates:
 @verbatim
 PC byte Instruction
 0  192  (byte-constant exchange-point-and-mark)
