@@ -47,7 +47,9 @@ for texinfo input."
          (bytecode (byte-decompile-bytecode bytes constvec))
          (rbc (reverse bytecode))
          (pc (length bytes))
-         (str "@end verbatim\n"))
+         (str "@end verbatim\n")
+	 (pc-width (format "%%%dd " (ceiling (log pc 10))))
+	 )
     (while (> pc 0)
       (if (eq (caar rbc) 'TAG)
           (setq rbc (cdr rbc))
@@ -65,7 +67,7 @@ for texinfo input."
                               str))
             (setq pc (1- pc)))
           (setq str (concat lstr
-                            (format "%5d " npc)
+                            (format pc-width npc)
                             (byte--pretty-bytes (substring bytes npc (1+ npc)))
                             " "
                             (format "%S\n" op)

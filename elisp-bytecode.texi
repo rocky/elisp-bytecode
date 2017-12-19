@@ -59,22 +59,35 @@ A stack reference
 @node byte-varref
 @unnumberedsubsec @code{byte-var-ref} (8--15)
 @kindex byte-varref
-A variable reference.
+Loads the value of a variable reference on the the evaluation stack.
 
 @subsubsection Example
 
 @code{(defun en(n) n)} generates:
 @verbatim
 PC byte Instruction
-0   8 (byte-varref n)
-1 135 (byte-return . 0)
+0     8 (byte-varref n)  ;; loads variable n onto the stack
+1   135 (byte-return . 0)
 @end verbatim
 
 @node byte-varset
 @unnumberedsubsec @code{byte-varset} (16--23)
 @kindex byte-varset
 
-Sets a variable
+Sets a variable given in the operand to the value that is on the top
+of the stack.
+
+@subsubsection Example
+
+@code{(defun en(n5) (setq n 5)} generates:
+@verbatim
+PC byte Instruction
+0   193 (byte-constant 5)
+1   137 (byte-dup . 0)
+2    16 (byte-varset n) ;; sets variable n
+3   135 (byte-return . 0)
+@end verbatim
+
 
 @node byte-varbind
 @unnumberedsubsec @code{byte-varbind} (24--31)
@@ -115,8 +128,8 @@ instruction 129.
 
 @unnumberedsubsec @code{byte-constant} (192--255)
 @kindex byte-constant
-A constant reference, usually greater than 63; there are special instructions
-to load constants from 0 to 63.
+Pushes a constant reference on the stack.
+Note that there are special instructions to push constants from 0 to 63.
 
 @node Return Instruction
 @section Return Instruction
@@ -124,7 +137,15 @@ to load constants from 0 to 63.
 @unnumberedsubsec @code{byte-return} (135)
 @kindex byte-return
 Return from function.  This is the last instruction in a function's
-bytecode sequence.
+bytecode sequence. The top value on the evaluation stack is the return value.
+
+@subsubsection Example
+@code{(defun one(n) 1)} generates:
+@verbatim
+PC byte Instruction
+0   192 (byte-constant 1)
+1   135 (byte-return . 0)
+@end verbatim
 
 @node Simple Instructions
 @section Simple Instructions
