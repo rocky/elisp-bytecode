@@ -5,20 +5,20 @@
 
 @dircategory Emacs lisp
 @direntry
-* Lap: (LAP).               The Lisp Assembly Program Manual.
+* Bytecode Bytecode Instructions::  The Emacs Lisp Bytecode Manual.
 @end direntry
 
 @node Top
-@top Lisp Assembler Program Manual
+@top Emacs Lisp Bytecode Manual
 
 @menu
-* LAP Instructions::            List of all instructions
-* Opcode Table::                Table ordered by Opcode Number
+* Lisp Bytecode Instructions::  Description all Emacs Lisp Bytecode Instructions
+* Opcode Table::                Table of Bytecode Instruction ordered by Opcode Number
 * Instruction Index::
 @end menu
 
-@node LAP Instructions
-@chapter LAP Instructions
+@node Lisp Bytecode Instructions
+@chapter Lisp Bytecode Instructions
 
 @menu
 * Argument-Packing Instructions::
@@ -27,12 +27,12 @@
 @node Argument-Packing Instructions
 @section Argument-Packing Instructions
 
-These instructions from opcode 0 to 47 encode an operand value from 0-7 as part of
+These instructions from opcode 1 to 47 encode an operand value from 0-7 as part of
 the opcode.
 
 @table @asis
 
-@item byte-stack-ref (0-7)
+@item byte-stack-ref (1-7)
 @kindex byte-stack-ref
 A stack reference
 
@@ -69,8 +69,8 @@ Unbinds special bindings
 @multitable @columnfractions .06 .30 .55
 @item Code @tab Instruction @tab Description
 @item 00
-@tab @code{byte-stack-ref 0}
-@tab stack reference 0
+@tab Not used see @code{dup}
+@tab
 @item 01
 @tab @code{byte-stack-ref 1}
 @tab stack reference 1
