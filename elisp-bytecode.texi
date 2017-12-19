@@ -27,8 +27,11 @@
 @node Argument-Packing Instructions
 @section Argument-Packing Instructions
 
-These instructions from opcode 1 to 47 encode an operand value from 0-7 as part of
-the opcode.
+These instructions from opcode 1 to 47 encode an operand value from 0
+to 7 as part of the opcode.  If the encoded value is 6, the actual
+operand value is the byte following the opcode.  If the encoded value
+is 7, the actual operand value is the two-byte number following the
+opcode, in little-endian byte order.
 
 @table @asis
 
@@ -88,10 +91,10 @@ Unbinds special bindings
 @tab stack reference 5
 @item 06
 @tab @code{byte-stack-ref 6}
-@tab stack reference 6
+@tab stack reference 0--255
 @item 07
 @tab @code{byte-stack-ref 7}
-@tab stack reference 7
+@tab stack reference 0--65535
 @item 08
 @tab @code{byte-varref 0}
 @tab variable reference 0
@@ -112,10 +115,10 @@ Unbinds special bindings
 @tab variable reference 5
 @item 14
 @tab @code{byte-varref 6}
-@tab variable reference 6
+@tab variable reference 0--255
 @item 15
 @tab @code{byte-varref 7}
-@tab variable reference 7
+@tab variable reference 0--65535
 @item 16
 @tab @code{byte-varset 0}
 @tab Sets a variable
