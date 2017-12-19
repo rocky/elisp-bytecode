@@ -22,6 +22,7 @@
 
 @menu
 * Argument-Packing Instructions::
+* Constant Instructions::
 @end menu
 
 @node Argument-Packing Instructions
@@ -65,6 +66,21 @@ Unbinds special bindings
 
 @end table
 
+
+@node Constant Instructions
+@section Constant Instructions
+
+The instructions from opcode 192 to 255 encode a constant index from 0
+to 63 as part of the opcode.  For constants outside of that range, see
+instruction 129.
+
+@table @asis
+
+@item byte-constant (192--255)
+@kindex byte-constant
+A constant reference
+
+@end table
 
 @node Opcode Table
 @chapter Opcode Table
@@ -152,6 +168,9 @@ Unbinds special bindings
 @item 40
 @tab @code{byte-unbind}
 @tab Unbinds special bindings
+@item 192
+@tab @code{byte-constant}
+@tab Constant reference
 @end multitable
 
 @node Instruction Index
