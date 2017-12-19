@@ -66,7 +66,7 @@ Binds a variable
 
 Calls a function.  The opcode argument specifies the number of
 arguments to pass to the function from the stack, excluding the
-function itself.  Thus, @code{exchange-point-and-mark)} generates:
+function itself.  Thus, @code{(exchange-point-and-mark)} generates:
 
 @verbatim
 PC byte Instruction
