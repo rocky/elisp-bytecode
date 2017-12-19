@@ -47,7 +47,9 @@ for texinfo input."
          (bytecode (byte-decompile-bytecode bytes constvec))
          (rbc (reverse bytecode))
          (pc (length bytes))
-         (str "@end multitable\n"))
+         (str "@end verbatim\n")
+	 (pc-width (format "%%%dd " (ceiling (log pc 10))))
+	 )
     (while (> pc 0)
       (if (eq (caar rbc) 'TAG)
           (setq rbc (cdr rbc))
@@ -56,26 +58,23 @@ for texinfo input."
                (lstr ""))
           (while (eq (car-safe npc) 'TAG)
             (setq rbc (cdr rbc))
-            (setq lstr (concat (format "@item %S:\n" npc) lstr))
+            (setq lstr (concat (format "%S:\n" npc) lstr))
             (setq npc (cadr rbc)))
           (while (< (1+ npc) pc)
-            (setq str (concat "@item @tab"
+            (setq str (concat "      "
                               (byte--pretty-bytes (substring bytes (1- pc) pc))
                               "\n"
                               str))
             (setq pc (1- pc)))
           (setq str (concat lstr
-                            "@item "
-                            (format "%5d " npc)
-                            "@tab "
+                            (format pc-width npc)
                             (byte--pretty-bytes (substring bytes npc (1+ npc)))
-                            " @tab "
+                            " "
                             (format "%S\n" op)
                             str))
           (setq rbc (if (eq (car-safe op) 'TAG) (cdr rbc) (cddr rbc)))
           (setq pc npc))))
-    (setq str (concat "@multitable @columnfractions .16 .16 .66\n"
-                      "@item PC @tab byte @tab Instruction\n"
+    (setq str (concat "@verbatim\n"
+                      "PC byte Instruction\n"
                       str))
     str))
-
