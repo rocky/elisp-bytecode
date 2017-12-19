@@ -1,0 +1,158 @@
+\input texinfo  @c -*-texinfo-*-
+@c %**start of header
+
+@c @include docstyle.texi
+
+@dircategory Emacs lisp
+@direntry
+* Lap: (LAP).               The Lisp Assembly Program Manual.
+@end direntry
+
+@node Top
+@top Lisp Assembler Program Manual
+
+@menu
+* LAP Instructions::            List of all instructions
+* Opcode Table::                Table ordered by Opcode Number
+* Instruction Index::
+@end menu
+
+@node LAP Instructions
+@chapter LAP Instructions
+
+@menu
+* Argument-Packing Instructions::
+@end menu
+
+@node Argument-Packing Instructions
+@section Argument-Packing Instructions
+
+These instructions from opcode 0 to 47 encode an operand value from 0-7 as part of
+the opcode.
+
+@table @asis
+
+@item byte-stack-ref (0-7)
+@kindex byte-stack-ref
+A stack reference
+
+@item byte-varref (8-15)
+@kindex byte-varref
+A variable reference
+
+@item byte-varset (16-23)
+@kindex byte-varset
+
+Sets a variable
+
+@item byte-varbind (24-31)
+@kindex byte-varbind
+
+Binds a variable
+
+@item byte-call (32-39)
+@kindex byte-call
+
+calls a function
+
+@item byte-unbind (40-27)
+@kindex byte-unbind
+
+Unbinds special bindings
+
+@end table
+
+
+@node Opcode Table
+@chapter Opcode Table
+
+@multitable @columnfractions .06 .30 .55
+@item Code @tab Instruction @tab Description
+@item 00
+@tab @code{byte-stack-ref 0}
+@tab stack reference 0
+@item 01
+@tab @code{byte-stack-ref 1}
+@tab stack reference 1
+@item 02
+@tab @code{byte-stack-ref 2}
+@tab stack reference 2
+@item 03
+@tab @code{byte-stack-ref 3}
+@tab stack reference 3
+@item 04
+@tab @code{byte-stack-ref 4}
+@tab stack reference 4
+@item 05
+@tab @code{byte-stack-ref 5}
+@tab stack reference 5
+@item 06
+@tab @code{byte-stack-ref 6}
+@tab stack reference 6
+@item 07
+@tab @code{byte-stack-ref 7}
+@tab stack reference 7
+@item 08
+@tab @code{byte-varref 0}
+@tab variable reference 0
+@item 09
+@tab @code{byte-varref 1}
+@tab variable reference 1
+@item 10
+@tab @code{byte-varref 2}
+@tab variable reference 2
+@item 11
+@tab @code{byte-varref 3}
+@tab variable reference 3
+@item 12
+@tab @code{byte-varref 4}
+@tab variable reference 4
+@item 13
+@tab @code{byte-varref 5}
+@tab variable reference 5
+@item 14
+@tab @code{byte-varref 6}
+@tab variable reference 6
+@item 15
+@tab @code{byte-varref 7}
+@tab variable reference 7
+@item 16
+@tab @code{byte-varset 0}
+@tab Sets a variable
+@item 17
+@tab @code{byte-varset 1}
+@tab Sets a variable
+@item 18
+@tab @code{byte-varset 2}
+@tab Sets a variable
+@item 19
+@tab @code{byte-varset 3}
+@tab Sets a variable
+@item 20
+@tab @code{byte-varset 4}
+@tab Sets a variable
+@item 21
+@tab @code{byte-varset 5}
+@tab Sets a variable
+@item 22
+@tab @code{byte-varset 6}
+@tab Sets a variable
+@item 23
+@tab @code{byte-varset 7}
+@tab Sets a variable
+@item 24
+@tab @code{byte-varbind}
+@tab Binds a variable
+@item 32
+@tab @code{byte-call}
+@tab Calls a function
+@item 40
+@tab @code{byte-unbind}
+@tab Unbinds special bindings
+@end multitable
+
+@node Instruction Index
+@unnumbered Instruction Index
+@printindex ky
+
+@bye
