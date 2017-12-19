@@ -396,34 +396,34 @@ Make a binding recording buffer, point, and mark.
 @tab variable reference 5
 @item @verb{| 14|}
 @tab @code{byte-varref 6}
-@tab variable reference 0--255 (usually greater than 5)
+@tab variable reference 0--255
 @item @verb{| 15|}
 @tab @code{byte-varref 7}
-@tab variable reference 0--65535 (usually greater than 255)
+@tab variable reference 0--65535
 @item @verb{| 16|}
 @tab @code{byte-varset 0}
-@tab Sets a variable
+@tab Sets variable 0
 @item @verb{| 17|}
 @tab @code{byte-varset 1}
-@tab Sets a variable
+@tab Sets variable 1
 @item @verb{| 18|}
 @tab @code{byte-varset 2}
-@tab Sets a variable
+@tab Sets variable 2
 @item @verb{| 19|}
 @tab @code{byte-varset 3}
-@tab Sets a variable
+@tab Sets variable 3
 @item @verb{| 20|}
 @tab @code{byte-varset 4}
-@tab Sets a variable
+@tab Sets variable 4
 @item @verb{| 21|}
 @tab @code{byte-varset 5}
-@tab Sets a variable
+@tab Sets variable 5
 @item @verb{| 22|}
 @tab @code{byte-varset 6}
-@tab Sets a variable
+@tab Sets variable 6
 @item @verb{| 23|}
 @tab @code{byte-varset 7}
-@tab Sets a variable
+@tab Sets variable 7
 @item @verb{| 24|}
 @tab @code{byte-varbind}
 @tab Binds a variable
