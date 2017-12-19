@@ -3,6 +3,8 @@
 
 @c @include docstyle.texi
 
+@setfilename elisp-bytecode
+
 @dircategory Emacs lisp
 @direntry
 * Bytecode Bytecode Instructions::  The Emacs Lisp Bytecode Manual.
