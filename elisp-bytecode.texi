@@ -59,11 +59,11 @@ A stack reference
 @node byte-varref
 @unnumberedsubsec @code{byte-varref} (8--15)
 @kindex byte-varref
-Loads the value of a variable reference on the the evaluation stack.
+Loads the value of a variable reference on the evaluation stack.
 
 @subsubsection Example
 
-With dynamic binding is in effect, @code{(defun en(n) n)} generates:
+When dynamic binding is in effect, @code{(defun en(n) n)} generates:
 @verbatim
 PC byte Instruction
 0     8 (byte-varref n)  ;; loads variable n onto the stack
@@ -79,7 +79,7 @@ of the stack.
 
 @subsubsection Example
 
-With dynamic binding is in effect, @code{(defun n5(n) (setq n 5))} generates:
+When dynamic binding is in effect, @code{(defun n5(n) (setq n 5))} generates:
 @verbatim
 PC byte Instruction
 0   193 (byte-constant 5)
