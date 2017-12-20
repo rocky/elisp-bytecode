@@ -34,7 +34,7 @@
 @section Why is Lisp Bytecode important and how is Emacs as a program different?
 
 If you were to look at two comparable complex programs circa 2018,
-Firefox 53.0.3 and Emacs 35.3, you see that relative sizes of Firefox
+Firefox 53.0.3 and Emacs 35.3, you would see that relative sizes of Firefox
 tarball is 5 times bigger than for Emacs. But how are these made up,
 or what languages are they comprised of?
 
@@ -82,27 +82,28 @@ orthoginal in its basic concepts and construction. Just as Leibniz was
 amazed that such diversity could come out of such simple rules of
 mathematics and physics, so it is remarkable that something as complex
 as Emacs can come out of the relatively simple language Lisp.
-n
+
 But Lisp is not and never has been a speedy language compared to say,
 C, C++, Go, Rust, or Java. And that's where bytecode comes in.
 
 @uref{https://www.gnu.org/software/emacs/manual/html_node/elisp/Speed-of-Byte_002dCode.html,
 Silly Loop Example} in the Emacs Lisp Manual gives a program to time
 the speed of running in Bytecode interpreter versus running in the
-Lisp interpreter. When I tried this program, bytecode ran 2.5 times
+Lisp interpreter. When I ran this program, bytecode ran 2.5 times
 faster. The Emacs Lisp manual gets a speed improvement of about 3
 times.
 
 @node Emacs Lisp Virtual Machine
 @section Emacs Lisp Virtual Machine
 
-Like many bytecode interpreters like Smalltalk, C Python, Forth, or
-PostScript, the Emacs Lisp bytecode has an evaluation stack and a code
-stack.  Emacs Lisp Bytecode is reverse polish notation which is how
-many other bytecode interpreters work. It is the opposite of they way
-Lisp works. So instead of in Lisp @code{(+ a b)} where the operator is
-first and the operands are last, the operator comes last and the
-corresponding bytecode is:
+The Emacs Lisp bytecode interpreter, like many bytecode interpreters
+such as Smalltalk, C Python, Forth, or PostScript, has an evaluation
+stack and a code stack.  Emacs Lisp Bytecode is Reverse Polish
+Notation which is how many other bytecode interpreters work. It is the
+opposite of they way Lisp works. In Lisp the operator or function
+comes first and the operands for the function come last, so we might
+write @code{(+ a b)}. However in bytecode it is the other way around:
+the operator or function comes last. So the corresponding bytecode is:
 
 @verbatim
 0	varref	  a
@@ -110,31 +111,32 @@ corresponding bytecode is:
 2	plus
 @end verbatim
 
-As in Lisp but in contrast to a typical assembly language for a
-general-purpose machine, the things that are on the evaluation stack
-are full Lisp objects. These objects can include Emacs buffers, or
-font faces, Lisp objects like hashes or vectors, or simply (30-bit)
-Lisp integers.
+As in Lisp but in contrast to a typical a number of general-purpose
+machine architecture, the things that are on the evaluation stack are
+full Lisp objects. These objects can include Emacs buffers, or font
+faces, Lisp objects like hashes or vectors, or simply (30-bit) Lisp
+integers.
 
 Control flow in Lisp bytecode is similar to a conventional assembly
 language: there are unconditional and conditional jumps. More complex
 control structures are simply built out of this.
-n
+
 Although it may be obvious, one last thing I'd like to point out is
 that Emacs Lisp bytecode is custom to Emacs Lisp. In addition to
-primative that you'd expect for Lisp like ``car'' and ``cdr'' There
-are primative bytecodes for more complex Emacs editor specific
+primatives that you'd expect for Lisp like ``car'' and ``cdr'' There
+are primative bytecodes for more complex Emacs editor-specific
 concepts like ``save-excusion''@footnote{The fact that the semantic
 level difference between Emacs Lisp and its bytecode is not great
 makes writing a decompiler for it more feasible than if the bytecode
 language were of a general nature such as say LLVM IR.}.
 
-The interpreter is largely backwards compatible@footnote{eventually
-old bytecode instructions do die} but not forwards compatible. So old
-versions of Emacs can’t run new byte-code. Each instruction is between
-1 and 3 bytes. The first byte is the opcode and the second and third
-bytes are either a single operand or a single intermediate value. Some
-operands are packed into the opcode byte.
+The interpreter is largely backwards compatible, but not forwards
+compatible@footnote{well, eventually old bytecode instructions
+@emph{do} die}. So old versions of Emacs can’t run new
+byte-code. Each instruction is between 1 and 3 bytes. The first byte
+is the opcode and the second and third bytes are either a single
+operand or a single intermediate value. Some operands are packed into
+the opcode byte.
 
 
 @node The Byte-code Function Literal
@@ -188,7 +190,7 @@ The elements of a bytecode function literal are:
 @node Function parameter (lambda) list
 @subsection Function Parameter List
 
-The first element of a bytecode-object literal is the parameter list
+The first element of a bytecode-function literal is the parameter list
 for the @code{defun}. The object takes on two different forms
 depending on if the function is lexically or dynamically scoped. If
 the function is dynamically scoped, the argument list is exactly what
@@ -306,12 +308,12 @@ recognize the end.
 @node Interactive Specification
 @subsection ``Interactive'' Specification
 
-The last object in a bytecode-function literal, like the docstring is
-optional. If it is present and non-nil then the function is an
-``interactive'' function. It holds the exactly contents of the
+The last object in a bytecode-function literal which, like the
+docstring, is optional. If it is present and non-nil then the function
+is an ``interactive'' function. It holds the exactly contents of the
 argument to @code{interactive} in the uncompiled function definition.
 
-Example:
+Examples:
 @verbatim
 (byte-compile (lambda (n) (interactive "nNumber: ") n))
 ;; => #[(n) "\010\207" [n] 1 nil "nNumber: "]
@@ -365,7 +367,7 @@ A stack reference
 @node byte-varref
 @unnumberedsubsec @code{byte-varref} (8--15)
 @kindex byte-varref
-Loads the value of a variable reference on the evaluation stack.
+Pushes the value of a variable reference onto the evaluation stack.
 
 @subsubsection Example
 
