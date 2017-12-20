@@ -7,18 +7,326 @@
 
 @dircategory Emacs lisp
 @direntry
-* Bytecode Bytecode Instructions::  The Emacs Lisp Bytecode Manual.
+* Lisp Bytecode Instructions::  The Emacs Lisp Bytecode Manual.
 @end direntry
 
 @node Top
 @top Emacs Lisp Bytecode Manual
 
 @menu
+* Introduction to Bytecode and LAP::
 * Lisp Bytecode Instructions::  Description of all Emacs Lisp Bytecode Instructions
 * Opcode Table::                Table of Bytecode Instruction ordered by Opcode Number
 * References::
 * Instruction Index::
 @end menu
+
+@node Introduction to Bytecode and LAP
+@chapter Introduction to Bytecode and LAP
+
+@menu
+* Why is Lisp Bytecode important and how is Emacs as a program different?::
+* Emacs Lisp Virtual Machine::
+* The Byte-code Function Literal::
+@end menu
+
+@node Why is Lisp Bytecode important and how is Emacs as a program different?
+@section Why is Lisp Bytecode important and how is Emacs as a program different?
+
+If you were to look at two comparable complex programs circa 2018,
+Firefox 53.0.3 and Emacs 35.3, you would see that relative sizes of Firefox
+tarball is 5 times bigger than for Emacs. But how are these made up,
+or what languages are they comprised of?
+
+For Firefox whose core is written in C++ we have:
+
+@verbatim
+$ cloc --match-f='\.(js|c|cpp|html|py|css)$' firefox-53.0.3
+   89156 text files.
+   86240 unique files.
+    1512 files ignored.
+
+cloc v 1.60  T=244.20 s (353.2 files/s, 56012.8 lines/s)
+-------------------------------------------------------------
+Language                     files     comment           code
+-------------------------------------------------------------
+C++                           7267      418019        3057110
+Javascript                   25855      532629        2859451
+HTML                         45311      120520        2209067
+C                             3482      400594        1664666
+@end verbatim
+
+And for Emacs whose core is written in C we have:
+
+@verbatim
+$ cloc emacs-25.3.tar.xz
+    3346 text files.
+    3251 unique files.
+    1130 files ignored.
+
+cloc 1.60  T=13.85 s (160.1 files/s, 154670.7 lines/s)
+-------------------------------------------------------------------
+Language                      files     comment           code
+--------------------------------------------------------------
+Lisp                           1616      200820        1270511
+C                               255       66169         256314
+C/C++ Header                    176       11505          34891
+@end verbatim
+
+If you look at the relative ratio of C++ versus Javascript code in
+Firefox, and the ratio of C versus Lisp code in Emacs, you'll see that
+there is much more of Emacs written in Lisp than say Firefox in
+Javascript. (And if you look at the C code for Emacs, a lot of it
+looks like Lisp with C syntax). My take is that Emacs a lot more
+orthoginal in its basic concepts and construction. Just as Leibniz was
+amazed that such diversity could come out of such simple rules of
+mathematics and physics, so it is remarkable that something as complex
+as Emacs can come out of the relatively simple language Lisp.
+
+But Lisp is not and never has been a speedy language compared to say,
+C, C++, Go, Rust, or Java. And that's where bytecode comes in.
+
+@uref{https://www.gnu.org/software/emacs/manual/html_node/elisp/Speed-of-Byte_002dCode.html,
+Silly Loop Example} in the Emacs Lisp Manual gives a program to time
+the speed of running in Bytecode interpreter versus running in the
+Lisp interpreter. When I ran this program, bytecode ran 2.5 times
+faster. The Emacs Lisp manual gets a speed improvement of about 3
+times.
+
+@node Emacs Lisp Virtual Machine
+@section Emacs Lisp Virtual Machine
+
+The Emacs Lisp bytecode interpreter, like many bytecode interpreters
+such as Smalltalk, C Python, Forth, or PostScript, has an evaluation
+stack and a code stack.  Emacs Lisp Bytecode is Reverse Polish
+Notation which is how many other bytecode interpreters work. It is the
+opposite of they way Lisp works. In Lisp the operator or function
+comes first and the operands for the function come last, so we might
+write @code{(+ a b)}. However in bytecode it is the other way around:
+the operator or function comes last. So the corresponding bytecode is:
+
+@verbatim
+0	varref	  a
+1	varref	  b
+2	plus
+@end verbatim
+
+As in Lisp but in contrast to a typical a number of general-purpose
+machine architecture, the things that are on the evaluation stack are
+full Lisp objects. These objects can include Emacs buffers, or font
+faces, Lisp objects like hashes or vectors, or simply (30-bit) Lisp
+integers.
+
+Control flow in Lisp bytecode is similar to a conventional assembly
+language: there are unconditional and conditional jumps. More complex
+control structures are simply built out of this.
+
+Although it may be obvious, one last thing I'd like to point out is
+that Emacs Lisp bytecode is custom to Emacs Lisp. In addition to
+primatives that you'd expect for Lisp like ``car'' and ``cdr'' There
+are primative bytecodes for more complex Emacs editor-specific
+concepts like ``save-excusion''@footnote{The fact that the semantic
+level difference between Emacs Lisp and its bytecode is not great
+makes writing a decompiler for it more feasible than if the bytecode
+language were of a general nature such as say LLVM IR.}.
+
+The interpreter is largely backwards compatible, but not forwards
+compatible@footnote{well, eventually old bytecode instructions
+@emph{do} die}. So old versions of Emacs can’t run new
+byte-code. Each instruction is between 1 and 3 bytes. The first byte
+is the opcode and the second and third bytes are either a single
+operand or a single intermediate value. Some operands are packed into
+the opcode byte.
+
+
+@node The Byte-code Function Literal
+@section The Byte-code Function Literal
+
+@emph{This section is largely lifted from Chris Wellon's Emacs
+Byte-code Internals.  See references at the end of this doc.}
+
+A byte-code object is functionally equivalent to a normal Elisp vector
+except that it can be evaluated as a function. Elements are accessed
+in constant time, the syntax is similar to vector syntax
+(@verb{|[...]|} vs. @verb{|#[...]|}), and it can be of any length,
+though valid functions must have at least 4 elements.
+
+There are two ways to create a byte-code object: using a byte-code
+object literal or with @code{make-byte-code}. Like vector literals,
+byte-code functions don’t need to be quoted.
+
+Examples:
+@verbatim
+(make-byte-code 0 "" [] 0)
+;; => #[0 "" [] 0]
+
+#[1 2 3 4]
+;; => #[1 2 3 4]
+
+(#[0 "" [] 0])
+;; error: Invalid byte opcode
+@end verbatim
+
+The elements of a bytecode function literal are:
+@iftex
+@enumerate
+@item Function parameter (lambda) list
+@item Byte-code Unibyte String
+@item Constants Vector
+@item Maximum Stack Usage
+@item Docstring
+@item Interactive Specification
+@end enumerate
+@end iftex
+@menu
+* Function parameter (lambda) list::
+* Byte-code Unibyte String::
+* Constants Vector::
+* Maximum Stack Usage::
+* Docstring::
+* Interactive Specification::
+@end menu
+
+@node Function parameter (lambda) list
+@subsection Function Parameter List
+
+The first element of a bytecode-function literal is the parameter list
+for the @code{defun}. The object takes on two different forms
+depending on if the function is lexically or dynamically scoped. If
+the function is dynamically scoped, the argument list is exactly what
+appears in lisp code.
+
+Example:
+@verbatim
+(byte-compile (lambda (a b &optional c)))
+;; => #[(a b &optional c) "\300\207" [nil] 1]
+@end verbatim
+
+There’s really no shorter way to represent the parameter list because
+preserving the argument names is critical. Remember that, in dynamic
+scope, while the function body is being evaluated these variables are
+globally bound (eww!) to the function’s arguments.
+
+When the function is lexically scoped, the parameter list is packed
+into an Elisp integer, indicating the counts of the different kinds of
+parameters: required, @verb{|&optional|}, and @verb{|&rest|}.
+
+The least significant 7 bits indicate the number of required
+arguments. Notice that this limits compiled, lexically-scoped
+functions to 127 required arguments. The 8th bit is the number of
+&rest arguments (up to 1). The remaining bits indicate the total
+number of optional and required arguments (not counting &rest). It’s
+really easy to parse these in your head when viewed as hexadecimal
+because each portion almost always fits inside its own ``digit.''
+
+Examples:
+@verbatim
+(byte-compile-make-args-desc '())
+;; => #x000  (0 args, 0 rest, 0 required)
+
+(byte-compile-make-args-desc '(a b))
+;; => #x202  (2 args, 0 rest, 2 required)
+
+(byte-compile-make-args-desc '(a b &optional c))
+;; => #x302  (3 args, 0 rest, 2 required)
+
+(byte-compile-make-args-desc '(a b &optional c &rest d))
+;; => #x382  (3 args, 1 rest, 2 required)
+@end verbatim
+
+The names of the arguments don’t matter in lexical scope: they’re
+purely positional. This tighter argument specification is one of the
+reasons lexical scope is faster: the byte-code interpreter doesn’t
+need to parse the entire lambda list and assign all of the variables
+on each function invocation.
+
+@node Byte-code Unibyte String
+@subsection Byte-code Unibyte String
+
+The second element of a bytecode-function literal is a unibyte string --- it
+strictly holds octets and is not to be interpreted as any sort of
+Unicode encoding. These strings should be created with unibyte-string
+because string may return a multibyte string. To disambiguate the
+string type to the lisp reader when higher values are present (> 127),
+the strings are printed in an escaped octal notation, keeping the
+string literal inside the ASCII character set.
+
+Example:
+@verbatim
+(unibyte-string 100 200 250)
+;; => "d\310\372"
+@end verbatim
+
+It’s unusual to see a byte-code string that doesn’t end with 135
+(#o207, byte-return). Perhaps this should have been implicit? I’ll
+talk more about the byte-code below.
+
+@node Constants Vector
+@subsection Constants Vector
+
+The third object in a bytecode-function literal is a constants vector
+which lists all of the contants in the function.
+
+The byte-code has very limited operands. Most operands are only a few
+bits, some fill an entire byte, and occasionally two bytes. The meat
+of the function that holds all the constants, function symbols, and
+variables symbols is the constants vector. It’s a normal Elisp vector
+and can be created with vector or a vector literal. Operands reference
+either this vector or they index into the stack itself.
+
+Example:
+@verbatim
+(byte-compile (lambda (a b) (my-func b a)))
+;; => #[(a b) "\302\134\011\042\207" [b a my-func] 3]
+@end verbatim
+
+Note that the constants vector lists the variable symbols as well as
+the external function symbol. If this was a lexically scoped function
+the constants vector wouldn’t have the variables listed, being only
+[my-func].
+
+@node Maximum Stack Usage
+@subsection Maximum Stack Usage
+
+The fourth object in a bytecode-function literal is an integer which gives
+the maximum stack space used by this byte-code. This value can be
+derived from the byte-code itself, but it’s pre-computed so that the
+byte-code interpreter can quickly check for stack
+overflow. Under-reporting this value is probably another way to crash
+Emacs.
+
+@node Docstring
+@subsection Docstring
+
+The fith object in a bytecode-function literal is simple and completely
+optional: it’s either the docstring itself, or if the docstring is
+especially large it’s a cons cell indicating a compiled `.elc` and a
+position for lazy access. Only one position, the start, is needed
+because the lisp reader is used to load it and it knows how to
+recognize the end.
+
+@node Interactive Specification
+@subsection ``Interactive'' Specification
+
+The last object in a bytecode-function literal which, like the
+docstring, is optional. If it is present and non-nil then the function
+is an ``interactive'' function. It holds the exactly contents of the
+argument to @code{interactive} in the uncompiled function definition.
+
+Examples:
+@verbatim
+(byte-compile (lambda (n) (interactive "nNumber: ") n))
+;; => #[(n) "\010\207" [n] 1 nil "nNumber: "]
+
+(byte-compile (lambda (n) (interactive (list (read))) n))
+;; => #[(n) "\010\207" [n] 1 nil (list (read))]
+@end verbatim
+
+The interactive expression is always interpreted, never
+byte-compiled. This is usually fine because, by definition, this code
+is going to be waiting on user input. However, it slows down keyboard
+macro playback.
+
 
 @node Lisp Bytecode Instructions
 @chapter Lisp Bytecode Instructions
@@ -59,7 +367,7 @@ A stack reference
 @node byte-varref
 @unnumberedsubsec @code{byte-varref} (8--15)
 @kindex byte-varref
-Loads the value of a variable reference on the evaluation stack.
+Pushes the value of a variable reference onto the evaluation stack.
 
 @subsubsection Example
 
