@@ -334,7 +334,7 @@ Discard one value.
 @node byte-dup
 @unnumberedsubsec @code{byte-dup} (137)
 @kindex byte-dup
-Push a copy the top of the evaluation stack
+Make a copy of the top-of-stack value and push that onto the top of the evaluation stack.
 
 @subsubsection Example
 When lexical binding is in effect, @code{(defun en(n) n)} generates:
