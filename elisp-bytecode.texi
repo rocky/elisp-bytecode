@@ -334,7 +334,15 @@ Discard one value.
 @node byte-dup
 @unnumberedsubsec @code{byte-dup} (137)
 @kindex byte-dup
-Duplicate one value.
+Push a copy the top of the evaluation stack
+
+@subsubsection Example
+When lexical binding is in effect, @code{(defun en(n) n)} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  137   (byte-dup . 0)  ;; duplicates top of stack: n
+ 1  135   (byte-return . 0)
+@end verbatim
 
 @node Binding Instructions
 @section Binding Instructions
@@ -536,6 +544,35 @@ Make a binding recording buffer, point, and mark.
 @item @verb{|138|}
 @tab @code{byte-save-excursion}
 @tab Make a binding recording buffer, point, and mark.
+@item @verb{|169|}
+@tab
+@tab Unused
+@item @verb{|170|}
+@tab
+@tab Unused
+@item @verb{|171|}
+@tab
+@tab Unused
+@item @verb{|172|}
+@tab
+@tab Unused
+@item @verb{|173|}
+@tab
+@tab Unused
+@item @verb{|174|}
+@tab
+@tab Unused
+@item @verb{|175|}
+@tab byte-listN
+@tab
+@item @verb{|176|}
+@tab byte-concatN)
+@item @verb{|177|}
+@tab byte-insertN
+@item @verb{|178|}
+@tab byte-stack-set
+@item @verb{|179|}
+@tab byte-stack-set2
 @item @verb{|192|}
 @tab @code{byte-constant 0}
 @item @verb{|193|}
