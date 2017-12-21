@@ -15,7 +15,7 @@
 
 @menu
 * Introduction to Bytecode and LAP::
-* Lisp Bytecode Instructions::  Description of all Emacs Lisp Bytecode Instructions
+* ELisp Bytecode Instructions::  Description of all Emacs Lisp Bytecode Instructions
 * Opcode Table::                Table of Bytecode Instruction ordered by Opcode Number
 * References::
 * Instruction Index::
@@ -34,7 +34,7 @@
 @section Why is Lisp Bytecode important and how is Emacs as a program different?
 
 If you were to look at two comparable complex programs circa 2018,
-Firefox 53.0.3 and Emacs 35.3, you would see that relative sizes of Firefox
+Firefox 53.0.3 and Emacs 25.3, you would see that relative sizes of Firefox
 tarball is 5 times bigger than for Emacs. But how are these made up,
 or what languages are they comprised of?
 
@@ -85,7 +85,16 @@ as complex as Emacs can come out of the relatively simple language
 Lisp.
 
 But Lisp is not and never has been a speedy language compared to say,
-C, C++, Go, Rust, or Java. And that's where bytecode comes in.
+C, C++, Go, Rust, or Java. And that's where LAP and bytecode comes in.
+
+LAP stands for Lisp Assembly Program. It is a representation of the
+assembly code that is used behind the scenes to speed up evaluating
+Emacs Lisp code. LAP syntax follows the assembly representation that
+is deplayed. ELisp bytecode on the other hand is the byte
+representation used by the bytecode interpreter. There is an
+instruction representation for that. I'll often use Elisp bytecode
+instruction refer to an assembly representation of an Elisp bytecode
+instruction.
 
 @uref{https://www.gnu.org/software/emacs/manual/html_node/elisp/Speed-of-Byte_002dCode.html,
 Silly Loop Example} in the Emacs Lisp Manual gives a program to time
@@ -103,7 +112,7 @@ stack and a code stack.  Emacs Lisp Bytecode uses Reverse Polish
 Notation which is how many other bytecode interpreters work. It is the
 opposite of the way Lisp works. In Lisp, the operator or function
 comes first and the operands for the function come last. Thus, to add
-the value in two variables we might write @code{(+ a b)}. However in
+the values of two variables we might write @code{(+ a b)}. However in
 bytecode it is the other way around: the operator or function comes
 last. So the corresponding bytecode is:
 
@@ -127,7 +136,7 @@ language: there are unconditional and conditional jumps. More complex
 control structures are simply built out of this.
 
 Although it may be obvious, one last thing I'd like to point out is
-that the Emacs bytecode instruction set is custom to Emacs.  In
+that the Elisp bytecode instruction set is custom to Emacs.  In
 addition to primitives that you'd expect for Lisp like ``car'' and
 ``cdr'', there are primitive bytecodes for more complex Emacs
 editor-specific concepts like ``save-excusion''@footnote{The fact that
@@ -136,7 +145,7 @@ not great makes writing a decompiler for it more feasible than if the
 bytecode language were of a general nature such as say LLVM IR.}.
 
 The interpreter is largely backwards compatible, but not forwards
-compatible@footnote{well, eventually old bytecode instructions
+compatible@footnote{well, eventually old Elisp bytecode instructions
 @emph{do} die}. So old versions of Emacs can’t run new
 byte-code. Each instruction is between 1 and 3 bytes. The first byte
 is the opcode and the second and third bytes are either a single
@@ -154,7 +163,8 @@ A byte-code object is functionally equivalent to a normal Elisp vector
 except that it can be evaluated as a function. Elements are accessed
 in constant time, the syntax is similar to vector syntax
 (@verb{|[...]|} vs. @verb{|#[...]|}), and it can be of any length,
-though valid functions must have at least 4 elements.
+though valid functions must have 4 to 6 elements where the elements
+have a particular structure elaborated on below.
 
 There are two ways to create a byte-code object: using a byte-code
 object literal or with @code{make-byte-code}. Like vector literals,
@@ -357,8 +367,8 @@ is going to be waiting on user input. However, it slows down keyboard
 macro playback.
 
 
-@node Lisp Bytecode Instructions
-@chapter Lisp Bytecode Instructions
+@node ELisp Bytecode Instructions
+@chapter ELisp Bytecode Instructions
 
 @menu
 * Argument-Packing Instructions::
