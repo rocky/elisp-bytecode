@@ -203,7 +203,7 @@ The elements of a bytecode function literal are:
 @end menu
 
 @node Function parameter (lambda) list
-@subsection Function Parameter List
+@unnumberedsubsec Function Parameter List
 
 The first element of a bytecode-function literal is the parameter list
 for the @code{defun}. The object takes on two different forms
@@ -211,7 +211,7 @@ depending on whether the function is lexically or dynamically scoped. If
 the function is dynamically scoped, the argument list is exactly what
 appears in Lisp code.
 
-Example showing how a parameter list is transformed:
+@subsubsection Example showing how a parameter list is transformed:
 @verbatim
 (byte-compile (lambda (a b &optional c)))
 ;; => #[(a b &optional c) "\300\207" [nil] 1]
@@ -263,7 +263,7 @@ compact index located usually in the operand value rather than an
 index into the constants vector followed by a lookup of the variable.
 
 @node Byte-code Unibyte String
-@subsection Byte-code Unibyte String
+@unnumberedsubsec Byte-code Unibyte String
 
 The second element of a bytecode-function literal is a unibyte string
 --- it strictly holds octets and is not to be interpreted as any sort
@@ -273,7 +273,7 @@ disambiguate the string type to the lisp reader when higher values are
 present (> 127), the strings are printed in an escaped octal notation,
 keeping the string literal inside the ASCII character set.
 
-Example:
+@subsubsection Example of a unibyte string:
 @verbatim
 (unibyte-string 100 200 250)
 ;; => "d\310\372"
@@ -284,7 +284,7 @@ It’s unusual to see a byte-code string that doesn’t end with 135
 talk more about the byte-code below.
 
 @node Constants Vector
-@subsection Constants Vector
+@unnumberedsubsec Constants Vector
 
 The third object in a bytecode-function literal is a ``constants''
 vector; it lists all of the symbols and constants used the function
@@ -301,7 +301,7 @@ pretty hefty.
 It’s a normal Elisp vector and can be created with vector or a vector
 literal.
 
-Example showing a constant vector:
+@subsubsection showing a constant vector:
 @verbatim
 ELISP> (byte-compile (lambda (a b) (my-func '("hi" "there") a nil 5)))
 #[(a b)
@@ -325,7 +325,7 @@ If this were a lexically-scoped function, the constants vector wouldn’t
 have the variable symbol ``a'' listed.
 
 @node Maximum Stack Usage
-@subsection Maximum Stack Usage
+@unnumberedsubsec Maximum Stack Usage
 
 The fourth object in a bytecode-function literal is an integer which gives
 the maximum stack space used by this byte-code. This value can be
@@ -335,7 +335,7 @@ overflow. Under-reporting this value is probably another way to crash
 Emacs.
 
 @node Docstring
-@subsection Docstring
+@unnumberedsubsec Docstring
 
 The fifth object in a bytecode-function literal is simple and completely
 optional: it’s either the docstring itself, or if the docstring is
@@ -345,14 +345,14 @@ because the lisp reader is used to load it and it knows how to
 recognize the end.
 
 @node Interactive Specification
-@subsection ``Interactive'' Specification
+@unnumberedsubsec ``Interactive'' Specification
 
 The last object in a bytecode-function literal is, like the docstring,
 optional. If it is present and non-nil then the function is an
 ``interactive'' function. It holds the exactly contents of the
 argument to @code{interactive} in the uncompiled function definition.
 
-Examples showing the interactive specification:
+@subsubsection Examples showing the interactive specification:
 @verbatim
 (byte-compile (lambda (n) (interactive "nNumber: ") n))
 ;; => #[(n) "\010\207" [n] 1 nil "nNumber: "]
@@ -372,7 +372,7 @@ macro playback.
 
 @menu
 * Argument-Packing Instructions::
-* Constant Instructions::
+* Constants-Vector Retrieval Instructions::
 * Return Instruction::
 * Simple Instructions::
 * Stack Manipulation Instructions::
@@ -465,17 +465,66 @@ PC  Byte  Instruction
 
 Unbinds special bindings
 
-@node Constant Instructions
-@section Constant Instructions
+@node Constants-Vector Retrieval Instructions
+@section Constants-Vector Retrieval Instructions
 
-The instructions from opcode 192 to 255 encode a constant index from 0
-to 63 as part of the opcode.  For constants outside of that range, see
-instruction 129.
+The instructions from opcode 192 to 255 push a value from the
+Constants Vector. @xref{Constants Vector}. Opcode 192 pushes the first
+entry, opcode 193, the second and so on. If there are more than 64
+constants, opcode @code{byte-constant2} (opcode 129) is used instead.
 
+@menu
+* byte-constant::
+* byte-constant2::
+@end menu
+
+@node byte-constant
 @unnumberedsubsec @code{byte-constant} (192--255)
 @kindex byte-constant
-Pushes a constant reference on the stack.
-Note that there are special instructions to push constants from 0 to 63.
+
+Pushes a value from the constants vector on the evaluation stack.
+There are special instructions to push any one of the first
+64 entries in the constants stack.
+
+@subsubsection Example
+@code{(defun n3(n) (+ n 10 11 12))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  193   (byte-constant +)
+ 1    8   (byte-varref n)
+ 2  194   (byte-constant 10)
+ 3  195   (byte-constant 11)
+ 4  196   (byte-constant 12)
+ 5   36   (byte-call . 4)
+ 6  135   (byte-return . 0)
+@end verbatim
+
+and the Constants Vector is @code{[n + 10 11 12]}
+
+@node byte-constant2
+@unnumberedsubsec @code{byte-constant2} (129)
+@kindex byte-constant2
+
+Pushes a value from the constants vector on the evaluation stack.
+Although there are special instructions to push any one of the first
+64 entries in the constants stack, this instruction is needed to push
+a value beyond one the first 64 entries.
+
+@code{(defun n64(n) (+ n 0 1 2 3 .. 64 ))} generates
+@verbatim
+PC  Byte  Instruction
+ 0  193   (byte-constant +)
+ 1    8   (byte-varref n)
+ 2  194   (byte-constant 0)
+ 3  195   (byte-constant 1)
+ 4  196   (byte-constant 2)
+ 5  197   (byte-constant 3)
+ ...
+66  129   (byte-constant 64)
+          64
+           0
+71  135   (byte-return . 0)
+@end verbatim
 
 @node Return Instruction
 @section Return Instruction
@@ -681,7 +730,15 @@ Discard one value.
 @node byte-dup
 @unnumberedsubsec @code{byte-dup} (137)
 @kindex byte-dup
-Duplicate one value.
+Make a copy of the top-of-stack value and push that onto the top of the evaluation stack.
+
+@subsubsection Example
+When lexical binding is in effect, @code{(defun en(n) n)} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  137   (byte-dup . 0)  ;; duplicates top of stack: n
+ 1  135   (byte-return . 0)
+@end verbatim
 
 @node Binding Instructions
 @section Binding Instructions
@@ -703,73 +760,73 @@ Make a binding recording buffer, point, and mark.
 @tab Not used; see @code{dup}
 @tab
 @item @verb{|  1|}
-@tab @code{byte-stack-ref 1}
+@tab @code{byte-stack-ref1}
 @tab stack reference 1
 @item @verb{|  2|}
-@tab @code{byte-stack-ref 2}
+@tab @code{byte-stack-ref2}
 @tab stack reference 2
 @item @verb{|  3|}
-@tab @code{byte-stack-ref 3}
+@tab @code{byte-stack-ref3}
 @tab stack reference 3
 @item @verb{|  4|}
-@tab @code{byte-stack-ref 4}
+@tab @code{byte-stack-ref4}
 @tab stack reference 4
 @item @verb{|  5|}
-@tab @code{byte-stack-ref 5}
+@tab @code{byte-stack-ref5}
 @tab stack reference 5
 @item @verb{|  6|}
-@tab @code{byte-stack-ref 6}
+@tab @code{byte-stack-ref6}
 @tab stack reference 0--255
 @item @verb{|  7|}
-@tab @code{byte-stack-ref 7}
+@tab @code{byte-stack-ref7}
 @tab stack reference 0--65535
 @item @verb{|  8|}
-@tab @code{byte-varref 0}
+@tab @code{byte-varref0}
 @tab variable reference 0
 @item @verb{|  9|}
-@tab @code{byte-varref 1}
+@tab @code{byte-varref1}
 @tab variable reference 1
 @item @verb{| 10|}
-@tab @code{byte-varref 2}
+@tab @code{byte-varref2}
 @tab variable reference 2
 @item @verb{| 11|}
-@tab @code{byte-varref 3}
+@tab @code{byte-varref3}
 @tab variable reference 3
 @item @verb{| 12|}
-@tab @code{byte-varref 4}
+@tab @code{byte-varref4}
 @tab variable reference 4
 @item @verb{| 13|}
-@tab @code{byte-varref 5}
+@tab @code{byte-varref5}
 @tab variable reference 5
 @item @verb{| 14|}
-@tab @code{byte-varref 6}
+@tab @code{byte-varref6}
 @tab variable reference 0--255
 @item @verb{| 15|}
-@tab @code{byte-varref 7}
+@tab @code{byte-varref7}
 @tab variable reference 0--65535
 @item @verb{| 16|}
-@tab @code{byte-varset 0}
+@tab @code{byte-varset0}
 @tab Sets variable 0
 @item @verb{| 17|}
-@tab @code{byte-varset 1}
+@tab @code{byte-varset1}
 @tab Sets variable 1
 @item @verb{| 18|}
-@tab @code{byte-varset 2}
+@tab @code{byte-varset2}
 @tab Sets variable 2
 @item @verb{| 19|}
-@tab @code{byte-varset 3}
+@tab @code{byte-varset3}
 @tab Sets variable 3
 @item @verb{| 20|}
-@tab @code{byte-varset 4}
+@tab @code{byte-varset4}
 @tab Sets variable 4
 @item @verb{| 21|}
-@tab @code{byte-varset 5}
+@tab @code{byte-varset5}
 @tab Sets variable 5
 @item @verb{| 22|}
-@tab @code{byte-varset 6}
+@tab @code{byte-varset6}
 @tab Sets variable 6
 @item @verb{| 23|}
-@tab @code{byte-varset 7}
+@tab @code{byte-varset7}
 @tab Sets variable 7
 @item @verb{| 24|}
 @tab @code{byte-varbind}
@@ -872,7 +929,7 @@ Make a binding recording buffer, point, and mark.
 @tab @code{byte-concat4}
 @tab Call @code{concat} with four arguments.
 @item @verb{|129|}
-@tab @code{byte-constant}
+@tab @code{byte-constant2}
 @tab Load a constant 0--65535 (but generally greater than 63)
 @item @verb{|136|}
 @tab @code{byte-discard}
@@ -883,134 +940,163 @@ Make a binding recording buffer, point, and mark.
 @item @verb{|138|}
 @tab @code{byte-save-excursion}
 @tab Make a binding recording buffer, point, and mark.
+@item @verb{|169|}
+@tab
+@tab Unused
+@item @verb{|170|}
+@tab
+@tab Unused
+@item @verb{|171|}
+@tab
+@tab Unused
+@item @verb{|172|}
+@tab
+@tab Unused
+@item @verb{|173|}
+@tab
+@tab Unused
+@item @verb{|174|}
+@tab
+@tab Unused
+@item @verb{|175|}
+@tab @code{byte-listN}
+@tab
+@item @verb{|176|}
+@tab @code{byte-concatN}
+@item @verb{|177|}
+@tab @code{byte-insertN}
+@item @verb{|178|}
+@tab @code{byte-stack-set}
+@item @verb{|179|}
+@tab @code{byte-stack-set2}
 @item @verb{|192|}
-@tab @code{byte-constant 0}
+@tab @code{byte-constant-i0}
 @item @verb{|193|}
-@tab @code{byte-constant 1}
+@tab @code{byte-constant-i1}
 @item @verb{|194|}
-@tab @code{byte-constant 2}
+@tab @code{byte-constant-i2}
 @item @verb{|195|}
-@tab @code{byte-constant 3}
+@tab @code{byte-constant-i3}
 @item @verb{|196|}
-@tab @code{byte-constant 4}
+@tab @code{byte-constant-i4}
 @item @verb{|197|}
-@tab @code{byte-constant 5}
+@tab @code{byte-constant-i5}
 @item @verb{|198|}
-@tab @code{byte-constant 6}
+@tab @code{byte-constant-i6}
 @item @verb{|199|}
-@tab @code{byte-constant 7}
+@tab @code{byte-constant-i7}
 @item @verb{|200|}
-@tab @code{byte-constant 8}
+@tab @code{byte-constant-i8}
 @item @verb{|201|}
-@tab @code{byte-constant 9}
+@tab @code{byte-constant-i9}
 @item @verb{|202|}
-@tab @code{byte-constant 10}
+@tab @code{byte-constant-i10}
 @item @verb{|203|}
-@tab @code{byte-constant 11}
+@tab @code{byte-constant-i11}
 @item @verb{|204|}
-@tab @code{byte-constant 12}
+@tab @code{byte-constant-i12}
 @item @verb{|205|}
-@tab @code{byte-constant 13}
+@tab @code{byte-constant-i13}
 @item @verb{|206|}
-@tab @code{byte-constant 14}
+@tab @code{byte-constant-i14}
 @item @verb{|207|}
-@tab @code{byte-constant 15}
+@tab @code{byte-constant-i15}
 @item @verb{|208|}
-@tab @code{byte-constant 16}
+@tab @code{byte-constant-i16}
 @item @verb{|209|}
-@tab @code{byte-constant 17}
+@tab @code{byte-constant-i17}
 @item @verb{|210|}
-@tab @code{byte-constant 18}
+@tab @code{byte-constant-i18}
 @item @verb{|211|}
-@tab @code{byte-constant 19}
+@tab @code{byte-constant-i19}
 @item @verb{|212|}
-@tab @code{byte-constant 20}
+@tab @code{byte-constant-i20}
 @item @verb{|213|}
-@tab @code{byte-constant 21}
+@tab @code{byte-constant-i21}
 @item @verb{|214|}
-@tab @code{byte-constant 22}
+@tab @code{byte-constant-i22}
 @item @verb{|215|}
-@tab @code{byte-constant 23}
+@tab @code{byte-constant-i23}
 @item @verb{|216|}
-@tab @code{byte-constant 24}
+@tab @code{byte-constant-i24}
 @item @verb{|217|}
-@tab @code{byte-constant 25}
+@tab @code{byte-constant-i25}
 @item @verb{|218|}
-@tab @code{byte-constant 26}
+@tab @code{byte-constant-i26}
 @item @verb{|219|}
-@tab @code{byte-constant 27}
+@tab @code{byte-constant-i27}
 @item @verb{|220|}
-@tab @code{byte-constant 28}
+@tab @code{byte-constant-i28}
 @item @verb{|221|}
-@tab @code{byte-constant 29}
+@tab @code{byte-constant-i29}
 @item @verb{|222|}
-@tab @code{byte-constant 30}
+@tab @code{byte-constant-i30}
 @item @verb{|223|}
-@tab @code{byte-constant 31}
+@tab @code{byte-constant-i31}
 @item @verb{|224|}
-@tab @code{byte-constant 32}
+@tab @code{byte-constant-i32}
 @item @verb{|225|}
-@tab @code{byte-constant 33}
+@tab @code{byte-constant-i33}
 @item @verb{|226|}
-@tab @code{byte-constant 34}
+@tab @code{byte-constant-i34}
 @item @verb{|227|}
-@tab @code{byte-constant 35}
+@tab @code{byte-constant-i35}
 @item @verb{|228|}
-@tab @code{byte-constant 36}
+@tab @code{byte-constant-i36}
 @item @verb{|229|}
-@tab @code{byte-constant 37}
+@tab @code{byte-constant-i37}
 @item @verb{|230|}
-@tab @code{byte-constant 38}
+@tab @code{byte-constant-i38}
 @item @verb{|231|}
-@tab @code{byte-constant 39}
+@tab @code{byte-constant-i39}
 @item @verb{|232|}
-@tab @code{byte-constant 40}
+@tab @code{byte-constant-i40}
 @item @verb{|233|}
-@tab @code{byte-constant 41}
+@tab @code{byte-constant-i41}
 @item @verb{|234|}
-@tab @code{byte-constant 42}
+@tab @code{byte-constant-i42}
 @item @verb{|235|}
-@tab @code{byte-constant 43}
+@tab @code{byte-constant-i43}
 @item @verb{|236|}
-@tab @code{byte-constant 44}
+@tab @code{byte-constant-i44}
 @item @verb{|237|}
-@tab @code{byte-constant 45}
+@tab @code{byte-constant-i45}
 @item @verb{|238|}
-@tab @code{byte-constant 46}
+@tab @code{byte-constant-i46}
 @item @verb{|239|}
-@tab @code{byte-constant 47}
+@tab @code{byte-constant-i47}
 @item @verb{|240|}
-@tab @code{byte-constant 48}
+@tab @code{byte-constant-i48}
 @item @verb{|241|}
-@tab @code{byte-constant 49}
+@tab @code{byte-constant-i49}
 @item @verb{|242|}
-@tab @code{byte-constant 50}
+@tab @code{byte-constant-i50}
 @item @verb{|243|}
-@tab @code{byte-constant 51}
+@tab @code{byte-constant-i51}
 @item @verb{|244|}
-@tab @code{byte-constant 52}
+@tab @code{byte-constant-i52}
 @item @verb{|245|}
-@tab @code{byte-constant 53}
+@tab @code{byte-constant-i53}
 @item @verb{|246|}
-@tab @code{byte-constant 54}
+@tab @code{byte-constant-i54}
 @item @verb{|247|}
-@tab @code{byte-constant 55}
+@tab @code{byte-constant-i55}
 @item @verb{|248|}
-@tab @code{byte-constant 56}
+@tab @code{byte-constant-i56}
 @item @verb{|249|}
-@tab @code{byte-constant 57}
+@tab @code{byte-constant-i57}
 @item @verb{|250|}
-@tab @code{byte-constant 58}
+@tab @code{byte-constant-i58}
 @item @verb{|251|}
-@tab @code{byte-constant 59}
+@tab @code{byte-constant-i59}
 @item @verb{|252|}
-@tab @code{byte-constant 60}
+@tab @code{byte-constant-i60}
 @item @verb{|253|}
-@tab @code{byte-constant 61}
+@tab @code{byte-constant-i61}
 @item @verb{|254|}
-@tab @code{byte-constant 62}
+@tab @code{byte-constant-i62}
 @item @verb{|255|}
-@tab @code{byte-constant 63}
+@tab @code{byte-constant-i63}
 @end multitable
 
 
