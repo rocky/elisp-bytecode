@@ -415,6 +415,8 @@ When dynamic binding is in effect, @code{(defun en(n) n)} generates:
 PC  Byte  Instruction
  0    8   (byte-varref n)  ;; loads variable n onto the stack
  1  135   (byte-return . 0)
+
+Constant Vector: [n]
 @end verbatim
 
 @node byte-varset
@@ -433,6 +435,8 @@ PC  Byte  Instruction
  1  137   (byte-dup . 0)
  2   16   (byte-varset n) ;; sets variable n
  3  135   (byte-return . 0)
+
+Constant Vector: [n 5]
 @end verbatim
 
 @node byte-varbind
@@ -457,6 +461,8 @@ PC  Byte  Instruction
  0  192   (byte-constant exchange-point-and-mark)
  1   32   (byte-call . 0)
  2  135   (byte-return . 0)
+
+Constant Vector: [exchange-point-and-mark]
 @end verbatim
 
 @node byte-unbind
@@ -497,9 +503,9 @@ PC  Byte  Instruction
  4  196   (byte-constant 12)
  5   36   (byte-call . 4)
  6  135   (byte-return . 0)
-@end verbatim
 
-and the Constants Vector is @code{[n + 10 11 12]}
+Constant Vector: [n + 10 11 12]
+@end verbatim
 
 @node byte-constant2
 @unnumberedsubsec @code{byte-constant2} (129)
@@ -540,6 +546,8 @@ bytecode sequence. The top value on the evaluation stack is the return value.
 PC  Byte  Instruction
  0  192   (byte-constant 1)
  1  135   (byte-return . 0)
+
+Constant Vector: [1]
 @end verbatim
 
 @node Simple Instructions
