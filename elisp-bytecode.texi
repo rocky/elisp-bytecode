@@ -14,24 +14,25 @@
 @top Emacs Lisp Bytecode Manual
 
 @menu
-* Introduction to Bytecode and LAP::
+* Introduction to Elisp Bytecode and LAP::
 * ELisp Bytecode Instructions::  Description of all Emacs Lisp Bytecode Instructions
 * Opcode Table::                Table of Bytecode Instruction ordered by Opcode Number
 * References::
 * Instruction Index::
 @end menu
 
-@node Introduction to Bytecode and LAP
-@chapter Introduction to Bytecode and LAP
+@node Introduction to Elisp Bytecode and LAP
+@chapter Introduction to Elisp Bytecode and LAP
 
 @menu
-* Why is Lisp Bytecode important and how is Emacs as a program different?::
+* Why is ELisp Bytecode important and how is Emacs as a program different?::
+* ELisp Bytecode and LAP::
 * Emacs Lisp Virtual Machine::
 * The Byte-code Function Literal::
 @end menu
 
-@node Why is Lisp Bytecode important and how is Emacs as a program different?
-@section Why is Lisp Bytecode important and how is Emacs as a program different?
+@node Why is ELisp Bytecode important and how is Emacs as a program different?
+@section Why is ELisp Bytecode important and how is Emacs as a program different?
 
 If you were to look at two comparable complex programs circa 2018,
 Firefox 53.0.3 and Emacs 25.3, you would see that relative sizes of Firefox
@@ -84,17 +85,36 @@ rules of mathematics and physics, so it is remarkable that something
 as complex as Emacs can come out of the relatively simple language
 Lisp.
 
-But Lisp is not and never has been a speedy language compared to say,
-C, C++, Go, Rust, or Java. And that's where LAP and bytecode comes in.
+@node ELisp Bytecode and LAP
+@section ELisp Bytecode and LAP
 
-LAP stands for Lisp Assembly Program. It is a representation of the
-assembly code that is used behind the scenes to speed up evaluating
-Emacs Lisp code. LAP syntax follows the assembly representation that
-is deplayed. ELisp bytecode on the other hand is the byte
-representation used by the bytecode interpreter. There is an
-instruction representation for that. I'll often use Elisp bytecode
-instruction refer to an assembly representation of an Elisp bytecode
-instruction.
+However pervasively used, Emacs Lisp (Elisp) is in making up the Emacs
+ecosystem, ELisp is not and never has been a speedy language compared
+to say, C, C++, Go, Rust, or Java. And that's where LAP and bytecode
+come in.
+
+As stated in a commment in @code{byte-opt.el} added circa 1996:
+@quotation
+No matter how hard you try, you can't make a racehorse out of a pig.
+
+You can, however, make a faster pig.
+@author Eric Naggum
+@end quotation
+
+ELisp bytecode is the custom lower-level language used by Emacs'
+bytecode interpreter. As with all bytecode, bytecode instructions are
+compact. For display purposes, there is a @code{disassemble} command
+that unpacks the fields of the instruction. With this and using the
+constants vector, bytecode can be printed in an assembly-language-like
+format.
+
+I'll often use Elisp bytecode instruction refer to an assembly
+representation of an Elisp bytecode instruction.
+
+LAP stands for Lisp Assembly Program. It seems to be an internal
+representation of bytecode in a more symbolic form. It is used behind
+the scenes to that make bytecode more amenable to optimization, since
+the instructions are in a structure which is easier to operate on.
 
 @uref{https://www.gnu.org/software/emacs/manual/html_node/elisp/Speed-of-Byte_002dCode.html,
 Silly Loop Example} in the Emacs Lisp Manual gives a program to time
