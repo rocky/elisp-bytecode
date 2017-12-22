@@ -1568,6 +1568,7 @@ Make a binding recording buffer, point, and mark.
 @tab @verb{|  82|}
 @tab @verb{|  byte-concat4|}
 @tab Call @code{concat} with four arguments.
+
 @item @verb{|0123|}
 @tab @verb{|  83|}
 @tab @verb{|  byte-sub1|}
@@ -1724,6 +1725,11 @@ Make a binding recording buffer, point, and mark.
 @tab @verb{| 127|}
 @tab @verb{|  byte-end-of-line|}
 @tab Call @code{end-of-line} with one argument.
+@item @verb{|0200|}
+@tab @verb{| 128|}
+@tab
+@tab Unused
+
 @item @verb{|0201|}
 @tab @verb{| 129|}
 @tab @verb{|  byte-constant2|}
@@ -1734,13 +1740,31 @@ Make a binding recording buffer, point, and mark.
 @tab @verb{|  byte-discard|}
 @tab Discard top stack value
 @item @verb{|0211|}
-@tab @verb{|  137|}
+@tab @verb{| 137|}
 @tab @verb{|  byte-dup|}
 @tab Duplicate top stack value
 @item @verb{|0212|}
 @tab @verb{| 138|}
 @tab @verb{|  byte-save-excursion|}
 @tab Make a binding recording buffer, point, and mark.
+
+@item @verb{|0257|}
+@tab @verb{| 175|}
+@tab @verb{|  byte-listN|}
+@tab
+@item @verb{|0260|}
+@tab @verb{| 176|}
+@tab @verb{|  byte-concatN|}
+@item @verb{|0261|}
+@tab @verb{| 177|}
+@tab @verb{|  byte-insertN|}
+@item @verb{|0262|}
+@tab @verb{| 178|}
+@tab @verb{|  byte-stack-set|}
+@item @verb{|0263|}
+@tab @verb{| 179|}
+@tab @verb{|  byte-stack-set2|}
+
 @item @verb{|0223|}
 @tab @verb{| 147|}
 @tab @verb{|  byte-set-marker|}
@@ -1833,7 +1857,15 @@ Make a binding recording buffer, point, and mark.
 @tab @verb{| 169|}
 @tab
 @tab Unused
-@item @verb{|0273|}
+@item @verb{|0270|}
+@tab @verb{| 184|}
+@tab
+@tab Unused
+@item @verb{|0271|}
+@tab @verb{| 185|}
+@tab
+@tab Unused
+@item @verb{|0272|}
 @tab @verb{| 186|}
 @tab
 @tab Unused
