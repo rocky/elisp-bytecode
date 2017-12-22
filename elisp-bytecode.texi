@@ -2118,258 +2118,322 @@ Make a binding recording buffer, point, and mark.
 @item @verb{|0300|}
 @tab @verb{| 192|}
 @tab @verb{|  byte-constant-i0|}
+@tab
 @tab @math{+1}
 @item @verb{|0301|}
 @tab @verb{| 193|}
 @tab @verb{|  byte-constant-i1|}
+@tab
 @tab @math{+1}
 @item @verb{|0302|}
 @tab @verb{| 194|}
 @tab @verb{|  byte-constant-i2|}
+@tab
 @tab @math{+1}
 @item @verb{|0303|}
 @tab @verb{| 195|}
 @tab @verb{|  byte-constant-i3|}
+@tab
 @tab @math{+1}
 @item @verb{|0304|}
 @tab @verb{| 196|}
 @tab @verb{|  byte-constant-i4|}
+@tab
 @tab @math{+1}
 @item @verb{|0305|}
 @tab @verb{| 197|}
 @tab @verb{|  byte-constant-i5|}
+@tab
 @tab @math{+1}
 @item @verb{|0306|}
 @tab @verb{| 198|}
 @tab @verb{|  byte-constant-i6|}
+@tab
 @tab @math{+1}
 @item @verb{|0307|}
 @tab @verb{| 199|}
 @tab @verb{|  byte-constant-i7|}
+@tab
 @tab @math{+1}
 @item @verb{|0310|}
 @tab @verb{| 200|}
 @tab @verb{|  byte-constant-i8|}
+@tab
 @tab @math{+1}
 @item @verb{|0311|}
 @tab @verb{| 201|}
 @tab @verb{|  byte-constant-i9|}
+@tab
 @tab @math{+1}
 @item @verb{|0312|}
 @tab @verb{| 202|}
 @tab @verb{|  byte-constant-i10|}
+@tab
 @tab @math{+1}
 @item @verb{|0313|}
 @tab @verb{| 203|}
 @tab @verb{|  byte-constant-i11|}
+@tab
 @tab @math{+1}
 @item @verb{|0314|}
 @tab @verb{| 204|}
 @tab @verb{|  byte-constant-i12|}
+@tab
 @tab @math{+1}
 @item @verb{|0315|}
 @tab @verb{| 205|}
 @tab @verb{|  byte-constant-i13|}
+@tab
 @tab @math{+1}
 @item @verb{|0316|}
 @tab @verb{| 206|}
 @tab @verb{|  byte-constant-i14|}
+@tab
 @tab @math{+1}
 @item @verb{|0317|}
 @tab @verb{| 207|}
 @tab @verb{|  byte-constant-i15|}
+@tab
 @tab @math{+1}
 @item @verb{|0320|}
 @tab @verb{| 208|}
 @tab @verb{|  byte-constant-i16|}
+@tab
 @tab @math{+1}
 @item @verb{|0321|}
 @tab @verb{| 209|}
 @tab @verb{|  byte-constant-i17|}
+@tab
 @tab @math{+1}
 @item @verb{|0322|}
 @tab @verb{| 210|}
 @tab @verb{|  byte-constant-i18|}
+@tab
 @tab @math{+1}
 @item @verb{|0323|}
 @tab @verb{| 211|}
 @tab @verb{|  byte-constant-i19|}
+@tab
 @tab @math{+1}
 @item @verb{|0324|}
 @tab @verb{| 212|}
 @tab @verb{|  byte-constant-i20|}
+@tab
 @tab @math{+1}
 @item @verb{|0325|}
 @tab @verb{| 213|}
 @tab @verb{|  byte-constant-i21|}
+@tab
 @tab @math{+1}
 @item @verb{|0326|}
 @tab @verb{| 214|}
 @tab @verb{|  byte-constant-i22|}
+@tab
 @tab @math{+1}
 @item @verb{|0327|}
 @tab @verb{| 215|}
 @tab @verb{|  byte-constant-i23|}
+@tab
 @tab @math{+1}
 @item @verb{|0330|}
 @tab @verb{| 216|}
 @tab @verb{|  byte-constant-i24|}
+@tab
 @tab @math{+1}
 @item @verb{|0331|}
 @tab @verb{| 217|}
 @tab @verb{|  byte-constant-i25|}
+@tab
 @tab @math{+1}
 @item @verb{|0332|}
 @tab @verb{| 218|}
 @tab @verb{|  byte-constant-i26|}
+@tab
 @tab @math{+1}
 @item @verb{|0333|}
 @tab @verb{| 219|}
 @tab @verb{|  byte-constant-i27|}
+@tab
 @tab @math{+1}
 @item @verb{|0334|}
 @tab @verb{| 220|}
 @tab @verb{|  byte-constant-i28|}
+@tab
 @tab @math{+1}
 @item @verb{|0335|}
 @tab @verb{| 221|}
 @tab @verb{|  byte-constant-i29|}
+@tab
 @tab @math{+1}
 @item @verb{|0336|}
 @tab @verb{| 222|}
 @tab @verb{|  byte-constant-i30|}
+@tab
 @tab @math{+1}
 @item @verb{|0337|}
 @tab @verb{| 223|}
 @tab @verb{|  byte-constant-i31|}
+@tab
 @tab @math{+1}
 @item @verb{|0340|}
 @tab @verb{| 224|}
 @tab @verb{|  byte-constant-i32|}
+@tab
 @tab @math{+1}
 @item @verb{|0341|}
 @tab @verb{| 225|}
 @tab @verb{|  byte-constant-i33|}
+@tab
 @tab @math{+1}
 @item @verb{|0342|}
 @tab @verb{| 226|}
 @tab @verb{|  byte-constant-i34|}
+@tab
 @tab @math{+1}
 @item @verb{|0343|}
 @tab @verb{| 227|}
 @tab @verb{|  byte-constant-i35|}
+@tab
 @tab @math{+1}
 @item @verb{|0344|}
 @tab @verb{| 228|}
 @tab @verb{|  byte-constant-i36|}
+@tab
 @tab @math{+1}
 @item @verb{|0345|}
 @tab @verb{| 229|}
 @tab @verb{|  byte-constant-i37|}
+@tab
 @tab @math{+1}
 @item @verb{|0346|}
 @tab @verb{| 230|}
 @tab @verb{|  byte-constant-i38|}
+@tab
 @tab @math{+1}
 @item @verb{|0347|}
 @tab @verb{| 231|}
 @tab @verb{|  byte-constant-i39|}
+@tab
 @tab @math{+1}
 @item @verb{|0350|}
 @tab @verb{| 232|}
 @tab @verb{|  byte-constant-i40|}
+@tab
 @tab @math{+1}
 @item @verb{|0351|}
 @tab @verb{| 233|}
 @tab @verb{|  byte-constant-i41|}
+@tab
 @tab @math{+1}
 @item @verb{|0352|}
 @tab @verb{| 234|}
 @tab @verb{|  byte-constant-i42|}
+@tab
 @tab @math{+1}
 @item @verb{|0353|}
 @tab @verb{| 235|}
 @tab @verb{|  byte-constant-i43|}
+@tab
 @tab @math{+1}
 @item @verb{|0354|}
 @tab @verb{| 236|}
 @tab @verb{|  byte-constant-i44|}
+@tab
 @tab @math{+1}
 @item @verb{|0355|}
 @tab @verb{| 237|}
 @tab @verb{|  byte-constant-i45|}
+@tab
 @tab @math{+1}
 @item @verb{|0356|}
 @tab @verb{| 238|}
 @tab @verb{|  byte-constant-i46|}
+@tab
 @tab @math{+1}
 @item @verb{|0357|}
 @tab @verb{| 239|}
 @tab @verb{|  byte-constant-i47|}
+@tab
 @tab @math{+1}
 @item @verb{|0360|}
 @tab @verb{| 240|}
 @tab @verb{|  byte-constant-i48|}
+@tab
 @tab @math{+1}
 @item @verb{|0361|}
 @tab @verb{| 241|}
 @tab @verb{|  byte-constant-i49|}
+@tab
 @tab @math{+1}
 @item @verb{|0362|}
 @tab @verb{| 242|}
 @tab @verb{|  byte-constant-i50|}
+@tab
 @tab @math{+1}
 @item @verb{|0363|}
 @tab @verb{| 243|}
 @tab @verb{|  byte-constant-i51|}
+@tab
 @tab @math{+1}
 @item @verb{|0364|}
 @tab @verb{| 244|}
 @tab @verb{|  byte-constant-i52|}
+@tab
 @tab @math{+1}
 @item @verb{|0365|}
 @tab @verb{| 245|}
 @tab @verb{|  byte-constant-i53|}
+@tab
 @tab @math{+1}
 @item @verb{|0366|}
 @tab @verb{| 246|}
 @tab @verb{|  byte-constant-i54|}
+@tab
 @tab @math{+1}
 @item @verb{|0367|}
 @tab @verb{| 247|}
 @tab @verb{|  byte-constant-i55|}
+@tab
 @tab @math{+1}
 @item @verb{|0370|}
 @tab @verb{| 248|}
 @tab @verb{|  byte-constant-i56|}
+@tab
 @tab @math{+1}
 @item @verb{|0371|}
 @tab @verb{| 249|}
 @tab @verb{|  byte-constant-i57|}
+@tab
 @tab @math{+1}
 @item @verb{|0372|}
 @tab @verb{| 250|}
 @tab @verb{|  byte-constant-i58|}
+@tab
 @tab @math{+1}
 @item @verb{|0373|}
 @tab @verb{| 251|}
 @tab @verb{|  byte-constant-i59|}
+@tab
 @tab @math{+1}
 @item @verb{|0374|}
 @tab @verb{| 252|}
 @tab @verb{|  byte-constant-i60|}
+@tab
 @tab @math{+1}
 @item @verb{|0375|}
 @tab @verb{| 253|}
 @tab @verb{|  byte-constant-i61|}
+@tab
 @tab @math{+1}
 @item @verb{|0376|}
 @tab @verb{| 254|}
 @tab @verb{|  byte-constant-i62|}
+@tab
 @tab @math{+1}
 @item @verb{|0377|}
 @tab @verb{| 255|}
 @tab @verb{|  byte-constant-i63|}
+@tab
 @tab @math{+1}
 @end multitable
 
