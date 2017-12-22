@@ -1493,55 +1493,83 @@ Make a binding recording buffer, point, and mark.
 
 @item @verb{| 050|}
 @tab @verb{|  40|}
-@tab @verb{|  byte-unbind|}
+@tab @verb{|  byte-unbind0|}
+@tab Unbinds special bindings
+@item @verb{| 051|}
+@tab @verb{|  41|}
+@tab @verb{|  byte-unbind1|}
+@tab Unbinds special bindings
+@item @verb{| 052|}
+@tab @verb{|  42|}
+@tab @verb{|  byte-unbind2|}
+@tab Unbinds special bindings
+@item @verb{| 053|}
+@tab @verb{|  43|}
+@tab @verb{|  byte-unbind3|}
+@tab Unbinds special bindings
+@item @verb{| 054|}
+@tab @verb{|  44|}
+@tab @verb{|  byte-unbind4|}
+@tab Unbinds special bindings
+@item @verb{| 055|}
+@tab @verb{|  45|}
+@tab @verb{|  byte-unbind5|}
+@tab Unbinds special bindings
+@item @verb{| 056|}
+@tab @verb{|  46|}
+@tab @verb{|  byte-unbind6|}
+@tab Unbinds special bindings
+@item @verb{| 057|}
+@tab @verb{|  47|}
+@tab @verb{|  byte-unbind7|}
 @tab Unbinds special bindings
 
-@item @verb{| 061|}
-@tab @verb{|  41|}
-@tab @tab Unused
-@item @verb{| 062|}
-@tab @verb{|  42|}
-@tab @tab Unused
 @item @verb{| 063|}
-@tab @verb{|  43|}
+@tab @verb{|  51|}
 @tab @tab Unused
 @item @verb{| 064|}
-@tab @verb{|  44|}
+@tab @verb{|  52|}
 @tab @tab Unused
 @item @verb{| 065|}
-@tab @verb{|  45|}
+@tab @verb{|  53|}
+@tab @tab Unused
+@item @verb{| 066|}
+@tab @verb{|  54|}
+@tab @tab Unused
+@item @verb{| 067|}
+@tab @verb{|  55|}
 @tab @tab Unused
 
 @item @verb{| 070|}
-@tab @verb{|  46|}
+@tab @verb{|  56|}
 @tab @verb{|  byte-nth|}
 @tab Call @code{nth} with two arguments.
 @item @verb{| 071|}
-@tab @verb{|  47|}
+@tab @verb{|  57|}
 @tab @verb{|  byte-symbolp|}
 @tab Call @code{symbolp} with one argument.
 @item @verb{| 072|}
-@tab @verb{|  48|}
+@tab @verb{|  58|}
 @tab @verb{|  byte-consp|}
 @tab Call @code{consp} with one argument.
 @item @verb{| 073|}
-@tab @verb{|  49|}
+@tab @verb{|  59|}
 @tab @verb{|  byte-stringp|}
 @tab Call @code{stringp} with one argument.
 @item @verb{| 074|}
-@tab @verb{|  50|}
+@tab @verb{|  60|}
 @tab @verb{|  byte-listp|}
 @tab Call @code{listp} with one argument.
 @item @verb{| 075|}
-@tab @verb{|  51|}
+@tab @verb{|  61|}
 @tab @verb{|  byte-eq|}
 @tab Call @code{eq} with two arguments.
 @item @verb{| 076|}
-@tab @verb{|  52|}
+@tab @verb{|  62|}
 @tab @verb{|  byte-memq|}
 @tab Call @code{memq} with two arguments.
 @item @verb{| 077|}
-@tab @verb{|  53|}
+@tab @verb{|  63|}
 @tab @verb{|  byte-not|}
 @tab Call @code{not} with one argument.
 
@@ -1687,14 +1715,14 @@ Make a binding recording buffer, point, and mark.
 @tab @verb{|  byte-insert|}
 @tab Call @code{insert} with one argument.
 @item @verb{|0145|}
-@tab @verb{| 101|}
-@tab @verb{|  byte-point-min|}
-@tab Call @code{point-min} with no arguments.
-@item @verb{|0144|}
 @tab @verb{| 100|}
 @tab @verb{|  byte-point-max|}
 @tab Call @code{point-max} with no arguments.
 @item @verb{|0146|}
+@tab @verb{| 101|}
+@tab @verb{|  byte-point-min|}
+@tab Call @code{point-min} with no arguments.
+@item @verb{|0144|}
 @tab @verb{| 102|}
 @tab @verb{|  byte-char-after|}
 @tab Call @code{char-after} with one argument.
