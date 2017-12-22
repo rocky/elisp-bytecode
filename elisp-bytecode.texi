@@ -10,8 +10,12 @@
 * Lisp Bytecode Instructions::  The Emacs Lisp Bytecode Manual.
 @end direntry
 
+@contents
+
+@ifnottex
 @node Top
-@top Emacs Lisp Bytecode Manual
+@top Emacs Lisp Bytecode and LAP Manual
+@end ifnottex
 
 @menu
 * Introduction to Elisp Bytecode and LAP::
