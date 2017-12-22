@@ -15,6 +15,7 @@
 
 @menu
 * Introduction to Elisp Bytecode and LAP::
+* Emacs Lisp Bytecode Environment::
 * ELisp Bytecode Instructions::  Description of all Emacs Lisp Bytecode Instructions
 * Opcode Table::                Table of Bytecode Instruction ordered by Opcode Number
 * References::
@@ -386,6 +387,117 @@ byte-compiled. This is usually fine because, by definition, this code
 is going to be waiting on user input. However, it slows down keyboard
 macro playback.
 
+@node Emacs Lisp Bytecode Environment
+@chapter Emacs Lisp Bytecode Environment
+
+@menu
+* Emacs Lisp Bytecode Objects::
+* Emacs Lisp Bytecode Compiler::
+* Emacs Lisp Bytecode Interpreter::
+* Emacs Lisp Bytecode Instructions::
+@end menu
+
+@node Emacs Lisp Bytecode Objects
+@section Emacs Lisp Bytecode Objects
+
+Emacs Lisp bytecode isn't actually just a string of octets (bytes):
+instead, it comes in the form of bytecode objects, which contain a
+string of bytes as well as a constants vector, the pre-calculated
+maximum stack depth, a docstring, and potentially other parts.
+
+The constants vector is required to make sense of most bytecode:
+functions that share the same bytecode byte string, but differ in
+their constants vectors, can do very different things.
+
+@node Emacs Lisp Bytecode Compiler
+@section Emacs Lisp Bytecode Compiler
+
+The Emacs Lisp Bytecode compiler is an ahead-of-time compiler that
+accepts Emacs Lisp input and produces bytecode that can be run by
+Emacs. The compiler itself is written in Emacs Lisp @footnote{usually,
+the compiler itself is compiled into bytecode, which avoids overflow
+problems}, and is a comparatively compact program contained in the
+files bytecomp.el and byte-opt.el.
+
+Internally, the compiler first produces an intermediate Lisp structure
+in LAP code, then performs various optimizations on that, and finally
+translates the LAP code into bytecode. LAP code is used during
+compilation, but not kept in memory or used when running bytecode.
+While it is possible to go back to LAP code from bytecode, this is
+done only in order to inline functions.
+
+@node Emacs Lisp Bytecode Interpreter
+@section Emacs Lisp Bytecode Interpreter
+
+When a function is called for which compiled bytecode is available,
+control passes to the bytecode interpreter.  The interpreter is
+written in C and heavily optimized for speed rather than readability.
+
+The bytecode interpreter operates on a single function at a time; for
+a function call, the bytecode interpreter calls other parts of Emacs,
+which might call the bytecode interpreter again, recursively. Thus, in
+contrast to languages like FORTH, there is no code stack per se, just
+the C stack.
+
+The bytecode interpreter implements a stack machine utilizing a
+fixed-size evaluation stack, which is usually allocated as a block on
+the C stack. Instructions can access either this stack or a constants
+vector, which is produced at compile time and made part of the
+bytecode object.
+
+The evaluation stack, as well as the constants vector, contains Lisp
+values, usually 64-bit words containing an integer (Emacs integers are
+limited to 62 bits on 64-bit machines), symbol index, or a tagged
+pointer to one of various Emacs structures such as markers, buffers,
+floating-point numbers, vectors, or cons cells.
+
+Values on the evaluation stack are created at run time; values in the
+constants vector are created when the byte-compiled file is read and
+converted into bytecode objects. The underlying bit representation of
+values in the constants vector can vary between Emacs instances: they
+are constants in the sense that they do not vary within a single Emacs
+instance.
+
+Bytecode objects contain a number safely estimating the maximum stack
+size the evaluation stack can grow to.
+
+@node Emacs Lisp Bytecode Instructions
+@section Emacs Lisp Bytecode Instructions
+
+The bytecode interpreter, once it has set up the evaluation stack and
+constants vector, executes the instructions that make up the bytecode
+byte string: each instruction is between one and three bytes in
+length, containing an opcode in the first byte and sometimes an eight-
+or 16-bit integer in the following bytes. Those integers are usually
+unsigned, and 16-bit integers are stored in little-endian byte order,
+regardless of whether that is the natural byte order for the machine
+Emacs runs on.
+
+Some opcodes, allocated in blocks, encode an integer as part of the
+opcode byte.
+
+Bytecode instructions operate on the evaluation stack: for example,
+@code{byte-plus}, the addition function, removes two values from the
+top of the stack and pushes a single value, the sum of the first two
+values, back on the stack.
+
+Since the arguments for a function call need to be on the stack before
+the function can operate on them, bytecode instructions use Reverse
+Polish Notation: first the arguments are pushed on the stack, then the
+function or operation is called.  For example, the Lisp expression
+@code{(+ a b)} turns into this bytecode:
+
+@c @code{(defun plus (a b) (+ a b))} generates
+@verbatim
+PC  Byte  Instruction
+ 0    8   (byte-varref a)
+ 1    9   (byte-varref b)
+ 2   92   (byte-plus . 0)
+@end verbatim
+
+First @code{a} and @code{b} are dereferenced and their values pushed
+onto the evaluation stack; then @code{byte-plus} is executed, leaving
+only a single value, the sum of @code{a} and @code{b}, on the stack.
 
 @node ELisp Bytecode Instructions
 @chapter ELisp Bytecode Instructions
@@ -434,7 +546,7 @@ When dynamic binding is in effect, @code{(defun en(n) n)} generates:
 @verbatim
 PC  Byte  Instruction
  0    8   (byte-varref n)  ;; loads variable n onto the stack
- 1  135   (byte-return . 0)
+ 1  135   (byte-return)
 
 Constant Vector: [n]
 @end verbatim
@@ -452,9 +564,9 @@ When dynamic binding is in effect, @code{(defun n5(n) (setq n 5))} generates:
 @verbatim
 PC  Byte  Instruction
  0  193   (byte-constant 5)
- 1  137   (byte-dup . 0)
+ 1  137   (byte-dup)
  2   16   (byte-varset n) ;; sets variable n
- 3  135   (byte-return . 0)
+ 3  135   (byte-return)
 
 Constant Vector: [n 5]
 @end verbatim
@@ -480,7 +592,7 @@ function itself.
 PC  Byte  Instruction
  0  192   (byte-constant exchange-point-and-mark)
  1   32   (byte-call . 0)
- 2  135   (byte-return . 0)
+ 2  135   (byte-return)
 
 Constant Vector: [exchange-point-and-mark]
 @end verbatim
@@ -522,7 +634,7 @@ PC  Byte  Instruction
  3  195   (byte-constant 11)
  4  196   (byte-constant 12)
  5   36   (byte-call . 4)
- 6  135   (byte-return . 0)
+ 6  135   (byte-return)
 
 Constant Vector: [n + 10 11 12]
 @end verbatim
@@ -536,6 +648,8 @@ Although there are special instructions to push any one of the first
 64 entries in the constants stack, this instruction is needed to push
 a value beyond one the first 64 entries.
 
+@c @code{(defun n64 (n) (+ n 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64))} generates
+
 @code{(defun n64(n) (+ n 0 1 2 3 .. 64 ))} generates
 @verbatim
 PC  Byte  Instruction
@@ -546,10 +660,10 @@ PC  Byte  Instruction
  4  196   (byte-constant 2)
  5  197   (byte-constant 3)
  ...
-66  129   (byte-constant 64)
+66  129   (byte-constant2 64)
           64
            0
-71  135   (byte-return . 0)
+71  135   (byte-return)
 @end verbatim
 
 @node Return Instruction
@@ -565,7 +679,7 @@ bytecode sequence. The top value on the evaluation stack is the return value.
 @verbatim
 PC  Byte  Instruction
  0  192   (byte-constant 1)
- 1  135   (byte-return . 0)
+ 1  135   (byte-return)
 
 Constant Vector: [1]
 @end verbatim
@@ -1139,8 +1253,8 @@ Make a copy of the top-of-stack value and push that onto the top of the evaluati
 When lexical binding is in effect, @code{(defun en(n) n)} generates:
 @verbatim
 PC  Byte  Instruction
- 0  137   (byte-dup . 0)  ;; duplicates top of stack: n
- 1  135   (byte-return . 0)
+ 0  137   (byte-dup)  ;; duplicates top of stack: n
+ 1  135   (byte-return)
 @end verbatim
 
 @node Binding Instructions
