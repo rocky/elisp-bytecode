@@ -15,6 +15,7 @@
 
 @menu
 * Introduction to Elisp Bytecode and LAP::
+* Emacs Lisp Bytecode Environment::
 * ELisp Bytecode Instructions::  Description of all Emacs Lisp Bytecode Instructions
 * Opcode Table::                Table of Bytecode Instruction ordered by Opcode Number
 * References::
