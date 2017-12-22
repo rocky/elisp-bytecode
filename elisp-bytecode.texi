@@ -164,14 +164,14 @@ Although it may be obvious, one last thing I'd like to point out is
 that the Elisp bytecode instruction set is custom to Emacs.  In
 addition to primitives that you'd expect for Lisp like ``car'' and
 ``cdr'', there are primitive bytecodes for more complex Emacs
-editor-specific concepts like ``save-excusion''@footnote{The fact that
+editor-specific concepts like ``save-excursion''@footnote{The fact that
 the semantic level difference between Emacs Lisp and its bytecode is
 not great makes writing a decompiler for it more feasible than if the
 bytecode language were of a general nature such as say LLVM IR.}.
 
 The interpreter is largely backwards compatible, but not forwards
 compatible@footnote{well, eventually old Elisp bytecode instructions
-@emph{do} die}. So old versions of Emacs can’t run new
+@emph{do} die}. So old versions of Emacs can't run new
 byte-code. Each instruction is between 1 and 3 bytes. The first byte
 is the opcode and the second and third bytes are either a single
 operand or a single intermediate value. Some operands are packed into
@@ -193,7 +193,7 @@ have a particular structure elaborated on below.
 
 There are two ways to create a byte-code object: using a byte-code
 object literal or with @code{make-byte-code}. Like vector literals,
-byte-code functions don’t need to be quoted.
+byte-code functions don't need to be quoted.
 
 Examples of calling @code{make-byte-code}:
 @verbatim
@@ -242,10 +242,10 @@ appears in Lisp code.
 ;; => #[(a b &optional c) "\300\207" [nil] 1]
 @end verbatim
 
-There’s really no shorter way to represent the parameter list because
+There's really no shorter way to represent the parameter list because
 preserving the argument names is critical. Remember that, in dynamic
 scope, while the function body is being evaluated these variables are
-globally bound (eww!) to the function’s arguments.
+globally bound (eww!) to the function's arguments.
 
 On the other hand, when the function is lexically scoped, the
 parameter list is packed into an Elisp integer, indicating the counts
@@ -260,7 +260,7 @@ The least significant 7 bits indicate the number of required
 arguments. Notice that this limits compiled, lexically-scoped
 functions to 127 required arguments. The 8th bit is the number of
 &rest arguments (up to 1). The remaining bits indicate the total
-number of optional and required arguments (not counting &rest). It’s
+number of optional and required arguments (not counting &rest). It's
 really easy to parse these in your head when viewed as hexadecimal
 because each portion almost always fits inside its own ``digit.''
 
@@ -279,9 +279,9 @@ Examples showing how lexical parameters are encoded:
 ;; => #x382  (3 args, 1 rest, 2 required)
 @end verbatim
 
-The names of the arguments don’t matter in lexical scope: they’re
+The names of the arguments don't matter in lexical scope: they're
 purely positional. This tighter argument specification is one of the
-reasons lexical scope is faster: the byte-code interpreter doesn’t
+reasons lexical scope is faster: the byte-code interpreter doesn't
 need to parse the entire lambda list and assign all of the variables
 on each function invocation; furthermore, variable access is via a
 compact index located usually in the operand value rather than an
@@ -304,8 +304,8 @@ keeping the string literal inside the ASCII character set.
 ;; => "d\310\372"
 @end verbatim
 
-It’s unusual to see a byte-code string that doesn’t end with 135
-(#o207, byte-return). Perhaps this should have been implicit? I’ll
+It's unusual to see a byte-code string that doesn't end with 135
+(#o207, byte-return). Perhaps this should have been implicit? I'll
 talk more about the byte-code below.
 
 @node Constants Vector
@@ -319,14 +319,14 @@ Byte-code has a limited number of kinds of operand. Most operands are
 only a few bits in length, some fill an entire byte, and occasionally
 an operand can be two bytes in length. Generally you can't have an
 arbitrary symbol or structured constant listed directly inside an
-operand. So instead, operands reference either the constant vector or
-they index into the stack itself. Given this, the constant vector is
+operand. So instead, operands reference either the constants vector or
+they index into the stack itself. Given this, the constants vector is
 pretty hefty.
 
-It’s a normal Elisp vector and can be created with vector or a vector
+It's a normal Elisp vector and can be created with vector or a vector
 literal.
 
-@subsubsection showing a constant vector:
+@subsubsection showing a constants vector:
 @verbatim
 ELISP> (byte-compile (lambda (a b) (my-func '("hi" "there") a nil 5)))
 #[(a b)
@@ -337,7 +337,7 @@ ELISP> (byte-compile (lambda (a b) (my-func '("hi" "there") a nil 5)))
   5]
 @end verbatim
 
-The constant vector in the above example contains 5 elements:
+The constants vector in the above example contains 5 elements:
 @itemize
 @item @code{a} --- the variable symbol ``a''; note that ``b'' is not listed
 @item @code{myfunc} the external function symbol ``myfunc''
@@ -346,7 +346,7 @@ The constant vector in the above example contains 5 elements:
 @item @code{5} the integer constant 5
 @end itemize
 
-If this were a lexically-scoped function, the constants vector wouldn’t
+If this were a lexically-scoped function, the constants vector wouldn't
 have the variable symbol ``a'' listed.
 
 @node Maximum Stack Usage
@@ -354,7 +354,7 @@ have the variable symbol ``a'' listed.
 
 The fourth object in a bytecode-function literal is an integer which gives
 the maximum stack space used by this byte-code. This value can be
-derived from the byte-code itself, but it’s pre-computed so that the
+derived from the byte-code itself, but it's pre-computed so that the
 byte-code interpreter can quickly check for stack
 overflow. Under-reporting this value is probably another way to crash
 Emacs.
@@ -363,8 +363,8 @@ Emacs.
 @unnumberedsubsec Docstring
 
 The fifth object in a bytecode-function literal is simple and completely
-optional: it’s either the docstring itself, or if the docstring is
-especially large it’s a cons cell indicating a compiled `.elc` and a
+optional: it's either the docstring itself, or if the docstring is
+especially large it's a cons cell indicating a compiled `.elc` and a
 position for lazy access. Only one position, the start, is needed
 because the lisp reader is used to load it and it knows how to
 recognize the end.
@@ -1045,8 +1045,8 @@ Call @code{%} with two arguments, calculating the modulus of the two values at t
 @subsection String Function Instructions
 
 These instructions correspond to general functions which are not
-specific to Emacs; common cases are usually inlined for speed by the
-bytecode interpreter.
+specific to Emacs; the bytecode interpreter calls the corresponding C
+function for them.
 
 @menu
 * byte-substring::
