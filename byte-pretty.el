@@ -166,7 +166,7 @@ for texinfo input."
 	 (str-width (format "%%%ds " width))
 	 )
     (if (> (length constvec) 0)
-        (setq str (concat (format "\nConstant Vector: %S\n" constvec) str)))
+        (setq str (concat (format "\nConstants Vector: %S\n" constvec) str)))
     (while (> pc 0)
       (if (eq (caar rbc) 'TAG)
           (setq rbc (cdr rbc))
