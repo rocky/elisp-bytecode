@@ -305,8 +305,8 @@ keeping the string literal inside the ASCII character set.
 @end verbatim
 
 It's unusual to see a byte-code string that doesn't end with 135
-(#o207, byte-return). Perhaps this should have been implicit? I'll
-talk more about the byte-code below.
+(#o207, return). Perhaps this should have been implicit? I'll talk
+more about the byte-code below.
 
 @node Constants Vector
 @unnumberedsubsec Constants Vector
@@ -481,7 +481,7 @@ Some opcodes, allocated in blocks, encode an integer as part of the
 opcode byte.
 
 Bytecode instructions operate on the evaluation stack: for example,
-@code{byte-plus}, the addition function, removes two values from the
+@code{plus}, the addition function, removes two values from the
 top of the stack and pushes a single value, the sum of the first two
 values, back on the stack.
 
@@ -500,7 +500,7 @@ PC  Byte  Instruction
 @end verbatim
 
 First @code{a} and @code{b} are dereferenced and their values pushed
-onto the evaluation stack; then @code{byte-plus} is executed, leaving
+onto the evaluation stack; then @code{plus} is executed, leaving
 only a single value, the sum of @code{a} and @code{b}, on the stack.
 
 @node ELisp Bytecode Instructions
@@ -525,23 +525,23 @@ is 7, the actual operand value is the two-byte number following the
 opcode, in little-endian byte order.
 
 @menu
-* byte-stack-ref::
-* byte-varref::
-* byte-varset::
-* byte-varbind::
-* byte-call::
-* byte-unbind::
+* stack-ref::
+* varref::
+* varset::
+* varbind::
+* call::
+* unbind::
 @end menu
 
-@node byte-stack-ref
-@unnumberedsubsec @code{byte-stack-ref} (1--7)
-@kindex byte-stack-ref
+@node stack-ref
+@unnumberedsubsec @code{stack-ref} (1--7)
+@kindex stack-ref
 
 A stack reference
 
-@node byte-varref
-@unnumberedsubsec @code{byte-varref} (8--15)
-@kindex byte-varref
+@node varref
+@unnumberedsubsec @code{varref} (8--15)
+@kindex varref
 Pushes the value of a variable reference onto the evaluation stack.
 
 @subsubsection Example
@@ -555,9 +555,9 @@ PC  Byte  Instruction
 Constants Vector: [n]
 @end verbatim
 
-@node byte-varset
-@unnumberedsubsec @code{byte-varset} (16--23)
-@kindex byte-varset
+@node varset
+@unnumberedsubsec @code{varset} (16--23)
+@kindex varset
 
 Sets a variable given in the operand to the value that is on the top
 of the stack.
@@ -575,15 +575,15 @@ PC  Byte  Instruction
 Constants Vector: [n 5]
 @end verbatim
 
-@node byte-varbind
-@unnumberedsubsec @code{byte-varbind} (24--31)
-@kindex byte-varbind
+@node varbind
+@unnumberedsubsec @code{varbind} (24--31)
+@kindex varbind
 
 Binds a variable
 
-@node byte-call
-@unnumberedsubsec @code{byte-call} (32--39)
-@kindex byte-call
+@node call
+@unnumberedsubsec @code{call} (32--39)
+@kindex call
 
 Calls a function.  The opcode argument specifies the number of
 arguments to pass to the function from the stack, excluding the
@@ -601,9 +601,9 @@ PC  Byte  Instruction
 Constants Vector: [exchange-point-and-mark]
 @end verbatim
 
-@node byte-unbind
-@unnumberedsubsec @code{byte-unbind} (40--47)
-@kindex byte-unbind
+@node unbind
+@unnumberedsubsec @code{unbind} (40--47)
+@kindex unbind
 
 Unbinds special bindings
 
@@ -613,16 +613,16 @@ Unbinds special bindings
 The instructions from opcode 192 to 255 push a value from the
 Constants Vector. @xref{Constants Vector}. Opcode 192 pushes the first
 entry, opcode 193, the second and so on. If there are more than 64
-constants, opcode @code{byte-constant2} (opcode 129) is used instead.
+constants, opcode @code{constant2} (opcode 129) is used instead.
 
 @menu
-* byte-constant::
-* byte-constant2::
+* constant::
+* constant2::
 @end menu
 
-@node byte-constant
-@unnumberedsubsec @code{byte-constant} (192--255)
-@kindex byte-constant
+@node constant
+@unnumberedsubsec @code{constant} (192--255)
+@kindex constant
 
 Pushes a value from the constants vector on the evaluation stack.
 There are special instructions to push any one of the first
@@ -643,9 +643,9 @@ PC  Byte  Instruction
 Constants Vector: [n + 10 11 12]
 @end verbatim
 
-@node byte-constant2
-@unnumberedsubsec @code{byte-constant2} (129)
-@kindex byte-constant2
+@node constant2
+@unnumberedsubsec @code{constant2} (129)
+@kindex constant2
 
 Pushes a value from the constants vector on the evaluation stack.
 Although there are special instructions to push any one of the first
@@ -679,8 +679,8 @@ Constants Vector: [n + 0 1 2 .. 63 64]
 @node Return Instruction
 @section Return Instruction
 
-@unnumberedsubsec @code{byte-return} (135)
-@kindex byte-return
+@unnumberedsubsec @code{return} (135)
+@kindex return
 Return from function.  This is the last instruction in a function's
 bytecode sequence. The top value on the evaluation stack is the return value.
 
@@ -719,108 +719,108 @@ specific to Emacs; common cases are usually inlined for speed by the
 bytecode interpreter.
 
 @menu
-* byte-symbolp::
-* byte-consp::
-* byte-stringp::
-* byte-listp::
-* byte-eq::
-* byte-memq::
-* byte-not::
-* byte-symbol-value::
-* byte-symbol-function::
-* byte-set::
-* byte-fset::
-* byte-get::
-* byte-equal::
-* byte-member::
-* byte-assq::
-* byte-numberp::
-* byte-integerp::
+* symbolp::
+* consp::
+* stringp::
+* listp::
+* eq::
+* memq::
+* not::
+* symbol-value::
+* symbol-function::
+* set::
+* fset::
+* get::
+* equal::
+* member::
+* assq::
+* numberp::
+* integerp::
 @end menu
 
-@node byte-symbolp
-@unnumberedsubsubsec @code{byte-symbolp} (57)
-@kindex byte-symbolp
+@node symbolp
+@unnumberedsubsubsec @code{symbolp} (57)
+@kindex symbolp
 Call @code{symbolp} with one argument.
 
-@node byte-consp
-@unnumberedsubsubsec @code{byte-consp} (58)
-@kindex byte-consp
+@node consp
+@unnumberedsubsubsec @code{consp} (58)
+@kindex consp
 Call @code{consp} with one argument.
 
-@node byte-stringp
-@unnumberedsubsubsec @code{byte-stringp} (59)
-@kindex byte-stringp
+@node stringp
+@unnumberedsubsubsec @code{stringp} (59)
+@kindex stringp
 Call @code{stringp} with one argument.
 
-@node byte-listp
-@unnumberedsubsubsec @code{byte-listp} (60)
-@kindex byte-listp
+@node listp
+@unnumberedsubsubsec @code{listp} (60)
+@kindex listp
 Call @code{listp} with one argument.
 
-@node byte-eq
-@unnumberedsubsubsec @code{byte-eq} (61)
-@kindex byte-eq
+@node eq
+@unnumberedsubsubsec @code{eq} (61)
+@kindex eq
 Call @code{eq} with two arguments.
 
-@node byte-memq
-@unnumberedsubsubsec @code{byte-memq} (62)
-@kindex byte-memq
+@node memq
+@unnumberedsubsubsec @code{memq} (62)
+@kindex memq
 Call @code{memq} with two arguments.
 
-@node byte-not
-@unnumberedsubsubsec @code{byte-not} (63)
-@kindex byte-not
+@node not
+@unnumberedsubsubsec @code{not} (63)
+@kindex not
 Call @code{not} with one argument.
 
-@node byte-symbol-value
-@unnumberedsubsubsec @code{byte-symbol-value} (74)
-@kindex byte-symbol-value
+@node symbol-value
+@unnumberedsubsubsec @code{symbol-value} (74)
+@kindex symbol-value
 Call @code{symbol-value} with one argument.
 
-@node byte-symbol-function
-@unnumberedsubsubsec @code{byte-symbol-function} (75)
-@kindex byte-symbol-function
+@node symbol-function
+@unnumberedsubsubsec @code{symbol-function} (75)
+@kindex symbol-function
 Call @code{symbol-function} with one argument.
 
-@node byte-set
-@unnumberedsubsubsec @code{byte-set} (76)
-@kindex byte-set
+@node set
+@unnumberedsubsubsec @code{set} (76)
+@kindex set
 Call @code{set} with two arguments.
 
-@node byte-fset
-@unnumberedsubsubsec @code{byte-fset} (77)
-@kindex byte-fset
+@node fset
+@unnumberedsubsubsec @code{fset} (77)
+@kindex fset
 Call @code{fset} with two arguments.
 
-@node byte-get
-@unnumberedsubsubsec @code{byte-get} (78)
-@kindex byte-get
+@node get
+@unnumberedsubsubsec @code{get} (78)
+@kindex get
 Call @code{get} with two arguments.
 
-@node byte-equal
-@unnumberedsubsubsec @code{byte-equal} (154)
-@kindex byte-equal
+@node equal
+@unnumberedsubsubsec @code{equal} (154)
+@kindex equal
 Call @code{equal} with two arguments.
 
-@node byte-member
-@unnumberedsubsubsec @code{byte-member} (157)
-@kindex byte-member
-Call @code{membec} with two arguments.
+@node member
+@unnumberedsubsubsec @code{member} (157)
+@kindex member
+Call @code{member} with two arguments.
 
-@node byte-assq
-@unnumberedsubsubsec @code{byte-assq} (158)
-@kindex byte-assq
+@node assq
+@unnumberedsubsubsec @code{assq} (158)
+@kindex assq
 Call @code{assq} with two arguments.
 
-@node byte-numberp
-@unnumberedsubsubsec @code{byte-numberp} (167)
-@kindex byte-numberp
+@node numberp
+@unnumberedsubsubsec @code{numberp} (167)
+@kindex numberp
 Call @code{numberp} with one argument.
 
-@node byte-integerp
-@unnumberedsubsubsec @code{byte-integerp} (168)
-@kindex byte-integerp
+@node integerp
+@unnumberedsubsubsec @code{integerp} (168)
+@kindex integerp
 Call @code{integerp} with one argument.
 
 @node List Function Instructions
@@ -831,120 +831,120 @@ specific to Emacs; common cases are usually inlined for speed by the
 bytecode interpreter.
 
 @menu
-* byte-nth::
-* byte-car::
-* byte-cdr::
-* byte-cons::
-* byte-list1::
-* byte-list2::
-* byte-list3::
-* byte-list4::
-* byte-length::
-* byte-aref::
-* byte-aset::
-* byte-nthcdr::
-* byte-elt::
-* byte-nreverse::
-* byte-setcar::
-* byte-setcdr::
-* byte-car-safe::
-* byte-cdr-safe::
-* byte-nconc::
+* nth::
+* car::
+* cdr::
+* cons::
+* list1::
+* list2::
+* list3::
+* list4::
+* length::
+* aref::
+* aset::
+* nthcdr::
+* elt::
+* nreverse::
+* setcar::
+* setcdr::
+* car-safe::
+* cdr-safe::
+* nconc::
 @end menu
 
-@node byte-nth
-@unnumberedsubsubsec @code{byte-nth} (56)
-@kindex byte-nth
+@node nth
+@unnumberedsubsubsec @code{nth} (56)
+@kindex nth
 Call @code{nth} with two arguments.
 
-@node byte-car
-@unnumberedsubsubsec @code{byte-car} (64)
-@kindex byte-car
+@node car
+@unnumberedsubsubsec @code{car} (64)
+@kindex car
 Call @code{car} with one argument.
 
-@node byte-cdr
-@unnumberedsubsubsec @code{byte-cdr} (65)
-@kindex byte-cdr
+@node cdr
+@unnumberedsubsubsec @code{cdr} (65)
+@kindex cdr
 Call @code{cdr} with one argument.
 
-@node byte-cons
-@unnumberedsubsubsec @code{byte-cons} (66)
-@kindex byte-cons
+@node cons
+@unnumberedsubsubsec @code{cons} (66)
+@kindex cons
 Call @code{cons} with two arguments.
 
-@node byte-list1
-@unnumberedsubsubsec @code{byte-list1} (67)
-@kindex byte-list1
+@node list1
+@unnumberedsubsubsec @code{list1} (67)
+@kindex list1
 Call @code{list} with one argument.
 
-@node byte-list2
-@unnumberedsubsubsec @code{byte-list2} (68)
-@kindex byte-list2
+@node list2
+@unnumberedsubsubsec @code{list2} (68)
+@kindex list2
 Call @code{list} with two arguments.
 
-@node byte-list3
-@unnumberedsubsubsec @code{byte-list3} (69)
-@kindex byte-list3
+@node list3
+@unnumberedsubsubsec @code{list3} (69)
+@kindex list3
 Call @code{list} with three arguments.
 
-@node byte-list4
-@unnumberedsubsubsec @code{byte-list4} (70)
-@kindex byte-list4
+@node list4
+@unnumberedsubsubsec @code{list4} (70)
+@kindex list4
 Call @code{list} with four arguments.
 
-@node byte-length
-@unnumberedsubsubsec @code{byte-length} (71)
-@kindex byte-length
+@node length
+@unnumberedsubsubsec @code{length} (71)
+@kindex length
 Call @code{length} with one argument.
 
-@node byte-aref
-@unnumberedsubsubsec @code{byte-aref} (72)
-@kindex byte-aref
+@node aref
+@unnumberedsubsubsec @code{aref} (72)
+@kindex aref
 Call @code{aref} with two arguments.
 
-@node byte-aset
-@unnumberedsubsubsec @code{byte-aset} (73)
-@kindex byte-aset
+@node aset
+@unnumberedsubsubsec @code{aset} (73)
+@kindex aset
 Call @code{aset} with three arguments.
 
-@node byte-nthcdr
-@unnumberedsubsubsec @code{byte-nthcdr} (155)
-@kindex byte-nthcdr
+@node nthcdr
+@unnumberedsubsubsec @code{nthcdr} (155)
+@kindex nthcdr
 Call @code{nthcdr} with two arguments.
 
-@node byte-elt
-@unnumberedsubsubsec @code{byte-elt} (156)
-@kindex byte-elt
+@node elt
+@unnumberedsubsubsec @code{elt} (156)
+@kindex elt
 Call @code{elt} with two arguments.
 
-@node byte-nreverse
-@unnumberedsubsubsec @code{byte-nreverse} (159)
-@kindex byte-nreverse
+@node nreverse
+@unnumberedsubsubsec @code{nreverse} (159)
+@kindex nreverse
 Call @code{nreverse} with one argument.
 
-@node byte-setcar
-@unnumberedsubsubsec @code{byte-setcar} (160)
-@kindex byte-setcar
+@node setcar
+@unnumberedsubsubsec @code{setcar} (160)
+@kindex setcar
 Call @code{setcar} with two arguments.
 
-@node byte-setcdr
-@unnumberedsubsubsec @code{byte-setcdr} (161)
-@kindex byte-setcdr
+@node setcdr
+@unnumberedsubsubsec @code{setcdr} (161)
+@kindex setcdr
 Call @code{setcdr} with two arguments.
 
-@node byte-car-safe
-@unnumberedsubsubsec @code{byte-car-safe} (162)
-@kindex byte-car-safe
+@node car-safe
+@unnumberedsubsubsec @code{car-safe} (162)
+@kindex car-safe
 Call @code{car-safe} with one argument.
 
-@node byte-cdr-safe
-@unnumberedsubsubsec @code{byte-cdr-safe} (163)
-@kindex byte-cdr-safe
+@node cdr-safe
+@unnumberedsubsubsec @code{cdr-safe} (163)
+@kindex cdr-safe
 Call @code{cdr-safe} with one argument.
 
-@node byte-nconc
-@unnumberedsubsubsec @code{byte-nconc} (164)
-@kindex byte-nconc
+@node nconc
+@unnumberedsubsubsec @code{nconc} (164)
+@kindex nconc
 Call @code{nconc} with two arguments.
 
 @node Arithmetic Function Instructions
@@ -955,96 +955,96 @@ specific to Emacs; common cases are usually inlined for speed by the
 bytecode interpreter.
 
 @menu
-* byte-sub1::
-* byte-add1::
-* byte-eqlsign::
-* byte-gtr::
-* byte-lss::
-* byte-leq::
-* byte-geq::
-* byte-diff::
-* byte-negate::
-* byte-plus::
-* byte-mult::
-* byte-max::
-* byte-min::
-* byte-quo::
-* byte-rem::
+* sub1::
+* add1::
+* eqlsign::
+* gtr::
+* lss::
+* leq::
+* geq::
+* diff::
+* negate::
+* plus::
+* mult::
+* max::
+* min::
+* quo::
+* rem::
 @end menu
 
-@node byte-sub1
-@unnumberedsubsubsec @code{byte-sub1} (83)
-@kindex byte-sub1
+@node sub1
+@unnumberedsubsubsec @code{sub1} (83)
+@kindex sub1
 Call @code{1-} with one argument, subtracting one from the top-of-stack value.
 
-@node byte-add1
-@unnumberedsubsubsec @code{byte-add1} (84)
-@kindex byte-add1
+@node add1
+@unnumberedsubsubsec @code{add1} (84)
+@kindex add1
 Call @code{1+} with one argument, adding one to the top-of-stack value.
 
-@node byte-eqlsign
-@unnumberedsubsubsec @code{byte-eqlsign} (85)
-@kindex byte-eqlsign
+@node eqlsign
+@unnumberedsubsubsec @code{eqlsign} (85)
+@kindex eqlsign
 Call @code{=} with two arguments, comparing the two values at the top of the stack for numerical or strict equality.
 
-@node byte-gtr
-@unnumberedsubsubsec @code{byte-gtr} (86)
-@kindex byte-gtr
+@node gtr
+@unnumberedsubsubsec @code{gtr} (86)
+@kindex gtr
 Call @code{>} with two arguments, comparing the two values at the top of the stack with the numerical greater-than relation.
 
-@node byte-lss
-@unnumberedsubsubsec @code{byte-lss} (87)
-@kindex byte-lss
+@node lss
+@unnumberedsubsubsec @code{lss} (87)
+@kindex lss
 Call @code{<} with two arguments, comparing the two values at the top of the stack with the numerical less-than relation.
 
-@node byte-leq
-@unnumberedsubsubsec @code{byte-leq} (88)
-@kindex byte-leq
+@node leq
+@unnumberedsubsubsec @code{leq} (88)
+@kindex leq
 Call @code{<=} with two arguments, comparing the two values at the top of the stack with the numerical less-than-or-equals relation.
 
-@node byte-geq
-@unnumberedsubsubsec @code{byte-geq} (89)
-@kindex byte-geq
+@node geq
+@unnumberedsubsubsec @code{geq} (89)
+@kindex geq
 Call @code{>=} with two arguments, comparing the two values at the top of the stack with the numerical less-than-or-equals relation.
 
-@node byte-diff
-@unnumberedsubsubsec @code{byte-diff} (90)
-@kindex byte-diff
+@node diff
+@unnumberedsubsubsec @code{diff} (90)
+@kindex diff
 Call @code{-} with two arguments, subtracting the two values at the top of the stack.
 
-@node byte-negate
-@unnumberedsubsubsec @code{byte-negate} (91)
-@kindex byte-negate
+@node negate
+@unnumberedsubsubsec @code{negate} (91)
+@kindex negate
 Call @code{-} with one argument, negating the top-of-stack value.
 
-@node byte-plus
-@unnumberedsubsubsec @code{byte-plus} (92)
-@kindex byte-plus
+@node plus
+@unnumberedsubsubsec @code{plus} (92)
+@kindex plus
 Call @code{+} with two arguments, adding the two values at the top of the stack.
 
-@node byte-mult
-@unnumberedsubsubsec @code{byte-mult} (95)
-@kindex byte-mult
+@node mult
+@unnumberedsubsubsec @code{mult} (95)
+@kindex mult
 Call @code{*} with two arguments, multiplying the two values at the top of the stack.
 
-@node byte-max
-@unnumberedsubsubsec @code{byte-max} (93)
-@kindex byte-max
+@node max
+@unnumberedsubsubsec @code{max} (93)
+@kindex max
 Call @code{max} with two arguments.
 
-@node byte-min
-@unnumberedsubsubsec @code{byte-min} (94)
-@kindex byte-min
+@node min
+@unnumberedsubsubsec @code{min} (94)
+@kindex min
 Call @code{min} with two arguments.
 
-@node byte-quo
-@unnumberedsubsubsec @code{byte-quo} (165)
-@kindex byte-quo
+@node quo
+@unnumberedsubsubsec @code{quo} (165)
+@kindex quo
 Call @code{/} with two arguments, dividing the two values at the top of the stack.
 
-@node byte-rem
-@unnumberedsubsubsec @code{byte-rem} (166)
-@kindex byte-rem
+@node rem
+@unnumberedsubsubsec @code{rem} (166)
+@kindex rem
 Call @code{%} with two arguments, calculating the modulus of the two values at the top of the stack.
 
 @node String Function Instructions
@@ -1055,55 +1055,55 @@ specific to Emacs; the bytecode interpreter calls the corresponding C
 function for them.
 
 @menu
-* byte-substring::
-* byte-concat2::
-* byte-concat3::
-* byte-concat4::
-* byte-upcase::
-* byte-downcase::
-* byte-stringeqlsign::
-* byte-stringlss::
+* substring::
+* concat2::
+* concat3::
+* concat4::
+* upcase::
+* downcase::
+* stringeqlsign::
+* stringlss::
 @end menu
 
-@node byte-substring
-@unnumberedsubsubsec @code{byte-substring} (79)
-@kindex byte-substring
+@node substring
+@unnumberedsubsubsec @code{substring} (79)
+@kindex substring
 Call @code{substring} with three arguments.
 
-@node byte-concat2
-@unnumberedsubsubsec @code{byte-concat2} (80)
-@kindex byte-concat2
+@node concat2
+@unnumberedsubsubsec @code{concat2} (80)
+@kindex concat2
 Call @code{concat} with two arguments.
 
-@node byte-concat3
-@unnumberedsubsubsec @code{byte-concat3} (81)
-@kindex byte-concat3
+@node concat3
+@unnumberedsubsubsec @code{concat3} (81)
+@kindex concat3
 Call @code{concat} with three arguments.
 
-@node byte-concat4
-@unnumberedsubsubsec @code{byte-concat4} (82)
-@kindex byte-concat4
+@node concat4
+@unnumberedsubsubsec @code{concat4} (82)
+@kindex concat4
 Call @code{concat} with four arguments.
 
 
-@node byte-upcase
-@unnumberedsubsubsec @code{byte-upcase} (150)
-@kindex byte-upcase
+@node upcase
+@unnumberedsubsubsec @code{upcase} (150)
+@kindex upcase
 Call @code{upcase} with one argument.
 
-@node byte-downcase
-@unnumberedsubsubsec @code{byte-downcase} (151)
-@kindex byte-downcase
+@node downcase
+@unnumberedsubsubsec @code{downcase} (151)
+@kindex downcase
 Call @code{downcase} with one argument.
 
-@node byte-stringeqlsign
-@unnumberedsubsubsec @code{byte-stringeqlsign} (152)
-@kindex byte-stringeqlsign
+@node stringeqlsign
+@unnumberedsubsubsec @code{stringeqlsign} (152)
+@kindex stringeqlsign
 Call @code{string=} with two arguments, comparing two strings for equality.
 
-@node byte-stringlss
-@unnumberedsubsubsec @code{byte-stringlss} (153)
-@kindex byte-stringlss
+@node stringlss
+@unnumberedsubsubsec @code{stringlss} (153)
+@kindex stringlss
 Call @code{string<} with two arguments, comparing two strings.
 
 @node Emacs Function Instructions
@@ -1114,198 +1114,198 @@ functions. They are generally not inlined by the bytecode interpreter,
 but simply call the corresponding C function.
 
 @menu
-* byte-point::
-* byte-goto-char::
-* byte-insert::
-* byte-point-min::
-* byte-point-max::
-* byte-char-after::
-* byte-following-char::
-* byte-preceding-char::
-* byte-current-column::
-* byte-eolp::
-* byte-eobp::
-* byte-bolp::
-* byte-bobp::
-* byte-current-buffer::
-* byte-set-buffer::
-* byte-forward-char::
-* byte-forward-word::
-* byte-skip-chars-forward::
-* byte-skip-chars-backward::
-* byte-forward-line::
-* byte-char-syntax::
-* byte-buffer-substring::
-* byte-delete-region::
-* byte-narrow-to-region::
-* byte-widen::
-* byte-end-of-line::
-* byte-set-marker::
-* byte-match-beginning::
-* byte-match-end::
+* point::
+* goto-char::
+* insert::
+* point-min::
+* point-max::
+* char-after::
+* following-char::
+* preceding-char::
+* current-column::
+* eolp::
+* eobp::
+* bolp::
+* bobp::
+* current-buffer::
+* set-buffer::
+* forward-char::
+* forward-word::
+* skip-chars-forward::
+* skip-chars-backward::
+* forward-line::
+* char-syntax::
+* buffer-substring::
+* delete-region::
+* narrow-to-region::
+* widen::
+* end-of-line::
+* set-marker::
+* match-beginning::
+* match-end::
 @end menu
 
-@node byte-point
-@unnumberedsubsubsec @code{byte-point} (96)
-@kindex byte-point
+@node point
+@unnumberedsubsubsec @code{point} (96)
+@kindex point
 Call @code{point} with no arguments.
 
-@node byte-goto-char
-@unnumberedsubsubsec @code{byte-goto-char} (98)
-@kindex byte-goto-char
+@node goto-char
+@unnumberedsubsubsec @code{goto-char} (98)
+@kindex goto-char
 Call @code{goto-char} with one argument.
 
-@node byte-insert
-@unnumberedsubsubsec @code{byte-insert} (99)
-@kindex byte-insert
+@node insert
+@unnumberedsubsubsec @code{insert} (99)
+@kindex insert
 Call @code{insert} with one argument.
 
-@node byte-point-min
-@unnumberedsubsubsec @code{byte-point-min} (101)
-@kindex byte-point-min
+@node point-min
+@unnumberedsubsubsec @code{point-min} (101)
+@kindex point-min
 Call @code{point-min} with no arguments.
 
-@node byte-point-max
-@unnumberedsubsubsec @code{byte-point-max} (100)
-@kindex byte-point-max
+@node point-max
+@unnumberedsubsubsec @code{point-max} (100)
+@kindex point-max
 Call @code{point-max} with no arguments.
 
-@node byte-char-after
-@unnumberedsubsubsec @code{byte-char-after} (102)
-@kindex byte-char-after
+@node char-after
+@unnumberedsubsubsec @code{char-after} (102)
+@kindex char-after
 Call @code{char-after} with one argument.
 
-@node byte-following-char
-@unnumberedsubsubsec @code{byte-following-char} (103)
-@kindex byte-following-char
+@node following-char
+@unnumberedsubsubsec @code{following-char} (103)
+@kindex following-char
 Call @code{following-char} with no arguments.
 
-@node byte-preceding-char
-@unnumberedsubsubsec @code{byte-preceding-char} (104)
-@kindex byte-preceding-char
+@node preceding-char
+@unnumberedsubsubsec @code{preceding-char} (104)
+@kindex preceding-char
 Call @code{preceding-char} with no arguments.
 
-@node byte-current-column
-@unnumberedsubsubsec @code{byte-current-column} (105)
-@kindex byte-current-column
+@node current-column
+@unnumberedsubsubsec @code{current-column} (105)
+@kindex current-column
 Call @code{current-column} with no arguments.
 
-@node byte-eolp
-@unnumberedsubsubsec @code{byte-eolp} (108)
-@kindex byte-eolp
+@node eolp
+@unnumberedsubsubsec @code{eolp} (108)
+@kindex eolp
 Call @code{eolp} with no arguments.
 
-@node byte-eobp
-@unnumberedsubsubsec @code{byte-eobp} (109)
-@kindex byte-eobp
+@node eobp
+@unnumberedsubsubsec @code{eobp} (109)
+@kindex eobp
 Call @code{eobp} with no arguments.
 
-@node byte-bolp
-@unnumberedsubsubsec @code{byte-bolp} (110)
-@kindex byte-bolp
+@node bolp
+@unnumberedsubsubsec @code{bolp} (110)
+@kindex bolp
 Call @code{bolp} with no arguments.
 
-@node byte-bobp
-@unnumberedsubsubsec @code{byte-bobp} (111)
-@kindex byte-bobp
+@node bobp
+@unnumberedsubsubsec @code{bobp} (111)
+@kindex bobp
 Call @code{bobp} with no arguments.
 
-@node byte-current-buffer
-@unnumberedsubsubsec @code{byte-current-buffer} (112)
-@kindex byte-current-buffer
+@node current-buffer
+@unnumberedsubsubsec @code{current-buffer} (112)
+@kindex current-buffer
 Call @code{current-buffer} with no arguments.
 
-@node byte-set-buffer
-@unnumberedsubsubsec @code{byte-set-buffer} (113)
-@kindex byte-set-buffer
+@node set-buffer
+@unnumberedsubsubsec @code{set-buffer} (113)
+@kindex set-buffer
 Call @code{set-buffer} with one argument.
 
-@node byte-forward-char
-@unnumberedsubsubsec @code{byte-forward-char} (117)
-@kindex byte-forward-char
+@node forward-char
+@unnumberedsubsubsec @code{forward-char} (117)
+@kindex forward-char
 Call @code{forward-char} with one argument.
 
-@node byte-forward-word
-@unnumberedsubsubsec @code{byte-forward-word} (118)
-@kindex byte-forward-word
+@node forward-word
+@unnumberedsubsubsec @code{forward-word} (118)
+@kindex forward-word
 Call @code{forward-word} with one argument.
 
-@node byte-skip-chars-forward
-@unnumberedsubsubsec @code{byte-skip-chars-forward} (119)
-@kindex byte-skip-chars-forward
+@node skip-chars-forward
+@unnumberedsubsubsec @code{skip-chars-forward} (119)
+@kindex skip-chars-forward
 Call @code{skip-chars-forward} with two arguments.
 
-@node byte-skip-chars-backward
-@unnumberedsubsubsec @code{byte-skip-chars-backward} (120)
-@kindex byte-skip-chars-backward
+@node skip-chars-backward
+@unnumberedsubsubsec @code{skip-chars-backward} (120)
+@kindex skip-chars-backward
 Call @code{skip-chars-backward} with two arguments.
 
-@node byte-forward-line
-@unnumberedsubsubsec @code{byte-forward-line} (121)
-@kindex byte-forward-line
+@node forward-line
+@unnumberedsubsubsec @code{forward-line} (121)
+@kindex forward-line
 Call @code{forward-line} with one argument.
 
-@node byte-char-syntax
-@unnumberedsubsubsec @code{byte-char-syntax} (122)
-@kindex byte-char-syntax
+@node char-syntax
+@unnumberedsubsubsec @code{char-syntax} (122)
+@kindex char-syntax
 Call @code{char-syntax} with one argument.
 
-@node byte-buffer-substring
-@unnumberedsubsubsec @code{byte-buffer-substring} (123)
-@kindex byte-buffer-substring
+@node buffer-substring
+@unnumberedsubsubsec @code{buffer-substring} (123)
+@kindex buffer-substring
 Call @code{buffer-substring} with two arguments.
 
-@node byte-delete-region
-@unnumberedsubsubsec @code{byte-delete-region} (124)
-@kindex byte-delete-region
+@node delete-region
+@unnumberedsubsubsec @code{delete-region} (124)
+@kindex delete-region
 Call @code{delete-region} with two arguments.
 
-@node byte-narrow-to-region
-@unnumberedsubsubsec @code{byte-narrow-to-region} (125)
-@kindex byte-narrow-to-region
+@node narrow-to-region
+@unnumberedsubsubsec @code{narrow-to-region} (125)
+@kindex narrow-to-region
 Call @code{narrow-to-region} with two arguments.
 
-@node byte-widen
-@unnumberedsubsubsec @code{byte-widen} (126)
-@kindex byte-widen
+@node widen
+@unnumberedsubsubsec @code{widen} (126)
+@kindex widen
 Call @code{widen} with no arguments.
 
-@node byte-end-of-line
-@unnumberedsubsubsec @code{byte-end-of-line} (127)
-@kindex byte-end-of-line
+@node end-of-line
+@unnumberedsubsubsec @code{end-of-line} (127)
+@kindex end-of-line
 Call @code{end-of-line} with one argument.
 
-@node byte-set-marker
-@unnumberedsubsubsec @code{byte-set-marker} (147)
-@kindex byte-set-marker
+@node set-marker
+@unnumberedsubsubsec @code{set-marker} (147)
+@kindex set-marker
 Call @code{set-marker} with three arguments.
 
-@node byte-match-beginning
-@unnumberedsubsubsec @code{byte-match-beginning} (148)
-@kindex byte-match-beginning
+@node match-beginning
+@unnumberedsubsubsec @code{match-beginning} (148)
+@kindex match-beginning
 Call @code{match-beginning} with one argument.
 
-@node byte-match-end
-@unnumberedsubsubsec @code{byte-match-end} (149)
-@kindex byte-match-end
+@node match-end
+@unnumberedsubsubsec @code{match-end} (149)
+@kindex match-end
 Call @code{match-end} with one argument.
 
 @node Stack Manipulation Instructions
 @section Stack Manipulation Instructions
 
 @menu
-* byte-discard::
-* byte-dup::
+* discard::
+* dup::
 @end menu
 
-@node byte-discard
-@unnumberedsubsec @code{byte-discard} (136)
-@kindex byte-discard
+@node discard
+@unnumberedsubsec @code{discard} (136)
+@kindex discard
 Discard one value.
 
-@node byte-dup
-@unnumberedsubsec @code{byte-dup} (137)
-@kindex byte-dup
+@node dup
+@unnumberedsubsec @code{dup} (137)
+@kindex dup
 Make a copy of the top-of-stack value and push that onto the top of the evaluation stack.
 
 @subsubsection Example
@@ -1321,10 +1321,10 @@ PC  Byte  Instruction
 
 These instructions manipulate the special-bindings stack by creating a
 new binding when executed.  They need to be balanced with
-@code{byte-unbind} instructions.
+@code{unbind} instructions.
 
-@unnumberedsubsec @code{byte-save-excursion} (138)
-@kindex byte-save-excursion
+@unnumberedsubsec @code{save-excursion} (138)
+@kindex save-excursion
 Make a binding recording buffer, point, and mark.
 
 @node Opcode Table
@@ -1338,242 +1338,242 @@ Make a binding recording buffer, point, and mark.
 
 @item @verb{|  01|}
 @tab @verb{|   1|}
-@tab @verb{|  byte-stack-ref1|}
+@tab @verb{|  stack-ref1|}
 @tab stack reference 1
 @tab @math{+1}
 @item @verb{|  02|}
 @tab @verb{|   2|}
-@tab @verb{|  byte-stack-ref2|}
+@tab @verb{|  stack-ref2|}
 @tab stack reference 2
 @tab @math{+1}
 @item @verb{|  03|}
 @tab @verb{|   3|}
-@tab @verb{|  byte-stack-ref3|}
+@tab @verb{|  stack-ref3|}
 @tab stack reference 3
 @tab @math{+1}
 @item @verb{|  04|}
 @tab @verb{|   4|}
-@tab @verb{|  byte-stack-ref4|}
+@tab @verb{|  stack-ref4|}
 @tab stack reference 4
 @tab @math{+1}
 @item @verb{|  05|}
 @tab @verb{|   5|}
-@tab @verb{|  byte-stack-ref5|}
+@tab @verb{|  stack-ref5|}
 @tab stack reference 5
 @tab @math{+1}
 @item @verb{|  06|}
 @tab @verb{|   6|}
-@tab @verb{|  byte-stack-ref6|}
+@tab @verb{|  stack-ref6|}
 @tab stack reference 0--255
 @tab @math{+1}
 @item @verb{|  07|}
 @tab @verb{|   7|}
-@tab @verb{|  byte-stack-ref7|}
+@tab @verb{|  stack-ref7|}
 @tab stack reference 0--65535
 @tab @math{+1}
 
 @item @verb{| 010|}
 @tab @verb{|   8|}
-@tab @verb{|  byte-varref0|}
+@tab @verb{|  varref0|}
 @tab variable reference 0
 @tab @math{+1}
 @item @verb{| 011|}
 @tab @verb{|   9|}
-@tab @verb{|  byte-varref1|}
+@tab @verb{|  varref1|}
 @tab variable reference 1
 @tab @math{+1}
 @item @verb{| 012|}
 @tab @verb{|  10|}
-@tab @verb{|  byte-varref2|}
+@tab @verb{|  varref2|}
 @tab variable reference 2
 @tab @math{+1}
 @item @verb{| 013|}
 @tab @verb{|  11|}
-@tab @verb{|  byte-varref3|}
+@tab @verb{|  varref3|}
 @tab variable reference 3
 @tab @math{+1}
 @item @verb{| 014|}
 @tab @verb{|  12|}
-@tab @verb{|  byte-varref4|}
+@tab @verb{|  varref4|}
 @tab variable reference 4
 @tab @math{+1}
 @item @verb{| 015|}
 @tab @verb{|  13|}
-@tab @verb{|  byte-varref5|}
+@tab @verb{|  varref5|}
 @tab variable reference 5
 @tab @math{+1}
 @item @verb{| 016|}
 @tab @verb{|  14|}
-@tab @verb{|  byte-varref6|}
+@tab @verb{|  varref6|}
 @tab variable reference 0--255
 @tab @math{+1}
 @item @verb{| 017|}
 @tab @verb{|  15|}
-@tab @verb{|  byte-varref7|}
+@tab @verb{|  varref7|}
 @tab variable reference 0--65535
 @tab @math{+1}
 
 @item @verb{| 020|}
 @tab @verb{|  16|}
-@tab @verb{|  byte-varset0|}
+@tab @verb{|  varset0|}
 @tab Sets variable 0
 @tab @math{-1}
 @item @verb{| 021|}
 @tab @verb{|  17|}
-@tab @verb{|  byte-varset1|}
+@tab @verb{|  varset1|}
 @tab Sets variable 1
 @tab @math{-1}
 @item @verb{| 022|}
 @tab @verb{|  18|}
-@tab @verb{|  byte-varset2|}
+@tab @verb{|  varset2|}
 @tab Sets variable 2
 @tab @math{-1}
 @item @verb{| 023|}
 @tab @verb{|  19|}
-@tab @verb{|  byte-varset3|}
+@tab @verb{|  varset3|}
 @tab Sets variable 3
 @tab @math{-1}
 @item @verb{| 024|}
 @tab @verb{|  20|}
-@tab @verb{|  byte-varset4|}
+@tab @verb{|  varset4|}
 @tab Sets variable 4
 @tab @math{-1}
 @item @verb{| 025|}
 @tab @verb{|  21|}
-@tab @verb{|  byte-varset5|}
+@tab @verb{|  varset5|}
 @tab Sets variable 5
 @tab @math{-1}
 @item @verb{| 026|}
 @tab @verb{|  22|}
-@tab @verb{|  byte-varset6|}
+@tab @verb{|  varset6|}
 @tab Sets variable 6
 @tab @math{-1}
 @item @verb{| 027|}
 @tab @verb{|  23|}
-@tab @verb{|  byte-varset7|}
+@tab @verb{|  varset7|}
 @tab Sets variable 7
 @tab @math{-1}
 
 @item @verb{| 030|}
 @tab @verb{|  24|}
-@tab @verb{|  byte-varbind0|}
+@tab @verb{|  varbind0|}
 @tab Bind variable 0
 @tab @math{-1}
 @item @verb{| 031|}
 @tab @verb{|  25|}
-@tab @verb{|  byte-varbind1|}
+@tab @verb{|  varbind1|}
 @tab Bind variable 1
 @tab @math{-1}
 @item @verb{| 032|}
 @tab @verb{|  26|}
-@tab @verb{|  byte-varbind2|}
+@tab @verb{|  varbind2|}
 @tab Bind variable 2
 @tab @math{-1}
 @item @verb{| 033|}
 @tab @verb{|  27|}
-@tab @verb{|  byte-varbind3|}
+@tab @verb{|  varbind3|}
 @tab Bind variable 3
 @tab @math{-1}
 @item @verb{| 034|}
 @tab @verb{|  28|}
-@tab @verb{|  byte-varbind4|}
+@tab @verb{|  varbind4|}
 @tab Bind variable 4
 @tab @math{-1}
 @item @verb{| 035|}
 @tab @verb{|  29|}
-@tab @verb{|  byte-varbind5|}
+@tab @verb{|  varbind5|}
 @tab Bind variable 5
 @tab @math{-1}
 @item @verb{| 036|}
 @tab @verb{|  30|}
-@tab @verb{|  byte-varbind6|}
+@tab @verb{|  varbind6|}
 @tab Bind variable 6
 @tab @math{-1}
 @item @verb{| 037|}
 @tab @verb{|  31|}
-@tab @verb{|  byte-varbind7|}
+@tab @verb{|  varbind7|}
 @tab Bind variable 7
 @tab @math{-1}
 
 @item @verb{| 040|}
 @tab @verb{|  32|}
-@tab @verb{|  byte-call0|}
+@tab @verb{|  call0|}
 @tab Calls a function
 @tab @math{-1+1}
 @item @verb{| 041|}
 @tab @verb{|  33|}
-@tab @verb{|  byte-call1|}
+@tab @verb{|  call1|}
 @tab Calls a function
 @tab @math{-2+1}
 @item @verb{| 042|}
 @tab @verb{|  34|}
-@tab @verb{|  byte-call2|}
+@tab @verb{|  call2|}
 @tab Calls a function
 @tab @math{-3+1}
 @item @verb{| 043|}
 @tab @verb{|  35|}
-@tab @verb{|  byte-call3|}
+@tab @verb{|  call3|}
 @tab Calls a function
 @tab @math{-4+1}
 @item @verb{| 044|}
 @tab @verb{|  36|}
-@tab @verb{|  byte-call4|}
+@tab @verb{|  call4|}
 @tab Calls a function
 @tab @math{-5+1}
 @item @verb{| 045|}
 @tab @verb{|  37|}
-@tab @verb{|  byte-call5|}
+@tab @verb{|  call5|}
 @tab Calls a function
 @tab @math{-6+1}
 @item @verb{| 046|}
 @tab @verb{|  38|}
-@tab @verb{|  byte-call6|}
+@tab @verb{|  call6|}
 @tab Calls a function
 @tab @math{-n-1+1}
 @item @verb{| 047|}
 @tab @verb{|  39|}
-@tab @verb{|  byte-call7|}
+@tab @verb{|  call7|}
 @tab Calls a function
 @tab @math{-n-1+1}
 
 @item @verb{| 050|}
 @tab @verb{|  40|}
-@tab @verb{|  byte-unbind0|}
+@tab @verb{|  unbind0|}
 @tab Unbinds special bindings
 @tab @math{0}
 @item @verb{| 051|}
 @tab @verb{|  41|}
-@tab @verb{|  byte-unbind1|}
+@tab @verb{|  unbind1|}
 @tab Unbinds special bindings
 @tab @math{0}
 @item @verb{| 052|}
 @tab @verb{|  42|}
-@tab @verb{|  byte-unbind2|}
+@tab @verb{|  unbind2|}
 @tab Unbinds special bindings
 @tab @math{0}
 @item @verb{| 053|}
 @tab @verb{|  43|}
-@tab @verb{|  byte-unbind3|}
+@tab @verb{|  unbind3|}
 @tab Unbinds special bindings
 @tab @math{0}
 @item @verb{| 054|}
 @tab @verb{|  44|}
-@tab @verb{|  byte-unbind4|}
+@tab @verb{|  unbind4|}
 @tab Unbinds special bindings
 @tab @math{0}
 @item @verb{| 055|}
 @tab @verb{|  45|}
-@tab @verb{|  byte-unbind5|}
+@tab @verb{|  unbind5|}
 @tab Unbinds special bindings
 @tab @math{0}
 @item @verb{| 056|}
 @tab @verb{|  46|}
-@tab @verb{|  byte-unbind6|}
+@tab @verb{|  unbind6|}
 @tab Unbinds special bindings
 @tab @math{0}
 @item @verb{| 057|}
 @tab @verb{|  47|}
-@tab @verb{|  byte-unbind7|}
+@tab @verb{|  unbind7|}
 @tab Unbinds special bindings
 @tab @math{0}
 
@@ -1595,334 +1595,334 @@ Make a binding recording buffer, point, and mark.
 
 @item @verb{| 070|}
 @tab @verb{|  56|}
-@tab @verb{|  byte-nth|}
+@tab @verb{|  nth|}
 @tab Call @code{nth} with two arguments.
 @tab @math{-2+1}
 @item @verb{| 071|}
 @tab @verb{|  57|}
-@tab @verb{|  byte-symbolp|}
+@tab @verb{|  symbolp|}
 @tab Call @code{symbolp} with one argument.
 @tab @math{-1+1}
 @item @verb{| 072|}
 @tab @verb{|  58|}
-@tab @verb{|  byte-consp|}
+@tab @verb{|  consp|}
 @tab Call @code{consp} with one argument.
 @tab @math{-1+1}
 @item @verb{| 073|}
 @tab @verb{|  59|}
-@tab @verb{|  byte-stringp|}
+@tab @verb{|  stringp|}
 @tab Call @code{stringp} with one argument.
 @tab @math{-1+1}
 @item @verb{| 074|}
 @tab @verb{|  60|}
-@tab @verb{|  byte-listp|}
+@tab @verb{|  listp|}
 @tab Call @code{listp} with one argument.
 @tab @math{-1+1}
 @item @verb{| 075|}
 @tab @verb{|  61|}
-@tab @verb{|  byte-eq|}
+@tab @verb{|  eq|}
 @tab Call @code{eq} with two arguments.
 @tab @math{-2+1}
 @item @verb{| 076|}
 @tab @verb{|  62|}
-@tab @verb{|  byte-memq|}
+@tab @verb{|  memq|}
 @tab Call @code{memq} with two arguments.
 @tab @math{-2+1}
 @item @verb{| 077|}
 @tab @verb{|  63|}
-@tab @verb{|  byte-not|}
+@tab @verb{|  not|}
 @tab Call @code{not} with one argument.
 @tab @math{-1+1}
 
 @item @verb{|0100|}
 @tab @verb{|  64|}
-@tab @verb{|  byte-car|}
+@tab @verb{|  car|}
 @tab Call @code{car} with one argument.
 @tab @math{-1+1}
 @item @verb{|0101|}
 @tab @verb{|  65|}
-@tab @verb{|  byte-cdr|}
+@tab @verb{|  cdr|}
 @tab Call @code{cdr} with one argument.
 @tab @math{-1+1}
 @item @verb{|0102|}
 @tab @verb{|  66|}
-@tab @verb{|  byte-cons|}
+@tab @verb{|  cons|}
 @tab Call @code{cons} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0103|}
 @tab @verb{|  67|}
-@tab @verb{|  byte-list1|}
+@tab @verb{|  list1|}
 @tab Call @code{list} with one argument.
 @tab @math{-1+1}
 @item @verb{|0104|}
 @tab @verb{|  68|}
-@tab @verb{|  byte-list2|}
+@tab @verb{|  list2|}
 @tab Call @code{list} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0105|}
 @tab @verb{|  69|}
-@tab @verb{|  byte-list3|}
+@tab @verb{|  list3|}
 @tab Call @code{list} with three arguments.
 @tab @math{-3+1}
 @item @verb{|0106|}
 @tab @verb{|  70|}
-@tab @verb{|  byte-list4|}
+@tab @verb{|  list4|}
 @tab Call @code{list} with four arguments.
 @tab @math{-4+1}
 @item @verb{|0107|}
 @tab @verb{|  71|}
-@tab @verb{|  byte-length|}
+@tab @verb{|  length|}
 @tab Call @code{length} with one argument.
 @tab @math{-1+1}
 @item @verb{|0110|}
 @tab @verb{|  72|}
-@tab @verb{|  byte-aref|}
+@tab @verb{|  aref|}
 @tab Call @code{aref} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0111|}
 @tab @verb{|  73|}
-@tab @verb{|  byte-aset|}
+@tab @verb{|  aset|}
 @tab Call @code{aset} with three arguments.
 @tab @math{-3+1}
 @item @verb{|0112|}
 @tab @verb{|  74|}
-@tab @verb{|  byte-symbol-value|}
+@tab @verb{|  symbol-value|}
 @tab Call @code{symbol-value} with one argument.
 @tab @math{-1+1}
 @item @verb{|0113|}
 @tab @verb{|  75|}
-@tab @verb{|  byte-symbol-function|}
+@tab @verb{|  symbol-function|}
 @tab Call @code{symbol-function} with one argument.
 @tab @math{-1+1}
 @item @verb{|0114|}
 @tab @verb{|  76|}
-@tab @verb{|  byte-set|}
+@tab @verb{|  set|}
 @tab Call @code{set} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0115|}
 @tab @verb{|  77|}
-@tab @verb{|  byte-fset|}
+@tab @verb{|  fset|}
 @tab Call @code{fset} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0116|}
 @tab @verb{|  78|}
-@tab @verb{|  byte-get|}
+@tab @verb{|  get|}
 @tab Call @code{get} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0117|}
 @tab @verb{|  79|}
-@tab @verb{|  byte-substring|}
+@tab @verb{|  substring|}
 @tab Call @code{substring} with three arguments.
 @tab @math{-3+1}
 @item @verb{|0120|}
 @tab @verb{|  80|}
-@tab @verb{|  byte-concat2|}
+@tab @verb{|  concat2|}
 @tab Call @code{concat} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0121|}
 @tab @verb{|  81|}
-@tab @verb{|  byte-concat3|}
+@tab @verb{|  concat3|}
 @tab Call @code{concat} with three arguments.
 @tab @math{-3+1}
 @item @verb{|0122|}
 @tab @verb{|  82|}
-@tab @verb{|  byte-concat4|}
+@tab @verb{|  concat4|}
 @tab Call @code{concat} with four arguments.
 @tab @math{-4+1}
 
 @item @verb{|0123|}
 @tab @verb{|  83|}
-@tab @verb{|  byte-sub1|}
+@tab @verb{|  sub1|}
 @tab Call @code{1-} with one argument, subtracting one from the top-of-stack value.
 @tab @math{-1+1}
 @item @verb{|0124|}
 @tab @verb{|  84|}
-@tab @verb{|  byte-add1|}
+@tab @verb{|  add1|}
 @tab Call @code{1+} with one argument, adding one to the top-of-stack value.
 @tab @math{-1+1}
 @item @verb{|0125|}
 @tab @verb{|  85|}
-@tab @verb{|  byte-eqlsign|}
+@tab @verb{|  eqlsign|}
 @tab Call @code{=} with two arguments, comparing the two values at the top of the stack for numerical or strict equality.
 @tab @math{-2+1}
 @item @verb{|0126|}
 @tab @verb{|  86|}
-@tab @verb{|  byte-gtr|}
+@tab @verb{|  gtr|}
 @tab Call @code{>} with two arguments, comparing the two values at the top of the stack with the numerical greater-than relation.
 @tab @math{-2+1}
 @item @verb{|0127|}
 @tab @verb{|  87|}
-@tab @verb{|  byte-lss|}
+@tab @verb{|  lss|}
 @tab Call @code{<} with two arguments, comparing the two values at the top of the stack with the numerical less-than relation.
 @tab @math{-2+1}
 @item @verb{|0130|}
 @tab @verb{|  88|}
-@tab @verb{|  byte-leq|}
+@tab @verb{|  leq|}
 @tab Call @code{<=} with two arguments, comparing the two values at the top of the stack with the numerical less-than-or-equals relation.
 @tab @math{-2+1}
 @item @verb{|0131|}
 @tab @verb{|  89|}
-@tab @verb{|  byte-geq|}
+@tab @verb{|  geq|}
 @tab Call @code{>=} with two arguments, comparing the two values at the top of the stack with the numerical less-than-or-equals relation.
 @tab @math{-2+1}
 @item @verb{|0132|}
 @tab @verb{|  90|}
-@tab @verb{|  byte-diff|}
+@tab @verb{|  diff|}
 @tab Call @code{-} with two arguments, subtracting the two values at the top of the stack.
 @tab @math{-2+1}
 @item @verb{|0133|}
 @tab @verb{|  91|}
-@tab @verb{|  byte-negate|}
+@tab @verb{|  negate|}
 @tab Call @code{-} with one argument, negating the top-of-stack value.
 @tab @math{-1+1}
 @item @verb{|0134|}
 @tab @verb{|  92|}
-@tab @verb{|  byte-plus|}
+@tab @verb{|  plus|}
 @tab Call @code{+} with two arguments, adding the two values at the top of the stack.
 @tab @math{-2+1}
 @item @verb{|0137|}
 @tab @verb{|  95|}
-@tab @verb{|  byte-mult|}
+@tab @verb{|  mult|}
 @tab Call @code{*} with two arguments, multiplying the two values at the top of the stack.
 @tab @math{-2+1}
 @item @verb{|0135|}
 @tab @verb{|  93|}
-@tab @verb{|  byte-max|}
+@tab @verb{|  max|}
 @tab Call @code{max} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0136|}
 @tab @verb{|  94|}
-@tab @verb{|  byte-min|}
+@tab @verb{|  min|}
 @tab Call @code{min} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0140|}
 @tab @verb{|  96|}
-@tab @verb{|  byte-point|}
+@tab @verb{|  point|}
 @tab Call @code{point} with no arguments.
 @tab @math{0+1}
 @item @verb{|0142|}
 @tab @verb{|  98|}
-@tab @verb{|  byte-goto-char|}
+@tab @verb{|  goto-char|}
 @tab Call @code{goto-char} with one argument.
 @tab @math{-1+1}
 @item @verb{|0143|}
 @tab @verb{|  99|}
-@tab @verb{|  byte-insert|}
+@tab @verb{|  insert|}
 @tab Call @code{insert} with one argument.
 @tab @math{-1+1}
 @item @verb{|0145|}
 @tab @verb{| 100|}
-@tab @verb{|  byte-point-max|}
+@tab @verb{|  point-max|}
 @tab Call @code{point-max} with no arguments.
 @tab @math{0+1}
 @item @verb{|0146|}
 @tab @verb{| 101|}
-@tab @verb{|  byte-point-min|}
+@tab @verb{|  point-min|}
 @tab Call @code{point-min} with no arguments.
 @tab @math{0+1}
 @item @verb{|0144|}
 @tab @verb{| 102|}
-@tab @verb{|  byte-char-after|}
+@tab @verb{|  char-after|}
 @tab Call @code{char-after} with one argument.
 @tab @math{-1+1}
 @item @verb{|0147|}
 @tab @verb{| 103|}
-@tab @verb{|  byte-following-char|}
+@tab @verb{|  following-char|}
 @tab Call @code{following-char} with no arguments.
 @tab @math{0+1}
 @item @verb{|0150|}
 @tab @verb{| 104|}
-@tab @verb{|  byte-preceding-char|}
+@tab @verb{|  preceding-char|}
 @tab Call @code{preceding-char} with no arguments.
 @tab @math{0+1}
 @item @verb{|0151|}
 @tab @verb{| 105|}
-@tab @verb{|  byte-current-column|}
+@tab @verb{|  current-column|}
 @tab Call @code{current-column} with no arguments.
 @tab @math{0+1}
 @item @verb{|0154|}
 @tab @verb{| 108|}
-@tab @verb{|  byte-eolp|}
+@tab @verb{|  eolp|}
 @tab Call @code{eolp} with no arguments.
 @tab @math{0+1}
 @item @verb{|0155|}
 @tab @verb{| 109|}
-@tab @verb{|  byte-eobp|}
+@tab @verb{|  eobp|}
 @tab Call @code{eobp} with no arguments.
 @tab @math{0+1}
 @item @verb{|0156|}
 @tab @verb{| 110|}
-@tab @verb{|  byte-bolp|}
+@tab @verb{|  bolp|}
 @tab Call @code{bolp} with no arguments.
 @tab @math{0+1}
 @item @verb{|0157|}
 @tab @verb{| 111|}
-@tab @verb{|  byte-bobp|}
+@tab @verb{|  bobp|}
 @tab Call @code{bobp} with no arguments.
 @tab @math{0+1}
 @item @verb{|0160|}
 @tab @verb{| 112|}
-@tab @verb{|  byte-current-buffer|}
+@tab @verb{|  current-buffer|}
 @tab Call @code{current-buffer} with no arguments.
 @tab @math{0+1}
 @item @verb{|0161|}
 @tab @verb{| 113|}
-@tab @verb{|  byte-set-buffer|}
+@tab @verb{|  set-buffer|}
 @tab Call @code{set-buffer} with one argument.
 @tab @math{-1+1}
 @item @verb{|0165|}
 @tab @verb{| 117|}
-@tab @verb{|  byte-forward-char|}
+@tab @verb{|  forward-char|}
 @tab Call @code{forward-char} with one argument.
 @tab @math{-1+1}
 @item @verb{|0166|}
 @tab @verb{| 118|}
-@tab @verb{|  byte-forward-word|}
+@tab @verb{|  forward-word|}
 @tab Call @code{forward-word} with one argument.
 @tab @math{-1+1}
 @item @verb{|0167|}
 @tab @verb{| 119|}
-@tab @verb{|  byte-skip-chars-forward|}
+@tab @verb{|  skip-chars-forward|}
 @tab Call @code{skip-chars-forward} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0170|}
 @tab @verb{| 120|}
-@tab @verb{|  byte-skip-chars-backward|}
+@tab @verb{|  skip-chars-backward|}
 @tab Call @code{skip-chars-backward} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0171|}
 @tab @verb{| 121|}
-@tab @verb{|  byte-forward-line|}
+@tab @verb{|  forward-line|}
 @tab Call @code{forward-line} with one argument.
 @tab @math{-1+1}
 @item @verb{|0172|}
 @tab @verb{| 122|}
-@tab @verb{|  byte-char-syntax|}
+@tab @verb{|  char-syntax|}
 @tab Call @code{char-syntax} with one argument.
 @tab @math{-1+1}
 @item @verb{|0173|}
 @tab @verb{| 123|}
-@tab @verb{|  byte-buffer-substring|}
+@tab @verb{|  buffer-substring|}
 @tab Call @code{buffer-substring} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0174|}
 @tab @verb{| 124|}
-@tab @verb{|  byte-delete-region|}
+@tab @verb{|  delete-region|}
 @tab Call @code{delete-region} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0175|}
 @tab @verb{| 125|}
-@tab @verb{|  byte-narrow-to-region|}
+@tab @verb{|  narrow-to-region|}
 @tab Call @code{narrow-to-region} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0176|}
 @tab @verb{| 126|}
-@tab @verb{|  byte-widen|}
+@tab @verb{|  widen|}
 @tab Call @code{widen} with no arguments.
 @tab @math{0+1}
 @item @verb{|0177|}
 @tab @verb{| 127|}
-@tab @verb{|  byte-end-of-line|}
+@tab @verb{|  end-of-line|}
 @tab Call @code{end-of-line} with one argument.
 @tab @math{-1+1}
 @item @verb{|0200|}
@@ -1932,156 +1932,156 @@ Make a binding recording buffer, point, and mark.
 
 @item @verb{|0201|}
 @tab @verb{| 129|}
-@tab @verb{|  byte-constant2|}
+@tab @verb{|  constant2|}
 @tab Load a constant 0--65535 (but generally greater than 63)
 @tab @math{+1}
 
 @item @verb{|0210|}
 @tab @verb{| 136|}
-@tab @verb{|  byte-discard|}
+@tab @verb{|  discard|}
 @tab Discard top stack value
 @tab @math{-1}
 @item @verb{|0211|}
 @tab @verb{| 137|}
-@tab @verb{|  byte-dup|}
+@tab @verb{|  dup|}
 @tab Duplicate top stack value
 @tab @math{+1}
 @item @verb{|0212|}
 @tab @verb{| 138|}
-@tab @verb{|  byte-save-excursion|}
+@tab @verb{|  save-excursion|}
 @tab Make a binding recording buffer, point, and mark.
 @tab @math{0}
 
 @item @verb{|0257|}
 @tab @verb{| 175|}
-@tab @verb{|  byte-listN|}
+@tab @verb{|  listN|}
 @tab
 @tab @math{-n+1}
 @item @verb{|0260|}
 @tab @verb{| 176|}
-@tab @verb{|  byte-concatN|}
+@tab @verb{|  concatN|}
 @tab
 @tab @math{-n+1}
 @item @verb{|0261|}
 @tab @verb{| 177|}
-@tab @verb{|  byte-insertN|}
+@tab @verb{|  insertN|}
 @tab
 @tab @math{-n+1}
 @item @verb{|0262|}
 @tab @verb{| 178|}
-@tab @verb{|  byte-stack-set|}
+@tab @verb{|  stack-set|}
 @item @verb{|0263|}
 @tab @verb{| 179|}
-@tab @verb{|  byte-stack-set2|}
+@tab @verb{|  stack-set2|}
 
 @item @verb{|0223|}
 @tab @verb{| 147|}
-@tab @verb{|  byte-set-marker|}
+@tab @verb{|  set-marker|}
 @tab Call @code{set-marker} with three arguments.
 @tab @math{-3+1}
 @item @verb{|0224|}
 @tab @verb{| 148|}
-@tab @verb{|  byte-match-beginning|}
+@tab @verb{|  match-beginning|}
 @tab Call @code{match-beginning} with one argument.
 @tab @math{-1+1}
 @item @verb{|0225|}
 @tab @verb{| 149|}
-@tab @verb{|  byte-match-end|}
+@tab @verb{|  match-end|}
 @tab Call @code{match-end} with one argument.
 @tab @math{-1+1}
 @item @verb{|0226|}
 @tab @verb{| 150|}
-@tab @verb{|  byte-upcase|}
+@tab @verb{|  upcase|}
 @tab Call @code{upcase} with one argument.
 @tab @math{-1+1}
 @item @verb{|0227|}
 @tab @verb{| 151|}
-@tab @verb{|  byte-downcase|}
+@tab @verb{|  downcase|}
 @tab Call @code{downcase} with one argument.
 @tab @math{-1+1}
 @item @verb{|0230|}
 @tab @verb{| 152|}
-@tab @verb{|  byte-stringeqlsign|}
+@tab @verb{|  stringeqlsign|}
 @tab Call @code{string=} with two arguments, comparing two strings for equality.
 @tab @math{-2+1}
 @item @verb{|0231|}
 @tab @verb{| 153|}
-@tab @verb{|  byte-stringlss|}
+@tab @verb{|  stringlss|}
 @tab Call @code{string<} with two arguments, comparing two strings.
 @tab @math{-2+1}
 @item @verb{|0232|}
 @tab @verb{| 154|}
-@tab @verb{|  byte-equal|}
+@tab @verb{|  equal|}
 @tab Call @code{equal} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0233|}
 @tab @verb{| 155|}
-@tab @verb{|  byte-nthcdr|}
+@tab @verb{|  nthcdr|}
 @tab Call @code{nthcdr} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0234|}
 @tab @verb{| 156|}
-@tab @verb{|  byte-elt|}
+@tab @verb{|  elt|}
 @tab Call @code{elt} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0235|}
 @tab @verb{| 157|}
-@tab @verb{|  byte-member|}
+@tab @verb{|  member|}
 @tab Call @code{member} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0236|}
 @tab @verb{| 158|}
-@tab @verb{|  byte-assq|}
+@tab @verb{|  assq|}
 @tab Call @code{assq} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0237|}
 @tab @verb{| 159|}
-@tab @verb{|  byte-nreverse|}
+@tab @verb{|  nreverse|}
 @tab Call @code{nreverse} with one argument.
 @tab @math{-1+1}
 @item @verb{|0240|}
 @tab @verb{| 160|}
-@tab @verb{|  byte-setcar|}
+@tab @verb{|  setcar|}
 @tab Call @code{setcar} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0241|}
 @tab @verb{| 161|}
-@tab @verb{|  byte-setcdr|}
+@tab @verb{|  setcdr|}
 @tab Call @code{setcdr} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0242|}
 @tab @verb{| 162|}
-@tab @verb{|  byte-car-safe|}
+@tab @verb{|  car-safe|}
 @tab Call @code{car-safe} with one argument.
 @tab @math{-1+1}
 @item @verb{|0243|}
 @tab @verb{| 163|}
-@tab @verb{|  byte-cdr-safe|}
+@tab @verb{|  cdr-safe|}
 @tab Call @code{cdr-safe} with one argument.
 @tab @math{-1+1}
 @item @verb{|0244|}
 @tab @verb{| 164|}
-@tab @verb{|  byte-nconc|}
+@tab @verb{|  nconc|}
 @tab Call @code{nconc} with two arguments.
 @tab @math{-2+1}
 @item @verb{|0245|}
 @tab @verb{| 165|}
-@tab @verb{|  byte-quo|}
+@tab @verb{|  quo|}
 @tab Call @code{/} with two arguments, dividing the two values at the top of the stack.
 @tab @math{-2+1}
 @item @verb{|0246|}
 @tab @verb{| 166|}
-@tab @verb{|  byte-rem|}
+@tab @verb{|  rem|}
 @tab Call @code{%} with two arguments, calculating the modulus of the two values at the top of the stack.
 @tab @math{-2+1}
 @item @verb{|0247|}
 @tab @verb{| 167|}
-@tab @verb{|  byte-numberp|}
+@tab @verb{|  numberp|}
 @tab Call @code{numberp} with one argument.
 @tab @math{-1+1}
 @item @verb{|0250|}
 @tab @verb{| 168|}
-@tab @verb{|  byte-integerp|}
+@tab @verb{|  integerp|}
 @tab Call @code{integerp} with one argument.
 @tab @math{-1+1}
 @item @verb{|0251|}
@@ -2123,322 +2123,322 @@ Make a binding recording buffer, point, and mark.
 
 @item @verb{|0300|}
 @tab @verb{| 192|}
-@tab @verb{|  byte-constant-i0|}
+@tab @verb{|  constant-i0|}
 @tab
 @tab @math{+1}
 @item @verb{|0301|}
 @tab @verb{| 193|}
-@tab @verb{|  byte-constant-i1|}
+@tab @verb{|  constant-i1|}
 @tab
 @tab @math{+1}
 @item @verb{|0302|}
 @tab @verb{| 194|}
-@tab @verb{|  byte-constant-i2|}
+@tab @verb{|  constant-i2|}
 @tab
 @tab @math{+1}
 @item @verb{|0303|}
 @tab @verb{| 195|}
-@tab @verb{|  byte-constant-i3|}
+@tab @verb{|  constant-i3|}
 @tab
 @tab @math{+1}
 @item @verb{|0304|}
 @tab @verb{| 196|}
-@tab @verb{|  byte-constant-i4|}
+@tab @verb{|  constant-i4|}
 @tab
 @tab @math{+1}
 @item @verb{|0305|}
 @tab @verb{| 197|}
-@tab @verb{|  byte-constant-i5|}
+@tab @verb{|  constant-i5|}
 @tab
 @tab @math{+1}
 @item @verb{|0306|}
 @tab @verb{| 198|}
-@tab @verb{|  byte-constant-i6|}
+@tab @verb{|  constant-i6|}
 @tab
 @tab @math{+1}
 @item @verb{|0307|}
 @tab @verb{| 199|}
-@tab @verb{|  byte-constant-i7|}
+@tab @verb{|  constant-i7|}
 @tab
 @tab @math{+1}
 @item @verb{|0310|}
 @tab @verb{| 200|}
-@tab @verb{|  byte-constant-i8|}
+@tab @verb{|  constant-i8|}
 @tab
 @tab @math{+1}
 @item @verb{|0311|}
 @tab @verb{| 201|}
-@tab @verb{|  byte-constant-i9|}
+@tab @verb{|  constant-i9|}
 @tab
 @tab @math{+1}
 @item @verb{|0312|}
 @tab @verb{| 202|}
-@tab @verb{|  byte-constant-i10|}
+@tab @verb{|  constant-i10|}
 @tab
 @tab @math{+1}
 @item @verb{|0313|}
 @tab @verb{| 203|}
-@tab @verb{|  byte-constant-i11|}
+@tab @verb{|  constant-i11|}
 @tab
 @tab @math{+1}
 @item @verb{|0314|}
 @tab @verb{| 204|}
-@tab @verb{|  byte-constant-i12|}
+@tab @verb{|  constant-i12|}
 @tab
 @tab @math{+1}
 @item @verb{|0315|}
 @tab @verb{| 205|}
-@tab @verb{|  byte-constant-i13|}
+@tab @verb{|  constant-i13|}
 @tab
 @tab @math{+1}
 @item @verb{|0316|}
 @tab @verb{| 206|}
-@tab @verb{|  byte-constant-i14|}
+@tab @verb{|  constant-i14|}
 @tab
 @tab @math{+1}
 @item @verb{|0317|}
 @tab @verb{| 207|}
-@tab @verb{|  byte-constant-i15|}
+@tab @verb{|  constant-i15|}
 @tab
 @tab @math{+1}
 @item @verb{|0320|}
 @tab @verb{| 208|}
-@tab @verb{|  byte-constant-i16|}
+@tab @verb{|  constant-i16|}
 @tab
 @tab @math{+1}
 @item @verb{|0321|}
 @tab @verb{| 209|}
-@tab @verb{|  byte-constant-i17|}
+@tab @verb{|  constant-i17|}
 @tab
 @tab @math{+1}
 @item @verb{|0322|}
 @tab @verb{| 210|}
-@tab @verb{|  byte-constant-i18|}
+@tab @verb{|  constant-i18|}
 @tab
 @tab @math{+1}
 @item @verb{|0323|}
 @tab @verb{| 211|}
-@tab @verb{|  byte-constant-i19|}
+@tab @verb{|  constant-i19|}
 @tab
 @tab @math{+1}
 @item @verb{|0324|}
 @tab @verb{| 212|}
-@tab @verb{|  byte-constant-i20|}
+@tab @verb{|  constant-i20|}
 @tab
 @tab @math{+1}
 @item @verb{|0325|}
 @tab @verb{| 213|}
-@tab @verb{|  byte-constant-i21|}
+@tab @verb{|  constant-i21|}
 @tab
 @tab @math{+1}
 @item @verb{|0326|}
 @tab @verb{| 214|}
-@tab @verb{|  byte-constant-i22|}
+@tab @verb{|  constant-i22|}
 @tab
 @tab @math{+1}
 @item @verb{|0327|}
 @tab @verb{| 215|}
-@tab @verb{|  byte-constant-i23|}
+@tab @verb{|  constant-i23|}
 @tab
 @tab @math{+1}
 @item @verb{|0330|}
 @tab @verb{| 216|}
-@tab @verb{|  byte-constant-i24|}
+@tab @verb{|  constant-i24|}
 @tab
 @tab @math{+1}
 @item @verb{|0331|}
 @tab @verb{| 217|}
-@tab @verb{|  byte-constant-i25|}
+@tab @verb{|  constant-i25|}
 @tab
 @tab @math{+1}
 @item @verb{|0332|}
 @tab @verb{| 218|}
-@tab @verb{|  byte-constant-i26|}
+@tab @verb{|  constant-i26|}
 @tab
 @tab @math{+1}
 @item @verb{|0333|}
 @tab @verb{| 219|}
-@tab @verb{|  byte-constant-i27|}
+@tab @verb{|  constant-i27|}
 @tab
 @tab @math{+1}
 @item @verb{|0334|}
 @tab @verb{| 220|}
-@tab @verb{|  byte-constant-i28|}
+@tab @verb{|  constant-i28|}
 @tab
 @tab @math{+1}
 @item @verb{|0335|}
 @tab @verb{| 221|}
-@tab @verb{|  byte-constant-i29|}
+@tab @verb{|  constant-i29|}
 @tab
 @tab @math{+1}
 @item @verb{|0336|}
 @tab @verb{| 222|}
-@tab @verb{|  byte-constant-i30|}
+@tab @verb{|  constant-i30|}
 @tab
 @tab @math{+1}
 @item @verb{|0337|}
 @tab @verb{| 223|}
-@tab @verb{|  byte-constant-i31|}
+@tab @verb{|  constant-i31|}
 @tab
 @tab @math{+1}
 @item @verb{|0340|}
 @tab @verb{| 224|}
-@tab @verb{|  byte-constant-i32|}
+@tab @verb{|  constant-i32|}
 @tab
 @tab @math{+1}
 @item @verb{|0341|}
 @tab @verb{| 225|}
-@tab @verb{|  byte-constant-i33|}
+@tab @verb{|  constant-i33|}
 @tab
 @tab @math{+1}
 @item @verb{|0342|}
 @tab @verb{| 226|}
-@tab @verb{|  byte-constant-i34|}
+@tab @verb{|  constant-i34|}
 @tab
 @tab @math{+1}
 @item @verb{|0343|}
 @tab @verb{| 227|}
-@tab @verb{|  byte-constant-i35|}
+@tab @verb{|  constant-i35|}
 @tab
 @tab @math{+1}
 @item @verb{|0344|}
 @tab @verb{| 228|}
-@tab @verb{|  byte-constant-i36|}
+@tab @verb{|  constant-i36|}
 @tab
 @tab @math{+1}
 @item @verb{|0345|}
 @tab @verb{| 229|}
-@tab @verb{|  byte-constant-i37|}
+@tab @verb{|  constant-i37|}
 @tab
 @tab @math{+1}
 @item @verb{|0346|}
 @tab @verb{| 230|}
-@tab @verb{|  byte-constant-i38|}
+@tab @verb{|  constant-i38|}
 @tab
 @tab @math{+1}
 @item @verb{|0347|}
 @tab @verb{| 231|}
-@tab @verb{|  byte-constant-i39|}
+@tab @verb{|  constant-i39|}
 @tab
 @tab @math{+1}
 @item @verb{|0350|}
 @tab @verb{| 232|}
-@tab @verb{|  byte-constant-i40|}
+@tab @verb{|  constant-i40|}
 @tab
 @tab @math{+1}
 @item @verb{|0351|}
 @tab @verb{| 233|}
-@tab @verb{|  byte-constant-i41|}
+@tab @verb{|  constant-i41|}
 @tab
 @tab @math{+1}
 @item @verb{|0352|}
 @tab @verb{| 234|}
-@tab @verb{|  byte-constant-i42|}
+@tab @verb{|  constant-i42|}
 @tab
 @tab @math{+1}
 @item @verb{|0353|}
 @tab @verb{| 235|}
-@tab @verb{|  byte-constant-i43|}
+@tab @verb{|  constant-i43|}
 @tab
 @tab @math{+1}
 @item @verb{|0354|}
 @tab @verb{| 236|}
-@tab @verb{|  byte-constant-i44|}
+@tab @verb{|  constant-i44|}
 @tab
 @tab @math{+1}
 @item @verb{|0355|}
 @tab @verb{| 237|}
-@tab @verb{|  byte-constant-i45|}
+@tab @verb{|  constant-i45|}
 @tab
 @tab @math{+1}
 @item @verb{|0356|}
 @tab @verb{| 238|}
-@tab @verb{|  byte-constant-i46|}
+@tab @verb{|  constant-i46|}
 @tab
 @tab @math{+1}
 @item @verb{|0357|}
 @tab @verb{| 239|}
-@tab @verb{|  byte-constant-i47|}
+@tab @verb{|  constant-i47|}
 @tab
 @tab @math{+1}
 @item @verb{|0360|}
 @tab @verb{| 240|}
-@tab @verb{|  byte-constant-i48|}
+@tab @verb{|  constant-i48|}
 @tab
 @tab @math{+1}
 @item @verb{|0361|}
 @tab @verb{| 241|}
-@tab @verb{|  byte-constant-i49|}
+@tab @verb{|  constant-i49|}
 @tab
 @tab @math{+1}
 @item @verb{|0362|}
 @tab @verb{| 242|}
-@tab @verb{|  byte-constant-i50|}
+@tab @verb{|  constant-i50|}
 @tab
 @tab @math{+1}
 @item @verb{|0363|}
 @tab @verb{| 243|}
-@tab @verb{|  byte-constant-i51|}
+@tab @verb{|  constant-i51|}
 @tab
 @tab @math{+1}
 @item @verb{|0364|}
 @tab @verb{| 244|}
-@tab @verb{|  byte-constant-i52|}
+@tab @verb{|  constant-i52|}
 @tab
 @tab @math{+1}
 @item @verb{|0365|}
 @tab @verb{| 245|}
-@tab @verb{|  byte-constant-i53|}
+@tab @verb{|  constant-i53|}
 @tab
 @tab @math{+1}
 @item @verb{|0366|}
 @tab @verb{| 246|}
-@tab @verb{|  byte-constant-i54|}
+@tab @verb{|  constant-i54|}
 @tab
 @tab @math{+1}
 @item @verb{|0367|}
 @tab @verb{| 247|}
-@tab @verb{|  byte-constant-i55|}
+@tab @verb{|  constant-i55|}
 @tab
 @tab @math{+1}
 @item @verb{|0370|}
 @tab @verb{| 248|}
-@tab @verb{|  byte-constant-i56|}
+@tab @verb{|  constant-i56|}
 @tab
 @tab @math{+1}
 @item @verb{|0371|}
 @tab @verb{| 249|}
-@tab @verb{|  byte-constant-i57|}
+@tab @verb{|  constant-i57|}
 @tab
 @tab @math{+1}
 @item @verb{|0372|}
 @tab @verb{| 250|}
-@tab @verb{|  byte-constant-i58|}
+@tab @verb{|  constant-i58|}
 @tab
 @tab @math{+1}
 @item @verb{|0373|}
 @tab @verb{| 251|}
-@tab @verb{|  byte-constant-i59|}
+@tab @verb{|  constant-i59|}
 @tab
 @tab @math{+1}
 @item @verb{|0374|}
 @tab @verb{| 252|}
-@tab @verb{|  byte-constant-i60|}
+@tab @verb{|  constant-i60|}
 @tab
 @tab @math{+1}
 @item @verb{|0375|}
 @tab @verb{| 253|}
-@tab @verb{|  byte-constant-i61|}
+@tab @verb{|  constant-i61|}
 @tab
 @tab @math{+1}
 @item @verb{|0376|}
 @tab @verb{| 254|}
-@tab @verb{|  byte-constant-i62|}
+@tab @verb{|  constant-i62|}
 @tab
 @tab @math{+1}
 @item @verb{|0377|}
 @tab @verb{| 255|}
-@tab @verb{|  byte-constant-i63|}
+@tab @verb{|  constant-i63|}
 @tab
 @tab @math{+1}
 @end multitable
