@@ -1,3 +1,116 @@
+;; This de-compiler is used for inline expansion of compiled functions,
+;; and by the disassembler.
+;;
+;; This list contains numbers, which are pc values,
+;; before each instruction.
+(defun byte-pretty-decompile-bytecode (bytes constvec)
+  "Turn BYTECODE into lapcode, referring to CONSTVEC."
+  (let ((byte-compile-constants nil)
+	(byte-compile-variables nil)
+	(byte-compile-tag-number 0))
+    (byte-pretty-decompile-bytecode-1 bytes constvec nil t)))
+
+;; As byte-decompile-bytecode, but updates
+;; byte-compile-{constants, variables, tag-number}.
+;; If MAKE-SPLICEABLE is true, then `return' opcodes are replaced
+;; with `goto's destined for the end of the code.
+;; That is for use by the compiler.
+;; If MAKE-SPLICEABLE is nil, we are being called for the disassembler.
+;; In that case, we put a pc value into the list
+;; before each insn (or its label).
+(defun byte-pretty-decompile-bytecode-1 (bytes constvec &optional make-spliceable verbatim)
+  (let ((length (length bytes))
+        (bytedecomp-ptr 0) optr tags bytedecomp-op offset
+	lap tmp last-constant)
+    (while (not (= bytedecomp-ptr length))
+      (or make-spliceable
+	  (push bytedecomp-ptr lap))
+      (setq bytedecomp-op (aref bytes bytedecomp-ptr)
+	    optr bytedecomp-ptr
+            ;; This uses dynamic-scope magic.
+            offset (disassemble-offset bytes))
+      (let ((opcode (aref byte-code-vector bytedecomp-op)))
+	(cl-assert opcode)
+	(setq bytedecomp-op opcode))
+      (cond ((memq bytedecomp-op byte-goto-ops)
+	     ;; It's a pc.
+	     (setq offset
+		   (cdr (or (assq offset tags)
+                            (let ((new (cons offset (byte-compile-make-tag))))
+                              (push new tags)
+                              new)))))
+	    ((cond ((eq bytedecomp-op 'byte-constant2)
+		    (unless verbatim (setq bytedecomp-op 'byte-constant)) t)
+		   ((memq bytedecomp-op byte-constref-ops)))
+	     (setq tmp (if (>= offset (length constvec))
+			   (list 'out-of-range offset)
+			 (aref constvec offset))
+		   offset (if (eq bytedecomp-op 'byte-constant)
+			      (byte-compile-get-constant tmp)
+			    (or (assq tmp byte-compile-variables)
+                                (let ((new (list tmp)))
+                                  (push new byte-compile-variables)
+                                  new)))
+                   last-constant tmp))
+	    ((eq bytedecomp-op 'byte-stack-set2)
+	     (unless verbatim (setq bytedecomp-op 'byte-stack-set)))
+	    ((and (eq bytedecomp-op 'byte-discardN) (>= offset #x80))
+	     ;; The top bit of the operand for byte-discardN is a flag,
+	     ;; saying whether the top-of-stack is preserved.  In
+	     ;; lapcode, we represent this by using a different opcode
+	     ;; (with the flag removed from the operand).
+	     (setq bytedecomp-op 'byte-discardN-preserve-tos)
+	     (setq offset (- offset #x80)))
+            ((eq bytedecomp-op 'byte-switch)
+             (cl-assert (hash-table-p last-constant) nil
+                        "byte-switch used without preceeding hash table")
+             ;; We cannot use the original hash table referenced in the op,
+             ;; so we create a copy of it, and replace the addresses with
+             ;; TAGs.
+             (let ((orig-table last-constant))
+               (cl-loop for e across constvec
+                        when (eq e last-constant)
+                        do (setq last-constant (copy-hash-table e))
+                        and return nil)
+               ;; Replace all addresses with TAGs.
+               (maphash #'(lambda (value tag)
+                            (let (newtag)
+                              (setq newtag (byte-compile-make-tag))
+                              (push (cons tag newtag) tags)
+                              (puthash value newtag last-constant)))
+                        last-constant)
+               ;; Replace the hash table referenced in the lapcode with our
+               ;; modified one.
+               (cl-loop for el in-ref lap
+                        when (and (listp el) ;; make sure we're at the correct op
+                                  (eq (nth 1 el) 'byte-constant)
+                                  (eq (nth 2 el) orig-table))
+                        ;; Jump tables are never reused, so do this exactly
+                        ;; once.
+                        do (setf (nth 2 el) last-constant) and return nil))))
+      ;; lap = ( [ (pc . (op . arg)) ]* )
+      (push (cons optr (cons bytedecomp-op offset))
+            lap)
+      (setq bytedecomp-ptr (1+ bytedecomp-ptr)))
+    (let ((rest lap))
+      (while rest
+	(cond ((numberp (car rest)))
+	      ((setq tmp (assq (car (car rest)) tags))
+	       ;; This addr is jumped to.
+	       (setcdr rest (cons (cons nil (cdr tmp))
+				  (cdr rest)))
+	       (setq tags (delq tmp tags))
+	       (setq rest (cdr rest))))
+	(setq rest (cdr rest))))
+    (if tags (error "optimizer error: missed tags %s" tags))
+    ;; Remove addrs, lap = ( [ (op . arg) | (TAG tagno) ]* )
+    (mapcar (function (lambda (elt)
+			(if (numberp elt)
+			    elt
+			  (cdr elt))))
+	    (nreverse lap))))
+
+
 (defun byte--pretty-bytes (bytes)
   (mapconcat (lambda (x) (format "%3d" x)) bytes " "))
 
@@ -7,7 +120,7 @@ bytecode and LAP-code side-by-side."
   (let* ((v (byte-compile form))
          (constvec (aref v 2))
          (bytes (aref v 1))
-         (bytecode (byte-decompile-bytecode bytes constvec))
+         (bytecode (byte-pretty-decompile-bytecode bytes constvec))
          (rbc (reverse bytecode))
          (pc (length bytes))
          (str ""))
@@ -44,7 +157,7 @@ for texinfo input."
          (v (byte-compile form))
          (constvec (aref v 2))
          (bytes (aref v 1))
-         (bytecode (byte-decompile-bytecode bytes constvec))
+         (bytecode (byte-pretty-decompile-bytecode bytes constvec))
          (rbc (reverse bytecode))
          (pc (length bytes))
          (str "@end verbatim\n")
