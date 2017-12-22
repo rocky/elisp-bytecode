@@ -1324,7 +1324,7 @@ Make a binding recording buffer, point, and mark.
 @node Opcode Table
 @chapter Opcode Table
 
-@multitable @columnfractions .04 .06 .30 .55
+@multitable @columnfractions .04 .06 .30 .55 .10
 @headitem @verb{| |}Oct @tab Code @tab @verb{| |} Instruction @tab Description
 @item @verb{|  00|}
 @tab @verb{|   0|}
@@ -1334,195 +1334,242 @@ Make a binding recording buffer, point, and mark.
 @tab @verb{|   1|}
 @tab @verb{|  byte-stack-ref1|}
 @tab stack reference 1
+@tab +1
 @item @verb{|  02|}
 @tab @verb{|   2|}
 @tab @verb{|  byte-stack-ref2|}
 @tab stack reference 2
+@tab +1
 @item @verb{|  03|}
 @tab @verb{|   3|}
 @tab @verb{|  byte-stack-ref3|}
 @tab stack reference 3
+@tab +1
 @item @verb{|  04|}
 @tab @verb{|   4|}
 @tab @verb{|  byte-stack-ref4|}
 @tab stack reference 4
+@tab +1
 @item @verb{|  05|}
 @tab @verb{|   5|}
 @tab @verb{|  byte-stack-ref5|}
 @tab stack reference 5
+@tab +1
 @item @verb{|  06|}
 @tab @verb{|   6|}
 @tab @verb{|  byte-stack-ref6|}
 @tab stack reference 0--255
+@tab +1
 @item @verb{|  07|}
 @tab @verb{|   7|}
 @tab @verb{|  byte-stack-ref7|}
 @tab stack reference 0--65535
+@tab +1
 
 @item @verb{| 010|}
 @tab @verb{|   8|}
 @tab @verb{|  byte-varref0|}
 @tab variable reference 0
+@tab +1
 @item @verb{| 011|}
 @tab @verb{|   9|}
 @tab @verb{|  byte-varref1|}
 @tab variable reference 1
+@tab +1
 @item @verb{| 012|}
 @tab @verb{|  10|}
 @tab @verb{|  byte-varref2|}
 @tab variable reference 2
+@tab +1
 @item @verb{| 013|}
 @tab @verb{|  11|}
 @tab @verb{|  byte-varref3|}
 @tab variable reference 3
+@tab +1
 @item @verb{| 014|}
 @tab @verb{|  12|}
 @tab @verb{|  byte-varref4|}
 @tab variable reference 4
+@tab +1
 @item @verb{| 015|}
 @tab @verb{|  13|}
 @tab @verb{|  byte-varref5|}
 @tab variable reference 5
+@tab +1
 @item @verb{| 016|}
 @tab @verb{|  14|}
 @tab @verb{|  byte-varref6|}
 @tab variable reference 0--255
+@tab +1
 @item @verb{| 017|}
 @tab @verb{|  15|}
 @tab @verb{|  byte-varref7|}
 @tab variable reference 0--65535
+@tab +1
 
 @item @verb{| 020|}
 @tab @verb{|  16|}
 @tab @verb{|  byte-varset0|}
 @tab Sets variable 0
+@tab -1
 @item @verb{| 021|}
 @tab @verb{|  17|}
 @tab @verb{|  byte-varset1|}
 @tab Sets variable 1
+@tab -1
 @item @verb{| 022|}
 @tab @verb{|  18|}
 @tab @verb{|  byte-varset2|}
 @tab Sets variable 2
+@tab -1
 @item @verb{| 023|}
 @tab @verb{|  19|}
 @tab @verb{|  byte-varset3|}
 @tab Sets variable 3
+@tab -1
 @item @verb{| 024|}
 @tab @verb{|  20|}
 @tab @verb{|  byte-varset4|}
 @tab Sets variable 4
+@tab -1
 @item @verb{| 025|}
 @tab @verb{|  21|}
 @tab @verb{|  byte-varset5|}
 @tab Sets variable 5
+@tab -1
 @item @verb{| 026|}
 @tab @verb{|  22|}
 @tab @verb{|  byte-varset6|}
 @tab Sets variable 6
+@tab -1
 @item @verb{| 027|}
 @tab @verb{|  23|}
 @tab @verb{|  byte-varset7|}
 @tab Sets variable 7
+@tab -1
 
 @item @verb{| 030|}
 @tab @verb{|  24|}
 @tab @verb{|  byte-varbind0|}
 @tab Bind variable 0
+@tab -1
 @item @verb{| 031|}
 @tab @verb{|  25|}
 @tab @verb{|  byte-varbind1|}
 @tab Bind variable 1
+@tab -1
 @item @verb{| 032|}
 @tab @verb{|  26|}
 @tab @verb{|  byte-varbind2|}
 @tab Bind variable 2
+@tab -1
 @item @verb{| 033|}
 @tab @verb{|  27|}
 @tab @verb{|  byte-varbind3|}
 @tab Bind variable 3
+@tab -1
 @item @verb{| 034|}
 @tab @verb{|  28|}
 @tab @verb{|  byte-varbind4|}
 @tab Bind variable 4
+@tab -1
 @item @verb{| 035|}
 @tab @verb{|  29|}
 @tab @verb{|  byte-varbind5|}
 @tab Bind variable 5
+@tab -1
 @item @verb{| 036|}
 @tab @verb{|  30|}
 @tab @verb{|  byte-varbind6|}
 @tab Bind variable 6
+@tab -1
 @item @verb{| 037|}
 @tab @verb{|  31|}
 @tab @verb{|  byte-varbind7|}
 @tab Bind variable 7
+@tab -1
 
 @item @verb{| 040|}
 @tab @verb{|  32|}
 @tab @verb{|  byte-call0|}
 @tab Calls a function
+@tab -1+1
 @item @verb{| 041|}
 @tab @verb{|  33|}
 @tab @verb{|  byte-call1|}
 @tab Calls a function
+@tab -2+1
 @item @verb{| 042|}
 @tab @verb{|  34|}
 @tab @verb{|  byte-call2|}
 @tab Calls a function
+@tab -3+1
 @item @verb{| 043|}
 @tab @verb{|  35|}
 @tab @verb{|  byte-call3|}
 @tab Calls a function
+@tab -4+1
 @item @verb{| 044|}
 @tab @verb{|  36|}
 @tab @verb{|  byte-call4|}
 @tab Calls a function
+@tab -5+1
 @item @verb{| 045|}
 @tab @verb{|  37|}
 @tab @verb{|  byte-call5|}
 @tab Calls a function
+@tab -6+1
 @item @verb{| 046|}
 @tab @verb{|  38|}
 @tab @verb{|  byte-call6|}
 @tab Calls a function
+@tab -n-1+1
 @item @verb{| 047|}
 @tab @verb{|  39|}
 @tab @verb{|  byte-call7|}
 @tab Calls a function
+@tab -n-1+1
 
 @item @verb{| 050|}
 @tab @verb{|  40|}
 @tab @verb{|  byte-unbind0|}
 @tab Unbinds special bindings
+@tab 0
 @item @verb{| 051|}
 @tab @verb{|  41|}
 @tab @verb{|  byte-unbind1|}
 @tab Unbinds special bindings
+@tab 0
 @item @verb{| 052|}
 @tab @verb{|  42|}
 @tab @verb{|  byte-unbind2|}
 @tab Unbinds special bindings
+@tab 0
 @item @verb{| 053|}
 @tab @verb{|  43|}
 @tab @verb{|  byte-unbind3|}
 @tab Unbinds special bindings
+@tab 0
 @item @verb{| 054|}
 @tab @verb{|  44|}
 @tab @verb{|  byte-unbind4|}
 @tab Unbinds special bindings
+@tab 0
 @item @verb{| 055|}
 @tab @verb{|  45|}
 @tab @verb{|  byte-unbind5|}
 @tab Unbinds special bindings
+@tab 0
 @item @verb{| 056|}
 @tab @verb{|  46|}
 @tab @verb{|  byte-unbind6|}
 @tab Unbinds special bindings
+@tab 0
 @item @verb{| 057|}
 @tab @verb{|  47|}
 @tab @verb{|  byte-unbind7|}
 @tab Unbinds special bindings
+@tab 0
 
 @item @verb{| 063|}
 @tab @verb{|  51|}
@@ -1544,268 +1591,334 @@ Make a binding recording buffer, point, and mark.
 @tab @verb{|  56|}
 @tab @verb{|  byte-nth|}
 @tab Call @code{nth} with two arguments.
+@tab -2+1
 @item @verb{| 071|}
 @tab @verb{|  57|}
 @tab @verb{|  byte-symbolp|}
 @tab Call @code{symbolp} with one argument.
+@tab -1+1
 @item @verb{| 072|}
 @tab @verb{|  58|}
 @tab @verb{|  byte-consp|}
 @tab Call @code{consp} with one argument.
+@tab -1+1
 @item @verb{| 073|}
 @tab @verb{|  59|}
 @tab @verb{|  byte-stringp|}
 @tab Call @code{stringp} with one argument.
+@tab -1+1
 @item @verb{| 074|}
 @tab @verb{|  60|}
 @tab @verb{|  byte-listp|}
 @tab Call @code{listp} with one argument.
+@tab -1+1
 @item @verb{| 075|}
 @tab @verb{|  61|}
 @tab @verb{|  byte-eq|}
 @tab Call @code{eq} with two arguments.
+@tab -2+1
 @item @verb{| 076|}
 @tab @verb{|  62|}
 @tab @verb{|  byte-memq|}
 @tab Call @code{memq} with two arguments.
+@tab -2+1
 @item @verb{| 077|}
 @tab @verb{|  63|}
 @tab @verb{|  byte-not|}
 @tab Call @code{not} with one argument.
+@tab -1+1
 
 @item @verb{|0100|}
 @tab @verb{|  64|}
 @tab @verb{|  byte-car|}
 @tab Call @code{car} with one argument.
+@tab -1+1
 @item @verb{|0101|}
 @tab @verb{|  65|}
 @tab @verb{|  byte-cdr|}
 @tab Call @code{cdr} with one argument.
+@tab -1+1
 @item @verb{|0102|}
 @tab @verb{|  66|}
 @tab @verb{|  byte-cons|}
 @tab Call @code{cons} with two arguments.
+@tab -2+1
 @item @verb{|0103|}
 @tab @verb{|  67|}
 @tab @verb{|  byte-list1|}
 @tab Call @code{list} with one argument.
+@tab -1+1
 @item @verb{|0104|}
 @tab @verb{|  68|}
 @tab @verb{|  byte-list2|}
 @tab Call @code{list} with two arguments.
+@tab -2+1
 @item @verb{|0105|}
 @tab @verb{|  69|}
 @tab @verb{|  byte-list3|}
 @tab Call @code{list} with three arguments.
+@tab -3+1
 @item @verb{|0106|}
 @tab @verb{|  70|}
 @tab @verb{|  byte-list4|}
 @tab Call @code{list} with four arguments.
+@tab -4+1
 @item @verb{|0107|}
 @tab @verb{|  71|}
 @tab @verb{|  byte-length|}
 @tab Call @code{length} with one argument.
+@tab -1+1
 @item @verb{|0110|}
 @tab @verb{|  72|}
 @tab @verb{|  byte-aref|}
 @tab Call @code{aref} with two arguments.
+@tab -2+1
 @item @verb{|0111|}
 @tab @verb{|  73|}
 @tab @verb{|  byte-aset|}
 @tab Call @code{aset} with three arguments.
+@tab -3+1
 @item @verb{|0112|}
 @tab @verb{|  74|}
 @tab @verb{|  byte-symbol-value|}
 @tab Call @code{symbol-value} with one argument.
+@tab -1+1
 @item @verb{|0113|}
 @tab @verb{|  75|}
 @tab @verb{|  byte-symbol-function|}
 @tab Call @code{symbol-function} with one argument.
+@tab -1+1
 @item @verb{|0114|}
 @tab @verb{|  76|}
 @tab @verb{|  byte-set|}
 @tab Call @code{set} with two arguments.
+@tab -2+1
 @item @verb{|0115|}
 @tab @verb{|  77|}
 @tab @verb{|  byte-fset|}
 @tab Call @code{fset} with two arguments.
+@tab -2+1
 @item @verb{|0116|}
 @tab @verb{|  78|}
 @tab @verb{|  byte-get|}
 @tab Call @code{get} with two arguments.
+@tab -2+1
 @item @verb{|0117|}
 @tab @verb{|  79|}
 @tab @verb{|  byte-substring|}
 @tab Call @code{substring} with three arguments.
+@tab -3+1
 @item @verb{|0120|}
 @tab @verb{|  80|}
 @tab @verb{|  byte-concat2|}
 @tab Call @code{concat} with two arguments.
+@tab -2+1
 @item @verb{|0121|}
 @tab @verb{|  81|}
 @tab @verb{|  byte-concat3|}
 @tab Call @code{concat} with three arguments.
+@tab -3+1
 @item @verb{|0122|}
 @tab @verb{|  82|}
 @tab @verb{|  byte-concat4|}
 @tab Call @code{concat} with four arguments.
+@tab -4+1
 
 @item @verb{|0123|}
 @tab @verb{|  83|}
 @tab @verb{|  byte-sub1|}
 @tab Call @code{1-} with one argument, subtracting one from the top-of-stack value.
+@tab -1+1
 @item @verb{|0124|}
 @tab @verb{|  84|}
 @tab @verb{|  byte-add1|}
 @tab Call @code{1+} with one argument, adding one to the top-of-stack value.
+@tab -1+1
 @item @verb{|0125|}
 @tab @verb{|  85|}
 @tab @verb{|  byte-eqlsign|}
 @tab Call @code{=} with two arguments, comparing the two values at the top of the stack for numerical or strict equality.
+@tab -2+1
 @item @verb{|0126|}
 @tab @verb{|  86|}
 @tab @verb{|  byte-gtr|}
 @tab Call @code{>} with two arguments, comparing the two values at the top of the stack with the numerical greater-than relation.
+@tab -2+1
 @item @verb{|0127|}
 @tab @verb{|  87|}
 @tab @verb{|  byte-lss|}
 @tab Call @code{<} with two arguments, comparing the two values at the top of the stack with the numerical less-than relation.
+@tab -2+1
 @item @verb{|0130|}
 @tab @verb{|  88|}
 @tab @verb{|  byte-leq|}
 @tab Call @code{<=} with two arguments, comparing the two values at the top of the stack with the numerical less-than-or-equals relation.
+@tab -2+1
 @item @verb{|0131|}
 @tab @verb{|  89|}
 @tab @verb{|  byte-geq|}
 @tab Call @code{>=} with two arguments, comparing the two values at the top of the stack with the numerical less-than-or-equals relation.
+@tab -2+1
 @item @verb{|0132|}
 @tab @verb{|  90|}
 @tab @verb{|  byte-diff|}
 @tab Call @code{-} with two arguments, subtracting the two values at the top of the stack.
+@tab -2+1
 @item @verb{|0133|}
 @tab @verb{|  91|}
 @tab @verb{|  byte-negate|}
 @tab Call @code{-} with one argument, negating the top-of-stack value.
+@tab -1+1
 @item @verb{|0134|}
 @tab @verb{|  92|}
 @tab @verb{|  byte-plus|}
 @tab Call @code{+} with two arguments, adding the two values at the top of the stack.
+@tab -2+1
 @item @verb{|0137|}
 @tab @verb{|  95|}
 @tab @verb{|  byte-mult|}
 @tab Call @code{*} with two arguments, multiplying the two values at the top of the stack.
+@tab -2+1
 @item @verb{|0135|}
 @tab @verb{|  93|}
 @tab @verb{|  byte-max|}
 @tab Call @code{max} with two arguments.
+@tab -2+1
 @item @verb{|0136|}
 @tab @verb{|  94|}
 @tab @verb{|  byte-min|}
 @tab Call @code{min} with two arguments.
+@tab -2+1
 @item @verb{|0140|}
 @tab @verb{|  96|}
 @tab @verb{|  byte-point|}
 @tab Call @code{point} with no arguments.
+@tab 0+1
 @item @verb{|0142|}
 @tab @verb{|  98|}
 @tab @verb{|  byte-goto-char|}
 @tab Call @code{goto-char} with one argument.
+@tab -1+1
 @item @verb{|0143|}
 @tab @verb{|  99|}
 @tab @verb{|  byte-insert|}
 @tab Call @code{insert} with one argument.
+@tab -1+1
 @item @verb{|0145|}
 @tab @verb{| 100|}
 @tab @verb{|  byte-point-max|}
 @tab Call @code{point-max} with no arguments.
+@tab 0+1
 @item @verb{|0146|}
 @tab @verb{| 101|}
 @tab @verb{|  byte-point-min|}
 @tab Call @code{point-min} with no arguments.
+@tab 0+1
 @item @verb{|0144|}
 @tab @verb{| 102|}
 @tab @verb{|  byte-char-after|}
 @tab Call @code{char-after} with one argument.
+@tab -1+1
 @item @verb{|0147|}
 @tab @verb{| 103|}
 @tab @verb{|  byte-following-char|}
 @tab Call @code{following-char} with no arguments.
+@tab 0+1
 @item @verb{|0150|}
 @tab @verb{| 104|}
 @tab @verb{|  byte-preceding-char|}
 @tab Call @code{preceding-char} with no arguments.
+@tab 0+1
 @item @verb{|0151|}
 @tab @verb{| 105|}
 @tab @verb{|  byte-current-column|}
 @tab Call @code{current-column} with no arguments.
+@tab 0+1
 @item @verb{|0154|}
 @tab @verb{| 108|}
 @tab @verb{|  byte-eolp|}
 @tab Call @code{eolp} with no arguments.
+@tab 0+1
 @item @verb{|0155|}
 @tab @verb{| 109|}
 @tab @verb{|  byte-eobp|}
 @tab Call @code{eobp} with no arguments.
+@tab 0+1
 @item @verb{|0156|}
 @tab @verb{| 110|}
 @tab @verb{|  byte-bolp|}
 @tab Call @code{bolp} with no arguments.
+@tab 0+1
 @item @verb{|0157|}
 @tab @verb{| 111|}
 @tab @verb{|  byte-bobp|}
 @tab Call @code{bobp} with no arguments.
+@tab 0+1
 @item @verb{|0160|}
 @tab @verb{| 112|}
 @tab @verb{|  byte-current-buffer|}
 @tab Call @code{current-buffer} with no arguments.
+@tab 0+1
 @item @verb{|0161|}
 @tab @verb{| 113|}
 @tab @verb{|  byte-set-buffer|}
 @tab Call @code{set-buffer} with one argument.
+@tab -1+1
 @item @verb{|0165|}
 @tab @verb{| 117|}
 @tab @verb{|  byte-forward-char|}
 @tab Call @code{forward-char} with one argument.
+@tab -1+1
 @item @verb{|0166|}
 @tab @verb{| 118|}
 @tab @verb{|  byte-forward-word|}
 @tab Call @code{forward-word} with one argument.
+@tab -1+1
 @item @verb{|0167|}
 @tab @verb{| 119|}
 @tab @verb{|  byte-skip-chars-forward|}
 @tab Call @code{skip-chars-forward} with two arguments.
+@tab -2+1
 @item @verb{|0170|}
 @tab @verb{| 120|}
 @tab @verb{|  byte-skip-chars-backward|}
 @tab Call @code{skip-chars-backward} with two arguments.
+@tab -2+1
 @item @verb{|0171|}
 @tab @verb{| 121|}
 @tab @verb{|  byte-forward-line|}
 @tab Call @code{forward-line} with one argument.
+@tab -1+1
 @item @verb{|0172|}
 @tab @verb{| 122|}
 @tab @verb{|  byte-char-syntax|}
 @tab Call @code{char-syntax} with one argument.
+@tab -1+1
 @item @verb{|0173|}
 @tab @verb{| 123|}
 @tab @verb{|  byte-buffer-substring|}
 @tab Call @code{buffer-substring} with two arguments.
+@tab -2+1
 @item @verb{|0174|}
 @tab @verb{| 124|}
 @tab @verb{|  byte-delete-region|}
 @tab Call @code{delete-region} with two arguments.
+@tab -2+1
 @item @verb{|0175|}
 @tab @verb{| 125|}
 @tab @verb{|  byte-narrow-to-region|}
 @tab Call @code{narrow-to-region} with two arguments.
+@tab -2+1
 @item @verb{|0176|}
 @tab @verb{| 126|}
 @tab @verb{|  byte-widen|}
 @tab Call @code{widen} with no arguments.
+@tab 0+1
 @item @verb{|0177|}
 @tab @verb{| 127|}
 @tab @verb{|  byte-end-of-line|}
 @tab Call @code{end-of-line} with one argument.
+@tab -1+1
 @item @verb{|0200|}
 @tab @verb{| 128|}
 @tab
@@ -1815,30 +1928,39 @@ Make a binding recording buffer, point, and mark.
 @tab @verb{| 129|}
 @tab @verb{|  byte-constant2|}
 @tab Load a constant 0--65535 (but generally greater than 63)
+@tab +1
 
 @item @verb{|0210|}
 @tab @verb{| 136|}
 @tab @verb{|  byte-discard|}
 @tab Discard top stack value
+@tab -1
 @item @verb{|0211|}
 @tab @verb{| 137|}
 @tab @verb{|  byte-dup|}
 @tab Duplicate top stack value
+@tab +1
 @item @verb{|0212|}
 @tab @verb{| 138|}
 @tab @verb{|  byte-save-excursion|}
 @tab Make a binding recording buffer, point, and mark.
+@tab 0
 
 @item @verb{|0257|}
 @tab @verb{| 175|}
 @tab @verb{|  byte-listN|}
 @tab
+@tab -n+1
 @item @verb{|0260|}
 @tab @verb{| 176|}
 @tab @verb{|  byte-concatN|}
+@tab
+@tab -n+1
 @item @verb{|0261|}
 @tab @verb{| 177|}
 @tab @verb{|  byte-insertN|}
+@tab
+@tab -n+1
 @item @verb{|0262|}
 @tab @verb{| 178|}
 @tab @verb{|  byte-stack-set|}
@@ -1850,90 +1972,112 @@ Make a binding recording buffer, point, and mark.
 @tab @verb{| 147|}
 @tab @verb{|  byte-set-marker|}
 @tab Call @code{set-marker} with three arguments.
+@tab -3+1
 @item @verb{|0224|}
 @tab @verb{| 148|}
 @tab @verb{|  byte-match-beginning|}
 @tab Call @code{match-beginning} with one argument.
+@tab -1+1
 @item @verb{|0225|}
 @tab @verb{| 149|}
 @tab @verb{|  byte-match-end|}
 @tab Call @code{match-end} with one argument.
+@tab -1+1
 @item @verb{|0226|}
 @tab @verb{| 150|}
 @tab @verb{|  byte-upcase|}
 @tab Call @code{upcase} with one argument.
+@tab -1+1
 @item @verb{|0227|}
 @tab @verb{| 151|}
 @tab @verb{|  byte-downcase|}
 @tab Call @code{downcase} with one argument.
+@tab -1+1
 @item @verb{|0230|}
 @tab @verb{| 152|}
 @tab @verb{|  byte-stringeqlsign|}
 @tab Call @code{string=} with two arguments, comparing two strings for equality.
+@tab -2+1
 @item @verb{|0231|}
 @tab @verb{| 153|}
 @tab @verb{|  byte-stringlss|}
 @tab Call @code{string<} with two arguments, comparing two strings.
+@tab -2+1
 @item @verb{|0232|}
 @tab @verb{| 154|}
 @tab @verb{|  byte-equal|}
 @tab Call @code{equal} with two arguments.
+@tab -2+1
 @item @verb{|0233|}
 @tab @verb{| 155|}
 @tab @verb{|  byte-nthcdr|}
 @tab Call @code{nthcdr} with two arguments.
+@tab -2+1
 @item @verb{|0234|}
 @tab @verb{| 156|}
 @tab @verb{|  byte-elt|}
 @tab Call @code{elt} with two arguments.
+@tab -2+1
 @item @verb{|0235|}
 @tab @verb{| 157|}
 @tab @verb{|  byte-member|}
-@tab Call @code{membec} with two arguments.
+@tab Call @code{member} with two arguments.
+@tab -2+1
 @item @verb{|0236|}
 @tab @verb{| 158|}
 @tab @verb{|  byte-assq|}
 @tab Call @code{assq} with two arguments.
+@tab -2+1
 @item @verb{|0237|}
 @tab @verb{| 159|}
 @tab @verb{|  byte-nreverse|}
 @tab Call @code{nreverse} with one argument.
+@tab -1+1
 @item @verb{|0240|}
 @tab @verb{| 160|}
 @tab @verb{|  byte-setcar|}
 @tab Call @code{setcar} with two arguments.
+@tab -2+1
 @item @verb{|0241|}
 @tab @verb{| 161|}
 @tab @verb{|  byte-setcdr|}
 @tab Call @code{setcdr} with two arguments.
+@tab -2+1
 @item @verb{|0242|}
 @tab @verb{| 162|}
 @tab @verb{|  byte-car-safe|}
 @tab Call @code{car-safe} with one argument.
+@tab -1+1
 @item @verb{|0243|}
 @tab @verb{| 163|}
 @tab @verb{|  byte-cdr-safe|}
 @tab Call @code{cdr-safe} with one argument.
+@tab -1+1
 @item @verb{|0244|}
 @tab @verb{| 164|}
 @tab @verb{|  byte-nconc|}
 @tab Call @code{nconc} with two arguments.
+@tab -2+1
 @item @verb{|0245|}
 @tab @verb{| 165|}
 @tab @verb{|  byte-quo|}
 @tab Call @code{/} with two arguments, dividing the two values at the top of the stack.
+@tab -2+1
 @item @verb{|0246|}
 @tab @verb{| 166|}
 @tab @verb{|  byte-rem|}
 @tab Call @code{%} with two arguments, calculating the modulus of the two values at the top of the stack.
+@tab -2+1
 @item @verb{|0247|}
 @tab @verb{| 167|}
 @tab @verb{|  byte-numberp|}
 @tab Call @code{numberp} with one argument.
+@tab -1+1
 @item @verb{|0250|}
 @tab @verb{| 168|}
 @tab @verb{|  byte-integerp|}
 @tab Call @code{integerp} with one argument.
+@tab -1+1
 @item @verb{|0251|}
 @tab @verb{| 169|}
 @tab
