@@ -549,7 +549,7 @@ Pushes the value of a variable reference onto the evaluation stack.
 When dynamic binding is in effect, @code{(defun en(n) n)} generates:
 @verbatim
 PC  Byte  Instruction
- 0    8   varref n  ;; loads variable n onto the stack
+ 0    8   varref[0] n
  1  135   return
 
 Constants Vector: [n]
@@ -567,9 +567,9 @@ of the stack.
 When dynamic binding is in effect, @code{(defun n5(n) (setq n 5))} generates:
 @verbatim
 PC  Byte  Instruction
- 0  193   constant 5
+ 0  193   constant[1] 5
  1  137   dup
- 2   16   varset n ;; sets variable n
+ 2   16   varset[0] n ;; sets variable n
  3  135   return
 
 Constants Vector: [n 5]
@@ -594,8 +594,8 @@ function itself.
 @code{(exchange-point-and-mark)} generates:
 @verbatim
 PC  Byte  Instruction
- 0  192   constant exchange-point-and-mark
- 1   32   call . 0
+ 0  192   constant[0] exchange-point-and-mark
+ 1   32   call[0]
  2  135   return
 
 Constants Vector: [exchange-point-and-mark]
@@ -632,12 +632,12 @@ There are special instructions to push any one of the first
 @code{(defun n3(n) (+ n 10 11 12))} generates:
 @verbatim
 PC  Byte  Instruction
- 0  193   constant +
- 1    8   varref n
- 2  194   constant 10
- 3  195   constant 11
- 4  196   constant 12
- 5   36   call . 4
+ 0  193   constant[1] +
+ 1    8   varref[0] n
+ 2  194   constant[2] 10
+ 3  195   constant[3] 11
+ 4  196   constant[4] 12
+ 5   36   call[4]
  6  135   return
 
 Constants Vector: [n + 10 11 12]
@@ -652,28 +652,32 @@ Although there are special instructions to push any one of the first
 64 entries in the constants stack, this instruction is needed to push
 a value beyond one the first 64 entries.
 
-@c @code{(defun n64 (n) (+ n 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64))} generates:
+@c @code{(defun n64 (n) (+ n 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64))} generates
 
 @code{(defun n64(n) (+ n 0 1 2 3 .. 64 ))} generates
 @verbatim
 PC  Byte  Instruction
- 0  193   constant +
- 1    8   varref n
- 2  194   constant 0
- 3  195   constant 1
- 4  196   constant 2
-...
-67  129   constant2 63
+ 0  193   constant[1] +
+ 1    8   varref[0] n
+ 2  194   constant[2] 0
+ 3  195   constant[3] 1
+ 4  196   constant[4] 2
+[...]
+63  255   constant[63] 61
+64  129   constant2 [64] 62
+          64
+           0
+67  129   constant2 [65] 63
           65
            0
-70  129   constant2 64
+70  129   constant2 [66] 64
           66
            0
-73   38   call . 66
+73   38   call [66]
           66
 75  135   return
 
-Constants Vector: [n + 0 1 2 .. 63 64]
+Constants Vector: [n + 0 1 2 .. 61 62 63 64]
 @end verbatim
 
 @node Return Instruction
@@ -688,7 +692,7 @@ bytecode sequence. The top value on the evaluation stack is the return value.
 @code{(defun one(n) 1)} generates:
 @verbatim
 PC  Byte  Instruction
- 0  192   constant 1
+ 0  192   constant[0] 1
  1  135   return
 
 Constants Vector: [1]
