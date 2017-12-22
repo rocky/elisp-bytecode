@@ -187,7 +187,15 @@ for texinfo input."
                             (format pc-width npc)
                             (byte--pretty-bytes (substring bytes npc (1+ npc)))
                             "   "
-                            (format "%S\n" op)
+                            (substring (format "%S" (car op)) 5)
+                            (cond
+                             ((consp (cdr op))
+                              (concat " " (mapconcat #'prin1-to-string (cdr op) " ")))
+                             ((cdr op)
+                              (concat " . " (format "%S" (cdr op))))
+                             (t
+                              ""))
+                            "\n"
                             str))
           (setq rbc (if (eq (car-safe op) 'TAG) (cdr rbc) (cddr rbc)))
           (setq pc npc))))
