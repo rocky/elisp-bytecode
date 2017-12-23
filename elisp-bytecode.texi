@@ -1334,7 +1334,7 @@ Make a binding recording buffer, point, and mark.
 @node Opcode Table
 @chapter Opcode Table
 
-@multitable @columnfractions .09 .09 .35 .55 .15
+@multitable @columnfractions .09 .09 .31 .55 .18
 @headitem
 @verb{| |}Oct
 @tab @verb{| |}Dec
