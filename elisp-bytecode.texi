@@ -264,7 +264,7 @@ number of optional and required arguments (not counting &rest). It's
 really easy to parse these in your head when viewed as hexadecimal
 because each portion almost always fits inside its own ``digit.''
 
-Examples showing how lexical parameters are encoded:
+@subsubsection Example showing how lexical parameters are encoded:
 @verbatim
 (byte-compile-make-args-desc '())
 ;; => #x000  (0 args, 0 rest, 0 required)
@@ -1334,8 +1334,14 @@ Make a binding recording buffer, point, and mark.
 @node Opcode Table
 @chapter Opcode Table
 
-@multitable @columnfractions .04 .06 .25 .55 .15
-@headitem @verb{| |}Oct @tab Code @tab @verb{| |} Instruction @tab Description
+@multitable @columnfractions .09 .09 .35 .55 .15
+@headitem
+@verb{| |}Oct
+@tab @verb{| |}Dec
+@tab @verb{| |} Instruction
+@tab Description
+@tab Stack
+
 @item @verb{|  00|}
 @tab @verb{|   0|}
 @tab @tab Not used; see @code{dup}
@@ -1544,42 +1550,42 @@ Make a binding recording buffer, point, and mark.
 @tab @verb{|  40|}
 @tab @verb{|  unbind0|}
 @tab Unbinds special bindings
-@tab @math{0}
+@tab @math{-0}
 @item @verb{| 051|}
 @tab @verb{|  41|}
 @tab @verb{|  unbind1|}
 @tab Unbinds special bindings
-@tab @math{0}
+@tab @math{-0}
 @item @verb{| 052|}
 @tab @verb{|  42|}
 @tab @verb{|  unbind2|}
 @tab Unbinds special bindings
-@tab @math{0}
+@tab @math{-0}
 @item @verb{| 053|}
 @tab @verb{|  43|}
 @tab @verb{|  unbind3|}
 @tab Unbinds special bindings
-@tab @math{0}
+@tab @math{-0}
 @item @verb{| 054|}
 @tab @verb{|  44|}
 @tab @verb{|  unbind4|}
 @tab Unbinds special bindings
-@tab @math{0}
+@tab @math{-0}
 @item @verb{| 055|}
 @tab @verb{|  45|}
 @tab @verb{|  unbind5|}
 @tab Unbinds special bindings
-@tab @math{0}
+@tab @math{-0}
 @item @verb{| 056|}
 @tab @verb{|  46|}
 @tab @verb{|  unbind6|}
 @tab Unbinds special bindings
-@tab @math{0}
+@tab @math{-0}
 @item @verb{| 057|}
 @tab @verb{|  47|}
 @tab @verb{|  unbind7|}
 @tab Unbinds special bindings
-@tab @math{0}
+@tab @math{-0}
 
 @item @verb{| 063|}
 @tab @verb{|  51|}
@@ -1803,7 +1809,7 @@ Make a binding recording buffer, point, and mark.
 @tab @verb{|  96|}
 @tab @verb{|  point|}
 @tab Call @code{point} with no arguments.
-@tab @math{0+1}
+@tab @math{-0+1}
 @item @verb{|0142|}
 @tab @verb{|  98|}
 @tab @verb{|  goto-char|}
@@ -1818,12 +1824,12 @@ Make a binding recording buffer, point, and mark.
 @tab @verb{| 100|}
 @tab @verb{|  point-max|}
 @tab Call @code{point-max} with no arguments.
-@tab @math{0+1}
+@tab @math{-0+1}
 @item @verb{|0146|}
 @tab @verb{| 101|}
 @tab @verb{|  point-min|}
 @tab Call @code{point-min} with no arguments.
-@tab @math{0+1}
+@tab @math{-0+1}
 @item @verb{|0144|}
 @tab @verb{| 102|}
 @tab @verb{|  char-after|}
@@ -1833,42 +1839,42 @@ Make a binding recording buffer, point, and mark.
 @tab @verb{| 103|}
 @tab @verb{|  following-char|}
 @tab Call @code{following-char} with no arguments.
-@tab @math{0+1}
+@tab @math{-0+1}
 @item @verb{|0150|}
 @tab @verb{| 104|}
 @tab @verb{|  preceding-char|}
 @tab Call @code{preceding-char} with no arguments.
-@tab @math{0+1}
+@tab @math{-0+1}
 @item @verb{|0151|}
 @tab @verb{| 105|}
 @tab @verb{|  current-column|}
 @tab Call @code{current-column} with no arguments.
-@tab @math{0+1}
+@tab @math{-0+1}
 @item @verb{|0154|}
 @tab @verb{| 108|}
 @tab @verb{|  eolp|}
 @tab Call @code{eolp} with no arguments.
-@tab @math{0+1}
+@tab @math{-0+1}
 @item @verb{|0155|}
 @tab @verb{| 109|}
 @tab @verb{|  eobp|}
 @tab Call @code{eobp} with no arguments.
-@tab @math{0+1}
+@tab @math{-0+1}
 @item @verb{|0156|}
 @tab @verb{| 110|}
 @tab @verb{|  bolp|}
 @tab Call @code{bolp} with no arguments.
-@tab @math{0+1}
+@tab @math{-0+1}
 @item @verb{|0157|}
 @tab @verb{| 111|}
 @tab @verb{|  bobp|}
 @tab Call @code{bobp} with no arguments.
-@tab @math{0+1}
+@tab @math{-0+1}
 @item @verb{|0160|}
 @tab @verb{| 112|}
 @tab @verb{|  current-buffer|}
 @tab Call @code{current-buffer} with no arguments.
-@tab @math{0+1}
+@tab @math{-0+1}
 @item @verb{|0161|}
 @tab @verb{| 113|}
 @tab @verb{|  set-buffer|}
@@ -1923,7 +1929,7 @@ Make a binding recording buffer, point, and mark.
 @tab @verb{| 126|}
 @tab @verb{|  widen|}
 @tab Call @code{widen} with no arguments.
-@tab @math{0+1}
+@tab @math{-0+1}
 @item @verb{|0177|}
 @tab @verb{| 127|}
 @tab @verb{|  end-of-line|}
@@ -1954,7 +1960,7 @@ Make a binding recording buffer, point, and mark.
 @tab @verb{| 138|}
 @tab @verb{|  save-excursion|}
 @tab Make a binding recording buffer, point, and mark.
-@tab @math{0}
+@tab @math{-0}
 
 @item @verb{|0257|}
 @tab @verb{| 175|}
