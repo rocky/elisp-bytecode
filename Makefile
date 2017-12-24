@@ -5,7 +5,7 @@ srcdir = .
 MAKEINFO = makeinfo
 MAKEINFO_OPTS = --force --enable-encoding -I $(emacsdir) -I $(srcdir)
 TEXI2DVI = texi2dvi
-TEXI2PDF = texi2pdf
+TEXI2PDF = pdftex
 DVIPS = dvips
 srcs = elisp-bytecode.texi
 
