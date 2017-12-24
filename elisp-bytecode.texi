@@ -535,23 +535,23 @@ opcode, in little-endian byte order.
 * unbind::
 @end menu
 
+@vindex stack-ref
+@kindex 1, (0001) stack-ref[1]
+@kindex 2, (0002) stack-ref[2]
+@kindex 3, (0003) stack-ref[3]
+@kindex 4, (0004) stack-ref[4]
+@kindex 5, (0005) stack-ref[5]
+@kindex 6, (0006) stack-ref[6]
+@kindex 7, (0007) stack-ref[7]
 @node stack-ref
 @unnumberedsubsec @code{stack-ref} (1--7)
-@vindex stack-ref
-@kindex 1, (01) stack-ref[1]
-@kindex 2, (02) stack-ref[2]
-@kindex 3, (03) stack-ref[3]
-@kindex 4, (04) stack-ref[4]
-@kindex 5, (05) stack-ref[5]
-@kindex 6, (06) stack-ref[6]
-@kindex 7, (07) stack-ref[7]
 
 A stack reference. This is used only in lexical binding.
 
 Added in Emacs 24.1
 
-@subsubsection Warning
 @vindex stack-ref, 0 opcode
+@subsubsection Warning
 Running an instruction with opcode 0 (logically this would be called
 @code{stack-ref[0]}), will cause an immediate abort of Emacs!
 
@@ -562,7 +562,7 @@ been initialized to value but represents data that hasn't been written to yet.
 By doing this we typically catch running random or invalid bytecode.
 
 @subsubsection Example
-When lexical binding is in effect, @code{(defun stack-ref() (let ((a 5) (b 6) (c 7)) (+ a c)))} generates:
+When lexical binding is in effect, @code{(defun stack-ref-eg() (let ((a 5) (b 6) (c 7)) (+ a c)))} generates:
 @verbatim
 PC  Byte  Instruction
  0  192   constant[0] 5
@@ -580,22 +580,22 @@ PC  Byte  Instruction
 Constants Vector: [5 6 7]
 @end verbatim
 
+@vindex varref
+@kindex 8, (0010) varref[0]
+@kindex 9, (0011) varref[1]
+@kindex 10, (0012) varref[2]
+@kindex 11, (0013) varref[3]
+@kindex 12, (0014) varref[4]
+@kindex 13, (0015) varref[5]
+@kindex 14, (0016) varref[6]
 @node varref
 @unnumberedsubsec @code{varref} (8--15)
-@vindex varref
-@kindex 8, (010) varref[0]
-@kindex 9, (011) varref[1]
-@kindex 10, (012) varref[2]
-@kindex 11, (013) varref[3]
-@kindex 12, (014) varref[4]
-@kindex 13, (015) varref[5]
-@kindex 14, (016) varref[6]
 
 Pushes the value of a variable reference onto the evaluation stack.
 
 @subsubsection Example
 
-When dynamic binding is in effect, @code{(defun varref(n) n)} generates:
+When dynamic binding is in effect, @code{(defun varref-eg(n) n)} generates:
 @verbatim
 PC  Byte  Instruction
  0    8   varref[0] n
@@ -604,24 +604,24 @@ PC  Byte  Instruction
 Constants Vector: [n]
 @end verbatim
 
+@vindex varset
+@kindex 16, (0020) varset[0]
+@kindex 17, (0021) varset[1]
+@kindex 18, (0022) varset[2]
+@kindex 19, (0023) varset[3]
+@kindex 20, (0024) varset[4]
+@kindex 21, (0025) varset[5]
+@kindex 22, (0026) varset[6]
+@kindex 23, (0027) varset[7]
 @node varset
 @unnumberedsubsec @code{varset} (16--23)
-@vindex varset
-@kindex 16, (020) varset[0]
-@kindex 17, (021) varset[1]
-@kindex 18, (022) varset[2]
-@kindex 19, (023) varset[3]
-@kindex 20, (024) varset[4]
-@kindex 21, (025) varset[5]
-@kindex 22, (026) varset[6]
-@kindex 23, (027) varset[7]
 
 Sets a variable given in the operand to the value that is on the top
 of the stack.
 
 @subsubsection Example
 
-When dynamic binding is in effect, @code{(defun varset(n) (setq n 5))} generates:
+When dynamic binding is in effect, @code{(defun varset-eg(n) (setq n 5))} generates:
 @verbatim
 PC  Byte  Instruction
  0  193   constant[1] 5
@@ -632,15 +632,31 @@ PC  Byte  Instruction
 Constants Vector: [n 5]
 @end verbatim
 
+@vindex varbind
+@kindex 24, (0030) varbind[0]
+@kindex 25, (0031) varbind[1]
+@kindex 26, (0032) varbind[2]
+@kindex 27, (0033) varbind[3]
+@kindex 28, (0034) varbind[4]
+@kindex 29, (0035) varbind[5]
+@kindex 30, (0036) varbind[6]
+@kindex 31, (0037) varbind[7]
 @node varbind
 @unnumberedsubsec @code{varbind} (24--31)
-@vindex varbind
 
 Binds a variable
 
+@vindex call
+@kindex 32, (0040) call[0]
+@kindex 33, (0041) call[1]
+@kindex 34, (0042) call[2]
+@kindex 35, (0043) call[3]
+@kindex 36, (0044) call[4]
+@kindex 37, (0045) call[5]
+@kindex 38, (0046) call[6]
+@kindex 39, (0047) call[7]
 @node call
 @unnumberedsubsec @code{call} (32--39)
-@vindex call
 
 Calls a function.  The opcode argument specifies the number of
 arguments to pass to the function from the stack, excluding the
@@ -661,6 +677,14 @@ Constants Vector: [exchange-point-and-mark]
 @node unbind
 @unnumberedsubsec @code{unbind} (40--47)
 @vindex unbind
+@kindex 40, (0050) unbind[0]
+@kindex 41, (0051) unbind[1]
+@kindex 42, (0052) unbind[2]
+@kindex 45, (0053) unbind[3]
+@kindex 44, (0054) unbind[4]
+@kindex 45, (0055) unbind[5]
+@kindex 46, (0056) unbind[6]
+@kindex 49, (0057) unbind[7]
 
 Unbinds special bindings
 
@@ -686,7 +710,7 @@ There are special instructions to push any one of the first
 64 entries in the constants stack.
 
 @subsubsection Example
-@code{(defun n3(n) (+ n 10 11 12))} generates:
+@code{(defun constants-eg(n) (+ n 10 11 12))} generates:
 @verbatim
 PC  Byte  Instruction
  0  193   constant[1] +
@@ -703,6 +727,7 @@ Constants Vector: [n + 10 11 12]
 @node constant2
 @unnumberedsubsec @code{constant2} (129)
 @vindex constant2
+@kindex 129, (0201) constant2
 
 Pushes a value from the constants vector on the evaluation stack.
 Although there are special instructions to push any one of the first
@@ -711,7 +736,7 @@ a value beyond one the first 64 entries.
 
 @c @code{(defun n64 (n) (+ n 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64))} generates
 
-@code{(defun n64(n) (+ n 0 1 2 3 .. 64 ))} generates
+@code{(defun constant2-eg(n) (+ n 0 1 2 3 .. 64 ))} generates
 @verbatim
 PC  Byte  Instruction
  0  193   constant[1] +
@@ -742,11 +767,12 @@ Constants Vector: [n + 0 1 2 .. 61 62 63 64]
 
 @unnumberedsubsec @code{return} (135)
 @vindex return
+@kindex 135, (0207) return
 Return from function.  This is the last instruction in a function's
 bytecode sequence. The top value on the evaluation stack is the return value.
 
 @subsubsection Example
-@code{(defun one(n) 1)} generates:
+@code{(defun return-eg(n) 1)} generates:
 @verbatim
 PC  Byte  Instruction
  0  192   constant[0] 1
@@ -799,44 +825,45 @@ bytecode interpreter.
 * integerp::
 @end menu
 
+@vindex symbolp
+@kindex 57, (0071) symbolp
 @node symbolp
 @unnumberedsubsubsec @code{symbolp} (57)
-@vindex symbolp
 Call @code{symbolp} with one argument.
 
+@vindex consp
 @node consp
 @unnumberedsubsubsec @code{consp} (58)
-@vindex consp
 Call @code{consp} with one argument.
 
+@vindex stringp
 @node stringp
 @unnumberedsubsubsec @code{stringp} (59)
-@vindex stringp
 Call @code{stringp} with one argument.
 
+@vindex listp
 @node listp
 @unnumberedsubsubsec @code{listp} (60)
-@vindex listp
 Call @code{listp} with one argument.
 
+@vindex eq
 @node eq
 @unnumberedsubsubsec @code{eq} (61)
-@vindex eq
 Call @code{eq} with two arguments.
 
+@vindex memq
 @node memq
 @unnumberedsubsubsec @code{memq} (62)
-@vindex memq
 Call @code{memq} with two arguments.
 
+@vindex not
 @node not
 @unnumberedsubsubsec @code{not} (63)
-@vindex not
 Call @code{not} with one argument.
 
+@vindex symbol-value
 @node symbol-value
 @unnumberedsubsubsec @code{symbol-value} (74)
-@vindex symbol-value
 Call @code{symbol-value} with one argument.
 
 @node symbol-function
@@ -1359,7 +1386,7 @@ Replaces older @code{save-current-buffer}.
 Added in Emacs 19.34.
 
 @strong{Example}
-@code{(defun scb() (save-current-buffer (prog 5)))} generates:
+@code{(defun save-current-buffer-eg() (save-current-buffer (prog 5)))} generates:
 @verbatim
 PC  Byte  Instruction
  0  114   save-current-buffer
@@ -1489,7 +1516,7 @@ Discard one value.
 Make a copy of the top-of-stack value and push that onto the top of the evaluation stack.
 
 @subsubsection Example
-When lexical binding is in effect, @code{(defun en(n) n)} generates:
+When lexical binding is in effect, @code{(defun dup-eg(n) n)} generates:
 @verbatim
 PC  Byte  Instruction
  0  137   dup  ;; duplicates top of stack: n
@@ -1695,7 +1722,7 @@ one is pushed. This is denoted: @math{-2+1}.
 @tab @math{+1}
 
 @item @verb{| 010|}
-p@tab @verb{|   8|}
+@tab @verb{|   8|}
 @tab @verb{|  varref[0]|}
 @tab variable reference 0
 @tab @math{+1}
@@ -1819,42 +1846,42 @@ p@tab @verb{|   8|}
 
 @item @verb{| 040|}
 @tab @verb{|  32|}
-@tab @verb{|  call0|}
+@tab @verb{|  call[0]|}
 @tab Calls a function
 @tab @math{-1+1}
 @item @verb{| 041|}
 @tab @verb{|  33|}
-@tab @verb{|  call1|}
+@tab @verb{|  call[1]|}
 @tab Calls a function
 @tab @math{-2+1}
 @item @verb{| 042|}
 @tab @verb{|  34|}
-@tab @verb{|  call2|}
+@tab @verb{|  call[2]|}
 @tab Calls a function
 @tab @math{-3+1}
 @item @verb{| 043|}
 @tab @verb{|  35|}
-@tab @verb{|  call3|}
+@tab @verb{|  call[3]|}
 @tab Calls a function
 @tab @math{-4+1}
 @item @verb{| 044|}
 @tab @verb{|  36|}
-@tab @verb{|  call4|}
+@tab @verb{|  call[4]|}
 @tab Calls a function
 @tab @math{-5+1}
 @item @verb{| 045|}
 @tab @verb{|  37|}
-@tab @verb{|  call5|}
+@tab @verb{|  call[5]|}
 @tab Calls a function
 @tab @math{-6+1}
 @item @verb{| 046|}
 @tab @verb{|  38|}
-@tab @verb{|  call6|}
+@tab @verb{|  call[6]|}
 @tab Calls a function
 @tab @math{-n-1+1}
 @item @verb{| 047|}
 @tab @verb{|  39|}
-@tab @verb{|  call7|}
+@tab @verb{|  call[7]|}
 @tab Calls a function
 @tab @math{-n-1+1}
 

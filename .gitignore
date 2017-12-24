@@ -5,4 +5,7 @@
 /*.log
 /*.pdf
 /*.toc
+/elisp-bytecode.dvi
 /elisp-bytecode.info
+/elisp-bytecode.vr
+/elisp-bytecode.vrs

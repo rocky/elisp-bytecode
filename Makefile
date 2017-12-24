@@ -18,7 +18,9 @@ PS_TARGETS = elisp-bytecode.ps
 srcdir = .
 buildinfodir = .
 
-all: elisp-bytecode.pdf elisp-bytecode.info
+# We make a DVI to get the index entries
+# pdftex creates PDF links but doesn't create index entries
+all: elisp-bytecode.dvi elisp-bytecode.pdf elisp-bytecode.info
 
 info: $(buildinfodir)/elisp-bytecode.info
 dvi: $(DVI_TARGETS)
