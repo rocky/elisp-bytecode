@@ -538,7 +538,38 @@ opcode, in little-endian byte order.
 @unnumberedsubsec @code{stack-ref} (1--7)
 @kindex stack-ref
 
-A stack reference
+A stack reference. This is used only in lexical binding.
+
+Added in Emacs 24.1
+
+@subsubsection Warning
+Running an instruction with opcode 0 (logically this would be called
+@code{stack-ref[0]}), will cause an immediate abort of Emacs!
+
+0 is typically an invalid bytecode and assembly instructions because 0
+values are commonly found data, e.g. the end of C strings, or data that has
+been initialized to value but represents data that hasn't been written to yet.
+
+By doing this we typically catch running random or invalid bytecode.
+
+@subsubsection Example
+When lexical binding is in effect, @code{(defun stack-ref() (let ((a 5) (b 6) (c 7)) (+ a c)))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] 5
+ 1  193   constant[1] 6
+ 2  194   constant[2] 7
+ 3    2   stack-ref[2]
+ 4    1   stack-ref[1]
+ 5   92   plus
+ 6  178   stack-set [3]
+           3
+ 8  136   discard
+ 9  136   discard
+10  135   return
+
+Constants Vector: [5 6 7]
+@end verbatim
 
 @node varref
 @unnumberedsubsec @code{varref} (8--15)
@@ -547,7 +578,7 @@ Pushes the value of a variable reference onto the evaluation stack.
 
 @subsubsection Example
 
-When dynamic binding is in effect, @code{(defun en(n) n)} generates:
+When dynamic binding is in effect, @code{(defun varref(n) n)} generates:
 @verbatim
 PC  Byte  Instruction
  0    8   varref[0] n
@@ -565,7 +596,7 @@ of the stack.
 
 @subsubsection Example
 
-When dynamic binding is in effect, @code{(defun n5(n) (setq n 5))} generates:
+When dynamic binding is in effect, @code{(defun varset(n) (setq n 5))} generates:
 @verbatim
 PC  Byte  Instruction
  0  193   constant[1] 5
@@ -1456,16 +1487,16 @@ Make a binding recording buffer, point, and mark.
 @chapter Opcode Changes Between Emacs Releases
 
 @menu
-* Between 17 and 18.59::
-* Between 18.59 and 19.34::
-* Between 19.34 and 20.1::
-* Between 20.1 and 21.4::
-* Between 21.1 and 22.1::
-* Between 22.1 and 23.1::
-* Between 23.1 and 24.1::
+* After 17 and Starting in 18.59::
+* After 18.59 and Starting in 19.34::
+* After 19.34 and Starting in 20.1::
+* After 20.1 and Starting in 21.4::
+* After 21.1 and Starting in 22.1::
+* After 22.1 and Starting in 23.1::
+* After 23.1 and Starting in 24.1::
 @end menu
 
-@node Between 17 and 18.59
+@node After 17 and Starting in 18.59
 @section Between 17 and 18.59
 
 The following became obsolete:
@@ -1475,10 +1506,10 @@ The following became obsolete:
 @item @code{set-mark} (115)
 @end itemize
 
-@node Between 18.59 and 19.34
-@section Between 18.59 and 19.34
+@node After 18.59 and Starting in 19.34
+@section After 18.59 and Starting 19.34
 
-jwz and Hallvard made major changes additions to the bytecode
+jwz and Hallvard made major changes and additions to the bytecode
 interpreter.
 
 The following were added:
@@ -1526,44 +1557,60 @@ The following were added:
 @item @code{listN} (175)
 @item @code{concatN} (176)
 @item @code{insertN} (177)
-
 @end itemize
 
-The following became obsolete:
-@itemize
-@item @code{read-char} (114)
-@end itemize
+Instruction @code{unbind-all} was added to support tail-recursion
+removal.  However this was never subsequently implemented so this
+intruction was never generated.
 
-@node Between 19.34 and 20.1
-@section Between 19.34 and 20.1
+Starting in this version, unless C prepocessor variable
+@code{BYTE_CODE_SAFE} (on by default) is defined, the obsolete
+instructions listed in 18.59 are not implemented.
+
+@node After 19.34 and Starting in 20.1
+@section After 19.34 and Starting in 20.1
 
 Thre were no instruction changes. However bytecode interpretation of
 @code{read-char}, which became obsolete in v19 was dropped.
 
-@node Between 20.1 and 21.4
-@section Between 20.1 and 21.4
+@node After 20.1 and Starting in 21.4
+@section Ater 20.1 and Starting in 21.4
 
 Thre were no instruction changes. However there were major
 changes in the bytecode interpreter.
 
-@node Between 21.1 and 22.1
-@section Between 21.1 and 22.1
+An instruction with opcode 0 causes an abort.
+
+@node After 21.1 and Starting in 22.1
+@section After 21.1 and Starting in 22.1
 
 Thre were no instruction changes.
 
-@node Between 22.1 and 23.1
-@section Between 22.1 and 23.1
+@node After 22.1 and Starting in 23.1
+@section After 22.1 and Starting in 23.1
 
-Thre were no instruction changes.
+There were no instruction changes.
 
-@node Between 23.1 and 24.1
-@section Between 23.1 and 24.1
+@node After 23.1 and Starting in 24.1
+@section After 23.1 and Starting in 24.1
 
 The following became obsolete:
 
 @unnumberedsubsec @code{save-current-buffer} (97)
 
 Is replaced by @code{save-current-buffer-1} (114)
+
+Unless C prepocessor variable @code{BYTE_CODE_SAFE} (on by default) is
+defined, obsolete instructions below and from earlier versions are not implemented.
+
+@itemize
+@item @code{temp-output-buffer-setup} (144)
+@item @code{temp-output-buffer-show} (145)
+@item @code{save-window-excursion} (139)
+@end itemize
+
+Instruction @code{unbind-all}, which never was generated, was marked obsolete
+in this version.
 
 @node Opcode Table
 @chapter Opcode Table
@@ -1584,164 +1631,164 @@ one is pushed. This is denoted: @math{-2+1}.
 
 @item @verb{|  00|}
 @tab @verb{|   0|}
-@tab @tab Not used; see @code{dup}
+@tab @tab Immediate program abort! Was @code{stack-ref[0]} but @code{dup} should be used instead.
 
 @item @verb{|  01|}
 @tab @verb{|   1|}
-@tab @verb{|  stack-ref1|}
+@tab @verb{|  stack-ref[1]|}
 @tab stack reference 1
 @tab @math{+1}
 @item @verb{|  02|}
 @tab @verb{|   2|}
-@tab @verb{|  stack-ref2|}
+@tab @verb{|  stack-ref[2]|}
 @tab stack reference 2
 @tab @math{+1}
 @item @verb{|  03|}
 @tab @verb{|   3|}
-@tab @verb{|  stack-ref3|}
+@tab @verb{|  stack-ref[3]|}
 @tab stack reference 3
 @tab @math{+1}
 @item @verb{|  04|}
 @tab @verb{|   4|}
-@tab @verb{|  stack-ref4|}
+@tab @verb{|  stack-ref[4]|}
 @tab stack reference 4
 @tab @math{+1}
 @item @verb{|  05|}
 @tab @verb{|   5|}
-@tab @verb{|  stack-ref5|}
+@tab @verb{|  stack-ref[5]|}
 @tab stack reference 5
 @tab @math{+1}
 @item @verb{|  06|}
 @tab @verb{|   6|}
-@tab @verb{|  stack-ref6|}
+@tab @verb{|  stack-ref[6]|}
 @tab stack reference 0--255
 @tab @math{+1}
 @item @verb{|  07|}
 @tab @verb{|   7|}
-@tab @verb{|  stack-ref7|}
+@tab @verb{|  stack-ref[7]|}
 @tab stack reference 0--65535
 @tab @math{+1}
 
 @item @verb{| 010|}
-@tab @verb{|   8|}
-@tab @verb{|  varref0|}
+p@tab @verb{|   8|}
+@tab @verb{|  varref[0]|}
 @tab variable reference 0
 @tab @math{+1}
 @item @verb{| 011|}
 @tab @verb{|   9|}
-@tab @verb{|  varref1|}
+@tab @verb{|  varref[1]|}
 @tab variable reference 1
 @tab @math{+1}
 @item @verb{| 012|}
 @tab @verb{|  10|}
-@tab @verb{|  varref2|}
+@tab @verb{|  varref[2]|}
 @tab variable reference 2
 @tab @math{+1}
 @item @verb{| 013|}
 @tab @verb{|  11|}
-@tab @verb{|  varref3|}
+@tab @verb{|  varref[3]|}
 @tab variable reference 3
 @tab @math{+1}
 @item @verb{| 014|}
 @tab @verb{|  12|}
-@tab @verb{|  varref4|}
+@tab @verb{|  varref[4]|}
 @tab variable reference 4
 @tab @math{+1}
 @item @verb{| 015|}
 @tab @verb{|  13|}
-@tab @verb{|  varref5|}
+@tab @verb{|  varref[5]|}
 @tab variable reference 5
 @tab @math{+1}
 @item @verb{| 016|}
 @tab @verb{|  14|}
-@tab @verb{|  varref6|}
+@tab @verb{|  varref[6]|}
 @tab variable reference 0--255
 @tab @math{+1}
 @item @verb{| 017|}
 @tab @verb{|  15|}
-@tab @verb{|  varref7|}
+@tab @verb{|  varref[7]|}
 @tab variable reference 0--65535
 @tab @math{+1}
 
 @item @verb{| 020|}
 @tab @verb{|  16|}
-@tab @verb{|  varset0|}
+@tab @verb{|  varset[0]|}
 @tab Sets variable 0
 @tab @math{-1}
 @item @verb{| 021|}
 @tab @verb{|  17|}
-@tab @verb{|  varset1|}
+@tab @verb{|  varset[1]|}
 @tab Sets variable 1
 @tab @math{-1}
 @item @verb{| 022|}
 @tab @verb{|  18|}
-@tab @verb{|  varset2|}
+@tab @verb{|  varset[2]|}
 @tab Sets variable 2
 @tab @math{-1}
 @item @verb{| 023|}
 @tab @verb{|  19|}
-@tab @verb{|  varset3|}
+@tab @verb{|  varset[3]|}
 @tab Sets variable 3
 @tab @math{-1}
 @item @verb{| 024|}
 @tab @verb{|  20|}
-@tab @verb{|  varset4|}
+@tab @verb{|  varset[4]|}
 @tab Sets variable 4
 @tab @math{-1}
 @item @verb{| 025|}
 @tab @verb{|  21|}
-@tab @verb{|  varset5|}
+@tab @verb{|  varset[5]|}
 @tab Sets variable 5
 @tab @math{-1}
 @item @verb{| 026|}
 @tab @verb{|  22|}
-@tab @verb{|  varset6|}
+@tab @verb{|  varset[6]|}
 @tab Sets variable 6
 @tab @math{-1}
 @item @verb{| 027|}
 @tab @verb{|  23|}
-@tab @verb{|  varset7|}
+@tab @verb{|  varset[7]|}
 @tab Sets variable 7
 @tab @math{-1}
 
 @item @verb{| 030|}
 @tab @verb{|  24|}
-@tab @verb{|  varbind0|}
+@tab @verb{|  varbind[0]|}
 @tab Bind variable 0
 @tab @math{-1}
 @item @verb{| 031|}
 @tab @verb{|  25|}
-@tab @verb{|  varbind1|}
+@tab @verb{|  varbind[1]|}
 @tab Bind variable 1
 @tab @math{-1}
 @item @verb{| 032|}
 @tab @verb{|  26|}
-@tab @verb{|  varbind2|}
+@tab @verb{|  varbind[2]|}
 @tab Bind variable 2
 @tab @math{-1}
 @item @verb{| 033|}
 @tab @verb{|  27|}
-@tab @verb{|  varbind3|}
+@tab @verb{|  varbind[3]|}
 @tab Bind variable 3
 @tab @math{-1}
 @item @verb{| 034|}
 @tab @verb{|  28|}
-@tab @verb{|  varbind4|}
+@tab @verb{|  varbind[4]|}
 @tab Bind variable 4
 @tab @math{-1}
 @item @verb{| 035|}
 @tab @verb{|  29|}
-@tab @verb{|  varbind5|}
+@tab @verb{|  varbind[5]|}
 @tab Bind variable 5
 @tab @math{-1}
 @item @verb{| 036|}
 @tab @verb{|  30|}
-@tab @verb{|  varbind6|}
+@tab @verb{|  varbind[6]|}
 @tab Bind variable 6
 @tab @math{-1}
 @item @verb{| 037|}
 @tab @verb{|  31|}
-@tab @verb{|  varbind7|}
+@tab @verb{|  varbind[7]|}
 @tab Bind variable 7
 @tab @math{-1}
 
@@ -2145,17 +2192,17 @@ one is pushed. This is denoted: @math{-2+1}.
 @item @verb{|0162|}
 @tab @verb{|*114|}
 @tab @verb{|  read-char|}
-@tab Obsolete as of v19
+@tab Obsolete starting with v19
 @tab @math{+1}
 @item @verb{|0163|}
 @tab @verb{|*115|}
 @tab @verb{|  set-mark|}
-@tab Obsolete as of v18
+@tab Obsolete starting with v18
 @tab @math{-0}
 @item @verb{|0164|}
 @tab @verb{|*116|}
 @tab @verb{|  interactive-p|}
-@tab Obsolete as of v18
+@tab Obsolete starting with v18
 @tab @math{+1}
 @item @verb{|0165|}
 @tab @verb{| 117|}
