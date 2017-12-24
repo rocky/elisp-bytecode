@@ -5,7 +5,8 @@ srcdir = .
 MAKEINFO = makeinfo
 MAKEINFO_OPTS = --force --enable-encoding -I $(emacsdir) -I $(srcdir)
 TEXI2DVI = texi2dvi
-TEXI2PDF = pdftex
+TEXI2PDF = texi2pdf
+PDFTEX = pdftex
 DVIPS = dvips
 srcs = elisp-bytecode.texi
 
@@ -13,14 +14,15 @@ DVI_TARGETS = elisp-bytecode.dvi
 HTML_TARGETS = elisp-bytecode.html
 PDF_TARGETS = elisp-bytecode.pdf
 PS_TARGETS = elisp-bytecode.ps
+INDEX_TARGETS = elisp-bytecode.vrs elisp-bytecode.kys
 
 # Standard configure variables.
 srcdir = .
 buildinfodir = .
 
-# We make a DVI to get the index entries
-# pdftex creates PDF links but doesn't create index entries
-all: elisp-bytecode.dvi elisp-bytecode.pdf elisp-bytecode.info
+all: $(INDEX_TARGETS) elisp-bytecode.info elisp-bytecode.pdf
+
+$(INDEX_TARGETS): $(srcs)
 
 info: $(buildinfodir)/elisp-bytecode.info
 dvi: $(DVI_TARGETS)

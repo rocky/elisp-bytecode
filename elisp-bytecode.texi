@@ -535,6 +535,8 @@ opcode, in little-endian byte order.
 * unbind::
 @end menu
 
+@node stack-ref
+@unnumberedsubsec @code{stack-ref} (1--7)
 @vindex stack-ref
 @kindex 1, (0001) stack-ref[1]
 @kindex 2, (0002) stack-ref[2]
@@ -543,8 +545,6 @@ opcode, in little-endian byte order.
 @kindex 5, (0005) stack-ref[5]
 @kindex 6, (0006) stack-ref[6]
 @kindex 7, (0007) stack-ref[7]
-@node stack-ref
-@unnumberedsubsec @code{stack-ref} (1--7)
 
 A stack reference. This is used only in lexical binding.
 
@@ -580,6 +580,7 @@ PC  Byte  Instruction
 Constants Vector: [5 6 7]
 @end verbatim
 
+@node varref
 @vindex varref
 @kindex 8, (0010) varref[0]
 @kindex 9, (0011) varref[1]
@@ -588,7 +589,6 @@ Constants Vector: [5 6 7]
 @kindex 12, (0014) varref[4]
 @kindex 13, (0015) varref[5]
 @kindex 14, (0016) varref[6]
-@node varref
 @unnumberedsubsec @code{varref} (8--15)
 
 Pushes the value of a variable reference onto the evaluation stack.
@@ -604,6 +604,7 @@ PC  Byte  Instruction
 Constants Vector: [n]
 @end verbatim
 
+@node varset
 @vindex varset
 @kindex 16, (0020) varset[0]
 @kindex 17, (0021) varset[1]
@@ -613,7 +614,6 @@ Constants Vector: [n]
 @kindex 21, (0025) varset[5]
 @kindex 22, (0026) varset[6]
 @kindex 23, (0027) varset[7]
-@node varset
 @unnumberedsubsec @code{varset} (16--23)
 
 Sets a variable given in the operand to the value that is on the top
@@ -632,6 +632,7 @@ PC  Byte  Instruction
 Constants Vector: [n 5]
 @end verbatim
 
+@node varbind
 @vindex varbind
 @kindex 24, (0030) varbind[0]
 @kindex 25, (0031) varbind[1]
@@ -641,11 +642,11 @@ Constants Vector: [n 5]
 @kindex 29, (0035) varbind[5]
 @kindex 30, (0036) varbind[6]
 @kindex 31, (0037) varbind[7]
-@node varbind
 @unnumberedsubsec @code{varbind} (24--31)
 
 Binds a variable
 
+@node call
 @vindex call
 @kindex 32, (0040) call[0]
 @kindex 33, (0041) call[1]
@@ -655,7 +656,6 @@ Binds a variable
 @kindex 37, (0045) call[5]
 @kindex 38, (0046) call[6]
 @kindex 39, (0047) call[7]
-@node call
 @unnumberedsubsec @code{call} (32--39)
 
 Calls a function.  The opcode argument specifies the number of
@@ -675,7 +675,6 @@ Constants Vector: [exchange-point-and-mark]
 @end verbatim
 
 @node unbind
-@unnumberedsubsec @code{unbind} (40--47)
 @vindex unbind
 @kindex 40, (0050) unbind[0]
 @kindex 41, (0051) unbind[1]
@@ -685,6 +684,7 @@ Constants Vector: [exchange-point-and-mark]
 @kindex 45, (0055) unbind[5]
 @kindex 46, (0056) unbind[6]
 @kindex 49, (0057) unbind[7]
+@unnumberedsubsec @code{unbind} (40--47)
 
 Unbinds special bindings
 
@@ -702,8 +702,8 @@ constants, opcode @code{constant2} (opcode 129) is used instead.
 @end menu
 
 @node constant
-@unnumberedsubsec @code{constant} (192--255)
 @vindex constant
+@unnumberedsubsec @code{constant} (192--255)
 
 Pushes a value from the constants vector on the evaluation stack.
 There are special instructions to push any one of the first
@@ -725,9 +725,9 @@ Constants Vector: [n + 10 11 12]
 @end verbatim
 
 @node constant2
-@unnumberedsubsec @code{constant2} (129)
 @vindex constant2
 @kindex 129, (0201) constant2
+@unnumberedsubsec @code{constant2} (129)
 
 Pushes a value from the constants vector on the evaluation stack.
 Although there are special instructions to push any one of the first
@@ -765,9 +765,9 @@ Constants Vector: [n + 0 1 2 .. 61 62 63 64]
 @node Return Instruction
 @section Return Instruction
 
-@unnumberedsubsec @code{return} (135)
 @vindex return
 @kindex 135, (0207) return
+@unnumberedsubsec @code{return} (135)
 Return from function.  This is the last instruction in a function's
 bytecode sequence. The top value on the evaluation stack is the return value.
 
@@ -825,82 +825,90 @@ bytecode interpreter.
 * integerp::
 @end menu
 
+@node symbolp
 @vindex symbolp
 @kindex 57, (0071) symbolp
-@node symbolp
 @unnumberedsubsubsec @code{symbolp} (57)
 Call @code{symbolp} with one argument.
 
-@vindex consp
 @node consp
+@vindex consp
+@kindex 58, (0072) consp
 @unnumberedsubsubsec @code{consp} (58)
 Call @code{consp} with one argument.
 
-@vindex stringp
 @node stringp
+@vindex stringp
+@kindex 59, (0073) srtingp
 @unnumberedsubsubsec @code{stringp} (59)
 Call @code{stringp} with one argument.
 
-@vindex listp
 @node listp
+@vindex listp
+@kindex 60, (0074) listp
 @unnumberedsubsubsec @code{listp} (60)
 Call @code{listp} with one argument.
 
-@vindex eq
 @node eq
+@vindex eq
+@kindex 61, (0075) eq
 @unnumberedsubsubsec @code{eq} (61)
 Call @code{eq} with two arguments.
 
-@vindex memq
 @node memq
+@vindex memq
+@kindex 62, (0076) memq
 @unnumberedsubsubsec @code{memq} (62)
 Call @code{memq} with two arguments.
 
-@vindex not
 @node not
+@vindex not
+@kindex 63, (0077) not
 @unnumberedsubsubsec @code{not} (63)
 Call @code{not} with one argument.
 
-@vindex symbol-value
 @node symbol-value
+@vindex symbol-value
+@kindex 64, (0112) symbol-value
 @unnumberedsubsubsec @code{symbol-value} (74)
 Call @code{symbol-value} with one argument.
 
 @node symbol-function
-@unnumberedsubsubsec @code{symbol-function} (75)
 @vindex symbol-function
+@kindex 75, (0113) symbol-function
+@unnumberedsubsubsec @code{symbol-function} (75)
 Call @code{symbol-function} with one argument.
 
 @node set
-@unnumberedsubsubsec @code{set} (76)
 @vindex set
+@unnumberedsubsubsec @code{set} (76)
 Call @code{set} with two arguments.
 
 @node fset
-@unnumberedsubsubsec @code{fset} (77)
 @vindex fset
+@unnumberedsubsubsec @code{fset} (77)
 Call @code{fset} with two arguments.
 
 @node get
-@unnumberedsubsubsec @code{get} (78)
 @vindex get
+@unnumberedsubsubsec @code{get} (78)
 Call @code{get} with two arguments.
 
 @node equal
-@unnumberedsubsubsec @code{equal} (154)
 @vindex equal
+@unnumberedsubsubsec @code{equal} (154)
 Call @code{equal} with two arguments.
 
 Added in Emacs 19.34.
 
 @node member
-@unnumberedsubsubsec @code{member} (157)
 @vindex member
+@unnumberedsubsubsec @code{member} (157)
 Call @code{member} with two arguments.
 
 @node assq
-@unnumberedsubsubsec @code{assq} (158)
 @vindex assq
+@unnumberedsubsubsec @code{assq} (158)
 Call @code{assq} with two arguments.
 
 @node numberp
