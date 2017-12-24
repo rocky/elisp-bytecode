@@ -21,7 +21,8 @@
 * Introduction to Elisp Bytecode and LAP::
 * Emacs Lisp Bytecode Environment::
 * ELisp Bytecode Instructions::  Description of all Emacs Lisp Bytecode Instructions
-* Opcode Table::                Table of Bytecode Instruction ordered by Opcode Number
+* Opcode Changes Between Emacs Releases::
+* Opcode Table::                 Table of Bytecode Instruction ordered by Opcode Number
 * References::
 * Instruction Index::
 @end menu
@@ -1029,7 +1030,10 @@ Call @code{+} with two arguments, adding the two values at the top of the stack.
 @node mult
 @unnumberedsubsubsec @code{mult} (95)
 @kindex mult
-Call @code{*} with two arguments, multiplying the two values at the top of the stack.
+Call @code{*} with two arguments, multiplying the two values at the
+top of the stack.
+
+Since emacs 19.34
 
 @node max
 @unnumberedsubsubsec @code{max} (93)
@@ -1133,6 +1137,7 @@ but simply call the corresponding C function.
 * bobp::
 * current-buffer::
 * set-buffer::
+* save-current-buffer-1::
 * forward-char::
 * forward-word::
 * skip-chars-forward::
@@ -1224,60 +1229,106 @@ Call @code{current-buffer} with no arguments.
 @kindex set-buffer
 Call @code{set-buffer} with one argument.
 
+@node save-current-buffer-1
+@unnumberedsubsubsec @code{save-current-buffer-1} (114)
+@kindex save-current-buffer
+Call @code{save-current-buffer} with one stack argument,
+the body to be evaluated.
+
+Replaces older @code{save-current-buffer}.
+
+Added in Emacs 19.34.
+
+@strong{Example}
+@code{(defun scb() (save-current-buffer (prog 5)))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  114   save-current-buffer
+ 1  192   constant[0] prog
+ 2  193   constant[1] 5
+ 3   33   call[1]
+ 4   41   unbind[1]
+ 5  135   return
+
+Constants Vector: [prog 5]
+@end verbatim
+
 @node forward-char
 @unnumberedsubsubsec @code{forward-char} (117)
 @kindex forward-char
 Call @code{forward-char} with one argument.
+
+Added in Emacs 19.34.
 
 @node forward-word
 @unnumberedsubsubsec @code{forward-word} (118)
 @kindex forward-word
 Call @code{forward-word} with one argument.
 
+Added in Emacs 19.34.
+
 @node skip-chars-forward
 @unnumberedsubsubsec @code{skip-chars-forward} (119)
 @kindex skip-chars-forward
 Call @code{skip-chars-forward} with two arguments.
+
+Added in Emacs 19.34.
 
 @node skip-chars-backward
 @unnumberedsubsubsec @code{skip-chars-backward} (120)
 @kindex skip-chars-backward
 Call @code{skip-chars-backward} with two arguments.
 
+Added in Emacs 19.34.
+
 @node forward-line
 @unnumberedsubsubsec @code{forward-line} (121)
 @kindex forward-line
 Call @code{forward-line} with one argument.
+
+Added in Emacs 19.34.
 
 @node char-syntax
 @unnumberedsubsubsec @code{char-syntax} (122)
 @kindex char-syntax
 Call @code{char-syntax} with one argument.
 
+Added in Emacs 19.34.
+
 @node buffer-substring
 @unnumberedsubsubsec @code{buffer-substring} (123)
 @kindex buffer-substring
 Call @code{buffer-substring} with two arguments.
+
+Added in Emacs 19.34.
 
 @node delete-region
 @unnumberedsubsubsec @code{delete-region} (124)
 @kindex delete-region
 Call @code{delete-region} with two arguments.
 
+Added in Emacs 19.34.
+
 @node narrow-to-region
 @unnumberedsubsubsec @code{narrow-to-region} (125)
 @kindex narrow-to-region
 Call @code{narrow-to-region} with two arguments.
+
+Added in Emacs 19.34.
 
 @node widen
 @unnumberedsubsubsec @code{widen} (126)
 @kindex widen
 Call @code{widen} with no arguments.
 
+Added in Emacs 19.34.
+
 @node end-of-line
 @unnumberedsubsubsec @code{end-of-line} (127)
 @kindex end-of-line
 Call @code{end-of-line} with one argument.
+
+Added in Emacs 19.34.
 
 @node set-marker
 @unnumberedsubsubsec @code{set-marker} (147)
@@ -1331,8 +1382,67 @@ new binding when executed.  They need to be balanced with
 @kindex save-excursion
 Make a binding recording buffer, point, and mark.
 
+@node Opcode Changes Between Emacs Releases
+
+@chapter Opcode Changes Between Emacs Releases
+
+@menu
+* Between 17 and 18.59::
+* Between 18.59 and 19.34::
+* Between 23.1 and 24.1::
+@end menu
+
+@node Between 17 and 18.59
+@section Between 17 and 18.59
+
+The following became obsolete:
+@itemize
+@item @code{mark} (97)
+@item @code{scan-buffer} (107)
+@item @code{set-mark} (115)
+@end itemize
+
+@node Between 18.59 and 19.34
+@section Between 18.59 and 19.34
+
+The following were added:
+@itemize
+@item @code{mult} (97)
+@item @code{forward-char} (117)
+@item @code{forward-word} (118)
+@item @code{skip-chars-forward} (119)
+@item @code{skip-chars-backward} (120)
+@item @code{forward-line} (121)
+@item @code{char-syntax} (122)
+@item @code{buffer-substring} (123)
+@item @code{delete-region} (124)
+@item @code{narrow-to-region} (125)
+@item @code{widen} (126)
+@item @code{end-of-line} (127)
+@end itemize
+
+The following became obsolete:
+@itemize
+@item @code{read-char} (114)
+@end itemize
+
+@node Between 23.1 and 24.1
+@section Between 23.1 and 24.1
+
+The following became obsolete:
+
+@unnumberedsubsec @code{save-current-buffer} (97)
+
+Is replaced by @code{save-current-buffer-1} (114)
+
 @node Opcode Table
 @chapter Opcode Table
+
+In the table below, a @code{*} by the decimal number indicates an
+obsolete instruction. Stack effects are given as the number of
+stack entries popped followed by the number of entries pushed. For
+example, for a @code{cons} instruction, two stack entries are popped and
+one is pushed. This is denoted: @math{-2+1}.
 
 @multitable @columnfractions .09 .09 .31 .55 .18
 @headitem
@@ -1804,11 +1914,31 @@ Make a binding recording buffer, point, and mark.
 @tab @verb{|  94|}
 @tab @verb{|  min|}
 @tab Call @code{min} with two arguments.
+
 @tab @math{-2+1}
 @item @verb{|0140|}
 @tab @verb{|  96|}
 @tab @verb{|  point|}
 @tab Call @code{point} with no arguments.
+@item @verb{|0141|}
+@tab @verb{| *97|}
+@tab @verb{|  save-current-buffer|}
+@tab Obsolete in 24.1?
+@tab @math{-0+1}
+@item @verb{|0141|}
+@tab @verb{| *97|}
+@tab @verb{|  bmark|}
+@tab used in v17
+@tab @math{-0+1}
+@item @verb{|0141|}
+@tab @verb{| *97|}
+@tab @verb{|  mult|}
+@tab From v19 to ??
+@tab @math{-0+1}
+@item @verb{|0141|}
+@tab @verb{| *97|}
+@tab @verb{|  bmark|}
+@tab used in v17
 @tab @math{-0+1}
 @item @verb{|0142|}
 @tab @verb{|  98|}
@@ -1878,62 +2008,79 @@ Make a binding recording buffer, point, and mark.
 @item @verb{|0161|}
 @tab @verb{| 113|}
 @tab @verb{|  set-buffer|}
-@tab Call @code{set-buffer} with one argument.
-@tab @math{-1+1}
+@item @verb{|0162|}
+@tab @verb{| 114|}
+@tab @verb{|save-current-buffer-1|}
+@tab Call @code{save-current-buffer} with one argument.
+@item @verb{|0162|}
+@tab @verb{|*114|}
+@tab @verb{|  read-char|}
+@tab Obsolete as of v19
+@tab @math{+1}
+@item @verb{|0163|}
+@tab @verb{|*115|}
+@tab @verb{|  set-mark|}
+@tab Obsolete as of v18
+@tab @math{-0}
+@item @verb{|0164|}
+@tab @verb{|*116|}
+@tab @verb{|  interactive-p|}
+@tab Obsolete as of v18
+@tab @math{+1}
 @item @verb{|0165|}
 @tab @verb{| 117|}
 @tab @verb{|  forward-char|}
-@tab Call @code{forward-char} with one argument.
+@tab Call @code{forward-char}, one argument.
 @tab @math{-1+1}
 @item @verb{|0166|}
 @tab @verb{| 118|}
 @tab @verb{|  forward-word|}
-@tab Call @code{forward-word} with one argument.
+@tab Call @code{forward-word}, one argument.
 @tab @math{-1+1}
 @item @verb{|0167|}
 @tab @verb{| 119|}
 @tab @verb{|  skip-chars-forward|}
-@tab Call @code{skip-chars-forward} with two arguments.
+@tab Call @code{skip-chars-forward}, two arguments.
 @tab @math{-2+1}
 @item @verb{|0170|}
 @tab @verb{| 120|}
 @tab @verb{|  skip-chars-backward|}
-@tab Call @code{skip-chars-backward} with two arguments.
+@tab Call @code{skip-chars-backward}, two arguments.
 @tab @math{-2+1}
 @item @verb{|0171|}
 @tab @verb{| 121|}
 @tab @verb{|  forward-line|}
-@tab Call @code{forward-line} with one argument.
+@tab Call @code{forward-line}, one argument.
 @tab @math{-1+1}
 @item @verb{|0172|}
 @tab @verb{| 122|}
 @tab @verb{|  char-syntax|}
-@tab Call @code{char-syntax} with one argument.
+@tab Call @code{char-syntax}, one argument.
 @tab @math{-1+1}
 @item @verb{|0173|}
 @tab @verb{| 123|}
 @tab @verb{|  buffer-substring|}
-@tab Call @code{buffer-substring} with two arguments.
+@tab Call @code{buffer-substring}, two arguments.
 @tab @math{-2+1}
 @item @verb{|0174|}
 @tab @verb{| 124|}
 @tab @verb{|  delete-region|}
-@tab Call @code{delete-region} with two arguments.
+@tab Call @code{delete-region}, two arguments.
 @tab @math{-2+1}
 @item @verb{|0175|}
 @tab @verb{| 125|}
 @tab @verb{|  narrow-to-region|}
-@tab Call @code{narrow-to-region} with two arguments.
+@tab Call @code{narrow-to-region}, two arguments.
 @tab @math{-2+1}
 @item @verb{|0176|}
 @tab @verb{| 126|}
 @tab @verb{|  widen|}
-@tab Call @code{widen} with no arguments.
+@tab Call @code{widen}, no arguments.
 @tab @math{-0+1}
 @item @verb{|0177|}
 @tab @verb{| 127|}
 @tab @verb{|  end-of-line|}
-@tab Call @code{end-of-line} with one argument.
+@tab Call @code{end-of-line}, one argument.
 @tab @math{-1+1}
 @item @verb{|0200|}
 @tab @verb{| 128|}
@@ -1987,112 +2134,112 @@ Make a binding recording buffer, point, and mark.
 @item @verb{|0223|}
 @tab @verb{| 147|}
 @tab @verb{|  set-marker|}
-@tab Call @code{set-marker} with three arguments.
+@tab Call @code{set-marker}, three arguments.
 @tab @math{-3+1}
 @item @verb{|0224|}
 @tab @verb{| 148|}
 @tab @verb{|  match-beginning|}
-@tab Call @code{match-beginning} with one argument.
+@tab Call @code{match-beginning}, one argument.
 @tab @math{-1+1}
 @item @verb{|0225|}
 @tab @verb{| 149|}
 @tab @verb{|  match-end|}
-@tab Call @code{match-end} with one argument.
+@tab Call @code{match-end}, one argument.
 @tab @math{-1+1}
 @item @verb{|0226|}
 @tab @verb{| 150|}
 @tab @verb{|  upcase|}
-@tab Call @code{upcase} with one argument.
+@tab Call @code{upcase}, one argument.
 @tab @math{-1+1}
 @item @verb{|0227|}
 @tab @verb{| 151|}
 @tab @verb{|  downcase|}
-@tab Call @code{downcase} with one argument.
+@tab Call @code{downcase}, one argument.
 @tab @math{-1+1}
 @item @verb{|0230|}
 @tab @verb{| 152|}
 @tab @verb{|  stringeqlsign|}
-@tab Call @code{string=} with two arguments, comparing two strings for equality.
+@tab Call @code{string=}, two arguments, comparing two strings for equality.
 @tab @math{-2+1}
 @item @verb{|0231|}
 @tab @verb{| 153|}
 @tab @verb{|  stringlss|}
-@tab Call @code{string<} with two arguments, comparing two strings.
+@tab Call @code{string<}, two arguments, comparing two strings.
 @tab @math{-2+1}
 @item @verb{|0232|}
 @tab @verb{| 154|}
 @tab @verb{|  equal|}
-@tab Call @code{equal} with two arguments.
+@tab Call @code{equal}, two arguments.
 @tab @math{-2+1}
 @item @verb{|0233|}
 @tab @verb{| 155|}
 @tab @verb{|  nthcdr|}
-@tab Call @code{nthcdr} with two arguments.
+@tab Call @code{nthcdr}, two arguments.
 @tab @math{-2+1}
 @item @verb{|0234|}
 @tab @verb{| 156|}
 @tab @verb{|  elt|}
-@tab Call @code{elt} with two arguments.
+@tab Call @code{elt}, two arguments.
 @tab @math{-2+1}
 @item @verb{|0235|}
 @tab @verb{| 157|}
 @tab @verb{|  member|}
-@tab Call @code{member} with two arguments.
+@tab Call @code{member}, two arguments.
 @tab @math{-2+1}
 @item @verb{|0236|}
 @tab @verb{| 158|}
 @tab @verb{|  assq|}
-@tab Call @code{assq} with two arguments.
+@tab Call @code{assq}, two arguments.
 @tab @math{-2+1}
 @item @verb{|0237|}
 @tab @verb{| 159|}
 @tab @verb{|  nreverse|}
-@tab Call @code{nreverse} with one argument.
+@tab Call @code{nreverse}, one argument.
 @tab @math{-1+1}
 @item @verb{|0240|}
 @tab @verb{| 160|}
 @tab @verb{|  setcar|}
-@tab Call @code{setcar} with two arguments.
+@tab Call @code{setcar}, two arguments.
 @tab @math{-2+1}
 @item @verb{|0241|}
 @tab @verb{| 161|}
 @tab @verb{|  setcdr|}
-@tab Call @code{setcdr} with two arguments.
+@tab Call @code{setcdr}, two arguments.
 @tab @math{-2+1}
 @item @verb{|0242|}
 @tab @verb{| 162|}
 @tab @verb{|  car-safe|}
-@tab Call @code{car-safe} with one argument.
+@tab Call @code{car-safe}, one argument.
 @tab @math{-1+1}
 @item @verb{|0243|}
 @tab @verb{| 163|}
 @tab @verb{|  cdr-safe|}
-@tab Call @code{cdr-safe} with one argument.
+@tab Call @code{cdr-safe}, one argument.
 @tab @math{-1+1}
 @item @verb{|0244|}
 @tab @verb{| 164|}
 @tab @verb{|  nconc|}
-@tab Call @code{nconc} with two arguments.
+@tab Call @code{nconc}, two arguments.
 @tab @math{-2+1}
 @item @verb{|0245|}
 @tab @verb{| 165|}
 @tab @verb{|  quo|}
-@tab Call @code{/} with two arguments, dividing the two values at the top of the stack.
+@tab Call @code{/}, two arguments, dividing the two values at the top of the stack.
 @tab @math{-2+1}
 @item @verb{|0246|}
 @tab @verb{| 166|}
 @tab @verb{|  rem|}
-@tab Call @code{%} with two arguments, calculating the modulus of the two values at the top of the stack.
+@tab Call @code{%}, two arguments, calculating the modulus of the two values at the top of the stack.
 @tab @math{-2+1}
 @item @verb{|0247|}
 @tab @verb{| 167|}
 @tab @verb{|  numberp|}
-@tab Call @code{numberp} with one argument.
+@tab Call @code{numberp}, one argument.
 @tab @math{-1+1}
 @item @verb{|0250|}
 @tab @verb{| 168|}
 @tab @verb{|  integerp|}
-@tab Call @code{integerp} with one argument.
+@tab Call @code{integerp}, one argument.
 @tab @math{-1+1}
 @item @verb{|0251|}
 @tab @verb{| 169|}
