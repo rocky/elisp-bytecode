@@ -808,6 +808,8 @@ Call @code{get} with two arguments.
 @kindex equal
 Call @code{equal} with two arguments.
 
+Added in Emacs 19.34.
+
 @node member
 @unnumberedsubsubsec @code{member} (157)
 @kindex member
@@ -823,10 +825,14 @@ Call @code{assq} with two arguments.
 @kindex numberp
 Call @code{numberp} with one argument.
 
+Added in Emacs 19.34.
+
 @node integerp
 @unnumberedsubsubsec @code{integerp} (168)
 @kindex integerp
 Call @code{integerp} with one argument.
+
+Added in Emacs 19.34.
 
 @node List Function Instructions
 @subsection List Function Instructions
@@ -844,6 +850,7 @@ bytecode interpreter.
 * list2::
 * list3::
 * list4::
+* listN::
 * length::
 * aref::
 * aset::
@@ -897,6 +904,16 @@ Call @code{list} with three arguments.
 @kindex list4
 Call @code{list} with four arguments.
 
+@node listN
+@unnumberedsubsubsec @code{list4} (70)
+@kindex listN
+Call @code{list} an arbitrary number of arguments.
+
+oNote special instructions for the case where tehre are 2 to 4 items in
+the list.
+
+Added in Emacs 19.34.
+
 @node length
 @unnumberedsubsubsec @code{length} (71)
 @kindex length
@@ -917,40 +934,55 @@ Call @code{aset} with three arguments.
 @kindex nthcdr
 Call @code{nthcdr} with two arguments.
 
+Added in Emacs 19.34.
+
 @node elt
 @unnumberedsubsubsec @code{elt} (156)
 @kindex elt
 Call @code{elt} with two arguments.
+
+Added in Emacs 19.34.
 
 @node nreverse
 @unnumberedsubsubsec @code{nreverse} (159)
 @kindex nreverse
 Call @code{nreverse} with one argument.
 
+Added in Emacs 19.34.
+
 @node setcar
 @unnumberedsubsubsec @code{setcar} (160)
 @kindex setcar
 Call @code{setcar} with two arguments.
+
+Added in Emacs 19.34.
 
 @node setcdr
 @unnumberedsubsubsec @code{setcdr} (161)
 @kindex setcdr
 Call @code{setcdr} with two arguments.
 
+Added in Emacs 19.34.
+
 @node car-safe
 @unnumberedsubsubsec @code{car-safe} (162)
 @kindex car-safe
 Call @code{car-safe} with one argument.
+
+Added in Emacs 19.34.
 
 @node cdr-safe
 @unnumberedsubsubsec @code{cdr-safe} (163)
 @kindex cdr-safe
 Call @code{cdr-safe} with one argument.
 
+Added in Emacs 19.34.
 @node nconc
 @unnumberedsubsubsec @code{nconc} (164)
 @kindex nconc
 Call @code{nconc} with two arguments.
+
+Added in Emacs 19.34.
 
 @node Arithmetic Function Instructions
 @subsection Arithmetic Function Instructions
@@ -1055,6 +1087,8 @@ Call @code{/} with two arguments, dividing the two values at the top of the stac
 @kindex rem
 Call @code{%} with two arguments, calculating the modulus of the two values at the top of the stack.
 
+Added in Emacs 19.34.
+
 @node String Function Instructions
 @subsection String Function Instructions
 
@@ -1067,6 +1101,7 @@ function for them.
 * concat2::
 * concat3::
 * concat4::
+* concatN::
 * upcase::
 * downcase::
 * stringeqlsign::
@@ -1094,25 +1129,43 @@ Call @code{concat} with three arguments.
 Call @code{concat} with four arguments.
 
 
+@node concatN
+@unnumberedsubsubsec @code{concatN} (174)
+@kindex concatN
+
+Call @code{concat} an arbitrary number of arguments.  Note there are
+Note special instructions for the case where tehre are 2 to 4 items to
+concatenate.
+
+Added in Emacs 19.34.
+
 @node upcase
 @unnumberedsubsubsec @code{upcase} (150)
 @kindex upcase
 Call @code{upcase} with one argument.
+
+Added in Emacs 19.34.
 
 @node downcase
 @unnumberedsubsubsec @code{downcase} (151)
 @kindex downcase
 Call @code{downcase} with one argument.
 
+Added in Emacs 19.34.
+
 @node stringeqlsign
 @unnumberedsubsubsec @code{stringeqlsign} (152)
 @kindex stringeqlsign
 Call @code{string=} with two arguments, comparing two strings for equality.
 
+Added in Emacs 19.34.
+
 @node stringlss
 @unnumberedsubsubsec @code{stringlss} (153)
 @kindex stringlss
 Call @code{string<} with two arguments, comparing two strings.
+
+Added in Emacs 19.34.
 
 @node Emacs Function Instructions
 @subsection Emacs Function Instructions
@@ -1125,6 +1178,7 @@ but simply call the corresponding C function.
 * point::
 * goto-char::
 * insert::
+* insertN::
 * point-min::
 * point-max::
 * char-after::
@@ -1168,6 +1222,15 @@ Call @code{goto-char} with one argument.
 @unnumberedsubsubsec @code{insert} (99)
 @kindex insert
 Call @code{insert} with one argument.
+
+@node insertN
+@unnumberedsubsubsec @code{insert} (99)
+@kindex insertN
+Call @code{insert} with an abitrary number of arguments.
+
+Note there are special instructions when there is only one argument.
+
+Added in Emacs 19.34.
 
 @node point-min
 @unnumberedsubsubsec @code{point-min} (101)
@@ -1335,15 +1398,21 @@ Added in Emacs 19.34.
 @kindex set-marker
 Call @code{set-marker} with three arguments.
 
+Added in Emacs 19.34.
+
 @node match-beginning
 @unnumberedsubsubsec @code{match-beginning} (148)
 @kindex match-beginning
 Call @code{match-beginning} with one argument.
 
+Added in Emacs 19.34.
+
 @node match-end
 @unnumberedsubsubsec @code{match-end} (149)
 @kindex match-end
 Call @code{match-end} with one argument.
+
+Added in Emacs 19.34.
 
 @node Stack Manipulation Instructions
 @section Stack Manipulation Instructions
@@ -1389,6 +1458,8 @@ Make a binding recording buffer, point, and mark.
 @menu
 * Between 17 and 18.59::
 * Between 18.59 and 19.34::
+* Between 19.34 and 20.1::
+* Between 20.1 and 21.4::
 * Between 23.1 and 24.1::
 @end menu
 
@@ -1405,6 +1476,9 @@ The following became obsolete:
 @node Between 18.59 and 19.34
 @section Between 18.59 and 19.34
 
+jwz and Hallvard made major changes additions to the bytecode
+interpreter.
+
 The following were added:
 @itemize
 @item @code{mult} (97)
@@ -1419,12 +1493,56 @@ The following were added:
 @item @code{narrow-to-region} (125)
 @item @code{widen} (126)
 @item @code{end-of-line} (127)
+@item @code{unbind-all} (146)
+@item @code{set-marker} (147)
+@item @code{match-beginning} (148)
+@item @code{match-end} (149)
+@item @code{upcase} (150)
+@item @code{downcase} (151)
+@item @code{stringeqlsign} (152)
+@item @code{stringlss} (153)
+@item @code{equal} (154)
+@item @code{nthcdr} (155)
+@item @code{elt} (156)
+@item @code{member} (157)
+@item @code{assq} (158)
+@item @code{nreverse} (159)
+@item @code{setcar} (160)
+@item @code{setcdr} (161)
+@item @code{car-safe} (162)
+@item @code{cdr-safe} (163
+@item @code{nconc} (164)
+@item @code{quo} (165)
+@item @code{rem} (166)
+@item @code{numberp} (167)
+@item @code{integerp} (162)
+@item @code{Rgoto} (170)
+@item @code{Rgotoifnil} (171)
+@item @code{Rgotoifnonnil} (172)
+@item @code{Rgotoifnilelsepop} (173)
+@item @code{Rgotoifnonnilelsepop} (174)
+@item @code{listN} (175)
+@item @code{concatN} (176)
+@item @code{insertN} (177)
+
 @end itemize
 
 The following became obsolete:
 @itemize
 @item @code{read-char} (114)
 @end itemize
+
+@node Between 19.34 and 20.1
+@section Between 19.34 and 20.1
+
+Thre were no instruction changes. However bytecode interpretation of
+@code{read-char}, which became obsolete in v19 was dropped.
+
+@node Between 20.1 and 21.4
+@section Between 20.1 and 21.4
+
+Thre were no instruction changes. However there were major
+changes in the ytecode interpreter.
 
 @node Between 23.1 and 24.1
 @section Between 23.1 and 24.1
@@ -2244,7 +2362,41 @@ one is pushed. This is denoted: @math{-2+1}.
 @item @verb{|0251|}
 @tab @verb{| 169|}
 @tab
-@tab Unused
+
+@item @verb{|0252|}
+@tab @verb{| 170|}
+@tab @verb{|  Rgoto|}
+@tab
+@item @verb{|0253|}
+@tab @verb{| 171|}
+@tab @verb{|  Rgotoifnil|}
+@tab
+@item @verb{|0252|}
+@tab @verb{| 172|}
+@tab @verb{|  Rgotoifnonnil|}
+@tab
+@item @verb{|0253|}
+@tab @verb{| 173|}
+@tab @verb{|  Rgotoifnilelsepop|}
+@tab
+@item @verb{|0254|}
+@tab @verb{| 174|}
+@tab @verb{|  Rgotoifnonnilelsepop|}
+@tab @tab
+
+@item @verb{|0255|}
+@tab @verb{| 175|}
+@tab @verb{|  listN|}
+@tab
+@item @verb{|0256|}
+@tab @verb{| 176|}
+@tab @verb{|  concatN|}
+@tab
+@item @verb{|0257|}
+@tab @verb{| 177|}
+@tab @verb{|  insertN|}
+@tab @tab
+
 @item @verb{|0270|}
 @tab @verb{| 184|}
 @tab
