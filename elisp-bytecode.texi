@@ -1460,6 +1460,8 @@ Make a binding recording buffer, point, and mark.
 * Between 18.59 and 19.34::
 * Between 19.34 and 20.1::
 * Between 20.1 and 21.4::
+* Between 21.1 and 22.1::
+* Between 22.1 and 23.1::
 * Between 23.1 and 24.1::
 @end menu
 
@@ -1542,7 +1544,17 @@ Thre were no instruction changes. However bytecode interpretation of
 @section Between 20.1 and 21.4
 
 Thre were no instruction changes. However there were major
-changes in the ytecode interpreter.
+changes in the bytecode interpreter.
+
+@node Between 21.1 and 22.1
+@section Between 21.1 and 22.1
+
+Thre were no instruction changes.
+
+@node Between 22.1 and 23.1
+@section Between 22.1 and 23.1
+
+Thre were no instruction changes.
 
 @node Between 23.1 and 24.1
 @section Between 23.1 and 24.1
