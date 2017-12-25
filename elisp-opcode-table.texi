@@ -516,12 +516,7 @@ one is pushed. This is denoted: @math{-2+1}.
 @item @verb{|0141|}
 @tab @verb{| *97|}
 @tab @verb{|  save-current-buffer|}
-@tab Obsolete in 24.1?
-@tab @math{-0+1}
-@item @verb{|0141|}
-@tab @verb{| *97|}
-@tab @verb{|  bmark|}
-@tab used in v17
+@tab Obsolete in 24.1
 @tab @math{-0+1}
 @item @verb{|0141|}
 @tab @verb{| *97|}
