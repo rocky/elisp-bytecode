@@ -1555,10 +1555,12 @@ Make a binding recording buffer, point, and mark.
 * After 22.1 and Starting in 23.1::
 * After 23.1 and Starting in 24.1::
 * After 24.1 and Starting in 25.1::
+* After 25.1 and Starting in 26.1::
+* After 26.1 and Starting in 27.1::
 @end menu
 
 @node After 17 and Starting in 18.59
-@section Between 17 and 18.59
+@section After 17 and Starting in 18.59
 
 The following became obsolete:
 @itemize
@@ -1573,7 +1575,7 @@ The following became obsolete:
 jwz and Hallvard made major changes and additions to the bytecode
 interpreter.
 
-The following were added:
+The following instructions were added:
 @itemize
 @item @code{mult} (97)
 @item @code{forward-char} (117)
@@ -1708,7 +1710,7 @@ Bytecode meta-comments look like this:
 @node After 23.1 and Starting in 24.1
 @section After 23.1 and Starting in 24.1
 
-The following were added:
+The following instructions were added:
 @itemize
 @item @code{stack-set}   (178)
 @item @code{stack_set2}, (179)
@@ -1755,7 +1757,7 @@ Instruction 0 becomes an error rather than aborting emacs.
 
 A number of changes were made to @code{bytecode.c}.
 
-The following were added:
+The following instructions were added:
 @itemize
 @item @code{ophandler} (48)
 @item @code{conditioncase} (49)
@@ -1783,6 +1785,19 @@ Bytecode meta-comments look like this:
 ;;; This file does not contain utf-8 non-ASCII characters,
 ;;; and so can be loaded in Emacs versions earlier than 23.
 @end verbatim
+
+@node After 25.1 and Starting in 26.1
+@section After 25.1 and Starting in 26.1
+
+The following instruction was added:
+@itemize
+@item @code{switch} (267)
+@end itemize
+
+@node After 26.1 and Starting in 27.1
+@section After 26.1 and Starting in 27.1
+
+No changes yet.
 
 @node Opcode Table
 @chapter Opcode Table
@@ -2641,16 +2656,30 @@ one is pushed. This is denoted: @math{-2+1}.
 @tab @tab
 
 @item @verb{|0262|}
-@tab @verb{| 180|}
+@tab @verb{| 178|}
 @tab @verb{|  stack-set|}
 @tab @tab
 @item @verb{|0263|}
-@tab @verb{| 181|}
+@tab @verb{| 179|}
 @tab @verb{|  stack-set2|}
 @tab @tab
-@item @verb{|0263|}
+
+@item @verb{|0264|}
+@tab @verb{| 180|}
+@tab
+@tab Unused
+@item @verb{|0265|}
 @tab @verb{| 181|}
+@tab
+@tab Unused
+
+@item @verb{|0266|}
+@tab @verb{| 182|}
 @tab @verb{|  discardN|}
+@tab @tab
+@item @verb{|0267|}
+@tab @verb{| 183|}
+@tab @verb{|  switch|}
 @tab @tab
 
 @item @verb{|0270|}
@@ -2799,7 +2828,7 @@ one is pushed. This is denoted: @math{-2+1}.
 @item @verb{|0326|}
 @tab @verb{| 214|}
 @tab @verb{|  constant-i22|}
-@tab
+     @tab
 @tab @math{+1}
 @item @verb{|0327|}
 @tab @verb{| 215|}
@@ -3020,6 +3049,9 @@ one is pushed. This is denoted: @math{-2+1}.
 @item @uref{https://www.emacswiki.org/emacs/ByteCodeEngineering, Emacs Wiki ByteCodeEngineering}
 @item @uref{https://groups.google.com/forum/#!topic/gnu.emacs.sources/oMfZT_4Oxrc easm.el, Assembler for Emacs' bytecode interpreter}
 @item @uref{https://github.com/rocky/elisp-decompile, Emacs Lisp Decompiler}
+@item @uref{https://ftp.gnu.org/pub/gnu/emacs, Emacs source code since Emacs 21.4a}
+@item @uref{https://ftp.gnu.org/pub/gnu/emacs, Emacs source code since Emacs 21.4a}
+@item @uref{https://ftp.gnu.org/pub/old-gnu/emacs, Emacs source code before Emacs 21.4a}
 @end itemize
 
 @node Instruction Index
