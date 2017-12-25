@@ -1483,13 +1483,24 @@ Added in Emacs 19.34.
 
 @menu
 * discard::
+* discardN::
 * dup::
+* stack-set::
+* stack-set2::
 @end menu
 
 @node discard
 @unnumberedsubsec @code{discard} (136)
 @kindex discard
-Discard one value.
+Discard one value from the stack.
+
+@node discardN
+@unnumberedsubsec @code{discardN} (180)
+@kindex discardN
+Discards up to 255 arguments from the stack.  Note there is a special
+instruction when there is only one argument.
+
+Added in Emacs 24.1
 
 @node dup
 @unnumberedsubsec @code{dup} (137)
@@ -1503,6 +1514,22 @@ PC  Byte  Instruction
  0  137   dup  ;; duplicates top of stack: n
  1  135   return
 @end verbatim
+
+@node stack-set
+@unnumberedsubsec @code{stack-set} (180)
+@kindex stack-set
+Like discard. [What's the difference?[
+
+Added in Emacs 24.1
+
+@node stack-set2
+@unnumberedsubsec @code{stack-setN} (181)
+@kindex stack-set2
+Like discardN. [What's the difference?]
+Can handle up to 255 arguments.  Note there is a special
+instruction when there is only one argument.
+
+Added in Emacs 24.1
 
 @node Binding Instructions
 @section Binding Instructions
@@ -1681,6 +1708,13 @@ Bytecode meta-comments look like this:
 @node After 23.1 and Starting in 24.1
 @section After 23.1 and Starting in 24.1
 
+The following were added:
+@itemize
+@item @code{stack-set}   (178)
+@item @code{stack_set2}, (179)
+@item @code{discardN}, (180)
+@end itemize
+
 The following became obsolete:
 
 @unnumberedsubsec @code{save-current-buffer} (97)
@@ -1690,7 +1724,6 @@ Is replaced by @code{byte-save-current-buffer} (114)
 Unless C prepocessor variable @code{BYTE_CODE_SAFE} (off by default) is
 defined, obsolete instructions below and from earlier versions are not implemented.
 
-The following were added:
 @itemize
 @item @code{temp-output-buffer-setup} (144)
 @item @code{temp-output-buffer-show} (145)
@@ -2581,30 +2614,43 @@ one is pushed. This is denoted: @math{-2+1}.
 @tab @verb{| 171|}
 @tab @verb{|  Rgotoifnil|}
 @tab
-@item @verb{|0252|}
+@item @verb{|0254|}
 @tab @verb{| 172|}
 @tab @verb{|  Rgotoifnonnil|}
 @tab
-@item @verb{|0253|}
+@item @verb{|0255|}
 @tab @verb{| 173|}
 @tab @verb{|  Rgotoifnilelsepop|}
 @tab
-@item @verb{|0254|}
+@item @verb{|0256|}
 @tab @verb{| 174|}
 @tab @verb{|  Rgotoifnonnilelsepop|}
 @tab @tab
 
-@item @verb{|0255|}
+@item @verb{|0257|}
 @tab @verb{| 175|}
 @tab @verb{|  listN|}
 @tab
-@item @verb{|0256|}
+@item @verb{|0260|}
 @tab @verb{| 176|}
 @tab @verb{|  concatN|}
 @tab
-@item @verb{|0257|}
+@item @verb{|0261|}
 @tab @verb{| 177|}
 @tab @verb{|  insertN|}
+@tab @tab
+
+@item @verb{|0262|}
+@tab @verb{| 180|}
+@tab @verb{|  stack-set|}
+@tab @tab
+@item @verb{|0263|}
+@tab @verb{| 181|}
+@tab @verb{|  stack-set2|}
+@tab @tab
+@item @verb{|0263|}
+@tab @verb{| 181|}
+@tab @verb{|  discardN|}
 @tab @tab
 
 @item @verb{|0270|}
