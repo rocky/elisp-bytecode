@@ -24,6 +24,7 @@
 * Opcode Changes Between Emacs Releases::
 * Opcode Table::                 Table of Bytecode Instruction ordered by Opcode Number
 * References::
+* Opcode Index::
 * Instruction Index::
 @end menu
 
@@ -536,12 +537,20 @@ opcode, in little-endian byte order.
 
 @node stack-ref
 @unnumberedsubsec @code{stack-ref} (1--7)
-@kindex stack-ref
+@vindex stack-ref
+@kindex 1, (0001) stack-ref[1]
+@kindex 2, (0002) stack-ref[2]
+@kindex 3, (0003) stack-ref[3]
+@kindex 4, (0004) stack-ref[4]
+@kindex 5, (0005) stack-ref[5]
+@kindex 6, (0006) stack-ref[6]
+@kindex 7, (0007) stack-ref[7]
 
 A stack reference. This is used only in lexical binding.
 
 Added in Emacs 24.1
 
+@vindex stack-ref, 0 opcode
 @subsubsection Warning
 Running an instruction with opcode 0 (logically this would be called
 @code{stack-ref[0]}), will cause an immediate abort of Emacs!
@@ -553,7 +562,7 @@ been initialized to value but represents data that hasn't been written to yet.
 By doing this we typically catch running random or invalid bytecode.
 
 @subsubsection Example
-When lexical binding is in effect, @code{(defun stack-ref() (let ((a 5) (b 6) (c 7)) (+ a c)))} generates:
+When lexical binding is in effect, @code{(defun stack-ref-eg() (let ((a 5) (b 6) (c 7)) (+ a c)))} generates:
 @verbatim
 PC  Byte  Instruction
  0  192   constant[0] 5
@@ -572,13 +581,21 @@ Constants Vector: [5 6 7]
 @end verbatim
 
 @node varref
+@vindex varref
+@kindex 8, (0010) varref[0]
+@kindex 9, (0011) varref[1]
+@kindex 10, (0012) varref[2]
+@kindex 11, (0013) varref[3]
+@kindex 12, (0014) varref[4]
+@kindex 13, (0015) varref[5]
+@kindex 14, (0016) varref[6]
 @unnumberedsubsec @code{varref} (8--15)
-@kindex varref
+
 Pushes the value of a variable reference onto the evaluation stack.
 
 @subsubsection Example
 
-When dynamic binding is in effect, @code{(defun varref(n) n)} generates:
+When dynamic binding is in effect, @code{(defun varref-eg(n) n)} generates:
 @verbatim
 PC  Byte  Instruction
  0    8   varref[0] n
@@ -588,15 +605,23 @@ Constants Vector: [n]
 @end verbatim
 
 @node varset
+@vindex varset
+@kindex 16, (0020) varset[0]
+@kindex 17, (0021) varset[1]
+@kindex 18, (0022) varset[2]
+@kindex 19, (0023) varset[3]
+@kindex 20, (0024) varset[4]
+@kindex 21, (0025) varset[5]
+@kindex 22, (0026) varset[6]
+@kindex 23, (0027) varset[7]
 @unnumberedsubsec @code{varset} (16--23)
-@kindex varset
 
 Sets a variable given in the operand to the value that is on the top
 of the stack.
 
 @subsubsection Example
 
-When dynamic binding is in effect, @code{(defun varset(n) (setq n 5))} generates:
+When dynamic binding is in effect, @code{(defun varset-eg(n) (setq n 5))} generates:
 @verbatim
 PC  Byte  Instruction
  0  193   constant[1] 5
@@ -608,14 +633,30 @@ Constants Vector: [n 5]
 @end verbatim
 
 @node varbind
+@vindex varbind
+@kindex 24, (0030) varbind[0]
+@kindex 25, (0031) varbind[1]
+@kindex 26, (0032) varbind[2]
+@kindex 27, (0033) varbind[3]
+@kindex 28, (0034) varbind[4]
+@kindex 29, (0035) varbind[5]
+@kindex 30, (0036) varbind[6]
+@kindex 31, (0037) varbind[7]
 @unnumberedsubsec @code{varbind} (24--31)
-@kindex varbind
 
 Binds a variable
 
 @node call
+@vindex call
+@kindex 32, (0040) call[0]
+@kindex 33, (0041) call[1]
+@kindex 34, (0042) call[2]
+@kindex 35, (0043) call[3]
+@kindex 36, (0044) call[4]
+@kindex 37, (0045) call[5]
+@kindex 38, (0046) call[6]
+@kindex 39, (0047) call[7]
 @unnumberedsubsec @code{call} (32--39)
-@kindex call
 
 Calls a function.  The opcode argument specifies the number of
 arguments to pass to the function from the stack, excluding the
@@ -634,8 +675,16 @@ Constants Vector: [exchange-point-and-mark]
 @end verbatim
 
 @node unbind
+@vindex unbind
+@kindex 40, (0050) unbind[0]
+@kindex 41, (0051) unbind[1]
+@kindex 42, (0052) unbind[2]
+@kindex 45, (0053) unbind[3]
+@kindex 44, (0054) unbind[4]
+@kindex 45, (0055) unbind[5]
+@kindex 46, (0056) unbind[6]
+@kindex 49, (0057) unbind[7]
 @unnumberedsubsec @code{unbind} (40--47)
-@kindex unbind
 
 Unbinds special bindings
 
@@ -653,15 +702,15 @@ constants, opcode @code{constant2} (opcode 129) is used instead.
 @end menu
 
 @node constant
+@vindex constant
 @unnumberedsubsec @code{constant} (192--255)
-@kindex constant
 
 Pushes a value from the constants vector on the evaluation stack.
 There are special instructions to push any one of the first
 64 entries in the constants stack.
 
 @subsubsection Example
-@code{(defun n3(n) (+ n 10 11 12))} generates:
+@code{(defun constants-eg(n) (+ n 10 11 12))} generates:
 @verbatim
 PC  Byte  Instruction
  0  193   constant[1] +
@@ -676,8 +725,9 @@ Constants Vector: [n + 10 11 12]
 @end verbatim
 
 @node constant2
+@vindex constant2
+@kindex 129, (0201) constant2
 @unnumberedsubsec @code{constant2} (129)
-@kindex constant2
 
 Pushes a value from the constants vector on the evaluation stack.
 Although there are special instructions to push any one of the first
@@ -686,7 +736,7 @@ a value beyond one the first 64 entries.
 
 @c @code{(defun n64 (n) (+ n 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64))} generates
 
-@code{(defun n64(n) (+ n 0 1 2 3 .. 64 ))} generates
+@code{(defun constant2-eg(n) (+ n 0 1 2 3 .. 64 ))} generates
 @verbatim
 PC  Byte  Instruction
  0  193   constant[1] +
@@ -715,13 +765,14 @@ Constants Vector: [n + 0 1 2 .. 61 62 63 64]
 @node Return Instruction
 @section Return Instruction
 
+@vindex return
+@kindex 135, (0207) return
 @unnumberedsubsec @code{return} (135)
-@kindex return
 Return from function.  This is the last instruction in a function's
 bytecode sequence. The top value on the evaluation stack is the return value.
 
 @subsubsection Example
-@code{(defun one(n) 1)} generates:
+@code{(defun return-eg(n) 1)} generates:
 @verbatim
 PC  Byte  Instruction
  0  192   constant[0] 1
@@ -775,92 +826,101 @@ bytecode interpreter.
 @end menu
 
 @node symbolp
+@vindex symbolp
+@kindex 57, (0071) symbolp
 @unnumberedsubsubsec @code{symbolp} (57)
-@kindex symbolp
 Call @code{symbolp} with one argument.
 
 @node consp
+@vindex consp
+@kindex 58, (0072) consp
 @unnumberedsubsubsec @code{consp} (58)
-@kindex consp
 Call @code{consp} with one argument.
 
 @node stringp
+@vindex stringp
+@kindex 59, (0073) srtingp
 @unnumberedsubsubsec @code{stringp} (59)
-@kindex stringp
 Call @code{stringp} with one argument.
 
 @node listp
+@vindex listp
+@kindex 60, (0074) listp
 @unnumberedsubsubsec @code{listp} (60)
-@kindex listp
 Call @code{listp} with one argument.
 
 @node eq
+@vindex eq
+@kindex 61, (0075) eq
 @unnumberedsubsubsec @code{eq} (61)
-@kindex eq
 Call @code{eq} with two arguments.
 
 @node memq
+@vindex memq
+@kindex 62, (0076) memq
 @unnumberedsubsubsec @code{memq} (62)
-@kindex memq
 Call @code{memq} with two arguments.
 
 @node not
+@vindex not
+@kindex 63, (0077) not
 @unnumberedsubsubsec @code{not} (63)
-@kindex not
 Call @code{not} with one argument.
 
 @node symbol-value
+@vindex symbol-value
+@kindex 64, (0112) symbol-value
 @unnumberedsubsubsec @code{symbol-value} (74)
-@kindex symbol-value
 Call @code{symbol-value} with one argument.
 
 @node symbol-function
+@vindex symbol-function
+@kindex 75, (0113) symbol-function
 @unnumberedsubsubsec @code{symbol-function} (75)
-@kindex symbol-function
 Call @code{symbol-function} with one argument.
 
 @node set
+@vindex set
 @unnumberedsubsubsec @code{set} (76)
-@kindex set
 Call @code{set} with two arguments.
 
 @node fset
+@vindex fset
 @unnumberedsubsubsec @code{fset} (77)
-@kindex fset
 Call @code{fset} with two arguments.
 
 @node get
+@vindex get
 @unnumberedsubsubsec @code{get} (78)
-@kindex get
 Call @code{get} with two arguments.
 
 @node equal
+@vindex equal
 @unnumberedsubsubsec @code{equal} (154)
-@kindex equal
 Call @code{equal} with two arguments.
 
 Added in Emacs 19.34.
 
 @node member
+@vindex member
 @unnumberedsubsubsec @code{member} (157)
-@kindex member
 Call @code{member} with two arguments.
 
 @node assq
+@vindex assq
 @unnumberedsubsubsec @code{assq} (158)
-@kindex assq
 Call @code{assq} with two arguments.
 
 @node numberp
 @unnumberedsubsubsec @code{numberp} (167)
-@kindex numberp
+@vindex numberp
 Call @code{numberp} with one argument.
 
 Added in Emacs 19.34.
 
 @node integerp
 @unnumberedsubsubsec @code{integerp} (168)
-@kindex integerp
+@vindex integerp
 Call @code{integerp} with one argument.
 
 Added in Emacs 19.34.
@@ -897,47 +957,47 @@ bytecode interpreter.
 
 @node nth
 @unnumberedsubsubsec @code{nth} (56)
-@kindex nth
+@vindex nth
 Call @code{nth} with two arguments.
 
 @node car
 @unnumberedsubsubsec @code{car} (64)
-@kindex car
+@vindex car
 Call @code{car} with one argument.
 
 @node cdr
 @unnumberedsubsubsec @code{cdr} (65)
-@kindex cdr
+@vindex cdr
 Call @code{cdr} with one argument.
 
 @node cons
 @unnumberedsubsubsec @code{cons} (66)
-@kindex cons
+@vindex cons
 Call @code{cons} with two arguments.
 
 @node list1
 @unnumberedsubsubsec @code{list1} (67)
-@kindex list1
+@vindex list1
 Call @code{list} with one argument.
 
 @node list2
 @unnumberedsubsubsec @code{list2} (68)
-@kindex list2
+@vindex list2
 Call @code{list} with two arguments.
 
 @node list3
 @unnumberedsubsubsec @code{list3} (69)
-@kindex list3
+@vindex list3
 Call @code{list} with three arguments.
 
 @node list4
 @unnumberedsubsubsec @code{list4} (70)
-@kindex list4
+@vindex list4
 Call @code{list} with four arguments.
 
 @node listN
 @unnumberedsubsubsec @code{list4} (70)
-@kindex listN
+@vindex listN
 Call @code{list} an arbitrary number of arguments.
 
 oNote special instructions for the case where tehre are 2 to 4 items in
@@ -947,70 +1007,70 @@ Added in Emacs 19.34.
 
 @node length
 @unnumberedsubsubsec @code{length} (71)
-@kindex length
+@vindex length
 Call @code{length} with one argument.
 
 @node aref
 @unnumberedsubsubsec @code{aref} (72)
-@kindex aref
+@vindex aref
 Call @code{aref} with two arguments.
 
 @node aset
 @unnumberedsubsubsec @code{aset} (73)
-@kindex aset
+@vindex aset
 Call @code{aset} with three arguments.
 
 @node nthcdr
 @unnumberedsubsubsec @code{nthcdr} (155)
-@kindex nthcdr
+@vindex nthcdr
 Call @code{nthcdr} with two arguments.
 
 Added in Emacs 19.34.
 
 @node elt
 @unnumberedsubsubsec @code{elt} (156)
-@kindex elt
+@vindex elt
 Call @code{elt} with two arguments.
 
 Added in Emacs 19.34.
 
 @node nreverse
 @unnumberedsubsubsec @code{nreverse} (159)
-@kindex nreverse
+@vindex nreverse
 Call @code{nreverse} with one argument.
 
 Added in Emacs 19.34.
 
 @node setcar
 @unnumberedsubsubsec @code{setcar} (160)
-@kindex setcar
+@vindex setcar
 Call @code{setcar} with two arguments.
 
 Added in Emacs 19.34.
 
 @node setcdr
 @unnumberedsubsubsec @code{setcdr} (161)
-@kindex setcdr
+@vindex setcdr
 Call @code{setcdr} with two arguments.
 
 Added in Emacs 19.34.
 
 @node car-safe
 @unnumberedsubsubsec @code{car-safe} (162)
-@kindex car-safe
+@vindex car-safe
 Call @code{car-safe} with one argument.
 
 Added in Emacs 19.34.
 
 @node cdr-safe
 @unnumberedsubsubsec @code{cdr-safe} (163)
-@kindex cdr-safe
+@vindex cdr-safe
 Call @code{cdr-safe} with one argument.
 
 Added in Emacs 19.34.
 @node nconc
 @unnumberedsubsubsec @code{nconc} (164)
-@kindex nconc
+@vindex nconc
 Call @code{nconc} with two arguments.
 
 Added in Emacs 19.34.
@@ -1042,57 +1102,57 @@ bytecode interpreter.
 
 @node sub1
 @unnumberedsubsubsec @code{sub1} (83)
-@kindex sub1
+@vindex sub1
 Call @code{1-} with one argument, subtracting one from the top-of-stack value.
 
 @node add1
 @unnumberedsubsubsec @code{add1} (84)
-@kindex add1
+@vindex add1
 Call @code{1+} with one argument, adding one to the top-of-stack value.
 
 @node eqlsign
 @unnumberedsubsubsec @code{eqlsign} (85)
-@kindex eqlsign
+@vindex eqlsign
 Call @code{=} with two arguments, comparing the two values at the top of the stack for numerical or strict equality.
 
 @node gtr
 @unnumberedsubsubsec @code{gtr} (86)
-@kindex gtr
+@vindex gtr
 Call @code{>} with two arguments, comparing the two values at the top of the stack with the numerical greater-than relation.
 
 @node lss
 @unnumberedsubsubsec @code{lss} (87)
-@kindex lss
+@vindex lss
 Call @code{<} with two arguments, comparing the two values at the top of the stack with the numerical less-than relation.
 
 @node leq
 @unnumberedsubsubsec @code{leq} (88)
-@kindex leq
+@vindex leq
 Call @code{<=} with two arguments, comparing the two values at the top of the stack with the numerical less-than-or-equals relation.
 
 @node geq
 @unnumberedsubsubsec @code{geq} (89)
-@kindex geq
+@vindex geq
 Call @code{>=} with two arguments, comparing the two values at the top of the stack with the numerical less-than-or-equals relation.
 
 @node diff
 @unnumberedsubsubsec @code{diff} (90)
-@kindex diff
+@vindex diff
 Call @code{-} with two arguments, subtracting the two values at the top of the stack.
 
 @node negate
 @unnumberedsubsubsec @code{negate} (91)
-@kindex negate
+@vindex negate
 Call @code{-} with one argument, negating the top-of-stack value.
 
 @node plus
 @unnumberedsubsubsec @code{plus} (92)
-@kindex plus
+@vindex plus
 Call @code{+} with two arguments, adding the two values at the top of the stack.
 
 @node mult
 @unnumberedsubsubsec @code{mult} (95)
-@kindex mult
+@vindex mult
 Call @code{*} with two arguments, multiplying the two values at the
 top of the stack.
 
@@ -1100,22 +1160,22 @@ Since emacs 19.34
 
 @node max
 @unnumberedsubsubsec @code{max} (93)
-@kindex max
+@vindex max
 Call @code{max} with two arguments.
 
 @node min
 @unnumberedsubsubsec @code{min} (94)
-@kindex min
+@vindex min
 Call @code{min} with two arguments.
 
 @node quo
 @unnumberedsubsubsec @code{quo} (165)
-@kindex quo
+@vindex quo
 Call @code{/} with two arguments, dividing the two values at the top of the stack.
 
 @node rem
 @unnumberedsubsubsec @code{rem} (166)
-@kindex rem
+@vindex rem
 Call @code{%} with two arguments, calculating the modulus of the two values at the top of the stack.
 
 Added in Emacs 19.34.
@@ -1141,28 +1201,28 @@ function for them.
 
 @node substring
 @unnumberedsubsubsec @code{substring} (79)
-@kindex substring
+@vindex substring
 Call @code{substring} with three arguments.
 
 @node concat2
 @unnumberedsubsubsec @code{concat2} (80)
-@kindex concat2
+@vindex concat2
 Call @code{concat} with two arguments.
 
 @node concat3
 @unnumberedsubsubsec @code{concat3} (81)
-@kindex concat3
+@vindex concat3
 Call @code{concat} with three arguments.
 
 @node concat4
 @unnumberedsubsubsec @code{concat4} (82)
-@kindex concat4
+@vindex concat4
 Call @code{concat} with four arguments.
 
 
 @node concatN
 @unnumberedsubsubsec @code{concatN} (174)
-@kindex concatN
+@vindex concatN
 
 Call @code{concat} an arbitrary number of arguments.  Note there are
 Note special instructions for the case where tehre are 2 to 4 items to
@@ -1172,28 +1232,28 @@ Added in Emacs 19.34.
 
 @node upcase
 @unnumberedsubsubsec @code{upcase} (150)
-@kindex upcase
+@vindex upcase
 Call @code{upcase} with one argument.
 
 Added in Emacs 19.34.
 
 @node downcase
 @unnumberedsubsubsec @code{downcase} (151)
-@kindex downcase
+@vindex downcase
 Call @code{downcase} with one argument.
 
 Added in Emacs 19.34.
 
 @node stringeqlsign
 @unnumberedsubsubsec @code{stringeqlsign} (152)
-@kindex stringeqlsign
+@vindex stringeqlsign
 Call @code{string=} with two arguments, comparing two strings for equality.
 
 Added in Emacs 19.34.
 
 @node stringlss
 @unnumberedsubsubsec @code{stringlss} (153)
-@kindex stringlss
+@vindex stringlss
 Call @code{string<} with two arguments, comparing two strings.
 
 Added in Emacs 19.34.
@@ -1241,22 +1301,22 @@ but simply call the corresponding C function.
 
 @node point
 @unnumberedsubsubsec @code{point} (96)
-@kindex point
+@vindex point
 Call @code{point} with no arguments.
 
 @node goto-char
 @unnumberedsubsubsec @code{goto-char} (98)
-@kindex goto-char
+@vindex goto-char
 Call @code{goto-char} with one argument.
 
 @node insert
 @unnumberedsubsubsec @code{insert} (99)
-@kindex insert
+@vindex insert
 Call @code{insert} with one argument.
 
 @node insertN
 @unnumberedsubsubsec @code{insert} (99)
-@kindex insertN
+@vindex insertN
 Call @code{insert} with an abitrary number of arguments.
 
 Note there are special instructions when there is only one argument.
@@ -1265,67 +1325,67 @@ Added in Emacs 19.34.
 
 @node point-min
 @unnumberedsubsubsec @code{point-min} (101)
-@kindex point-min
+@vindex point-min
 Call @code{point-min} with no arguments.
 
 @node point-max
 @unnumberedsubsubsec @code{point-max} (100)
-@kindex point-max
+@vindex point-max
 Call @code{point-max} with no arguments.
 
 @node char-after
 @unnumberedsubsubsec @code{char-after} (102)
-@kindex char-after
+@vindex char-after
 Call @code{char-after} with one argument.
 
 @node following-char
 @unnumberedsubsubsec @code{following-char} (103)
-@kindex following-char
+@vindex following-char
 Call @code{following-char} with no arguments.
 
 @node preceding-char
 @unnumberedsubsubsec @code{preceding-char} (104)
-@kindex preceding-char
+@vindex preceding-char
 Call @code{preceding-char} with no arguments.
 
 @node current-column
 @unnumberedsubsubsec @code{current-column} (105)
-@kindex current-column
+@vindex current-column
 Call @code{current-column} with no arguments.
 
 @node eolp
 @unnumberedsubsubsec @code{eolp} (108)
-@kindex eolp
+@vindex eolp
 Call @code{eolp} with no arguments.
 
 @node eobp
 @unnumberedsubsubsec @code{eobp} (109)
-@kindex eobp
+@vindex eobp
 Call @code{eobp} with no arguments.
 
 @node bolp
 @unnumberedsubsubsec @code{bolp} (110)
-@kindex bolp
+@vindex bolp
 Call @code{bolp} with no arguments.
 
 @node bobp
 @unnumberedsubsubsec @code{bobp} (111)
-@kindex bobp
+@vindex bobp
 Call @code{bobp} with no arguments.
 
 @node current-buffer
 @unnumberedsubsubsec @code{current-buffer} (112)
-@kindex current-buffer
+@vindex current-buffer
 Call @code{current-buffer} with no arguments.
 
 @node set-buffer
 @unnumberedsubsubsec @code{set-buffer} (113)
-@kindex set-buffer
+@vindex set-buffer
 Call @code{set-buffer} with one argument.
 
 @node save-current-buffer-1
 @unnumberedsubsubsec @code{save-current-buffer-1} (114)
-@kindex save-current-buffer
+@vindex save-current-buffer
 Call @code{save-current-buffer} with one stack argument,
 the body to be evaluated.
 
@@ -1334,7 +1394,7 @@ Replaces older @code{save-current-buffer}.
 Added in Emacs 19.34.
 
 @strong{Example}
-@code{(defun scb() (save-current-buffer (prog 5)))} generates:
+@code{(defun save-current-buffer-eg() (save-current-buffer (prog 5)))} generates:
 @verbatim
 PC  Byte  Instruction
  0  114   save-current-buffer
@@ -1349,98 +1409,98 @@ Constants Vector: [prog 5]
 
 @node forward-char
 @unnumberedsubsubsec @code{forward-char} (117)
-@kindex forward-char
+@vindex forward-char
 Call @code{forward-char} with one argument.
 
 Added in Emacs 19.34.
 
 @node forward-word
 @unnumberedsubsubsec @code{forward-word} (118)
-@kindex forward-word
+@vindex forward-word
 Call @code{forward-word} with one argument.
 
 Added in Emacs 19.34.
 
 @node skip-chars-forward
 @unnumberedsubsubsec @code{skip-chars-forward} (119)
-@kindex skip-chars-forward
+@vindex skip-chars-forward
 Call @code{skip-chars-forward} with two arguments.
 
 Added in Emacs 19.34.
 
 @node skip-chars-backward
 @unnumberedsubsubsec @code{skip-chars-backward} (120)
-@kindex skip-chars-backward
+@vindex skip-chars-backward
 Call @code{skip-chars-backward} with two arguments.
 
 Added in Emacs 19.34.
 
 @node forward-line
 @unnumberedsubsubsec @code{forward-line} (121)
-@kindex forward-line
+@vindex forward-line
 Call @code{forward-line} with one argument.
 
 Added in Emacs 19.34.
 
 @node char-syntax
 @unnumberedsubsubsec @code{char-syntax} (122)
-@kindex char-syntax
+@vindex char-syntax
 Call @code{char-syntax} with one argument.
 
 Added in Emacs 19.34.
 
 @node buffer-substring
 @unnumberedsubsubsec @code{buffer-substring} (123)
-@kindex buffer-substring
+@vindex buffer-substring
 Call @code{buffer-substring} with two arguments.
 
 Added in Emacs 19.34.
 
 @node delete-region
 @unnumberedsubsubsec @code{delete-region} (124)
-@kindex delete-region
+@vindex delete-region
 Call @code{delete-region} with two arguments.
 
 Added in Emacs 19.34.
 
 @node narrow-to-region
 @unnumberedsubsubsec @code{narrow-to-region} (125)
-@kindex narrow-to-region
+@vindex narrow-to-region
 Call @code{narrow-to-region} with two arguments.
 
 Added in Emacs 19.34.
 
 @node widen
 @unnumberedsubsubsec @code{widen} (126)
-@kindex widen
+@vindex widen
 Call @code{widen} with no arguments.
 
 Added in Emacs 19.34.
 
 @node end-of-line
 @unnumberedsubsubsec @code{end-of-line} (127)
-@kindex end-of-line
+@vindex end-of-line
 Call @code{end-of-line} with one argument.
 
 Added in Emacs 19.34.
 
 @node set-marker
 @unnumberedsubsubsec @code{set-marker} (147)
-@kindex set-marker
+@vindex set-marker
 Call @code{set-marker} with three arguments.
 
 Added in Emacs 19.34.
 
 @node match-beginning
 @unnumberedsubsubsec @code{match-beginning} (148)
-@kindex match-beginning
+@vindex match-beginning
 Call @code{match-beginning} with one argument.
 
 Added in Emacs 19.34.
 
 @node match-end
 @unnumberedsubsubsec @code{match-end} (149)
-@kindex match-end
+@vindex match-end
 Call @code{match-end} with one argument.
 
 Added in Emacs 19.34.
@@ -1455,16 +1515,16 @@ Added in Emacs 19.34.
 
 @node discard
 @unnumberedsubsec @code{discard} (136)
-@kindex discard
+@vindex discard
 Discard one value.
 
 @node dup
 @unnumberedsubsec @code{dup} (137)
-@kindex dup
+@vindex dup
 Make a copy of the top-of-stack value and push that onto the top of the evaluation stack.
 
 @subsubsection Example
-When lexical binding is in effect, @code{(defun en(n) n)} generates:
+When lexical binding is in effect, @code{(defun dup-eg(n) n)} generates:
 @verbatim
 PC  Byte  Instruction
  0  137   dup  ;; duplicates top of stack: n
@@ -1479,7 +1539,7 @@ new binding when executed.  They need to be balanced with
 @code{unbind} instructions.
 
 @unnumberedsubsec @code{save-excursion} (138)
-@kindex save-excursion
+@vindex save-excursion
 Make a binding recording buffer, point, and mark.
 
 @node Opcode Changes Between Emacs Releases
@@ -1670,7 +1730,7 @@ one is pushed. This is denoted: @math{-2+1}.
 @tab @math{+1}
 
 @item @verb{| 010|}
-p@tab @verb{|   8|}
+@tab @verb{|   8|}
 @tab @verb{|  varref[0]|}
 @tab variable reference 0
 @tab @math{+1}
@@ -1794,42 +1854,42 @@ p@tab @verb{|   8|}
 
 @item @verb{| 040|}
 @tab @verb{|  32|}
-@tab @verb{|  call0|}
+@tab @verb{|  call[0]|}
 @tab Calls a function
 @tab @math{-1+1}
 @item @verb{| 041|}
 @tab @verb{|  33|}
-@tab @verb{|  call1|}
+@tab @verb{|  call[1]|}
 @tab Calls a function
 @tab @math{-2+1}
 @item @verb{| 042|}
 @tab @verb{|  34|}
-@tab @verb{|  call2|}
+@tab @verb{|  call[2]|}
 @tab Calls a function
 @tab @math{-3+1}
 @item @verb{| 043|}
 @tab @verb{|  35|}
-@tab @verb{|  call3|}
+@tab @verb{|  call[3]|}
 @tab Calls a function
 @tab @math{-4+1}
 @item @verb{| 044|}
 @tab @verb{|  36|}
-@tab @verb{|  call4|}
+@tab @verb{|  call[4]|}
 @tab Calls a function
 @tab @math{-5+1}
 @item @verb{| 045|}
 @tab @verb{|  37|}
-@tab @verb{|  call5|}
+@tab @verb{|  call[5]|}
 @tab Calls a function
 @tab @math{-6+1}
 @item @verb{| 046|}
 @tab @verb{|  38|}
-@tab @verb{|  call6|}
+@tab @verb{|  call[6]|}
 @tab Calls a function
 @tab @math{-n-1+1}
 @item @verb{| 047|}
 @tab @verb{|  39|}
-@tab @verb{|  call7|}
+@tab @verb{|  call[7]|}
 @tab Calls a function
 @tab @math{-n-1+1}
 
@@ -2825,8 +2885,12 @@ p@tab @verb{|   8|}
 @item @uref{https://github.com/rocky/elisp-decompile, Emacs Lisp Decompiler}
 @end itemize
 
+@node Opcode Index
+@unnumbered Opcode Index
+@printindex ky
+
 @node Instruction Index
 @unnumbered Instruction Index
-@printindex ky
+@printindex vr
 
 @bye
