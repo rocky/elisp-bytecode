@@ -1808,6 +1808,15 @@ stack entries popped followed by the number of entries pushed. For
 example, for a @code{cons} instruction, two stack entries are popped and
 one is pushed. This is denoted: @math{-2+1}.
 
+@menu
+* Opcodes (0000-0077)::
+* Opcodes (0100-0177)::
+* Opcodes (0200-0277)::
+* Opcodes (0300-0377) Constants::
+@end menu
+
+@node Opcodes (0000-0077)
+@section Opcodes (0000-0177)
 @multitable @columnfractions .09 .09 .31 .55 .18
 @headitem
 @verb{| |}Oct
@@ -2134,6 +2143,13 @@ one is pushed. This is denoted: @math{-2+1}.
 @tab Call @code{not} with one argument.
 @tab @math{-1+1}
 
+@end multitable
+
+@page
+@node Opcodes (0100-0177)
+@section Opcodes (0100-0177)
+
+@multitable @columnfractions .09 .09 .31 .55 .18
 @item @verb{|0100|}
 @tab @verb{|  64|}
 @tab @verb{|  car|}
@@ -2458,11 +2474,20 @@ one is pushed. This is denoted: @math{-2+1}.
 @tab @verb{|  end-of-line|}
 @tab Call @code{end-of-line}
 @tab @math{-1+1}
+@end multitable
+
+@page
+@node Opcodes (0200-0277)
+@section Opcodes (0200-0277)
+@multitable @columnfractions .09 .09 .31 .55 .18
+
 @item @verb{|0200|}
 @tab @verb{| 128|}
 @tab
 @tab Unused
+@end multitable
 
+@multitable @columnfractions .09 .09 .31 .55 .18
 @item @verb{|0201|}
 @tab @verb{| 129|}
 @tab @verb{|  constant2|}
@@ -2714,7 +2739,13 @@ one is pushed. This is denoted: @math{-2+1}.
 @tab @verb{| 191|}
 @tab
 @tab Unused
+@end multitable
 
+@page
+@node Opcodes (0300-0377) Constants
+@section Opcodes (0300-3277) Constants
+
+@multitable @columnfractions .09 .09 .31 .55 .18
 @item @verb{|0300|}
 @tab @verb{| 192|}
 @tab @verb{|  constant-i0|}
