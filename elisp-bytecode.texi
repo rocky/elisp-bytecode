@@ -1088,6 +1088,18 @@ Call @code{-} with one argument, negating the top-of-stack value.
 @kindex plus
 Call @code{+} with two arguments, adding the two values at the top of the stack.
 
+@strong{Example}
+When dynamic binding is in effect, @code{(defun plus-eg(n) (+ n n ))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] n
+ 1    8   varref[0] n
+ 2   92   plus
+ 3  135   return
+
+Constants Vector: [n]
+@end verbatim
+
 @node mult
 @unnumberedsubsubsec @code{mult} (95)
 @kindex mult
@@ -1330,7 +1342,20 @@ Call @code{current-buffer} with no arguments.
 @node set-buffer
 @unnumberedsubsubsec @code{set-buffer} (113)
 @kindex set-buffer
-Call @code{set-buffer} with one argument.
+Call @code{set-buffer} with the top of the stack,
+The top of the stack is replaced by the result of
+@code{(set-buffer TOS)}
+
+@strong{Example}
+@code{(defun set-buffer-eg() (set-buffer "*scratch"))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] "*scratch"
+ 1  113   set-buffer
+ 2  135   return
+
+Constants Vector: ["*scratch"]
+@end verbatim
 
 @node byte-save-current-buffer
 @unnumberedsubsubsec @code{byte-save-current-buffer} (114)
@@ -2226,6 +2251,8 @@ one is pushed. This is denoted: @math{-2+1}.
 @item @verb{|0161|}
 @tab @verb{| 113|}
 @tab @verb{|  set-buffer|}
+@tab Call @code{set-buffer}
+@tab @math{-1+1}
 @item @verb{|0162|}
 @tab @verb{| 114|}
 @tab @verb{|byte-save-current-buffer|}
