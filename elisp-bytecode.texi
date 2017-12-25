@@ -938,10 +938,8 @@ Call @code{list} with four arguments.
 @node listN
 @unnumberedsubsubsec @code{list4} (70)
 @kindex listN
-Call @code{list} an arbitrary number of arguments.
-
-oNote special instructions for the case where tehre are 2 to 4 items in
-the list.
+Call @code{list} on up to 255 arguments. Note special instructions for
+the case where tehre are 2 to 4 items in the list.
 
 Added in Emacs 19.34.
 
@@ -1096,6 +1094,18 @@ Call @code{+} with two arguments, adding the two values at the top of the stack.
 Call @code{*} with two arguments, multiplying the two values at the
 top of the stack.
 
+@strong{Example}
+@code{(defun mult-eg(n) (* n n))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] n
+ 1    8   varref[0] n
+ 2   95   mult
+ 3  135   return
+
+Constants Vector: [n]
+@end verbatim
+
 Since emacs 19.34
 
 @node max
@@ -1164,8 +1174,8 @@ Call @code{concat} with four arguments.
 @unnumberedsubsubsec @code{concatN} (174)
 @kindex concatN
 
-Call @code{concat} an arbitrary number of arguments.  Note there are
-Note special instructions for the case where tehre are 2 to 4 items to
+Call @code{concat} on up to 255 arguments.  Note there are
+special instructions for the case where there are 2 to 4 items to
 concatenate.
 
 Added in Emacs 19.34.
@@ -1222,7 +1232,7 @@ but simply call the corresponding C function.
 * bobp::
 * current-buffer::
 * set-buffer::
-* save-current-buffer-1::
+* byte-save-current-buffer::
 * forward-char::
 * forward-word::
 * skip-chars-forward::
@@ -1257,9 +1267,8 @@ Call @code{insert} with one argument.
 @node insertN
 @unnumberedsubsubsec @code{insert} (99)
 @kindex insertN
-Call @code{insert} with an abitrary number of arguments.
-
-Note there are special instructions when there is only one argument.
+Call @code{insert} on up to 255 arguments.  Note there are special
+instructions when there is only one argument.
 
 Added in Emacs 19.34.
 
@@ -1323,11 +1332,10 @@ Call @code{current-buffer} with no arguments.
 @kindex set-buffer
 Call @code{set-buffer} with one argument.
 
-@node save-current-buffer-1
-@unnumberedsubsubsec @code{save-current-buffer-1} (114)
+@node byte-save-current-buffer
+@unnumberedsubsubsec @code{byte-save-current-buffer} (114)
 @kindex save-current-buffer
-Call @code{save-current-buffer} with one stack argument,
-the body to be evaluated.
+Call @code{save-current-buffer}.
 
 Replaces older @code{save-current-buffer}.
 
@@ -1494,6 +1502,7 @@ Make a binding recording buffer, point, and mark.
 * After 21.1 and Starting in 22.1::
 * After 22.1 and Starting in 23.1::
 * After 23.1 and Starting in 24.1::
+* After 24.1 and Starting in 25.1::
 @end menu
 
 @node After 17 and Starting in 18.59
@@ -1560,17 +1569,17 @@ The following were added:
 @end itemize
 
 Instruction @code{unbind-all} was added to support tail-recursion
-removal.  However this was never subsequently implemented so this
+removal.  However this was never subsequently implemented; so this
 intruction was never generated.
 
 Starting in this version, unless C prepocessor variable
-@code{BYTE_CODE_SAFE} (on by default) is defined, the obsolete
+@code{BYTE_CODE_SAFE} (off by default) is defined, the obsolete
 instructions listed in 18.59 are not implemented.
 
 @node After 19.34 and Starting in 20.1
 @section After 19.34 and Starting in 20.1
 
-Thre were no instruction changes. However bytecode interpretation of
+There were no instruction changes. However bytecode interpretation of
 @code{read-char}, which became obsolete in v19 was dropped.
 
 @node After 20.1 and Starting in 21.4
@@ -1598,11 +1607,12 @@ The following became obsolete:
 
 @unnumberedsubsec @code{save-current-buffer} (97)
 
-Is replaced by @code{save-current-buffer-1} (114)
+Is replaced by @code{byte-save-current-buffer} (114)
 
-Unless C prepocessor variable @code{BYTE_CODE_SAFE} (on by default) is
+Unless C prepocessor variable @code{BYTE_CODE_SAFE} (off by default) is
 defined, obsolete instructions below and from earlier versions are not implemented.
 
+The following were added:
 @itemize
 @item @code{temp-output-buffer-setup} (144)
 @item @code{temp-output-buffer-show} (145)
@@ -1611,6 +1621,28 @@ defined, obsolete instructions below and from earlier versions are not implement
 
 Instruction @code{unbind-all}, which never was generated, was marked obsolete
 in this version.
+
+@node After 24.1 and Starting in 25.1
+@section After 24.1 and Starting in 25.1
+
+Instruction 0 becomes an error rather than aborting emacs.
+
+A number of changes were made to @code{bytecode.c}.
+
+The following were added:
+@itemize
+@item @code{ophandler} (48)
+@item @code{conditioncase} (49)
+@item @code{pushcondition} (50)
+@end itemize
+
+The following obsolete instructions as of v18 can no longer can be interpreted:
+@itemize
+@item @code{scan-buffer} (107)
+@item @code{set-mark} (115)
+@end itemize
+
+You will get an error if @code{BYTE_CODE_SAFE} is defined.
 
 @node Opcode Table
 @chapter Opcode Table
@@ -1631,7 +1663,7 @@ one is pushed. This is denoted: @math{-2+1}.
 
 @item @verb{|  00|}
 @tab @verb{|   0|}
-@tab @tab Immediate program abort! Was @code{stack-ref[0]} but @code{dup} should be used instead.
+@tab @tab An error. Before 25.1 it is an immediate program abort! Logically @code{stack-ref[0]} but @code{dup} should be used instead.
 
 @item @verb{|  01|}
 @tab @verb{|   1|}
@@ -1670,7 +1702,7 @@ one is pushed. This is denoted: @math{-2+1}.
 @tab @math{+1}
 
 @item @verb{| 010|}
-p@tab @verb{|   8|}
+@tab @verb{|   8|}
 @tab @verb{|  varref[0]|}
 @tab variable reference 0
 @tab @math{+1}
@@ -1874,6 +1906,22 @@ p@tab @verb{|   8|}
 @tab Unbinds special bindings
 @tab @math{-0}
 
+@item @verb{| 060|}
+@tab @verb{|  48|}
+@tab @verb{|  ophandler|}
+@tab
+@tab @math{-0}
+@item @verb{| 061|}
+@tab @verb{|  49|}
+@tab @verb{|  conditioncase|}
+@tab
+@tab @math{-0}
+@item @verb{| 062|}
+@tab @verb{|  50|}
+@tab @verb{|  pushconditioncase|}
+@tab
+
+@tab @math{-0}
 @item @verb{| 063|}
 @tab @verb{|  51|}
 @tab @tab Unused
@@ -2077,11 +2125,6 @@ p@tab @verb{|   8|}
 @tab @verb{|  plus|}
 @tab Call @code{+} with two arguments, adding the two values at the top of the stack.
 @tab @math{-2+1}
-@item @verb{|0137|}
-@tab @verb{|  95|}
-@tab @verb{|  mult|}
-@tab Call @code{*} with two arguments, multiplying the two values at the top of the stack.
-@tab @math{-2+1}
 @item @verb{|0135|}
 @tab @verb{|  93|}
 @tab @verb{|  max|}
@@ -2091,7 +2134,10 @@ p@tab @verb{|   8|}
 @tab @verb{|  94|}
 @tab @verb{|  min|}
 @tab Call @code{min} with two arguments.
-
+@item @verb{|0135|}
+@tab @verb{|  95|}
+@tab @verb{|  mult|}
+@tab Call @code{*} with two arguments, multiplying the two values at the top of the stack.
 @tab @math{-2+1}
 @item @verb{|0140|}
 @tab @verb{|  96|}
@@ -2106,11 +2152,6 @@ p@tab @verb{|   8|}
 @tab @verb{| *97|}
 @tab @verb{|  bmark|}
 @tab used in v17
-@tab @math{-0+1}
-@item @verb{|0141|}
-@tab @verb{| *97|}
-@tab @verb{|  mult|}
-@tab From v19 to ??
 @tab @math{-0+1}
 @item @verb{|0141|}
 @tab @verb{| *97|}
@@ -2165,30 +2206,31 @@ p@tab @verb{|   8|}
 @item @verb{|0155|}
 @tab @verb{| 109|}
 @tab @verb{|  eobp|}
-@tab Call @code{eobp} with no arguments.
+@tab Call @code{eobp}
 @tab @math{-0+1}
 @item @verb{|0156|}
 @tab @verb{| 110|}
 @tab @verb{|  bolp|}
-@tab Call @code{bolp} with no arguments.
+@tab Call @code{bolp}
 @tab @math{-0+1}
 @item @verb{|0157|}
 @tab @verb{| 111|}
 @tab @verb{|  bobp|}
-@tab Call @code{bobp} with no arguments.
+@tab Call @code{bobp}
 @tab @math{-0+1}
 @item @verb{|0160|}
 @tab @verb{| 112|}
 @tab @verb{|  current-buffer|}
-@tab Call @code{current-buffer} with no arguments.
+@tab Call @code{current-buffer}
 @tab @math{-0+1}
 @item @verb{|0161|}
 @tab @verb{| 113|}
 @tab @verb{|  set-buffer|}
 @item @verb{|0162|}
 @tab @verb{| 114|}
-@tab @verb{|save-current-buffer-1|}
-@tab Call @code{save-current-buffer} with one argument.
+@tab @verb{|byte-save-current-buffer|}
+@tab Call @code{save-current-buffer}
+@tab @math{-0}
 @item @verb{|0162|}
 @tab @verb{|*114|}
 @tab @verb{|  read-char|}
@@ -2207,57 +2249,57 @@ p@tab @verb{|   8|}
 @item @verb{|0165|}
 @tab @verb{| 117|}
 @tab @verb{|  forward-char|}
-@tab Call @code{forward-char}, one argument.
+@tab Call @code{forward-char}
 @tab @math{-1+1}
 @item @verb{|0166|}
 @tab @verb{| 118|}
 @tab @verb{|  forward-word|}
-@tab Call @code{forward-word}, one argument.
+@tab Call @code{forward-word}
 @tab @math{-1+1}
 @item @verb{|0167|}
 @tab @verb{| 119|}
 @tab @verb{|  skip-chars-forward|}
-@tab Call @code{skip-chars-forward}, two arguments.
+@tab Call @code{skip-chars-forward}
 @tab @math{-2+1}
 @item @verb{|0170|}
 @tab @verb{| 120|}
 @tab @verb{|  skip-chars-backward|}
-@tab Call @code{skip-chars-backward}, two arguments.
+@tab Call @code{skip-chars-backward}
 @tab @math{-2+1}
 @item @verb{|0171|}
 @tab @verb{| 121|}
 @tab @verb{|  forward-line|}
-@tab Call @code{forward-line}, one argument.
+@tab Call @code{forward-line}
 @tab @math{-1+1}
 @item @verb{|0172|}
 @tab @verb{| 122|}
 @tab @verb{|  char-syntax|}
-@tab Call @code{char-syntax}, one argument.
+@tab Call @code{char-syntax}
 @tab @math{-1+1}
 @item @verb{|0173|}
 @tab @verb{| 123|}
 @tab @verb{|  buffer-substring|}
-@tab Call @code{buffer-substring}, two arguments.
+@tab Call @code{buffer-substring}
 @tab @math{-2+1}
 @item @verb{|0174|}
 @tab @verb{| 124|}
 @tab @verb{|  delete-region|}
-@tab Call @code{delete-region}, two arguments.
+@tab Call @code{delete-region}
 @tab @math{-2+1}
 @item @verb{|0175|}
 @tab @verb{| 125|}
 @tab @verb{|  narrow-to-region|}
-@tab Call @code{narrow-to-region}, two arguments.
+@tab Call @code{narrow-to-region}
 @tab @math{-2+1}
 @item @verb{|0176|}
 @tab @verb{| 126|}
 @tab @verb{|  widen|}
-@tab Call @code{widen}, no arguments.
+@tab Call @code{widen}
 @tab @math{-0+1}
 @item @verb{|0177|}
 @tab @verb{| 127|}
 @tab @verb{|  end-of-line|}
-@tab Call @code{end-of-line}, one argument.
+@tab Call @code{end-of-line}
 @tab @math{-1+1}
 @item @verb{|0200|}
 @tab @verb{| 128|}
