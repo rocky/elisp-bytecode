@@ -1562,7 +1562,7 @@ Make a binding recording buffer, point, and mark.
 @node After 17 and Starting in 18.59
 @section After 17 and Starting in 18.59
 
-The following became obsolete:
+The following instructions became obsolete:
 @itemize
 @item @code{mark} (97)
 @item @code{scan-buffer} (107)
@@ -1717,7 +1717,7 @@ The following instructions were added:
 @item @code{discardN}, (180)
 @end itemize
 
-The following became obsolete:
+The following instructions became obsolete:
 
 @unnumberedsubsec @code{save-current-buffer} (97)
 
