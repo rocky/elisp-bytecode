@@ -1601,29 +1601,82 @@ Starting in this version, unless C prepocessor variable
 @code{BYTE_CODE_SAFE} (off by default) is defined, the obsolete
 instructions listed in 18.59 are not implemented.
 
+Bytecode meta-comments look like this:
+@verbatim
+;;; compiled by rms@psilocin.gnu.ai.mit.edu on Mon Jun 10 17:37:37 1996
+;;; from file /home/fsf/rms/e19/lisp/bytecomp.el
+;;; emacs version 19.31.2.
+;;; bytecomp version FSF 2.10
+;;; optimization is on.
+;;; this file uses opcodes which do not exist in Emacs 18.
+@end verbatim
+
+
 @node After 19.34 and Starting in 20.1
 @section After 19.34 and Starting in 20.1
 
 There were no instruction changes. However bytecode interpretation of
 @code{read-char}, which became obsolete in v19 was dropped.
 
+Bytecode meta-comments look like this:
+@verbatim
+;;; Compiled by rms@psilocin.gnu.ai.mit.edu on Sun Aug 31 13:07:37 1997
+;;; from file /home/fsf/rms/e19/lisp/emacs-lisp/bytecomp.el
+;;; in Emacs version 20.0.97.1
+;;; with bytecomp version 2.33
+;;; with all optimizations.
+;;; This file uses opcodes which do not exist in Emacs 18.
+@end verbatim
+
+
 @node After 20.1 and Starting in 21.4
 @section Ater 20.1 and Starting in 21.4
 
-Thre were no instruction changes. However there were major
+There were no instruction changes. However there were major
 changes in the bytecode interpreter.
 
 An instruction with opcode 0 causes an abort.
 
+Bytecode meta-comments look like this:
+@verbatim
+;;; Compiled by pot@pot.cnuce.cnr.it on Tue Mar 18 15:36:26 2003
+;;; from file /home/pot/gnu/emacs-pretest.new/lisp/emacs-lisp/bytecomp.el
+;;; in Emacs version 21.3
+;;; with bytecomp version 2.85.4.1
+;;; with all optimizations.
+@end verbatim
+
 @node After 21.1 and Starting in 22.1
 @section After 21.1 and Starting in 22.1
 
-Thre were no instruction changes.
+There were no instruction changes.
+
+The bytecode meta-comment no longer includess the bytecomp version used.
+
+Bytecode meta-comments look like this:
+@verbatim
+;;; Compiled by cyd@localhost on Sat Jun  2 00:54:30 2007
+;;; from file /home/cyd/emacs/lisp/emacs-lisp/bytecomp.el
+;;; in Emacs version 22.1
+;;; with all optimizations.
+
+;;; This file uses dynamic docstrings, first added in Emacs 19.29.
+@end verbatim
 
 @node After 22.1 and Starting in 23.1
 @section After 22.1 and Starting in 23.1
 
 There were no instruction changes.
+
+Bytecode meta-comments look like this:
+@verbatim
+;;; Compiled by cyd@furry on Wed Jul 29 11:15:02 2009
+;;; from file /home/cyd/emacs/lisp/emacs-lisp/bytecomp.el
+;;; in Emacs version 23.1
+;;; with all optimizations.
+
+;;; This file uses dynamic docstrings, first added in Emacs 19.29.
+@end verbatim
 
 @node After 23.1 and Starting in 24.1
 @section After 23.1 and Starting in 24.1
@@ -1647,6 +1700,21 @@ The following were added:
 Instruction @code{unbind-all}, which never was generated, was marked obsolete
 in this version.
 
+The bytecode meta-comment no longer who user/hostname compiled and at what time.
+A message indcating whether utf-8 non-ASCII characters is used is included.
+
+Bytecode meta-comments look like this:
+@verbatim
+;;; from file /misc/emacs/bzr/emacs24-merge/lisp/emacs-lisp/bytecomp.el
+;;; in Emacs version 24.3
+;;; with all optimizations.
+
+;;; This file uses dynamic docstrings, first added in Emacs 19.29.
+
+;;; This file does not contain utf-8 non-ASCII characters,
+;;; and so can be loaded in Emacs versions earlier than 23.
+@end verbatim
+
 @node After 24.1 and Starting in 25.1
 @section After 24.1 and Starting in 25.1
 
@@ -1668,6 +1736,20 @@ The following obsolete instructions as of v18 can no longer can be interpreted:
 @end itemize
 
 You will get an error if @code{BYTE_CODE_SAFE} is defined.
+
+The bytecode meta-comment no longer include the source-code path.
+
+Bytecode meta-comments look like this:
+@verbatim
+;;; Compiled
+;;; in Emacs version 25.2
+;;; with all optimizations.
+
+;;; This file uses dynamic docstrings, first added in Emacs 19.29.
+
+;;; This file does not contain utf-8 non-ASCII characters,
+;;; and so can be loaded in Emacs versions earlier than 23.
+@end verbatim
 
 @node Opcode Table
 @chapter Opcode Table
