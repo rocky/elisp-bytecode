@@ -936,10 +936,10 @@ Call @code{list} with three arguments.
 Call @code{list} with four arguments.
 
 @node listN
-@unnumberedsubsubsec @code{list4} (70)
+@unnumberedsubsubsec @code{listN} (70)
 @kindex listN
 Call @code{list} on up to 255 arguments. Note special instructions for
-the case where tehre are 2 to 4 items in the list.
+the case where there are 2 to 4 items in the list.
 
 Added in Emacs 19.34.
 
