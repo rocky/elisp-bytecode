@@ -21,7 +21,8 @@
 * Introduction to Elisp Bytecode and LAP::
 * Emacs Lisp Bytecode Environment::
 * ELisp Bytecode Instructions::  Description of all Emacs Lisp Bytecode Instructions
-* Opcode Table::                Table of Bytecode Instruction ordered by Opcode Number
+* Opcode Changes Between Emacs Releases::
+* Opcode Table::                 Table of Bytecode Instruction ordered by Opcode Number
 * References::
 * Instruction Index::
 @end menu
@@ -537,7 +538,38 @@ opcode, in little-endian byte order.
 @unnumberedsubsec @code{stack-ref} (1--7)
 @kindex stack-ref
 
-A stack reference
+A stack reference. This is used only in lexical binding.
+
+Added in Emacs 24.1
+
+@subsubsection Warning
+Running an instruction with opcode 0 (logically this would be called
+@code{stack-ref[0]}), will cause an immediate abort of Emacs!
+
+0 is typically an invalid bytecode and assembly instructions because 0
+values are commonly found data, e.g. the end of C strings, or data that has
+been initialized to value but represents data that hasn't been written to yet.
+
+By doing this we typically catch running random or invalid bytecode.
+
+@subsubsection Example
+When lexical binding is in effect, @code{(defun stack-ref() (let ((a 5) (b 6) (c 7)) (+ a c)))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] 5
+ 1  193   constant[1] 6
+ 2  194   constant[2] 7
+ 3    2   stack-ref[2]
+ 4    1   stack-ref[1]
+ 5   92   plus
+ 6  178   stack-set [3]
+           3
+ 8  136   discard
+ 9  136   discard
+10  135   return
+
+Constants Vector: [5 6 7]
+@end verbatim
 
 @node varref
 @unnumberedsubsec @code{varref} (8--15)
@@ -546,7 +578,7 @@ Pushes the value of a variable reference onto the evaluation stack.
 
 @subsubsection Example
 
-When dynamic binding is in effect, @code{(defun en(n) n)} generates:
+When dynamic binding is in effect, @code{(defun varref(n) n)} generates:
 @verbatim
 PC  Byte  Instruction
  0    8   varref[0] n
@@ -564,7 +596,7 @@ of the stack.
 
 @subsubsection Example
 
-When dynamic binding is in effect, @code{(defun n5(n) (setq n 5))} generates:
+When dynamic binding is in effect, @code{(defun varset(n) (setq n 5))} generates:
 @verbatim
 PC  Byte  Instruction
  0  193   constant[1] 5
@@ -807,6 +839,8 @@ Call @code{get} with two arguments.
 @kindex equal
 Call @code{equal} with two arguments.
 
+Added in Emacs 19.34.
+
 @node member
 @unnumberedsubsubsec @code{member} (157)
 @kindex member
@@ -822,10 +856,14 @@ Call @code{assq} with two arguments.
 @kindex numberp
 Call @code{numberp} with one argument.
 
+Added in Emacs 19.34.
+
 @node integerp
 @unnumberedsubsubsec @code{integerp} (168)
 @kindex integerp
 Call @code{integerp} with one argument.
+
+Added in Emacs 19.34.
 
 @node List Function Instructions
 @subsection List Function Instructions
@@ -843,6 +881,7 @@ bytecode interpreter.
 * list2::
 * list3::
 * list4::
+* listN::
 * length::
 * aref::
 * aset::
@@ -896,6 +935,14 @@ Call @code{list} with three arguments.
 @kindex list4
 Call @code{list} with four arguments.
 
+@node listN
+@unnumberedsubsubsec @code{listN} (70)
+@kindex listN
+Call @code{list} on up to 255 arguments. Note special instructions for
+the case where there are 2 to 4 items in the list.
+
+Added in Emacs 19.34.
+
 @node length
 @unnumberedsubsubsec @code{length} (71)
 @kindex length
@@ -916,40 +963,55 @@ Call @code{aset} with three arguments.
 @kindex nthcdr
 Call @code{nthcdr} with two arguments.
 
+Added in Emacs 19.34.
+
 @node elt
 @unnumberedsubsubsec @code{elt} (156)
 @kindex elt
 Call @code{elt} with two arguments.
+
+Added in Emacs 19.34.
 
 @node nreverse
 @unnumberedsubsubsec @code{nreverse} (159)
 @kindex nreverse
 Call @code{nreverse} with one argument.
 
+Added in Emacs 19.34.
+
 @node setcar
 @unnumberedsubsubsec @code{setcar} (160)
 @kindex setcar
 Call @code{setcar} with two arguments.
+
+Added in Emacs 19.34.
 
 @node setcdr
 @unnumberedsubsubsec @code{setcdr} (161)
 @kindex setcdr
 Call @code{setcdr} with two arguments.
 
+Added in Emacs 19.34.
+
 @node car-safe
 @unnumberedsubsubsec @code{car-safe} (162)
 @kindex car-safe
 Call @code{car-safe} with one argument.
+
+Added in Emacs 19.34.
 
 @node cdr-safe
 @unnumberedsubsubsec @code{cdr-safe} (163)
 @kindex cdr-safe
 Call @code{cdr-safe} with one argument.
 
+Added in Emacs 19.34.
 @node nconc
 @unnumberedsubsubsec @code{nconc} (164)
 @kindex nconc
 Call @code{nconc} with two arguments.
+
+Added in Emacs 19.34.
 
 @node Arithmetic Function Instructions
 @subsection Arithmetic Function Instructions
@@ -1026,10 +1088,37 @@ Call @code{-} with one argument, negating the top-of-stack value.
 @kindex plus
 Call @code{+} with two arguments, adding the two values at the top of the stack.
 
+@strong{Example}
+When dynamic binding is in effect, @code{(defun plus-eg(n) (+ n n ))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] n
+ 1    8   varref[0] n
+ 2   92   plus
+ 3  135   return
+
+Constants Vector: [n]
+@end verbatim
+
 @node mult
 @unnumberedsubsubsec @code{mult} (95)
 @kindex mult
-Call @code{*} with two arguments, multiplying the two values at the top of the stack.
+Call @code{*} with two arguments, multiplying the two values at the
+top of the stack.
+
+@strong{Example}
+@code{(defun mult-eg(n) (* n n))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] n
+ 1    8   varref[0] n
+ 2   95   mult
+ 3  135   return
+
+Constants Vector: [n]
+@end verbatim
+
+Since emacs 19.34
 
 @node max
 @unnumberedsubsubsec @code{max} (93)
@@ -1051,6 +1140,8 @@ Call @code{/} with two arguments, dividing the two values at the top of the stac
 @kindex rem
 Call @code{%} with two arguments, calculating the modulus of the two values at the top of the stack.
 
+Added in Emacs 19.34.
+
 @node String Function Instructions
 @subsection String Function Instructions
 
@@ -1063,6 +1154,7 @@ function for them.
 * concat2::
 * concat3::
 * concat4::
+* concatN::
 * upcase::
 * downcase::
 * stringeqlsign::
@@ -1090,25 +1182,43 @@ Call @code{concat} with three arguments.
 Call @code{concat} with four arguments.
 
 
+@node concatN
+@unnumberedsubsubsec @code{concatN} (174)
+@kindex concatN
+
+Call @code{concat} on up to 255 arguments.  Note there are
+special instructions for the case where there are 2 to 4 items to
+concatenate.
+
+Added in Emacs 19.34.
+
 @node upcase
 @unnumberedsubsubsec @code{upcase} (150)
 @kindex upcase
 Call @code{upcase} with one argument.
+
+Added in Emacs 19.34.
 
 @node downcase
 @unnumberedsubsubsec @code{downcase} (151)
 @kindex downcase
 Call @code{downcase} with one argument.
 
+Added in Emacs 19.34.
+
 @node stringeqlsign
 @unnumberedsubsubsec @code{stringeqlsign} (152)
 @kindex stringeqlsign
 Call @code{string=} with two arguments, comparing two strings for equality.
 
+Added in Emacs 19.34.
+
 @node stringlss
 @unnumberedsubsubsec @code{stringlss} (153)
 @kindex stringlss
 Call @code{string<} with two arguments, comparing two strings.
+
+Added in Emacs 19.34.
 
 @node Emacs Function Instructions
 @subsection Emacs Function Instructions
@@ -1121,6 +1231,7 @@ but simply call the corresponding C function.
 * point::
 * goto-char::
 * insert::
+* insertN::
 * point-min::
 * point-max::
 * char-after::
@@ -1133,6 +1244,7 @@ but simply call the corresponding C function.
 * bobp::
 * current-buffer::
 * set-buffer::
+* byte-save-current-buffer::
 * forward-char::
 * forward-word::
 * skip-chars-forward::
@@ -1163,6 +1275,14 @@ Call @code{goto-char} with one argument.
 @unnumberedsubsubsec @code{insert} (99)
 @kindex insert
 Call @code{insert} with one argument.
+
+@node insertN
+@unnumberedsubsubsec @code{insert} (99)
+@kindex insertN
+Call @code{insert} on up to 255 arguments.  Note there are special
+instructions when there is only one argument.
+
+Added in Emacs 19.34.
 
 @node point-min
 @unnumberedsubsubsec @code{point-min} (101)
@@ -1222,90 +1342,165 @@ Call @code{current-buffer} with no arguments.
 @node set-buffer
 @unnumberedsubsubsec @code{set-buffer} (113)
 @kindex set-buffer
-Call @code{set-buffer} with one argument.
+Call @code{set-buffer} with the top of the stack,
+The top of the stack is replaced by the result of
+@code{(set-buffer TOS)}
+
+@strong{Example}
+@code{(defun set-buffer-eg() (set-buffer "*scratch"))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] "*scratch"
+ 1  113   set-buffer
+ 2  135   return
+
+Constants Vector: ["*scratch"]
+@end verbatim
+
+@node byte-save-current-buffer
+@unnumberedsubsubsec @code{byte-save-current-buffer} (114)
+@kindex save-current-buffer
+Call @code{save-current-buffer}.
+
+Replaces older @code{save-current-buffer}.
+
+Added in Emacs 19.34.
+
+@strong{Example}
+@code{(defun scb() (save-current-buffer (prog 5)))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  114   save-current-buffer
+ 1  192   constant[0] prog
+ 2  193   constant[1] 5
+ 3   33   call[1]
+ 4   41   unbind[1]
+ 5  135   return
+
+Constants Vector: [prog 5]
+@end verbatim
 
 @node forward-char
 @unnumberedsubsubsec @code{forward-char} (117)
 @kindex forward-char
 Call @code{forward-char} with one argument.
 
+Added in Emacs 19.34.
+
 @node forward-word
 @unnumberedsubsubsec @code{forward-word} (118)
 @kindex forward-word
 Call @code{forward-word} with one argument.
+
+Added in Emacs 19.34.
 
 @node skip-chars-forward
 @unnumberedsubsubsec @code{skip-chars-forward} (119)
 @kindex skip-chars-forward
 Call @code{skip-chars-forward} with two arguments.
 
+Added in Emacs 19.34.
+
 @node skip-chars-backward
 @unnumberedsubsubsec @code{skip-chars-backward} (120)
 @kindex skip-chars-backward
 Call @code{skip-chars-backward} with two arguments.
+
+Added in Emacs 19.34.
 
 @node forward-line
 @unnumberedsubsubsec @code{forward-line} (121)
 @kindex forward-line
 Call @code{forward-line} with one argument.
 
+Added in Emacs 19.34.
+
 @node char-syntax
 @unnumberedsubsubsec @code{char-syntax} (122)
 @kindex char-syntax
 Call @code{char-syntax} with one argument.
+
+Added in Emacs 19.34.
 
 @node buffer-substring
 @unnumberedsubsubsec @code{buffer-substring} (123)
 @kindex buffer-substring
 Call @code{buffer-substring} with two arguments.
 
+Added in Emacs 19.34.
+
 @node delete-region
 @unnumberedsubsubsec @code{delete-region} (124)
 @kindex delete-region
 Call @code{delete-region} with two arguments.
+
+Added in Emacs 19.34.
 
 @node narrow-to-region
 @unnumberedsubsubsec @code{narrow-to-region} (125)
 @kindex narrow-to-region
 Call @code{narrow-to-region} with two arguments.
 
+Added in Emacs 19.34.
+
 @node widen
 @unnumberedsubsubsec @code{widen} (126)
 @kindex widen
 Call @code{widen} with no arguments.
+
+Added in Emacs 19.34.
 
 @node end-of-line
 @unnumberedsubsubsec @code{end-of-line} (127)
 @kindex end-of-line
 Call @code{end-of-line} with one argument.
 
+Added in Emacs 19.34.
+
 @node set-marker
 @unnumberedsubsubsec @code{set-marker} (147)
 @kindex set-marker
 Call @code{set-marker} with three arguments.
+
+Added in Emacs 19.34.
 
 @node match-beginning
 @unnumberedsubsubsec @code{match-beginning} (148)
 @kindex match-beginning
 Call @code{match-beginning} with one argument.
 
+Added in Emacs 19.34.
+
 @node match-end
 @unnumberedsubsubsec @code{match-end} (149)
 @kindex match-end
 Call @code{match-end} with one argument.
+
+Added in Emacs 19.34.
 
 @node Stack Manipulation Instructions
 @section Stack Manipulation Instructions
 
 @menu
 * discard::
+* discardN::
 * dup::
+* stack-set::
+* stack-set2::
 @end menu
 
 @node discard
 @unnumberedsubsec @code{discard} (136)
 @kindex discard
-Discard one value.
+Discard one value from the stack.
+
+@node discardN
+@unnumberedsubsec @code{discardN} (180)
+@kindex discardN
+Discards up to 255 arguments from the stack.  Note there is a special
+instruction when there is only one argument.
+
+Added in Emacs 24.1
 
 @node dup
 @unnumberedsubsec @code{dup} (137)
@@ -1320,6 +1515,22 @@ PC  Byte  Instruction
  1  135   return
 @end verbatim
 
+@node stack-set
+@unnumberedsubsec @code{stack-set} (180)
+@kindex stack-set
+Like discard. [What's the difference?[
+
+Added in Emacs 24.1
+
+@node stack-set2
+@unnumberedsubsec @code{stack-setN} (181)
+@kindex stack-set2
+Like discardN. [What's the difference?]
+Can handle up to 255 arguments.  Note there is a special
+instruction when there is only one argument.
+
+Added in Emacs 24.1
+
 @node Binding Instructions
 @section Binding Instructions
 
@@ -1331,8 +1542,271 @@ new binding when executed.  They need to be balanced with
 @kindex save-excursion
 Make a binding recording buffer, point, and mark.
 
+@node Opcode Changes Between Emacs Releases
+
+@chapter Opcode Changes Between Emacs Releases
+
+@menu
+* After 17 and Starting in 18.59::
+* After 18.59 and Starting in 19.34::
+* After 19.34 and Starting in 20.1::
+* After 20.1 and Starting in 21.4::
+* After 21.1 and Starting in 22.1::
+* After 22.1 and Starting in 23.1::
+* After 23.1 and Starting in 24.1::
+* After 24.1 and Starting in 25.1::
+* After 25.1 and Starting in 26.1::
+* After 26.1 and Starting in 27.1::
+@end menu
+
+@node After 17 and Starting in 18.59
+@section After 17 and Starting in 18.59
+
+The following became obsolete:
+@itemize
+@item @code{mark} (97)
+@item @code{scan-buffer} (107)
+@item @code{set-mark} (115)
+@end itemize
+
+@node After 18.59 and Starting in 19.34
+@section After 18.59 and Starting 19.34
+
+jwz and Hallvard made major changes and additions to the bytecode
+interpreter.
+
+The following instructions were added:
+@itemize
+@item @code{mult} (97)
+@item @code{forward-char} (117)
+@item @code{forward-word} (118)
+@item @code{skip-chars-forward} (119)
+@item @code{skip-chars-backward} (120)
+@item @code{forward-line} (121)
+@item @code{char-syntax} (122)
+@item @code{buffer-substring} (123)
+@item @code{delete-region} (124)
+@item @code{narrow-to-region} (125)
+@item @code{widen} (126)
+@item @code{end-of-line} (127)
+@item @code{unbind-all} (146)
+@item @code{set-marker} (147)
+@item @code{match-beginning} (148)
+@item @code{match-end} (149)
+@item @code{upcase} (150)
+@item @code{downcase} (151)
+@item @code{stringeqlsign} (152)
+@item @code{stringlss} (153)
+@item @code{equal} (154)
+@item @code{nthcdr} (155)
+@item @code{elt} (156)
+@item @code{member} (157)
+@item @code{assq} (158)
+@item @code{nreverse} (159)
+@item @code{setcar} (160)
+@item @code{setcdr} (161)
+@item @code{car-safe} (162)
+@item @code{cdr-safe} (163
+@item @code{nconc} (164)
+@item @code{quo} (165)
+@item @code{rem} (166)
+@item @code{numberp} (167)
+@item @code{integerp} (162)
+@item @code{Rgoto} (170)
+@item @code{Rgotoifnil} (171)
+@item @code{Rgotoifnonnil} (172)
+@item @code{Rgotoifnilelsepop} (173)
+@item @code{Rgotoifnonnilelsepop} (174)
+@item @code{listN} (175)
+@item @code{concatN} (176)
+@item @code{insertN} (177)
+@end itemize
+
+Instruction @code{unbind-all} was added to support tail-recursion
+removal.  However this was never subsequently implemented; so this
+intruction was never generated.
+
+Starting in this version, unless C prepocessor variable
+@code{BYTE_CODE_SAFE} (off by default) is defined, the obsolete
+instructions listed in 18.59 are not implemented.
+
+Bytecode meta-comments look like this:
+@verbatim
+;;; compiled by rms@psilocin.gnu.ai.mit.edu on Mon Jun 10 17:37:37 1996
+;;; from file /home/fsf/rms/e19/lisp/bytecomp.el
+;;; emacs version 19.31.2.
+;;; bytecomp version FSF 2.10
+;;; optimization is on.
+;;; this file uses opcodes which do not exist in Emacs 18.
+@end verbatim
+
+
+@node After 19.34 and Starting in 20.1
+@section After 19.34 and Starting in 20.1
+
+There were no instruction changes. However bytecode interpretation of
+@code{read-char}, which became obsolete in v19 was dropped.
+
+Bytecode meta-comments look like this:
+@verbatim
+;;; Compiled by rms@psilocin.gnu.ai.mit.edu on Sun Aug 31 13:07:37 1997
+;;; from file /home/fsf/rms/e19/lisp/emacs-lisp/bytecomp.el
+;;; in Emacs version 20.0.97.1
+;;; with bytecomp version 2.33
+;;; with all optimizations.
+;;; This file uses opcodes which do not exist in Emacs 18.
+@end verbatim
+
+
+@node After 20.1 and Starting in 21.4
+@section Ater 20.1 and Starting in 21.4
+
+There were no instruction changes. However there were major
+changes in the bytecode interpreter.
+
+An instruction with opcode 0 causes an abort.
+
+Bytecode meta-comments look like this:
+@verbatim
+;;; Compiled by pot@pot.cnuce.cnr.it on Tue Mar 18 15:36:26 2003
+;;; from file /home/pot/gnu/emacs-pretest.new/lisp/emacs-lisp/bytecomp.el
+;;; in Emacs version 21.3
+;;; with bytecomp version 2.85.4.1
+;;; with all optimizations.
+@end verbatim
+
+@node After 21.1 and Starting in 22.1
+@section After 21.1 and Starting in 22.1
+
+There were no instruction changes.
+
+The bytecode meta-comment no longer includess the bytecomp version used.
+
+Bytecode meta-comments look like this:
+@verbatim
+;;; Compiled by cyd@localhost on Sat Jun  2 00:54:30 2007
+;;; from file /home/cyd/emacs/lisp/emacs-lisp/bytecomp.el
+;;; in Emacs version 22.1
+;;; with all optimizations.
+
+;;; This file uses dynamic docstrings, first added in Emacs 19.29.
+@end verbatim
+
+@node After 22.1 and Starting in 23.1
+@section After 22.1 and Starting in 23.1
+
+There were no instruction changes.
+
+Bytecode meta-comments look like this:
+@verbatim
+;;; Compiled by cyd@furry on Wed Jul 29 11:15:02 2009
+;;; from file /home/cyd/emacs/lisp/emacs-lisp/bytecomp.el
+;;; in Emacs version 23.1
+;;; with all optimizations.
+
+;;; This file uses dynamic docstrings, first added in Emacs 19.29.
+@end verbatim
+
+@node After 23.1 and Starting in 24.1
+@section After 23.1 and Starting in 24.1
+
+The following instructions were added:
+@itemize
+@item @code{stack-set}   (178)
+@item @code{stack_set2}, (179)
+@item @code{discardN}, (180)
+@end itemize
+
+The following became obsolete:
+
+@unnumberedsubsec @code{save-current-buffer} (97)
+
+Is replaced by @code{byte-save-current-buffer} (114)
+
+Unless C prepocessor variable @code{BYTE_CODE_SAFE} (off by default) is
+defined, obsolete instructions below and from earlier versions are not implemented.
+
+@itemize
+@item @code{temp-output-buffer-setup} (144)
+@item @code{temp-output-buffer-show} (145)
+@item @code{save-window-excursion} (139)
+@end itemize
+
+Instruction @code{unbind-all}, which never was generated, was marked obsolete
+in this version.
+
+The bytecode meta-comment no longer who user/hostname compiled and at what time.
+A message indcating whether utf-8 non-ASCII characters is used is included.
+
+Bytecode meta-comments look like this:
+@verbatim
+;;; from file /misc/emacs/bzr/emacs24-merge/lisp/emacs-lisp/bytecomp.el
+;;; in Emacs version 24.3
+;;; with all optimizations.
+
+;;; This file uses dynamic docstrings, first added in Emacs 19.29.
+
+;;; This file does not contain utf-8 non-ASCII characters,
+;;; and so can be loaded in Emacs versions earlier than 23.
+@end verbatim
+
+@node After 24.1 and Starting in 25.1
+@section After 24.1 and Starting in 25.1
+
+Instruction 0 becomes an error rather than aborting emacs.
+
+A number of changes were made to @code{bytecode.c}.
+
+The following instructions were added:
+@itemize
+@item @code{ophandler} (48)
+@item @code{conditioncase} (49)
+@item @code{pushcondition} (50)
+@end itemize
+
+The following obsolete instructions as of v18 can no longer can be interpreted:
+@itemize
+@item @code{scan-buffer} (107)
+@item @code{set-mark} (115)
+@end itemize
+
+You will get an error if @code{BYTE_CODE_SAFE} is defined.
+
+The bytecode meta-comment no longer include the source-code path.
+
+Bytecode meta-comments look like this:
+@verbatim
+;;; Compiled
+;;; in Emacs version 25.2
+;;; with all optimizations.
+
+;;; This file uses dynamic docstrings, first added in Emacs 19.29.
+
+;;; This file does not contain utf-8 non-ASCII characters,
+;;; and so can be loaded in Emacs versions earlier than 23.
+@end verbatim
+
+@node After 25.1 and Starting in 26.1
+@section After 25.1 and Starting in 26.1
+
+The following instruction was added:
+@itemize
+@item @code{switch} (267)
+@end itemize
+
+@node After 26.1 and Starting in 27.1
+@section After 26.1 and Starting in 27.1
+
+No changes yet.
+
 @node Opcode Table
 @chapter Opcode Table
+
+In the table below, a @code{*} by the decimal number indicates an
+obsolete instruction. Stack effects are given as the number of
+stack entries popped followed by the number of entries pushed. For
+example, for a @code{cons} instruction, two stack entries are popped and
+one is pushed. This is denoted: @math{-2+1}.
 
 @multitable @columnfractions .09 .09 .31 .55 .18
 @headitem
@@ -1344,164 +1818,164 @@ Make a binding recording buffer, point, and mark.
 
 @item @verb{|  00|}
 @tab @verb{|   0|}
-@tab @tab Not used; see @code{dup}
+@tab @tab An error. Before 25.1 it is an immediate program abort! Logically @code{stack-ref[0]} but @code{dup} should be used instead.
 
 @item @verb{|  01|}
 @tab @verb{|   1|}
-@tab @verb{|  stack-ref1|}
+@tab @verb{|  stack-ref[1]|}
 @tab stack reference 1
 @tab @math{+1}
 @item @verb{|  02|}
 @tab @verb{|   2|}
-@tab @verb{|  stack-ref2|}
+@tab @verb{|  stack-ref[2]|}
 @tab stack reference 2
 @tab @math{+1}
 @item @verb{|  03|}
 @tab @verb{|   3|}
-@tab @verb{|  stack-ref3|}
+@tab @verb{|  stack-ref[3]|}
 @tab stack reference 3
 @tab @math{+1}
 @item @verb{|  04|}
 @tab @verb{|   4|}
-@tab @verb{|  stack-ref4|}
+@tab @verb{|  stack-ref[4]|}
 @tab stack reference 4
 @tab @math{+1}
 @item @verb{|  05|}
 @tab @verb{|   5|}
-@tab @verb{|  stack-ref5|}
+@tab @verb{|  stack-ref[5]|}
 @tab stack reference 5
 @tab @math{+1}
 @item @verb{|  06|}
 @tab @verb{|   6|}
-@tab @verb{|  stack-ref6|}
+@tab @verb{|  stack-ref[6]|}
 @tab stack reference 0--255
 @tab @math{+1}
 @item @verb{|  07|}
 @tab @verb{|   7|}
-@tab @verb{|  stack-ref7|}
+@tab @verb{|  stack-ref[7]|}
 @tab stack reference 0--65535
 @tab @math{+1}
 
 @item @verb{| 010|}
 @tab @verb{|   8|}
-@tab @verb{|  varref0|}
+@tab @verb{|  varref[0]|}
 @tab variable reference 0
 @tab @math{+1}
 @item @verb{| 011|}
 @tab @verb{|   9|}
-@tab @verb{|  varref1|}
+@tab @verb{|  varref[1]|}
 @tab variable reference 1
 @tab @math{+1}
 @item @verb{| 012|}
 @tab @verb{|  10|}
-@tab @verb{|  varref2|}
+@tab @verb{|  varref[2]|}
 @tab variable reference 2
 @tab @math{+1}
 @item @verb{| 013|}
 @tab @verb{|  11|}
-@tab @verb{|  varref3|}
+@tab @verb{|  varref[3]|}
 @tab variable reference 3
 @tab @math{+1}
 @item @verb{| 014|}
 @tab @verb{|  12|}
-@tab @verb{|  varref4|}
+@tab @verb{|  varref[4]|}
 @tab variable reference 4
 @tab @math{+1}
 @item @verb{| 015|}
 @tab @verb{|  13|}
-@tab @verb{|  varref5|}
+@tab @verb{|  varref[5]|}
 @tab variable reference 5
 @tab @math{+1}
 @item @verb{| 016|}
 @tab @verb{|  14|}
-@tab @verb{|  varref6|}
+@tab @verb{|  varref[6]|}
 @tab variable reference 0--255
 @tab @math{+1}
 @item @verb{| 017|}
 @tab @verb{|  15|}
-@tab @verb{|  varref7|}
+@tab @verb{|  varref[7]|}
 @tab variable reference 0--65535
 @tab @math{+1}
 
 @item @verb{| 020|}
 @tab @verb{|  16|}
-@tab @verb{|  varset0|}
+@tab @verb{|  varset[0]|}
 @tab Sets variable 0
 @tab @math{-1}
 @item @verb{| 021|}
 @tab @verb{|  17|}
-@tab @verb{|  varset1|}
+@tab @verb{|  varset[1]|}
 @tab Sets variable 1
 @tab @math{-1}
 @item @verb{| 022|}
 @tab @verb{|  18|}
-@tab @verb{|  varset2|}
+@tab @verb{|  varset[2]|}
 @tab Sets variable 2
 @tab @math{-1}
 @item @verb{| 023|}
 @tab @verb{|  19|}
-@tab @verb{|  varset3|}
+@tab @verb{|  varset[3]|}
 @tab Sets variable 3
 @tab @math{-1}
 @item @verb{| 024|}
 @tab @verb{|  20|}
-@tab @verb{|  varset4|}
+@tab @verb{|  varset[4]|}
 @tab Sets variable 4
 @tab @math{-1}
 @item @verb{| 025|}
 @tab @verb{|  21|}
-@tab @verb{|  varset5|}
+@tab @verb{|  varset[5]|}
 @tab Sets variable 5
 @tab @math{-1}
 @item @verb{| 026|}
 @tab @verb{|  22|}
-@tab @verb{|  varset6|}
+@tab @verb{|  varset[6]|}
 @tab Sets variable 6
 @tab @math{-1}
 @item @verb{| 027|}
 @tab @verb{|  23|}
-@tab @verb{|  varset7|}
+@tab @verb{|  varset[7]|}
 @tab Sets variable 7
 @tab @math{-1}
 
 @item @verb{| 030|}
 @tab @verb{|  24|}
-@tab @verb{|  varbind0|}
+@tab @verb{|  varbind[0]|}
 @tab Bind variable 0
 @tab @math{-1}
 @item @verb{| 031|}
 @tab @verb{|  25|}
-@tab @verb{|  varbind1|}
+@tab @verb{|  varbind[1]|}
 @tab Bind variable 1
 @tab @math{-1}
 @item @verb{| 032|}
 @tab @verb{|  26|}
-@tab @verb{|  varbind2|}
+@tab @verb{|  varbind[2]|}
 @tab Bind variable 2
 @tab @math{-1}
 @item @verb{| 033|}
 @tab @verb{|  27|}
-@tab @verb{|  varbind3|}
+@tab @verb{|  varbind[3]|}
 @tab Bind variable 3
 @tab @math{-1}
 @item @verb{| 034|}
 @tab @verb{|  28|}
-@tab @verb{|  varbind4|}
+@tab @verb{|  varbind[4]|}
 @tab Bind variable 4
 @tab @math{-1}
 @item @verb{| 035|}
 @tab @verb{|  29|}
-@tab @verb{|  varbind5|}
+@tab @verb{|  varbind[5]|}
 @tab Bind variable 5
 @tab @math{-1}
 @item @verb{| 036|}
 @tab @verb{|  30|}
-@tab @verb{|  varbind6|}
+@tab @verb{|  varbind[6]|}
 @tab Bind variable 6
 @tab @math{-1}
 @item @verb{| 037|}
 @tab @verb{|  31|}
-@tab @verb{|  varbind7|}
+@tab @verb{|  varbind[7]|}
 @tab Bind variable 7
 @tab @math{-1}
 
@@ -1587,6 +2061,22 @@ Make a binding recording buffer, point, and mark.
 @tab Unbinds special bindings
 @tab @math{-0}
 
+@item @verb{| 060|}
+@tab @verb{|  48|}
+@tab @verb{|  ophandler|}
+@tab
+@tab @math{-0}
+@item @verb{| 061|}
+@tab @verb{|  49|}
+@tab @verb{|  conditioncase|}
+@tab
+@tab @math{-0}
+@item @verb{| 062|}
+@tab @verb{|  50|}
+@tab @verb{|  pushconditioncase|}
+@tab
+
+@tab @math{-0}
 @item @verb{| 063|}
 @tab @verb{|  51|}
 @tab @tab Unused
@@ -1790,11 +2280,6 @@ Make a binding recording buffer, point, and mark.
 @tab @verb{|  plus|}
 @tab Call @code{+} with two arguments, adding the two values at the top of the stack.
 @tab @math{-2+1}
-@item @verb{|0137|}
-@tab @verb{|  95|}
-@tab @verb{|  mult|}
-@tab Call @code{*} with two arguments, multiplying the two values at the top of the stack.
-@tab @math{-2+1}
 @item @verb{|0135|}
 @tab @verb{|  93|}
 @tab @verb{|  max|}
@@ -1804,11 +2289,29 @@ Make a binding recording buffer, point, and mark.
 @tab @verb{|  94|}
 @tab @verb{|  min|}
 @tab Call @code{min} with two arguments.
+@item @verb{|0135|}
+@tab @verb{|  95|}
+@tab @verb{|  mult|}
+@tab Call @code{*} with two arguments, multiplying the two values at the top of the stack.
 @tab @math{-2+1}
 @item @verb{|0140|}
 @tab @verb{|  96|}
 @tab @verb{|  point|}
 @tab Call @code{point} with no arguments.
+@item @verb{|0141|}
+@tab @verb{| *97|}
+@tab @verb{|  save-current-buffer|}
+@tab Obsolete in 24.1?
+@tab @math{-0+1}
+@item @verb{|0141|}
+@tab @verb{| *97|}
+@tab @verb{|  bmark|}
+@tab used in v17
+@tab @math{-0+1}
+@item @verb{|0141|}
+@tab @verb{| *97|}
+@tab @verb{|  bmark|}
+@tab used in v17
 @tab @math{-0+1}
 @item @verb{|0142|}
 @tab @verb{|  98|}
@@ -1858,82 +2361,102 @@ Make a binding recording buffer, point, and mark.
 @item @verb{|0155|}
 @tab @verb{| 109|}
 @tab @verb{|  eobp|}
-@tab Call @code{eobp} with no arguments.
+@tab Call @code{eobp}
 @tab @math{-0+1}
 @item @verb{|0156|}
 @tab @verb{| 110|}
 @tab @verb{|  bolp|}
-@tab Call @code{bolp} with no arguments.
+@tab Call @code{bolp}
 @tab @math{-0+1}
 @item @verb{|0157|}
 @tab @verb{| 111|}
 @tab @verb{|  bobp|}
-@tab Call @code{bobp} with no arguments.
+@tab Call @code{bobp}
 @tab @math{-0+1}
 @item @verb{|0160|}
 @tab @verb{| 112|}
 @tab @verb{|  current-buffer|}
-@tab Call @code{current-buffer} with no arguments.
+@tab Call @code{current-buffer}
 @tab @math{-0+1}
 @item @verb{|0161|}
 @tab @verb{| 113|}
 @tab @verb{|  set-buffer|}
-@tab Call @code{set-buffer} with one argument.
+@tab Call @code{set-buffer}
 @tab @math{-1+1}
+@item @verb{|0162|}
+@tab @verb{| 114|}
+@tab @verb{|byte-save-current-buffer|}
+@tab Call @code{save-current-buffer}
+@tab @math{-0}
+@item @verb{|0162|}
+@tab @verb{|*114|}
+@tab @verb{|  read-char|}
+@tab Obsolete starting with v19
+@tab @math{+1}
+@item @verb{|0163|}
+@tab @verb{|*115|}
+@tab @verb{|  set-mark|}
+@tab Obsolete starting with v18
+@tab @math{-0}
+@item @verb{|0164|}
+@tab @verb{|*116|}
+@tab @verb{|  interactive-p|}
+@tab Obsolete starting with v18
+@tab @math{+1}
 @item @verb{|0165|}
 @tab @verb{| 117|}
 @tab @verb{|  forward-char|}
-@tab Call @code{forward-char} with one argument.
+@tab Call @code{forward-char}
 @tab @math{-1+1}
 @item @verb{|0166|}
 @tab @verb{| 118|}
 @tab @verb{|  forward-word|}
-@tab Call @code{forward-word} with one argument.
+@tab Call @code{forward-word}
 @tab @math{-1+1}
 @item @verb{|0167|}
 @tab @verb{| 119|}
 @tab @verb{|  skip-chars-forward|}
-@tab Call @code{skip-chars-forward} with two arguments.
+@tab Call @code{skip-chars-forward}
 @tab @math{-2+1}
 @item @verb{|0170|}
 @tab @verb{| 120|}
 @tab @verb{|  skip-chars-backward|}
-@tab Call @code{skip-chars-backward} with two arguments.
+@tab Call @code{skip-chars-backward}
 @tab @math{-2+1}
 @item @verb{|0171|}
 @tab @verb{| 121|}
 @tab @verb{|  forward-line|}
-@tab Call @code{forward-line} with one argument.
+@tab Call @code{forward-line}
 @tab @math{-1+1}
 @item @verb{|0172|}
 @tab @verb{| 122|}
 @tab @verb{|  char-syntax|}
-@tab Call @code{char-syntax} with one argument.
+@tab Call @code{char-syntax}
 @tab @math{-1+1}
 @item @verb{|0173|}
 @tab @verb{| 123|}
 @tab @verb{|  buffer-substring|}
-@tab Call @code{buffer-substring} with two arguments.
+@tab Call @code{buffer-substring}
 @tab @math{-2+1}
 @item @verb{|0174|}
 @tab @verb{| 124|}
 @tab @verb{|  delete-region|}
-@tab Call @code{delete-region} with two arguments.
+@tab Call @code{delete-region}
 @tab @math{-2+1}
 @item @verb{|0175|}
 @tab @verb{| 125|}
 @tab @verb{|  narrow-to-region|}
-@tab Call @code{narrow-to-region} with two arguments.
+@tab Call @code{narrow-to-region}
 @tab @math{-2+1}
 @item @verb{|0176|}
 @tab @verb{| 126|}
 @tab @verb{|  widen|}
-@tab Call @code{widen} with no arguments.
+@tab Call @code{widen}
 @tab @math{-0+1}
 @item @verb{|0177|}
 @tab @verb{| 127|}
 @tab @verb{|  end-of-line|}
-@tab Call @code{end-of-line} with one argument.
+@tab Call @code{end-of-line}
 @tab @math{-1+1}
 @item @verb{|0200|}
 @tab @verb{| 128|}
@@ -1987,117 +2510,178 @@ Make a binding recording buffer, point, and mark.
 @item @verb{|0223|}
 @tab @verb{| 147|}
 @tab @verb{|  set-marker|}
-@tab Call @code{set-marker} with three arguments.
+@tab Call @code{set-marker}, three arguments.
 @tab @math{-3+1}
 @item @verb{|0224|}
 @tab @verb{| 148|}
 @tab @verb{|  match-beginning|}
-@tab Call @code{match-beginning} with one argument.
+@tab Call @code{match-beginning}, one argument.
 @tab @math{-1+1}
 @item @verb{|0225|}
 @tab @verb{| 149|}
 @tab @verb{|  match-end|}
-@tab Call @code{match-end} with one argument.
+@tab Call @code{match-end}, one argument.
 @tab @math{-1+1}
 @item @verb{|0226|}
 @tab @verb{| 150|}
 @tab @verb{|  upcase|}
-@tab Call @code{upcase} with one argument.
+@tab Call @code{upcase}, one argument.
 @tab @math{-1+1}
 @item @verb{|0227|}
 @tab @verb{| 151|}
 @tab @verb{|  downcase|}
-@tab Call @code{downcase} with one argument.
+@tab Call @code{downcase}, one argument.
 @tab @math{-1+1}
 @item @verb{|0230|}
 @tab @verb{| 152|}
 @tab @verb{|  stringeqlsign|}
-@tab Call @code{string=} with two arguments, comparing two strings for equality.
+@tab Call @code{string=}, two arguments, comparing two strings for equality.
 @tab @math{-2+1}
 @item @verb{|0231|}
 @tab @verb{| 153|}
 @tab @verb{|  stringlss|}
-@tab Call @code{string<} with two arguments, comparing two strings.
+@tab Call @code{string<}, two arguments, comparing two strings.
 @tab @math{-2+1}
 @item @verb{|0232|}
 @tab @verb{| 154|}
 @tab @verb{|  equal|}
-@tab Call @code{equal} with two arguments.
+@tab Call @code{equal}, two arguments.
 @tab @math{-2+1}
 @item @verb{|0233|}
 @tab @verb{| 155|}
 @tab @verb{|  nthcdr|}
-@tab Call @code{nthcdr} with two arguments.
+@tab Call @code{nthcdr}, two arguments.
 @tab @math{-2+1}
 @item @verb{|0234|}
 @tab @verb{| 156|}
 @tab @verb{|  elt|}
-@tab Call @code{elt} with two arguments.
+@tab Call @code{elt}, two arguments.
 @tab @math{-2+1}
 @item @verb{|0235|}
 @tab @verb{| 157|}
 @tab @verb{|  member|}
-@tab Call @code{member} with two arguments.
+@tab Call @code{member}, two arguments.
 @tab @math{-2+1}
 @item @verb{|0236|}
 @tab @verb{| 158|}
 @tab @verb{|  assq|}
-@tab Call @code{assq} with two arguments.
+@tab Call @code{assq}, two arguments.
 @tab @math{-2+1}
 @item @verb{|0237|}
 @tab @verb{| 159|}
 @tab @verb{|  nreverse|}
-@tab Call @code{nreverse} with one argument.
+@tab Call @code{nreverse}, one argument.
 @tab @math{-1+1}
 @item @verb{|0240|}
 @tab @verb{| 160|}
 @tab @verb{|  setcar|}
-@tab Call @code{setcar} with two arguments.
+@tab Call @code{setcar}, two arguments.
 @tab @math{-2+1}
 @item @verb{|0241|}
 @tab @verb{| 161|}
 @tab @verb{|  setcdr|}
-@tab Call @code{setcdr} with two arguments.
+@tab Call @code{setcdr}, two arguments.
 @tab @math{-2+1}
 @item @verb{|0242|}
 @tab @verb{| 162|}
 @tab @verb{|  car-safe|}
-@tab Call @code{car-safe} with one argument.
+@tab Call @code{car-safe}, one argument.
 @tab @math{-1+1}
 @item @verb{|0243|}
 @tab @verb{| 163|}
 @tab @verb{|  cdr-safe|}
-@tab Call @code{cdr-safe} with one argument.
+@tab Call @code{cdr-safe}, one argument.
 @tab @math{-1+1}
 @item @verb{|0244|}
 @tab @verb{| 164|}
 @tab @verb{|  nconc|}
-@tab Call @code{nconc} with two arguments.
+@tab Call @code{nconc}, two arguments.
 @tab @math{-2+1}
 @item @verb{|0245|}
 @tab @verb{| 165|}
 @tab @verb{|  quo|}
-@tab Call @code{/} with two arguments, dividing the two values at the top of the stack.
+@tab Call @code{/}, two arguments, dividing the two values at the top of the stack.
 @tab @math{-2+1}
 @item @verb{|0246|}
 @tab @verb{| 166|}
 @tab @verb{|  rem|}
-@tab Call @code{%} with two arguments, calculating the modulus of the two values at the top of the stack.
+@tab Call @code{%}, two arguments, calculating the modulus of the two values at the top of the stack.
 @tab @math{-2+1}
 @item @verb{|0247|}
 @tab @verb{| 167|}
 @tab @verb{|  numberp|}
-@tab Call @code{numberp} with one argument.
+@tab Call @code{numberp}, one argument.
 @tab @math{-1+1}
 @item @verb{|0250|}
 @tab @verb{| 168|}
 @tab @verb{|  integerp|}
-@tab Call @code{integerp} with one argument.
+@tab Call @code{integerp}, one argument.
 @tab @math{-1+1}
 @item @verb{|0251|}
 @tab @verb{| 169|}
 @tab
+
+@item @verb{|0252|}
+@tab @verb{| 170|}
+@tab @verb{|  Rgoto|}
+@tab
+@item @verb{|0253|}
+@tab @verb{| 171|}
+@tab @verb{|  Rgotoifnil|}
+@tab
+@item @verb{|0254|}
+@tab @verb{| 172|}
+@tab @verb{|  Rgotoifnonnil|}
+@tab
+@item @verb{|0255|}
+@tab @verb{| 173|}
+@tab @verb{|  Rgotoifnilelsepop|}
+@tab
+@item @verb{|0256|}
+@tab @verb{| 174|}
+@tab @verb{|  Rgotoifnonnilelsepop|}
+@tab @tab
+
+@item @verb{|0257|}
+@tab @verb{| 175|}
+@tab @verb{|  listN|}
+@tab
+@item @verb{|0260|}
+@tab @verb{| 176|}
+@tab @verb{|  concatN|}
+@tab
+@item @verb{|0261|}
+@tab @verb{| 177|}
+@tab @verb{|  insertN|}
+@tab @tab
+
+@item @verb{|0262|}
+@tab @verb{| 178|}
+@tab @verb{|  stack-set|}
+@tab @tab
+@item @verb{|0263|}
+@tab @verb{| 179|}
+@tab @verb{|  stack-set2|}
+@tab @tab
+
+@item @verb{|0264|}
+@tab @verb{| 180|}
+@tab
 @tab Unused
+@item @verb{|0265|}
+@tab @verb{| 181|}
+@tab
+@tab Unused
+
+@item @verb{|0266|}
+@tab @verb{| 182|}
+@tab @verb{|  discardN|}
+@tab @tab
+@item @verb{|0267|}
+@tab @verb{| 183|}
+@tab @verb{|  switch|}
+@tab @tab
+
 @item @verb{|0270|}
 @tab @verb{| 184|}
 @tab
@@ -2244,7 +2828,7 @@ Make a binding recording buffer, point, and mark.
 @item @verb{|0326|}
 @tab @verb{| 214|}
 @tab @verb{|  constant-i22|}
-@tab
+     @tab
 @tab @math{+1}
 @item @verb{|0327|}
 @tab @verb{| 215|}
@@ -2465,6 +3049,9 @@ Make a binding recording buffer, point, and mark.
 @item @uref{https://www.emacswiki.org/emacs/ByteCodeEngineering, Emacs Wiki ByteCodeEngineering}
 @item @uref{https://groups.google.com/forum/#!topic/gnu.emacs.sources/oMfZT_4Oxrc easm.el, Assembler for Emacs' bytecode interpreter}
 @item @uref{https://github.com/rocky/elisp-decompile, Emacs Lisp Decompiler}
+@item @uref{https://ftp.gnu.org/pub/gnu/emacs, Emacs source code since Emacs 21.4a}
+@item @uref{https://ftp.gnu.org/pub/gnu/emacs, Emacs source code since Emacs 21.4a}
+@item @uref{https://ftp.gnu.org/pub/old-gnu/emacs, Emacs source code before Emacs 21.4a}
 @end itemize
 
 @node Instruction Index
