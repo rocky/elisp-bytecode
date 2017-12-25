@@ -1041,27 +1041,90 @@ bytecode interpreter.
 @node sub1
 @unnumberedsubsubsec @code{sub1} (83)
 @kindex sub1
-Call @code{1-} with one argument, subtracting one from the top-of-stack value.
+
+@math{TOS = TOS - 1}. Generated from function @code{1-}.
+
+Stack effect is: @math{-1+1}.
+
+@strong{Example}
+When lexical binding is in effect, @code{(defun sub1-eg(n) (1- n))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1   83   sub1
+ 2  135   return
+@end verbatim
 
 @node add1
 @unnumberedsubsubsec @code{add1} (84)
 @kindex add1
-Call @code{1+} with one argument, adding one to the top-of-stack value.
+
+@math{TOS = TOS + 1}. Generated from function @code{1+}.
+
+Stack effect is: @math{-1+1}.
+
+@strong{Example}
+When lexical binding is in effect, @code{(defun add1-eg(n) (1+ n))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1   83   add1
+ 2  135   return
+@end verbatim
 
 @node eqlsign
 @unnumberedsubsubsec @code{eqlsign} (85)
 @kindex eqlsign
-Call @code{=} with two arguments, comparing the two values at the top of the stack for numerical or strict equality.
+
+@math{TOS = TOS == TOS-1}. Generated from function @code{=}.
+
+Stack effect is: @math{-2+1}.
+
+@strong{Example}
+When lexical binding is in effect, @code{(defun eqlsign-eg(a b) (= a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    1   stack-ref[1]
+ 1    1   stack-ref[1]
+ 2   85   eqlsign
+ 3  135   return
+@end verbatim
 
 @node gtr
 @unnumberedsubsubsec @code{gtr} (86)
 @kindex gtr
-Call @code{>} with two arguments, comparing the two values at the top of the stack with the numerical greater-than relation.
+@math{TOS = TOS == TOS-1}. Generated from function @code{>}.
+
+Stack effect is: @math{-2+1}.
+
+@strong{Example}
+When lexical binding is in effect, @code{(defun gtr-eg(a b) (> a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    1   stack-ref[1]
+ 1    1   stack-ref[1]
+ 2   86   gtr
+ 3  135   return
+@end verbatim
 
 @node lss
 @unnumberedsubsubsec @code{lss} (87)
 @kindex lss
 Call @code{<} with two arguments, comparing the two values at the top of the stack with the numerical less-than relation.
+
+@math{TOS = TOS > TOS-1}. Generated from function @code{>}.
+
+Stack effect is: @math{-2+1}.
+
+@strong{Example}
+When lexical binding is in effect, @code{(defun lss-eg(a b) (< a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    1   stack-ref[1]
+ 1    1   stack-ref[1]
+ 2   86   lss
+ 3  135   return
+@end verbatim
 
 @node leq
 @unnumberedsubsubsec @code{leq} (88)
