@@ -1378,7 +1378,7 @@ Constants Vector: [n]
 
 @table @strong
 @item Implements:
-@code{TOS <- (max(S[1] TOS)}.
+@code{TOS <- (max S[1] TOS)}.
 @item Generated via:
 binary @code{max}.
 @item Stack effect:
@@ -1453,7 +1453,7 @@ Constants Vector: [a b]
 
 @table @strong
 @item implements:
-@code{TOS <- TOS \% s[1])}.
+@code{TOS <- (\% S[1] TOS)}.
 @item generated via:
 binary @verb{|%|}
 @item Stack effect:
