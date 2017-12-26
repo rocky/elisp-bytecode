@@ -1208,7 +1208,7 @@ PC  Byte  Instruction
 
 @table @strong
 @item Implements:
-@code{TOS <- (< TOS S[1]}.
+@code{TOS <- (< S[1] TOS}.
 @item Generated via:
 binary @code{<}.
 @item Stack effect:
@@ -1233,19 +1233,21 @@ Constants Vector: [a b]
 
 @table @strong
 @item Implements:
-@code{TOS <- (<= TOS S[1])}.
+@code{TOS <- (<= S[1] TOS)}.
 @item Generated via:
 binary @code{<=}.
 @item Stack effect:
 @math{-2+1}.
 @item Example:
-When lexical binding is in effect, @code{(defun leq-eg(a b) (<= a b))} generates:
+When dynamic binding is in effect, @code{(defun leq-eg(a b) (<= a b))} generates:
 @verbatim
 PC  Byte  Instruction
- 0    1   stack-ref[1]
- 1    1   stack-ref[1]
+ 0    8   varref[0] a
+ 1    9   varref[1] b
  2   88   leq
  3  135   return
+
+Constants Vector: [a b]
 @end verbatim
 
 @end table
@@ -1256,7 +1258,7 @@ PC  Byte  Instruction
 
 @table @strong
 @item Implements:
-@code{TOS <- (>= TOS S[1]}.
+@code{TOS <- (>= S[1] TOS}.
 @item Generated via:
 binary @code{>=}.
 @item Stack effect:
@@ -1279,7 +1281,7 @@ PC  Byte  Instruction
 
 @table @strong
 @item Implements:
-@code{TOS <- (- TOS S[1]}.
+@code{TOS <- (- S[1] TOS}.
 @item Generated via:
 binary @code{-}.
 @item Stack effect:
@@ -1324,7 +1326,7 @@ PC  Byte  Instruction
 
 @table @strong
 @item Implements:
-@code{TOS <- (+ TOS S[1])}.
+@code{TOS <- (+ S[1] TOS)}.
 @item Generated via:
 binary @code{+}.
 @item Stack effect:
@@ -1349,7 +1351,7 @@ Constants Vector: [n]
 
 @table @strong
 @item Implements:
-@code{TOS <- (* TOS S[1])}.
+@code{TOS <- (* S[1] TOS)}.
 @item Generated via:
 binary @code{*}.
 @item Stack effect:
@@ -1376,19 +1378,21 @@ Constants Vector: [n]
 
 @table @strong
 @item Implements:
-@code{TOS <- (max(TOS S[1])}.
+@code{TOS <- (max(S[1] TOS)}.
 @item Generated via:
 binary @code{max}.
 @item Stack effect:
 @math{-2+1}.
 @item Example:
-When lexical binding is in effect, @code{(defun max-eg(a b) (max a b))} generates:
+When dynamic binding is in effect, @code{(defun max-eg(a b) (max a b))} generates:
 @verbatim
 PC  Byte  Instruction
- 0    1   stack-ref[1]
- 1    1   stack-ref[1]
+ 0    8   varref[0] a
+ 1    9   varref[1] b
  2   93   max
  3  135   return
+
+Constants Vector: [a b]
 @end verbatim
 
 @end table
@@ -1399,19 +1403,21 @@ PC  Byte  Instruction
 
 @table @strong
 @item Implements:
-@code{TOS <- (min(TOS S[1])}.
+@code{TOS <- (min(S[1] TOS)}.
 @item Generated via:
 binary @code{min}.
 @item Stack effect:
 @math{-2+1}.
 @item Example:
-When lexical binding is in effect, @code{(defun min-eg(a b) (min a b))} generates:
+When dynamic binding is in effect, @code{(defun min-eg(a b) (min a b))} generates:
 @verbatim
 PC  Byte  Instruction
- 0    1   stack-ref[1]
- 1    1   stack-ref[1]
+ 0    8   varref[0] a
+ 1    9   varref[1] b
  2   94   min
  3  135   return
+
+Constants Vector: [a b]
 @end verbatim
 
 @end table
@@ -1422,19 +1428,21 @@ PC  Byte  Instruction
 
 @table @strong
 @item Implements:
-@code{TOS <- (/ TOS S[1])}.
+@code{TOS <- (/ S[1] TOS)}.
 @item Generated via:
 binary @verb{|/|}.
 @item Stack effect:
 @math{-2+1}.
 @item Example:
-When lexical binding is in effect, @code{(defun min-quo(a b) (/ a b))} generates:
+When dynamic binding is in effect, @code{(defun min-quo(a b) (/ a b))} generates:
 @verbatim
 PC  Byte  Instruction
- 0    1   stack-ref[1]
- 1    1   stack-ref[1]
+ 0    8   varref[0] a
+ 1    9   varref[1] b
  2  165   quo
  3  135   return
+
+Constants Vector: [a b]
 @end verbatim
 
 @end table
@@ -1840,7 +1848,7 @@ PC  Byte  Instruction
 @node stack-set
 @unnumberedsubsec @code{stack-set} (180)
 @kindex stack-set
-Like discard. [What's the difference?[
+Like discard. [What's the difference?]
 
 Added in Emacs 24.1
 
