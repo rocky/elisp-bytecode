@@ -898,22 +898,94 @@ bytecode interpreter.
 @node nth
 @unnumberedsubsubsec @code{nth} (56)
 @kindex nth
-Call @code{nth} with two arguments.
+@table @strong
+@item Implements:
+@code{TOS <- (nth S[1] TOS)}.
+@item Generated via:
+binary @code{nth}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun nth-eg(l) (nth 5 l))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] 5
+ 1    1   stack-ref[1]
+ 2   56   nth
+ 3  135   return
+
+Constants Vector: [5]
+@end verbatim
+
+@end table
 
 @node car
 @unnumberedsubsubsec @code{car} (64)
 @kindex car
-Call @code{car} with one argument.
+@table @strong
+@item Implements:
+@code{TOS <- (car TOS)}.
+@item Generated via:
+unary @code{car}.
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun car-eg(l) (car l))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1   64   car
+ 2  135   return
+@end verbatim
+
+@end table
 
 @node cdr
 @unnumberedsubsubsec @code{cdr} (65)
 @kindex cdr
-Call @code{cdr} with one argument.
+@table @strong
+@item Implements:
+@code{TOS <- (cdr TOS)}.
+@item Generated via:
+unary @code{cdr}.
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun cdr-eg(l) (cdr l))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1   65   cdr
+ 2  135   return
+@end verbatim
+
+@end table
 
 @node cons
 @unnumberedsubsubsec @code{cons} (66)
 @kindex cons
-Call @code{cons} with two arguments.
+
+@table @strong
+@item Implements:
+@code{TOS <- (cons S[1] TOS)}.
+@item Generated via:
+binary @code{cons}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When dynamic binding is in effect, @code{(defun cons-eg() (cons 'a 'b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] a
+ 1  193   constant[1] b
+ 2   66   cons
+ 3  135   return
+
+Constants Vector: [a b]
+@end verbatim
+
+@end table
+
 
 @node list1
 @unnumberedsubsubsec @code{list1} (67)
@@ -1041,55 +1113,226 @@ bytecode interpreter.
 @node sub1
 @unnumberedsubsubsec @code{sub1} (83)
 @kindex sub1
-Call @code{1-} with one argument, subtracting one from the top-of-stack value.
+
+@table @strong
+@item Implements:
+@code{TOS <- (1- TOS)}.
+@item Generated via:
+unary @code{1-}.
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun sub1-eg(n) (1- n))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1   83   sub1
+ 2  135   return
+@end verbatim
+
+@end table
 
 @node add1
 @unnumberedsubsubsec @code{add1} (84)
 @kindex add1
-Call @code{1+} with one argument, adding one to the top-of-stack value.
+
+@table @strong
+@item Implements:
+@code{TOS <- (1+ TOS)}.
+@item Generated via:
+unary @code{-}.
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun add1-eg(n) (1+ n))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1   84   add1
+ 2  135   return
+@end verbatim
+
+@end table
 
 @node eqlsign
 @unnumberedsubsubsec @code{eqlsign} (85)
 @kindex eqlsign
-Call @code{=} with two arguments, comparing the two values at the top of the stack for numerical or strict equality.
+
+@table @strong
+@item Implements:
+@code{TOS <- (= TOS S[1]}.
+@item Generated via:
+binary @code{=}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When dynamic binding is in effect, @code{(defun eqlsign-eg(a b) (= a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] a
+ 1    9   varref[1] b
+ 2   85   eqlsign
+ 3  135   return
+
+Constants Vector: [a b]
+@end verbatim
+
+@end table
 
 @node gtr
 @unnumberedsubsubsec @code{gtr} (86)
 @kindex gtr
-Call @code{>} with two arguments, comparing the two values at the top of the stack with the numerical greater-than relation.
+
+@table @strong
+@item Implements:
+@code{TOS <- (> TOS S[1]}.
+@item Generated via:
+binary @code{>}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun gtr-eg(a b) (> a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    1   stack-ref[1]
+ 1    1   stack-ref[1]
+ 2   86   gtr
+ 3  135   return
+@end verbatim
+
+@end table
 
 @node lss
 @unnumberedsubsubsec @code{lss} (87)
 @kindex lss
-Call @code{<} with two arguments, comparing the two values at the top of the stack with the numerical less-than relation.
+
+@table @strong
+@item Implements:
+@code{TOS <- (< S[1] TOS}.
+@item Generated via:
+binary @code{<}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When dynamic binding is in effect, @code{(defun lss-eg(a b) (< a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] a
+ 1    9   varref[1] b
+ 2   87   lss
+ 3  135   return
+
+Constants Vector: [a b]
+@end verbatim
+
+@end table
 
 @node leq
 @unnumberedsubsubsec @code{leq} (88)
 @kindex leq
-Call @code{<=} with two arguments, comparing the two values at the top of the stack with the numerical less-than-or-equals relation.
+
+@table @strong
+@item Implements:
+@code{TOS <- (<= S[1] TOS)}.
+@item Generated via:
+binary @code{<=}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When dynamic binding is in effect, @code{(defun leq-eg(a b) (<= a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] a
+ 1    9   varref[1] b
+ 2   88   leq
+ 3  135   return
+
+Constants Vector: [a b]
+@end verbatim
+
+@end table
 
 @node geq
 @unnumberedsubsubsec @code{geq} (89)
 @kindex geq
-Call @code{>=} with two arguments, comparing the two values at the top of the stack with the numerical less-than-or-equals relation.
+
+@table @strong
+@item Implements:
+@code{TOS <- (>= S[1] TOS}.
+@item Generated via:
+binary @code{>=}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun geq-eg(a b) (>= a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    1   stack-ref[1]
+ 1    1   stack-ref[1]
+ 2   89   geq
+ 3  135   return
+@end verbatim
+
+@end table
 
 @node diff
 @unnumberedsubsubsec @code{diff} (90)
 @kindex diff
-Call @code{-} with two arguments, subtracting the two values at the top of the stack.
+
+@table @strong
+@item Implements:
+@code{TOS <- (- S[1] TOS}.
+@item Generated via:
+binary @code{-}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun diff-eg(a b) (- a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    1   stack-ref[1]
+ 1    1   stack-ref[1]
+ 2   90   diff
+ 3  135   return
+@end verbatim
+
+@end table
 
 @node negate
 @unnumberedsubsubsec @code{negate} (91)
 @kindex negate
-Call @code{-} with one argument, negating the top-of-stack value.
+
+@table @strong
+@item Implements:
+@code{TOS <- (- TOS)}.
+@item Generated via:
+unary @code{-}.
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun negate-eg(a) (- a))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1   91   negate
+ 2  135   return
+@end verbatim
+
+@end table
 
 @node plus
 @unnumberedsubsubsec @code{plus} (92)
 @kindex plus
-Call @code{+} with two arguments, adding the two values at the top of the stack.
 
-@strong{Example}
-When dynamic binding is in effect, @code{(defun plus-eg(n) (+ n n ))} generates:
+@table @strong
+@item Implements:
+@code{TOS <- (+ S[1] TOS)}.
+@item Generated via:
+binary @code{+}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When dynamic binding is in effect, @code{(defun plus-eg(n) (+ n n))} generates:
 @verbatim
 PC  Byte  Instruction
  0    8   varref[0] n
@@ -1100,14 +1343,23 @@ PC  Byte  Instruction
 Constants Vector: [n]
 @end verbatim
 
+@end table
+
 @node mult
 @unnumberedsubsubsec @code{mult} (95)
 @kindex mult
-Call @code{*} with two arguments, multiplying the two values at the
-top of the stack.
 
-@strong{Example}
-@code{(defun mult-eg(n) (* n n))} generates:
+@table @strong
+@item Implements:
+@code{TOS <- (* S[1] TOS)}.
+@item Generated via:
+binary @code{*}.
+@item Stack effect:
+@math{-2+1}.
+@item Added in:
+Emacs 19.34
+@item Example:
+When dynamic binding is in effect, @code{(defun mult-eg(n) (* n n))} generates:
 @verbatim
 PC  Byte  Instruction
  0    8   varref[0] n
@@ -1118,29 +1370,107 @@ PC  Byte  Instruction
 Constants Vector: [n]
 @end verbatim
 
-Since emacs 19.34
+@end table
 
 @node max
 @unnumberedsubsubsec @code{max} (93)
 @kindex max
-Call @code{max} with two arguments.
+
+@table @strong
+@item Implements:
+@code{TOS <- (max S[1] TOS)}.
+@item Generated via:
+binary @code{max}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When dynamic binding is in effect, @code{(defun max-eg(a b) (max a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] a
+ 1    9   varref[1] b
+ 2   93   max
+ 3  135   return
+
+Constants Vector: [a b]
+@end verbatim
+
+@end table
 
 @node min
 @unnumberedsubsubsec @code{min} (94)
 @kindex min
-Call @code{min} with two arguments.
+
+@table @strong
+@item Implements:
+@code{TOS <- (min(S[1] TOS)}.
+@item Generated via:
+binary @code{min}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When dynamic binding is in effect, @code{(defun min-eg(a b) (min a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] a
+ 1    9   varref[1] b
+ 2   94   min
+ 3  135   return
+
+Constants Vector: [a b]
+@end verbatim
+
+@end table
 
 @node quo
 @unnumberedsubsubsec @code{quo} (165)
 @kindex quo
-Call @code{/} with two arguments, dividing the two values at the top of the stack.
+
+@table @strong
+@item Implements:
+@code{TOS <- (/ S[1] TOS)}.
+@item Generated via:
+binary @verb{|/|}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When dynamic binding is in effect, @code{(defun min-quo(a b) (/ a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] a
+ 1    9   varref[1] b
+ 2  165   quo
+ 3  135   return
+
+Constants Vector: [a b]
+@end verbatim
+
+@end table
 
 @node rem
 @unnumberedsubsubsec @code{rem} (166)
 @kindex rem
-Call @code{%} with two arguments, calculating the modulus of the two values at the top of the stack.
 
-Added in Emacs 19.34.
+@table @strong
+@item implements:
+@code{TOS <- (\% S[1] TOS)}.
+@item generated via:
+binary @verb{|%|}
+@item Stack effect:
+@math{-2+1}
+@item Added in:
+Emacs 19.34.
+@item Example:
+When lexical binding is in effect, @code{(defun rem-eg(a b) (% a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    1   stack-ref[1]
+ 1    1   stack-ref[1]
+ 2  166   rem
+ 3  135   return
+@end verbatim
+
+@end table
 
 @node String Function Instructions
 @subsection String Function Instructions
@@ -1518,7 +1848,7 @@ PC  Byte  Instruction
 @node stack-set
 @unnumberedsubsec @code{stack-set} (180)
 @kindex stack-set
-Like discard. [What's the difference?[
+Like discard. [What's the difference?]
 
 Added in Emacs 24.1
 
