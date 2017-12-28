@@ -2,9 +2,10 @@
 @chapter Opcode Table
 
 In the table below, a @code{*} by the decimal number indicates an
-obsolete instruction. @xref{Instruction-Description Format} for a
-description of how to interpret opcode when it contans an index, for a description
-of how to interpret the stack-effect field.
+obsolete instruction. @xref{Instruction-Description Format} for
+abbreviations used here, a description of how to interpret an opcode
+when it contans an index, and for a description of how to interpret
+the stack-effect field.
 
 @menu
 * Opcodes (0000-0077)::
@@ -686,11 +687,21 @@ of how to interpret the stack-effect field.
 @tab @verb{|  constant2|}
 @tab Load a constant 0--65535
 @tab @math{+1}
+@item @verb{|0202|}
+@tab @verb{| 130|}
+@tab @verb{|  goto|}
+@tab Unconditional Jump
+@tab @math{-1+0}
+@item @verb{|0203|}
+@tab @verb{| 131|}
+@tab @verb{|  goto-if-not-nil|}
+@tab Jump if TOS is not nil
+@tab @math{-1+0}
 @item @verb{|0205|}
 @tab @verb{| 133|}
 @tab @verb{|  goto-if-not-nil-else-pop|}
 @tab Jump if TOS is not nil, else pop
-@tab @math{-1+0}
+@tab @math{\phi(-1,+0)}
 @item @verb{|0207|}
 @tab @verb{| 135|}
 @tab @verb{|  return|}
