@@ -2,9 +2,9 @@
 @chapter Opcode Table
 
 In the table below, a @code{*} by the decimal number indicates an
-obsolete instruction. See @xref{Instruction-Description Format} for a
-description of how to interpret opcode when it has an index in it and
-the stack-effect field.
+obsolete instruction. @xref{Instruction-Description Format} for a
+description of how to interpret opcode when it contans an index, for a description
+of how to interpret the stack-effect field.
 
 @menu
 * Opcodes (0000-0077)::
