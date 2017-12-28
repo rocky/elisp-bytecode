@@ -2,10 +2,9 @@
 @chapter Opcode Table
 
 In the table below, a @code{*} by the decimal number indicates an
-obsolete instruction. Stack effects are given as the number of
-stack entries popped followed by the number of entries pushed. For
-example, for a @code{cons} instruction, two stack entries are popped and
-one is pushed. This is denoted: @math{-2+1}.
+obsolete instruction. See @xref{Instruction-Description Format} for a
+description of how to interpret opcode when it has an index in it and
+the stack-effect field.
 
 @menu
 * Opcodes (0000-0077)::
@@ -685,9 +684,18 @@ one is pushed. This is denoted: @math{-2+1}.
 @item @verb{|0201|}
 @tab @verb{| 129|}
 @tab @verb{|  constant2|}
-@tab Load a constant 0--65535 (but generally greater than 63)
+@tab Load a constant 0--65535
 @tab @math{+1}
-
+@item @verb{|0205|}
+@tab @verb{| 133|}
+@tab @verb{|  goto-if-not-nil-else-pop|}
+@tab Jump if TOS is not nil, else pop
+@tab @math{-1+0}
+@item @verb{|0207|}
+@tab @verb{| 135|}
+@tab @verb{|  return|}
+@tab return from a function
+@tab @math{-1+0}
 @item @verb{|0210|}
 @tab @verb{| 136|}
 @tab @verb{|  discard|}
