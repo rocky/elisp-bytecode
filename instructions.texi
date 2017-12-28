@@ -26,7 +26,7 @@ small amount of jargon which is be explained here.
 @item @code{TOS}
 The top of the evaluations stack. Many instruction either read or push onto this
 @item @code{S}
-This is an array of evaluation stack items. @code{S[0]} is the top of the same or
+This is an array of evaluation stack items. @code{S[0]} is the top of the stack, or
 @code{TOS}.
 @item @math{\phi}
 This is used in describing stack effects for branching instructions
@@ -37,7 +37,7 @@ the stack effect for the nil branch. So @math{\phi(0,-1)} which is
 seen in @code{goto-if-not-nil-else-pop} means that if the jump is
 taken, the stack effect is 0, otherwise the effect removes or pops an
 evaluation-stack entry.
-@item opcode subscripting @code{[]})
+@item opcode subscripting (@code{[]})
 In many opcodes such as @code{constant}, @code{varref}, you will find
 an index after the opcode. What's going on is that opcode is one of a
 number of opcodes in a class encodes an index into the opcode. We
@@ -77,7 +77,7 @@ the opcode was added. It may also give when the opcode became obsolete
 or was no longer implemented.
 @item Example:
 Some ELisp code to show how the instruction is used. For example
-the for the @code{go} instruction we give:
+the for the @code{goto} instruction we give:
 
 @code{(defun goto-eg(n) (while (n) 2))} generates:
 @verbatim
@@ -96,8 +96,8 @@ Constants Vector: [n]
 @end verbatim
 
 From the above we see that the @code{goto} instruction at program
-counter (PC) 5, has decimal opcode 130. It the instruction is three bytes
-long.
+counter (PC) 5, has decimal opcode 130. The instruction is three bytes
+long: a one-byte opcode followed by a two-byte operand.
 
 Unless otherwise stated, all code examples were compiled in Emacs 25
 with optimization turned off.
