@@ -462,7 +462,7 @@ again when the jump is taken.
 @item Stack effect:
 @math{\phi(0,-1)+0}
 @item Example:
-@code{(defun goto-if-not-nil-eg(n) (if (or (n) (n)) 1340))} generates:
+@code{(defun goto-if-not-nil-else-pop-eg(n) (if (or (n) (n)) 1340))} generates:
 @verbatim
 PC  Byte  Instruction
  0  192   constant[0] n
