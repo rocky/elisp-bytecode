@@ -1,0 +1,256 @@
+@node Opcode Changes Between Emacs Releases
+
+@chapter Opcode Changes Between Emacs Releases
+
+@menu
+* After 17 and Starting in 18.59::
+* After 18.59 and Starting in 19.34::
+* After 19.34 and Starting in 20.1::
+* After 20.1 and Starting in 21.4::
+* After 21.1 and Starting in 22.1::
+* After 22.1 and Starting in 23.1::
+* After 23.1 and Starting in 24.1::
+* After 24.1 and Starting in 25.1::
+* After 25.1 and Starting in 26.1::
+* After 26.1 and Starting in 27.1::
+@end menu
+
+@node After 17 and Starting in 18.59
+@section After 17 and Starting in 18.59
+
+The following instructions became obsolete:
+@itemize
+@item @code{mark} (97)
+@item @code{scan-buffer} (107)
+@item @code{set-mark} (115)
+@end itemize
+
+@node After 18.59 and Starting in 19.34
+@section After 18.59 and Starting 19.34
+
+jwz and Hallvard made major changes and additions to the bytecode
+interpreter.
+
+The following instructions were added:
+@itemize
+@item @code{mult} (97)
+@item @code{forward-char} (117)
+@item @code{forward-word} (118)
+@item @code{skip-chars-forward} (119)
+@item @code{skip-chars-backward} (120)
+@item @code{forward-line} (121)
+@item @code{char-syntax} (122)
+@item @code{buffer-substring} (123)
+@item @code{delete-region} (124)
+@item @code{narrow-to-region} (125)
+@item @code{widen} (126)
+@item @code{end-of-line} (127)
+@item @code{unbind-all} (146)
+@item @code{set-marker} (147)
+@item @code{match-beginning} (148)
+@item @code{match-end} (149)
+@item @code{upcase} (150)
+@item @code{downcase} (151)
+@item @code{stringeqlsign} (152)
+@item @code{stringlss} (153)
+@item @code{equal} (154)
+@item @code{nthcdr} (155)
+@item @code{elt} (156)
+@item @code{member} (157)
+@item @code{assq} (158)
+@item @code{nreverse} (159)
+@item @code{setcar} (160)
+@item @code{setcdr} (161)
+@item @code{car-safe} (162)
+@item @code{cdr-safe} (163
+@item @code{nconc} (164)
+@item @code{quo} (165)
+@item @code{rem} (166)
+@item @code{numberp} (167)
+@item @code{integerp} (162)
+@item @code{Rgoto} (170)
+@item @code{Rgotoifnil} (171)
+@item @code{Rgotoifnonnil} (172)
+@item @code{Rgotoifnilelsepop} (173)
+@item @code{Rgotoifnonnilelsepop} (174)
+@item @code{listN} (175)
+@item @code{concatN} (176)
+@item @code{insertN} (177)
+@end itemize
+
+Instruction @code{unbind-all} was added to support tail-recursion
+removal.  However this was never subsequently implemented; so this
+intruction was never generated.
+
+Starting in this version, unless C prepocessor variable
+@code{BYTE_CODE_SAFE} (off by default) is defined, the obsolete
+instructions listed in 18.59 are not implemented.
+
+Bytecode meta-comments look like this:
+@verbatim
+;;; compiled by rms@psilocin.gnu.ai.mit.edu on Mon Jun 10 17:37:37 1996
+;;; from file /home/fsf/rms/e19/lisp/bytecomp.el
+;;; emacs version 19.31.2.
+;;; bytecomp version FSF 2.10
+;;; optimization is on.
+;;; this file uses opcodes which do not exist in Emacs 18.
+@end verbatim
+
+
+@node After 19.34 and Starting in 20.1
+@section After 19.34 and Starting in 20.1
+
+There were no instruction changes. However bytecode interpretation of
+@code{read-char}, which became obsolete in v19 was dropped.
+
+Bytecode meta-comments look like this:
+@verbatim
+;;; Compiled by rms@psilocin.gnu.ai.mit.edu on Sun Aug 31 13:07:37 1997
+;;; from file /home/fsf/rms/e19/lisp/emacs-lisp/bytecomp.el
+;;; in Emacs version 20.0.97.1
+;;; with bytecomp version 2.33
+;;; with all optimizations.
+;;; This file uses opcodes which do not exist in Emacs 18.
+@end verbatim
+
+
+@node After 20.1 and Starting in 21.4
+@section Ater 20.1 and Starting in 21.4
+
+There were no instruction changes. However there were major
+changes in the bytecode interpreter.
+
+An instruction with opcode 0 causes an abort.
+
+Bytecode meta-comments look like this:
+@verbatim
+;;; Compiled by pot@pot.cnuce.cnr.it on Tue Mar 18 15:36:26 2003
+;;; from file /home/pot/gnu/emacs-pretest.new/lisp/emacs-lisp/bytecomp.el
+;;; in Emacs version 21.3
+;;; with bytecomp version 2.85.4.1
+;;; with all optimizations.
+@end verbatim
+
+@node After 21.1 and Starting in 22.1
+@section After 21.1 and Starting in 22.1
+
+There were no instruction changes.
+
+The bytecode meta-comment no longer includess the bytecomp version used.
+
+Bytecode meta-comments look like this:
+@verbatim
+;;; Compiled by cyd@localhost on Sat Jun  2 00:54:30 2007
+;;; from file /home/cyd/emacs/lisp/emacs-lisp/bytecomp.el
+;;; in Emacs version 22.1
+;;; with all optimizations.
+
+;;; This file uses dynamic docstrings, first added in Emacs 19.29.
+@end verbatim
+
+@node After 22.1 and Starting in 23.1
+@section After 22.1 and Starting in 23.1
+
+There were no instruction changes.
+
+Bytecode meta-comments look like this:
+@verbatim
+;;; Compiled by cyd@furry on Wed Jul 29 11:15:02 2009
+;;; from file /home/cyd/emacs/lisp/emacs-lisp/bytecomp.el
+;;; in Emacs version 23.1
+;;; with all optimizations.
+
+;;; This file uses dynamic docstrings, first added in Emacs 19.29.
+@end verbatim
+
+@node After 23.1 and Starting in 24.1
+@section After 23.1 and Starting in 24.1
+
+The following instructions were added:
+@itemize
+@item @code{stack-set}   (178)
+@item @code{stack_set2}, (179)
+@item @code{discardN}, (180)
+@end itemize
+
+The following instructions became obsolete:
+
+@unnumberedsubsec @code{save-current-buffer} (97)
+
+Is replaced by @code{byte-save-current-buffer} (114)
+
+Unless C prepocessor variable @code{BYTE_CODE_SAFE} (off by default) is
+defined, obsolete instructions below and from earlier versions are not implemented.
+
+@itemize
+@item @code{temp-output-buffer-setup} (144)
+@item @code{temp-output-buffer-show} (145)
+@item @code{save-window-excursion} (139)
+@end itemize
+
+Instruction @code{unbind-all}, which never was generated, was marked obsolete
+in this version.
+
+The bytecode meta-comment no longer who user/hostname compiled and at what time.
+A message indcating whether utf-8 non-ASCII characters is used is included.
+
+Bytecode meta-comments look like this:
+@verbatim
+;;; from file /misc/emacs/bzr/emacs24-merge/lisp/emacs-lisp/bytecomp.el
+;;; in Emacs version 24.3
+;;; with all optimizations.
+
+;;; This file uses dynamic docstrings, first added in Emacs 19.29.
+
+;;; This file does not contain utf-8 non-ASCII characters,
+;;; and so can be loaded in Emacs versions earlier than 23.
+@end verbatim
+
+@node After 24.1 and Starting in 25.1
+@section After 24.1 and Starting in 25.1
+
+Instruction 0 becomes an error rather than aborting emacs.
+
+A number of changes were made to @code{bytecode.c}.
+
+The following instructions were added:
+@itemize
+@item @code{ophandler} (48)
+@item @code{conditioncase} (49)
+@item @code{pushcondition} (50)
+@end itemize
+
+The following obsolete instructions as of v18 can no longer can be interpreted:
+@itemize
+@item @code{scan-buffer} (107)
+@item @code{set-mark} (115)
+@end itemize
+
+You will get an error if @code{BYTE_CODE_SAFE} is defined.
+
+The bytecode meta-comment no longer include the source-code path.
+
+Bytecode meta-comments look like this:
+@verbatim
+;;; Compiled
+;;; in Emacs version 25.2
+;;; with all optimizations.
+
+;;; This file uses dynamic docstrings, first added in Emacs 19.29.
+
+;;; This file does not contain utf-8 non-ASCII characters,
+;;; and so can be loaded in Emacs versions earlier than 23.
+@end verbatim
+
+@node After 25.1 and Starting in 26.1
+@section After 25.1 and Starting in 26.1
+
+The following instruction was added:
+@itemize
+@item @code{switch} (267)
+@end itemize
+
+@node After 26.1 and Starting in 27.1
+@section After 26.1 and Starting in 27.1
+
+No changes yet.

@@ -1,0 +1,1367 @@
+@node ELisp Bytecode Instructions
+@chapter ELisp Bytecode Instructions
+
+@menu
+* Argument-Packing Instructions::
+* Constants-Vector Retrieval Instructions::
+* Return Instruction::
+* Function-Call Instructions::
+* Stack Manipulation Instructions::
+* Binding Instructions::
+@end menu
+
+@node Argument-Packing Instructions
+@section Argument-Packing Instructions
+
+These instructions from opcode 1 to 47 encode an operand value from 0
+to 7 as part of the opcode.  If the encoded value is 6, the actual
+operand value is the byte following the opcode.  If the encoded value
+is 7, the actual operand value is the two-byte number following the
+opcode, in little-endian byte order.
+
+@menu
+* stack-ref::
+* varref::
+* varset::
+* varbind::
+* call::
+* unbind::
+@end menu
+
+@node stack-ref
+@unnumberedsubsec @code{stack-ref} (1--7)
+@kindex stack-ref
+
+A stack reference. This is used only in lexical binding.
+
+Added in Emacs 24.1
+
+@subsubsection Warning
+Running an instruction with opcode 0 (logically this would be called
+@code{stack-ref[0]}), will cause an immediate abort of Emacs!
+
+0 is typically an invalid bytecode and assembly instructions because 0
+values are commonly found data, e.g. the end of C strings, or data that has
+been initialized to value but represents data that hasn't been written to yet.
+
+By doing this we typically catch running random or invalid bytecode.
+
+@subsubsection Example
+When lexical binding is in effect, @code{(defun stack-ref() (let ((a 5) (b 6) (c 7)) (+ a c)))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] 5
+ 1  193   constant[1] 6
+ 2  194   constant[2] 7
+ 3    2   stack-ref[2]
+ 4    1   stack-ref[1]
+ 5   92   plus
+ 6  178   stack-set [3]
+           3
+ 8  136   discard
+ 9  136   discard
+10  135   return
+
+Constants Vector: [5 6 7]
+@end verbatim
+
+@node varref
+@unnumberedsubsec @code{varref} (8--15)
+@kindex varref
+Pushes the value of a variable reference onto the evaluation stack.
+
+@subsubsection Example
+
+When dynamic binding is in effect, @code{(defun varref(n) n)} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] n
+ 1  135   return
+
+Constants Vector: [n]
+@end verbatim
+
+@node varset
+@unnumberedsubsec @code{varset} (16--23)
+@kindex varset
+
+Sets a variable given in the operand to the value that is on the top
+of the stack.
+
+@subsubsection Example
+
+When dynamic binding is in effect, @code{(defun varset(n) (setq n 5))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  193   constant[1] 5
+ 1  137   dup
+ 2   16   varset[0] n ;; sets variable n
+ 3  135   return
+
+Constants Vector: [n 5]
+@end verbatim
+
+@node varbind
+@unnumberedsubsec @code{varbind} (24--31)
+@kindex varbind
+
+Binds a variable
+
+@node call
+@unnumberedsubsec @code{call} (32--39)
+@kindex call
+
+Calls a function.  The opcode argument specifies the number of
+arguments to pass to the function from the stack, excluding the
+function itself.
+
+@subsubsection Example
+
+@code{(exchange-point-and-mark)} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] exchange-point-and-mark
+ 1   32   call[0]
+ 2  135   return
+
+Constants Vector: [exchange-point-and-mark]
+@end verbatim
+
+@node unbind
+@unnumberedsubsec @code{unbind} (40--47)
+@kindex unbind
+
+Unbinds special bindings
+
+@node Constants-Vector Retrieval Instructions
+@section Constants-Vector Retrieval Instructions
+
+The instructions from opcode 192 to 255 push a value from the
+Constants Vector. @xref{Constants Vector}. Opcode 192 pushes the first
+entry, opcode 193, the second and so on. If there are more than 64
+constants, opcode @code{constant2} (opcode 129) is used instead.
+
+@menu
+* constant::
+* constant2::
+@end menu
+
+@node constant
+@unnumberedsubsec @code{constant} (192--255)
+@kindex constant
+
+Pushes a value from the constants vector on the evaluation stack.
+There are special instructions to push any one of the first
+64 entries in the constants stack.
+
+@subsubsection Example
+@code{(defun n3(n) (+ n 10 11 12))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  193   constant[1] +
+ 1    8   varref[0] n
+ 2  194   constant[2] 10
+ 3  195   constant[3] 11
+ 4  196   constant[4] 12
+ 5   36   call[4]
+ 6  135   return
+
+Constants Vector: [n + 10 11 12]
+@end verbatim
+
+@node constant2
+@unnumberedsubsec @code{constant2} (129)
+@kindex constant2
+
+Pushes a value from the constants vector on the evaluation stack.
+Although there are special instructions to push any one of the first
+64 entries in the constants stack, this instruction is needed to push
+a value beyond one the first 64 entries.
+
+@c @code{(defun n64 (n) (+ n 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64))} generates
+
+@code{(defun n64(n) (+ n 0 1 2 3 .. 64 ))} generates
+@verbatim
+PC  Byte  Instruction
+ 0  193   constant[1] +
+ 1    8   varref[0] n
+ 2  194   constant[2] 0
+ 3  195   constant[3] 1
+ 4  196   constant[4] 2
+[...]
+63  255   constant[63] 61
+64  129   constant2 [64] 62
+          64
+           0
+67  129   constant2 [65] 63
+          65
+           0
+70  129   constant2 [66] 64
+          66
+           0
+73   38   call [66]
+          66
+75  135   return
+
+Constants Vector: [n + 0 1 2 .. 61 62 63 64]
+@end verbatim
+
+@node Return Instruction
+@section Return Instruction
+
+@unnumberedsubsec @code{return} (135)
+@kindex return
+Return from function.  This is the last instruction in a function's
+bytecode sequence. The top value on the evaluation stack is the return value.
+
+@subsubsection Example
+@code{(defun one(n) 1)} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] 1
+ 1  135   return
+
+Constants Vector: [1]
+@end verbatim
+
+@node Function-Call Instructions
+@section Function-Call Instructions
+
+These instructions use up one byte, and are followed by the next
+instruction directly.  They are equivalent to calling an Emacs Lisp
+function with a fixed number of arguments: the arguments are popped
+from the stack, and a single return value is pushed back onto the
+stack.
+
+@menu
+* Lisp Function Instructions::
+* List Function Instructions::
+* Arithmetic Function Instructions::
+* String Function Instructions::
+* Emacs Function Instructions::
+@end menu
+
+@node Lisp Function Instructions
+@subsection Lisp Function Instructions
+
+These instructions correspond to general functions which are not
+specific to Emacs; common cases are usually inlined for speed by the
+bytecode interpreter.
+
+@menu
+* symbolp::
+* consp::
+* stringp::
+* listp::
+* eq::
+* memq::
+* not::
+* symbol-value::
+* symbol-function::
+* set::
+* fset::
+* get::
+* equal::
+* member::
+* assq::
+* numberp::
+* integerp::
+@end menu
+
+@node symbolp
+@unnumberedsubsubsec @code{symbolp} (57)
+@kindex symbolp
+Call @code{symbolp} with one argument.
+
+@node consp
+@unnumberedsubsubsec @code{consp} (58)
+@kindex consp
+Call @code{consp} with one argument.
+
+@node stringp
+@unnumberedsubsubsec @code{stringp} (59)
+@kindex stringp
+Call @code{stringp} with one argument.
+
+@node listp
+@unnumberedsubsubsec @code{listp} (60)
+@kindex listp
+Call @code{listp} with one argument.
+
+@node eq
+@unnumberedsubsubsec @code{eq} (61)
+@kindex eq
+Call @code{eq} with two arguments.
+
+@node memq
+@unnumberedsubsubsec @code{memq} (62)
+@kindex memq
+Call @code{memq} with two arguments.
+
+@node not
+@unnumberedsubsubsec @code{not} (63)
+@kindex not
+Call @code{not} with one argument.
+
+@node symbol-value
+@unnumberedsubsubsec @code{symbol-value} (74)
+@kindex symbol-value
+Call @code{symbol-value} with one argument.
+
+@node symbol-function
+@unnumberedsubsubsec @code{symbol-function} (75)
+@kindex symbol-function
+Call @code{symbol-function} with one argument.
+
+@node set
+@unnumberedsubsubsec @code{set} (76)
+@kindex set
+Call @code{set} with two arguments.
+
+@node fset
+@unnumberedsubsubsec @code{fset} (77)
+@kindex fset
+Call @code{fset} with two arguments.
+
+@node get
+@unnumberedsubsubsec @code{get} (78)
+@kindex get
+Call @code{get} with two arguments.
+
+@node equal
+@unnumberedsubsubsec @code{equal} (154)
+@kindex equal
+Call @code{equal} with two arguments.
+
+Added in Emacs 19.34.
+
+@node member
+@unnumberedsubsubsec @code{member} (157)
+@kindex member
+Call @code{member} with two arguments.
+
+@node assq
+@unnumberedsubsubsec @code{assq} (158)
+@kindex assq
+Call @code{assq} with two arguments.
+
+@node numberp
+@unnumberedsubsubsec @code{numberp} (167)
+@kindex numberp
+Call @code{numberp} with one argument.
+
+Added in Emacs 19.34.
+
+@node integerp
+@unnumberedsubsubsec @code{integerp} (168)
+@kindex integerp
+Call @code{integerp} with one argument.
+
+Added in Emacs 19.34.
+
+@node List Function Instructions
+@subsection List Function Instructions
+
+These instructions correspond to general functions which are not
+specific to Emacs; common cases are usually inlined for speed by the
+bytecode interpreter.
+
+@menu
+* nth::
+* car::
+* cdr::
+* cons::
+* list1::
+* list2::
+* list3::
+* list4::
+* listN::
+* length::
+* aref::
+* aset::
+* nthcdr::
+* elt::
+* nreverse::
+* setcar::
+* setcdr::
+* car-safe::
+* cdr-safe::
+* nconc::
+@end menu
+
+@node nth
+@unnumberedsubsubsec @code{nth} (56)
+@kindex nth
+@table @strong
+@item Implements:
+@code{TOS <- (nth S[1] TOS)}.
+@item Generated via:
+binary @code{nth}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun nth-eg(l) (nth 5 l))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] 5
+ 1    1   stack-ref[1]
+ 2   56   nth
+ 3  135   return
+
+Constants Vector: [5]
+@end verbatim
+
+@end table
+
+@node car
+@unnumberedsubsubsec @code{car} (64)
+@kindex car
+@table @strong
+@item Implements:
+@code{TOS <- (car TOS)}.
+@item Generated via:
+unary @code{car}.
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun car-eg(l) (car l))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1   64   car
+ 2  135   return
+@end verbatim
+
+@end table
+
+@node cdr
+@unnumberedsubsubsec @code{cdr} (65)
+@kindex cdr
+@table @strong
+@item Implements:
+@code{TOS <- (cdr TOS)}.
+@item Generated via:
+unary @code{cdr}.
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun cdr-eg(l) (cdr l))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1   65   cdr
+ 2  135   return
+@end verbatim
+
+@end table
+
+@node cons
+@unnumberedsubsubsec @code{cons} (66)
+@kindex cons
+
+@table @strong
+@item Implements:
+@code{TOS <- (cons S[1] TOS)}.
+@item Generated via:
+binary @code{cons}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When dynamic binding is in effect, @code{(defun cons-eg() (cons 'a 'b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] a
+ 1  193   constant[1] b
+ 2   66   cons
+ 3  135   return
+
+Constants Vector: [a b]
+@end verbatim
+
+@end table
+
+
+@node list1
+@unnumberedsubsubsec @code{list1} (67)
+@kindex list1
+Call @code{list} with one argument.
+
+@node list2
+@unnumberedsubsubsec @code{list2} (68)
+@kindex list2
+Call @code{list} with two arguments.
+
+@node list3
+@unnumberedsubsubsec @code{list3} (69)
+@kindex list3
+Call @code{list} with three arguments.
+
+@node list4
+@unnumberedsubsubsec @code{list4} (70)
+@kindex list4
+Call @code{list} with four arguments.
+
+@node listN
+@unnumberedsubsubsec @code{listN} (70)
+@kindex listN
+Call @code{list} on up to 255 arguments. Note special instructions for
+the case where there are 2 to 4 items in the list.
+
+Added in Emacs 19.34.
+
+@node length
+@unnumberedsubsubsec @code{length} (71)
+@kindex length
+Call @code{length} with one argument.
+
+@node aref
+@unnumberedsubsubsec @code{aref} (72)
+@kindex aref
+Call @code{aref} with two arguments.
+
+@node aset
+@unnumberedsubsubsec @code{aset} (73)
+@kindex aset
+Call @code{aset} with three arguments.
+
+@node nthcdr
+@unnumberedsubsubsec @code{nthcdr} (155)
+@kindex nthcdr
+Call @code{nthcdr} with two arguments.
+
+Added in Emacs 19.34.
+
+@node elt
+@unnumberedsubsubsec @code{elt} (156)
+@kindex elt
+Call @code{elt} with two arguments.
+
+Added in Emacs 19.34.
+
+@node nreverse
+@unnumberedsubsubsec @code{nreverse} (159)
+@kindex nreverse
+Call @code{nreverse} with one argument.
+
+Added in Emacs 19.34.
+
+@node setcar
+@unnumberedsubsubsec @code{setcar} (160)
+@kindex setcar
+Call @code{setcar} with two arguments.
+
+Added in Emacs 19.34.
+
+@node setcdr
+@unnumberedsubsubsec @code{setcdr} (161)
+@kindex setcdr
+Call @code{setcdr} with two arguments.
+
+Added in Emacs 19.34.
+
+@node car-safe
+@unnumberedsubsubsec @code{car-safe} (162)
+@kindex car-safe
+Call @code{car-safe} with one argument.
+
+Added in Emacs 19.34.
+
+@node cdr-safe
+@unnumberedsubsubsec @code{cdr-safe} (163)
+@kindex cdr-safe
+Call @code{cdr-safe} with one argument.
+
+Added in Emacs 19.34.
+@node nconc
+@unnumberedsubsubsec @code{nconc} (164)
+@kindex nconc
+Call @code{nconc} with two arguments.
+
+Added in Emacs 19.34.
+
+@node Arithmetic Function Instructions
+@subsection Arithmetic Function Instructions
+
+These instructions correspond to general functions which are not
+specific to Emacs; common cases are usually inlined for speed by the
+bytecode interpreter.
+
+@menu
+* sub1::
+* add1::
+* eqlsign::
+* gtr::
+* lss::
+* leq::
+* geq::
+* diff::
+* negate::
+* plus::
+* mult::
+* max::
+* min::
+* quo::
+* rem::
+@end menu
+
+@node sub1
+@unnumberedsubsubsec @code{sub1} (83)
+@kindex sub1
+
+@table @strong
+@item Implements:
+@code{TOS <- (1- TOS)}.
+@item Generated via:
+unary @code{1-}.
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun sub1-eg(n) (1- n))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1   83   sub1
+ 2  135   return
+@end verbatim
+
+@end table
+
+@node add1
+@unnumberedsubsubsec @code{add1} (84)
+@kindex add1
+
+@table @strong
+@item Implements:
+@code{TOS <- (1+ TOS)}.
+@item Generated via:
+unary @code{-}.
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun add1-eg(n) (1+ n))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1   84   add1
+ 2  135   return
+@end verbatim
+
+@end table
+
+@node eqlsign
+@unnumberedsubsubsec @code{eqlsign} (85)
+@kindex eqlsign
+
+@table @strong
+@item Implements:
+@code{TOS <- (= TOS S[1]}.
+@item Generated via:
+binary @code{=}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When dynamic binding is in effect, @code{(defun eqlsign-eg(a b) (= a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] a
+ 1    9   varref[1] b
+ 2   85   eqlsign
+ 3  135   return
+
+Constants Vector: [a b]
+@end verbatim
+
+@end table
+
+@node gtr
+@unnumberedsubsubsec @code{gtr} (86)
+@kindex gtr
+
+@table @strong
+@item Implements:
+@code{TOS <- (> TOS S[1]}.
+@item Generated via:
+binary @code{>}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun gtr-eg(a b) (> a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    1   stack-ref[1]
+ 1    1   stack-ref[1]
+ 2   86   gtr
+ 3  135   return
+@end verbatim
+
+@end table
+
+@node lss
+@unnumberedsubsubsec @code{lss} (87)
+@kindex lss
+
+@table @strong
+@item Implements:
+@code{TOS <- (< S[1] TOS}.
+@item Generated via:
+binary @code{<}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When dynamic binding is in effect, @code{(defun lss-eg(a b) (< a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] a
+ 1    9   varref[1] b
+ 2   87   lss
+ 3  135   return
+
+Constants Vector: [a b]
+@end verbatim
+
+@end table
+
+@node leq
+@unnumberedsubsubsec @code{leq} (88)
+@kindex leq
+
+@table @strong
+@item Implements:
+@code{TOS <- (<= S[1] TOS)}.
+@item Generated via:
+binary @code{<=}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When dynamic binding is in effect, @code{(defun leq-eg(a b) (<= a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] a
+ 1    9   varref[1] b
+ 2   88   leq
+ 3  135   return
+
+Constants Vector: [a b]
+@end verbatim
+
+@end table
+
+@node geq
+@unnumberedsubsubsec @code{geq} (89)
+@kindex geq
+
+@table @strong
+@item Implements:
+@code{TOS <- (>= S[1] TOS}.
+@item Generated via:
+binary @code{>=}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun geq-eg(a b) (>= a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    1   stack-ref[1]
+ 1    1   stack-ref[1]
+ 2   89   geq
+ 3  135   return
+@end verbatim
+
+@end table
+
+@node diff
+@unnumberedsubsubsec @code{diff} (90)
+@kindex diff
+
+@table @strong
+@item Implements:
+@code{TOS <- (- S[1] TOS}.
+@item Generated via:
+binary @code{-}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun diff-eg(a b) (- a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    1   stack-ref[1]
+ 1    1   stack-ref[1]
+ 2   90   diff
+ 3  135   return
+@end verbatim
+
+@end table
+
+@node negate
+@unnumberedsubsubsec @code{negate} (91)
+@kindex negate
+
+@table @strong
+@item Implements:
+@code{TOS <- (- TOS)}.
+@item Generated via:
+unary @code{-}.
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun negate-eg(a) (- a))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1   91   negate
+ 2  135   return
+@end verbatim
+
+@end table
+
+@node plus
+@unnumberedsubsubsec @code{plus} (92)
+@kindex plus
+
+@table @strong
+@item Implements:
+@code{TOS <- (+ S[1] TOS)}.
+@item Generated via:
+binary @code{+}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When dynamic binding is in effect, @code{(defun plus-eg(n) (+ n n))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] n
+ 1    8   varref[0] n
+ 2   92   plus
+ 3  135   return
+
+Constants Vector: [n]
+@end verbatim
+
+@end table
+
+@node mult
+@unnumberedsubsubsec @code{mult} (95)
+@kindex mult
+
+@table @strong
+@item Implements:
+@code{TOS <- (* S[1] TOS)}.
+@item Generated via:
+binary @code{*}.
+@item Stack effect:
+@math{-2+1}.
+@item Added in:
+Emacs 19.34
+@item Example:
+When dynamic binding is in effect, @code{(defun mult-eg(n) (* n n))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] n
+ 1    8   varref[0] n
+ 2   95   mult
+ 3  135   return
+
+Constants Vector: [n]
+@end verbatim
+
+@end table
+
+@node max
+@unnumberedsubsubsec @code{max} (93)
+@kindex max
+
+@table @strong
+@item Implements:
+@code{TOS <- (max S[1] TOS)}.
+@item Generated via:
+binary @code{max}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When dynamic binding is in effect, @code{(defun max-eg(a b) (max a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] a
+ 1    9   varref[1] b
+ 2   93   max
+ 3  135   return
+
+Constants Vector: [a b]
+@end verbatim
+
+@end table
+
+@node min
+@unnumberedsubsubsec @code{min} (94)
+@kindex min
+
+@table @strong
+@item Implements:
+@code{TOS <- (min(S[1] TOS)}.
+@item Generated via:
+binary @code{min}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When dynamic binding is in effect, @code{(defun min-eg(a b) (min a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] a
+ 1    9   varref[1] b
+ 2   94   min
+ 3  135   return
+
+Constants Vector: [a b]
+@end verbatim
+
+@end table
+
+@node quo
+@unnumberedsubsubsec @code{quo} (165)
+@kindex quo
+
+@table @strong
+@item Implements:
+@code{TOS <- (/ S[1] TOS)}.
+@item Generated via:
+binary @verb{|/|}.
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When dynamic binding is in effect, @code{(defun min-quo(a b) (/ a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] a
+ 1    9   varref[1] b
+ 2  165   quo
+ 3  135   return
+
+Constants Vector: [a b]
+@end verbatim
+
+@end table
+
+@node rem
+@unnumberedsubsubsec @code{rem} (166)
+@kindex rem
+
+@table @strong
+@item implements:
+@code{TOS <- (\% S[1] TOS)}.
+@item generated via:
+binary @verb{|%|}
+@item Stack effect:
+@math{-2+1}
+@item Added in:
+Emacs 19.34.
+@item Example:
+When lexical binding is in effect, @code{(defun rem-eg(a b) (% a b))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0    1   stack-ref[1]
+ 1    1   stack-ref[1]
+ 2  166   rem
+ 3  135   return
+@end verbatim
+
+@end table
+
+@node String Function Instructions
+@subsection String Function Instructions
+
+These instructions correspond to general functions which are not
+specific to Emacs; the bytecode interpreter calls the corresponding C
+function for them.
+
+@menu
+* substring::
+* concat2::
+* concat3::
+* concat4::
+* concatN::
+* upcase::
+* downcase::
+* stringeqlsign::
+* stringlss::
+@end menu
+
+@node substring
+@unnumberedsubsubsec @code{substring} (79)
+@kindex substring
+Call @code{substring} with three arguments.
+
+@node concat2
+@unnumberedsubsubsec @code{concat2} (80)
+@kindex concat2
+Call @code{concat} with two arguments.
+
+@node concat3
+@unnumberedsubsubsec @code{concat3} (81)
+@kindex concat3
+Call @code{concat} with three arguments.
+
+@node concat4
+@unnumberedsubsubsec @code{concat4} (82)
+@kindex concat4
+Call @code{concat} with four arguments.
+
+
+@node concatN
+@unnumberedsubsubsec @code{concatN} (174)
+@kindex concatN
+
+Call @code{concat} on up to 255 arguments.  Note there are
+special instructions for the case where there are 2 to 4 items to
+concatenate.
+
+Added in Emacs 19.34.
+
+@node upcase
+@unnumberedsubsubsec @code{upcase} (150)
+@kindex upcase
+Call @code{upcase} with one argument.
+
+Added in Emacs 19.34.
+
+@node downcase
+@unnumberedsubsubsec @code{downcase} (151)
+@kindex downcase
+Call @code{downcase} with one argument.
+
+Added in Emacs 19.34.
+
+@node stringeqlsign
+@unnumberedsubsubsec @code{stringeqlsign} (152)
+@kindex stringeqlsign
+Call @code{string=} with two arguments, comparing two strings for equality.
+
+Added in Emacs 19.34.
+
+@node stringlss
+@unnumberedsubsubsec @code{stringlss} (153)
+@kindex stringlss
+Call @code{string<} with two arguments, comparing two strings.
+
+Added in Emacs 19.34.
+
+@node Emacs Function Instructions
+@subsection Emacs Function Instructions
+
+These instructions correspond to Emacs-specific text manipulation
+functions. They are generally not inlined by the bytecode interpreter,
+but simply call the corresponding C function.
+
+@menu
+* point::
+* goto-char::
+* insert::
+* insertN::
+* point-min::
+* point-max::
+* char-after::
+* following-char::
+* preceding-char::
+* current-column::
+* eolp::
+* eobp::
+* bolp::
+* bobp::
+* current-buffer::
+* set-buffer::
+* byte-save-current-buffer::
+* forward-char::
+* forward-word::
+* skip-chars-forward::
+* skip-chars-backward::
+* forward-line::
+* char-syntax::
+* buffer-substring::
+* delete-region::
+* narrow-to-region::
+* widen::
+* end-of-line::
+* set-marker::
+* match-beginning::
+* match-end::
+@end menu
+
+@node point
+@unnumberedsubsubsec @code{point} (96)
+@kindex point
+Call @code{point} with no arguments.
+
+@node goto-char
+@unnumberedsubsubsec @code{goto-char} (98)
+@kindex goto-char
+Call @code{goto-char} with one argument.
+
+@node insert
+@unnumberedsubsubsec @code{insert} (99)
+@kindex insert
+Call @code{insert} with one argument.
+
+@node insertN
+@unnumberedsubsubsec @code{insert} (99)
+@kindex insertN
+Call @code{insert} on up to 255 arguments.  Note there are special
+instructions when there is only one argument.
+
+Added in Emacs 19.34.
+
+@node point-min
+@unnumberedsubsubsec @code{point-min} (101)
+@kindex point-min
+Call @code{point-min} with no arguments.
+
+@node point-max
+@unnumberedsubsubsec @code{point-max} (100)
+@kindex point-max
+Call @code{point-max} with no arguments.
+
+@node char-after
+@unnumberedsubsubsec @code{char-after} (102)
+@kindex char-after
+Call @code{char-after} with one argument.
+
+@node following-char
+@unnumberedsubsubsec @code{following-char} (103)
+@kindex following-char
+Call @code{following-char} with no arguments.
+
+@node preceding-char
+@unnumberedsubsubsec @code{preceding-char} (104)
+@kindex preceding-char
+Call @code{preceding-char} with no arguments.
+
+@node current-column
+@unnumberedsubsubsec @code{current-column} (105)
+@kindex current-column
+Call @code{current-column} with no arguments.
+
+@node eolp
+@unnumberedsubsubsec @code{eolp} (108)
+@kindex eolp
+Call @code{eolp} with no arguments.
+
+@node eobp
+@unnumberedsubsubsec @code{eobp} (109)
+@kindex eobp
+Call @code{eobp} with no arguments.
+
+@node bolp
+@unnumberedsubsubsec @code{bolp} (110)
+@kindex bolp
+Call @code{bolp} with no arguments.
+
+@node bobp
+@unnumberedsubsubsec @code{bobp} (111)
+@kindex bobp
+Call @code{bobp} with no arguments.
+
+@node current-buffer
+@unnumberedsubsubsec @code{current-buffer} (112)
+@kindex current-buffer
+Call @code{current-buffer} with no arguments.
+
+@node set-buffer
+@unnumberedsubsubsec @code{set-buffer} (113)
+@kindex set-buffer
+Call @code{set-buffer} with the top of the stack,
+The top of the stack is replaced by the result of
+@code{(set-buffer TOS)}
+
+@strong{Example}
+@code{(defun set-buffer-eg() (set-buffer "*scratch"))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] "*scratch"
+ 1  113   set-buffer
+ 2  135   return
+
+Constants Vector: ["*scratch"]
+@end verbatim
+
+@node byte-save-current-buffer
+@unnumberedsubsubsec @code{byte-save-current-buffer} (114)
+@kindex save-current-buffer
+Call @code{save-current-buffer}.
+
+Replaces older @code{save-current-buffer}.
+
+Added in Emacs 19.34.
+
+@strong{Example}
+@code{(defun scb() (save-current-buffer (prog 5)))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  114   save-current-buffer
+ 1  192   constant[0] prog
+ 2  193   constant[1] 5
+ 3   33   call[1]
+ 4   41   unbind[1]
+ 5  135   return
+
+Constants Vector: [prog 5]
+@end verbatim
+
+@node forward-char
+@unnumberedsubsubsec @code{forward-char} (117)
+@kindex forward-char
+Call @code{forward-char} with one argument.
+
+Added in Emacs 19.34.
+
+@node forward-word
+@unnumberedsubsubsec @code{forward-word} (118)
+@kindex forward-word
+Call @code{forward-word} with one argument.
+
+Added in Emacs 19.34.
+
+@node skip-chars-forward
+@unnumberedsubsubsec @code{skip-chars-forward} (119)
+@kindex skip-chars-forward
+Call @code{skip-chars-forward} with two arguments.
+
+Added in Emacs 19.34.
+
+@node skip-chars-backward
+@unnumberedsubsubsec @code{skip-chars-backward} (120)
+@kindex skip-chars-backward
+Call @code{skip-chars-backward} with two arguments.
+
+Added in Emacs 19.34.
+
+@node forward-line
+@unnumberedsubsubsec @code{forward-line} (121)
+@kindex forward-line
+Call @code{forward-line} with one argument.
+
+Added in Emacs 19.34.
+
+@node char-syntax
+@unnumberedsubsubsec @code{char-syntax} (122)
+@kindex char-syntax
+Call @code{char-syntax} with one argument.
+
+Added in Emacs 19.34.
+
+@node buffer-substring
+@unnumberedsubsubsec @code{buffer-substring} (123)
+@kindex buffer-substring
+Call @code{buffer-substring} with two arguments.
+
+Added in Emacs 19.34.
+
+@node delete-region
+@unnumberedsubsubsec @code{delete-region} (124)
+@kindex delete-region
+Call @code{delete-region} with two arguments.
+
+Added in Emacs 19.34.
+
+@node narrow-to-region
+@unnumberedsubsubsec @code{narrow-to-region} (125)
+@kindex narrow-to-region
+Call @code{narrow-to-region} with two arguments.
+
+Added in Emacs 19.34.
+
+@node widen
+@unnumberedsubsubsec @code{widen} (126)
+@kindex widen
+Call @code{widen} with no arguments.
+
+Added in Emacs 19.34.
+
+@node end-of-line
+@unnumberedsubsubsec @code{end-of-line} (127)
+@kindex end-of-line
+Call @code{end-of-line} with one argument.
+
+Added in Emacs 19.34.
+
+@node set-marker
+@unnumberedsubsubsec @code{set-marker} (147)
+@kindex set-marker
+Call @code{set-marker} with three arguments.
+
+Added in Emacs 19.34.
+
+@node match-beginning
+@unnumberedsubsubsec @code{match-beginning} (148)
+@kindex match-beginning
+Call @code{match-beginning} with one argument.
+
+Added in Emacs 19.34.
+
+@node match-end
+@unnumberedsubsubsec @code{match-end} (149)
+@kindex match-end
+Call @code{match-end} with one argument.
+
+Added in Emacs 19.34.
+
+@node Stack Manipulation Instructions
+@section Stack Manipulation Instructions
+
+@menu
+* discard::
+* discardN::
+* dup::
+* stack-set::
+* stack-set2::
+@end menu
+
+@node discard
+@unnumberedsubsec @code{discard} (136)
+@kindex discard
+Discard one value from the stack.
+
+@node discardN
+@unnumberedsubsec @code{discardN} (180)
+@kindex discardN
+Discards up to 255 arguments from the stack.  Note there is a special
+instruction when there is only one argument.
+
+Added in Emacs 24.1
+
+@node dup
+@unnumberedsubsec @code{dup} (137)
+@kindex dup
+Make a copy of the top-of-stack value and push that onto the top of the evaluation stack.
+
+@subsubsection Example
+When lexical binding is in effect, @code{(defun en(n) n)} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup  ;; duplicates top of stack: n
+ 1  135   return
+@end verbatim
+
+@node stack-set
+@unnumberedsubsec @code{stack-set} (180)
+@kindex stack-set
+Like discard. [What's the difference?]
+
+Added in Emacs 24.1
+
+@node stack-set2
+@unnumberedsubsec @code{stack-setN} (181)
+@kindex stack-set2
+Like discardN. [What's the difference?]
+Can handle up to 255 arguments.  Note there is a special
+instruction when there is only one argument.
+
+Added in Emacs 24.1
+
+@node Binding Instructions
+@section Binding Instructions
+
+These instructions manipulate the special-bindings stack by creating a
+new binding when executed.  They need to be balanced with
+@code{unbind} instructions.
+
+@unnumberedsubsec @code{save-excursion} (138)
+@kindex save-excursion
+Make a binding recording buffer, point, and mark.

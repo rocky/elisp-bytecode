@@ -7,7 +7,8 @@ MAKEINFO_OPTS = --force --enable-encoding -I $(emacsdir) -I $(srcdir)
 TEXI2DVI = texi2dvi
 TEXI2PDF = texi2pdf
 DVIPS = dvips
-srcs = elisp-bytecode.texi
+TOP_SRC = elisp-bytecode.texi
+srcs =  $(wildcard *.texi)
 
 DVI_TARGETS = elisp-bytecode.dvi
 HTML_TARGETS = elisp-bytecode.html
@@ -37,7 +38,7 @@ clean: mostlyclean
 	rm -f $(DVI_TARGETS) $(HTML_TARGETS) $(PDF_TARGETS) $(PS_TARGETS)
 
 
-elisp-bytecode.pdf: $(srcs)
+elisp-bytecode.pdf: $(TOP_SRC)
 	$(ENVADD) $(TEXI2PDF) $<
 
 clean:
