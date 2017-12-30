@@ -41,13 +41,14 @@ evaluation-stack entry.
 In many opcodes such as @code{constant}, @code{varref}, you will find
 an index after the opcode. What's going on is that opcode is one of a
 number of opcodes in a class encodes an index into the opcode. We
-generally call this an ``Argument-encoding'' instruction. In both the
-display of the opcode as well we'll include that particular opcode
-variant in subscripts.
+generally call this an ``Argument-encoding'' instruction. In the
+display of the opcode in assembly listings and in the opcode table
+chapter where we list each opcode, we will include that particular
+opcode variant in subscripts.
 
 For example consider @code{constant[0]} versus @code{constant[1]}.
 The former has opcode 192 while the latter has opcode 193. In terms of
-semantics the former is the first or zeroth-index entry in a function's constant
+semantics, the former is the first or zeroth-index entry in a function's constant
 vector while the latter is the second or 1-index entry.
 
 @end itemize
