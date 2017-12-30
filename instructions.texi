@@ -327,7 +327,7 @@ Jump to label given in the 16-bit operand
 @item Stack effect:
 @math{-0+0}
 @item Example:
-@code{(defun goto-eg(n) (while (n) 2))} generates:
+@code{(defun goto-eg(n) (while (n) 1300))} generates:
 @verbatim
 PC  Byte  Instruction
  0  192   constant[0] n
@@ -342,6 +342,7 @@ PC  Byte  Instruction
 
 Constants Vector: [n]
 @end verbatim
+
 @end table
 
 @node goto-if-nil
@@ -349,7 +350,8 @@ Constants Vector: [n]
 @kindex goto-if-not-nil
 @table @strong
 @item Implements:
-Jump to label given in the 16-bit operand if TOS is nil
+Jump to label given in the 16-bit operand if TOS is nil. In contrast to
+@code{goto-if-nil-else-pop}, the test expression, TOS, is always popped.
 @item Generated via:
 @code{if} with ``else'' clause and various control-flow constructs
 @item Instruction size:
@@ -357,7 +359,7 @@ Jump to label given in the 16-bit operand if TOS is nil
 @item Stack effect:
 @math{-1+0}
 @item Example:
-@code{(defun goto-if-nil-eg(n) (if (n) 2 3))} generates:
+@code{(defun goto-if-nil-eg(n) (if (n) 1310 1311))} generates:
 @verbatim
 PC  Byte  Instruction
  0  192   constant[0] n
@@ -365,15 +367,16 @@ PC  Byte  Instruction
  2  131   goto-if-nil [9]
            9
            0
- 5  193   constant[1] 2
+ 5  193   constant[1] 1310
  6  130   goto [10]
           10
            0
- 9  194   constant[2] 3
+ 9  194   constant[2] 1311
 10  135   return
 
-Constants Vector: [n 2 3]
+Constants Vector: [n 1310 1311]
 @end verbatim
+
 @end table
 
 @node goto-if-not-nil
@@ -381,7 +384,9 @@ Constants Vector: [n 2 3]
 @kindex goto-if-not-nil
 @table @strong
 @item Implements:
-Jump to label given in the 16-bit operand if TOS is not nil
+Jump to label given in the 16-bit operand if TOS is not nil.  In
+contrast to @code{goto-if-not-nil-else-pop}, the test expression, TOS, is
+always popped.
 @item Generated via:
 @code{or} inside an @code{if} with optimization and various
 control-flow constructs
@@ -390,12 +395,12 @@ control-flow constructs
 @item Stack effect:
 @math{-1+0}
 @item Example:
-@code{(defun goto-if-not-nil-eg(n) (if (or (n) (n)) 6))} generates
+With bytecode optimization, @code{(defun goto-if-not-nil-eg(n) (if (or (n) (n)) 1320))} generates
 @verbatim
 PC  Byte  Instruction
  0  192   constant[0] n
  1   32   call[0]
- 2  134   goto-if-not-nil [10]
+ 2  132   goto-if-not-nil [10]
            7
            0
  5  192   constant[0] n
@@ -403,20 +408,23 @@ PC  Byte  Instruction
  7  133   goto-if-nil-else-pop [11]
           11
            0
-10  193   constant[1] 6
+10  193   constant[1] 1320
 11  135   return
 
-Constants Vector: [n 6]
+Constants Vector: [n 1320]
 @end verbatim
+
+Note the change in opcode when bytecode optimization is not performed.
 @end table
 
 @node goto-if-nil-else-pop
 @subsection @code{goto-if-nil-else-pop} (133)
-@kindex goto-if-not-else-pop
+@kindex goto-if-nil-else-pop
 @table @strong
 @item Implements:
-Jump to label given in the 16-bit operand if TOS is nil; otherwise
-pop the top stack instruction.
+Jump to label given in the 16-bit operand if TOS is nil; otherwise pop
+the TOS, the tested condition. This allows the test expression, nil,
+to be used again on the branch as the TOS.
 @item Generated via:
 @code{cond}, @code{if} and various control-flow constructs
 @item Instruction size:
@@ -424,7 +432,18 @@ pop the top stack instruction.
 @item Stack effect:
 @math{\phi(0,-1)+0}
 @item Example:
+@code{(defun goto-if-nil-else-pop-eg(n) (cond ((n) 1330)))} generates:
 @verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] n
+ 1   32   call[0]
+ 2  133   goto-if-nil-else-pop [6]
+           6
+           0
+ 5  193   constant[1] 1330
+ 6  135   return
+
+Constants Vector: [n 1330]
 @end verbatim
 @end table
 
@@ -434,7 +453,8 @@ pop the top stack instruction.
 @table @strong
 @item Implements:
 Jump to label given in the 16-bit operand if TOS is not nil; otherwise
-pop the top stack instruction.
+pop TOS, the tested condition. This allows the tested expression on TOS to be used
+again when the jump is taken.
 @item Generated via:
 @code{cond}, @code{if} and various control-flow constructs
 @item Instruction size:
@@ -442,19 +462,26 @@ pop the top stack instruction.
 @item Stack effect:
 @math{\phi(0,-1)+0}
 @item Example:
-@code{(defun goto-if-not-nil-else-pop-eg(n) (if (n) 2))} generates:
+@code{(defun goto-if-not-nil-eg(n) (if (or (n) (n)) 1340))} generates:
 @verbatim
 PC  Byte  Instruction
  0  192   constant[0] n
  1   32   call[0]
- 2  134   goto-if-nil-else-pop [6]
-           6
+ 2  134   goto-if-not-nil-else-pop [7]
+           7
            0
- 5  193   constant[1] 2
- 6  135   return
+ 5  192   constant[0] n
+ 6   32   call[0]
+ 7  133   goto-if-nil-else-pop [11]
+          11
+           0
+10  193   constant[1] 1340
+11  135   return
 
-Constants Vector: [n 2]
+Constants Vector: [n 1340]
 @end verbatim
+
+Note the change in opcode when bytecode optimization is performed.
 @end table
 
 @node return
@@ -471,14 +498,15 @@ bytecode sequence. The top value on the evaluation stack is the return value.
 @item Stack effect:
 @math{-1+0}
 @item Example:
-@code{(defun return-eg(n) 1)} generates:
+@code{(defun return-eg(n) 1350)} generates:
 @verbatim
 PC  Byte  Instruction
- 0  192   constant[0] 1
+ 0  192   constant[0] 1350
  1  135   return
 
-Constants Vector: [1]
+Constants Vector: [1350]
 @end verbatim
+
 @end table
 
 @node Function-Call Instructions
@@ -659,15 +687,15 @@ binary @code{nth}.
 @item Stack effect:
 @math{-2+1}.
 @item Example:
-When lexical binding is in effect, @code{(defun nth-eg(l) (nth 5 l))} generates:
+When lexical binding is in effect, @code{(defun nth-eg(l) (nth 560 l))} generates:
 @verbatim
 PC  Byte  Instruction
- 0  192   constant[0] 5
+ 0  192   constant[0] 560
  1    1   stack-ref[1]
  2   56   nth
  3  135   return
 
-Constants Vector: [5]
+Constants Vector: [560]
 @end verbatim
 
 @end table
