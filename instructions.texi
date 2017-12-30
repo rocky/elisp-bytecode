@@ -19,7 +19,7 @@ In this chapter we'll document instructions of the course of the
 entire history of Emacs. (Or at least we aim to.)
 
 To simplify and regularize things we'll use a standard format and a
-small amount of jargon which is be explained here.
+small amount of jargon which is explained here.
 
 @subsection Instruction Jargon
 @itemize
@@ -146,7 +146,7 @@ is more likely to catch situations where random sections of memory are
 run such as by setting the PC incorrectly.
 
 @subsubsection Example
-When lexical binding is in effect, @code{(defun stack-ref() (let ((a 5) (b 6) (c 7)) (+ a c)))} generates:
+When lexical binding is in effect, @code{(defun stack-ref() (let ((a 5) (_b 6) (c 7)) (+ a c)))} generates:
 @c ((lexical . t) (optimize . nil))
 @verbatim
 PC  Byte  Instruction
@@ -387,7 +387,7 @@ Constants Vector: [n 1310 1311]
 @end table
 
 @node goto-if-not-nil
-@subsection @code{goto-if-not-nil} (132)
+@unnumberedsubsec @code{goto-if-not-nil} (132)
 @kindex goto-if-not-nil
 @table @strong
 @item Implements:
@@ -425,7 +425,7 @@ Note the change in opcode when bytecode optimization is not performed.
 @end table
 
 @node goto-if-nil-else-pop
-@subsection @code{goto-if-nil-else-pop} (133)
+@unnumberedsubsec @code{goto-if-nil-else-pop} (133)
 @kindex goto-if-nil-else-pop
 @table @strong
 @item Implements:
@@ -456,7 +456,7 @@ Constants Vector: [n 1330]
 @end table
 
 @node goto-if-not-nil-else-pop
-@subsection @code{goto-if-not-nil-else-pop} (134)
+@unnumberedsubsec @code{goto-if-not-nil-else-pop} (134)
 @kindex goto-if-not-nil-else-pop
 @table @strong
 @item Implements:
@@ -727,9 +727,11 @@ When lexical binding is in effect, @code{(defun car-eg(l) (car l))} generates:
 @c ((lexical . t))
 @verbatim
 PC  Byte  Instruction
- 0  137   dup
+ 0    8   varref[0] l
  1   64   car
  2  135   return
+
+Constants Vector: [l]
 @end verbatim
 
 @end table
@@ -751,9 +753,11 @@ When lexical binding is in effect, @code{(defun cdr-eg(l) (cdr l))} generates:
 @c ((lexical . t))
 @verbatim
 PC  Byte  Instruction
- 0  137   dup
+ 0    8   varref[0] l
  1   65   cdr
  2  135   return
+
+Constants Vector: [l]
 @end verbatim
 
 @end table
@@ -772,7 +776,8 @@ binary @code{cons}.
 @item Stack effect:
 @math{-2+1}.
 @item Example:
-When dynamic binding is in effect, @code{(defun cons-eg() (cons 'a 'b))} generates:
+@code{(defun cons-eg() (cons 'a 'b))} generates:
+@c ((lexical . t) (optimize . nil))
 @verbatim
 PC  Byte  Instruction
  0  192   constant[0] a
@@ -807,10 +812,10 @@ Call @code{list} with three arguments.
 Call @code{list} with four arguments.
 
 @node listN
-@unnumberedsubsubsec @code{listN} (70)
+@unnumberedsubsubsec @code{listN} (175)
 @kindex listN
 Call @code{list} on up to 255 arguments. Note special instructions for
-the case where there are 2 to 4 items in the list.
+the case where there are 1 to 4 items in the list.
 
 Added in Emacs 19.34.
 
@@ -965,7 +970,7 @@ PC  Byte  Instruction
 
 @table @strong
 @item Implements:
-@code{TOS <- (= TOS S[1]}.
+@code{TOS <- (= TOS S[1])}.
 @item Generated via:
 binary @code{=}.
 @item Instruction size:
@@ -992,7 +997,7 @@ Constants Vector: [a b]
 
 @table @strong
 @item Implements:
-@code{TOS <- (> TOS S[1]}.
+@code{TOS <- (> TOS S[1])}.
 @item Generated via:
 binary @code{>}.
 @item Instruction size:
@@ -1018,7 +1023,7 @@ PC  Byte  Instruction
 
 @table @strong
 @item Implements:
-@code{TOS <- (< S[1] TOS}.
+@code{TOS <- (< S[1] TOS)}.
 @item Generated via:
 binary @code{<}.
 @item Instruction size:
@@ -1074,7 +1079,7 @@ Constants Vector: [a b]
 
 @table @strong
 @item Implements:
-@code{TOS <- (>= S[1] TOS}.
+@code{TOS <- (>= S[1] TOS)}.
 @item Instruction size:
 1 byte
 @item Generated via:
@@ -1102,7 +1107,7 @@ PC  Byte  Instruction
 
 @table @strong
 @item Implements:
-@code{TOS <- (- S[1] TOS}.
+@code{TOS <- (- S[1] TOS)}.
 @item Generated via:
 binary @code{-}.
 @item Instruction size:
@@ -1144,9 +1149,11 @@ When lexical binding is in effect, @code{(defun negate-eg(a) (- a))} generates:
 @c ((lexical . t))
 @verbatim
 PC  Byte  Instruction
- 0  137   dup
+ 0    8   varref[0] a
  1   91   negate
  2  135   return
+
+Constants Vector: [a]
 @end verbatim
 
 @end table
@@ -1294,7 +1301,7 @@ Constants Vector: [a b]
 
 @table @strong
 @item implements:
-@code{TOS <- (\% S[1] TOS)}.
+@code{TOS <- (% S[1] TOS)}.
 @item generated via:
 binary @verb{|%|}
 @item Instruction size:
@@ -1406,8 +1413,8 @@ but simply call the corresponding C function.
 * goto-char::
 * insert::
 * insertN::
-* point-min::
 * point-max::
+* point-min::
 * char-after::
 * following-char::
 * preceding-char::
@@ -1418,7 +1425,7 @@ but simply call the corresponding C function.
 * bobp::
 * current-buffer::
 * set-buffer::
-* byte-save-current-buffer::
+* save-current-buffer::
 * forward-char::
 * forward-word::
 * skip-chars-forward::
@@ -1458,15 +1465,15 @@ instructions when there is only one argument.
 
 Added in Emacs 19.34.
 
-@node point-min
-@unnumberedsubsubsec @code{point-min} (101)
-@kindex point-min
-Call @code{point-min} with no arguments.
-
 @node point-max
 @unnumberedsubsubsec @code{point-max} (100)
 @kindex point-max
 Call @code{point-max} with no arguments.
+
+@node point-min
+@unnumberedsubsubsec @code{point-min} (101)
+@kindex point-min
+Call @code{point-min} with no arguments.
 
 @node char-after
 @unnumberedsubsubsec @code{char-after} (102)
@@ -1531,12 +1538,12 @@ PC  Byte  Instruction
 Constants Vector: ["*scratch"]
 @end verbatim
 
-@node byte-save-current-buffer
-@unnumberedsubsubsec @code{byte-save-current-buffer} (114)
+@node save-current-buffer
+@unnumberedsubsubsec @code{save-current-buffer} (114)
 @kindex save-current-buffer
 Call @code{save-current-buffer}.
 
-Replaces older @code{save-current-buffer}.
+Replaces older @code{save-current-buffer-OBSOLETE}.
 
 Added in Emacs 19.34.
 
