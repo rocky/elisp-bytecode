@@ -396,13 +396,13 @@ control-flow constructs
 @item Stack effect:
 @math{-1+0}
 @item Example:
-With bytecode optimization, @code{(defun goto-if-not-nil-eg(n) (if (or (n) (n)) 1320))} generates
+With bytecode optimization, @code{(defun goto-if-not-nil-eg(n) (if (or (n) (n)) 1320))} generates:
 @verbatim
 PC  Byte  Instruction
  0  192   constant[0] n
  1   32   call[0]
  2  132   goto-if-not-nil [10]
-           7
+          10
            0
  5  192   constant[0] n
  6   32   call[0]
@@ -446,6 +446,7 @@ PC  Byte  Instruction
 
 Constants Vector: [n 1330]
 @end verbatim
+
 @end table
 
 @node goto-if-not-nil-else-pop
