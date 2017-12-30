@@ -563,6 +563,11 @@ the stack-effect field.
 @tab @verb{|  current-column|}
 @tab Call @code{current-column} with no arguments.
 @tab @math{-0+1}
+@item @verb{|0153|}
+@tab @verb{|*107|}
+@tab @verb{|  scan-buffer|}
+@tab
+@tab
 @item @verb{|0154|}
 @tab @verb{| 108|}
 @tab @verb{|  eolp|}
