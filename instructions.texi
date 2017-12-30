@@ -134,13 +134,16 @@ Added in Emacs 24.1
 
 @subsubsection Warning
 Running an instruction with opcode 0 (logically this would be called
-@code{stack-ref[0]}), will cause an immediate abort of Emacs!
+@code{stack-ref[0]}), will cause an immediate abort of Emacs in
+versions after version 20 and before version 25! The abort of the
+opcode was in place before this instruction was added.
 
-0 is typically an invalid bytecode and assembly instructions because 0
-values are commonly found data, e.g. the end of C strings, or data that has
-been initialized to value but represents data that hasn't been written to yet.
-
-By doing this we typically catch running random or invalid bytecode.
+Zero is typically an invalid in bytecode and in machine code, since
+zero values are commonly found data, e.g. the end of C strings, or
+data that has been initialized to value but represents data that
+hasn't been written to yet. By having it be an invalid instruction, it
+is more likely to catch situations where random sections of memory are
+run such as by setting the PC incorrectly.
 
 @subsubsection Example
 When lexical binding is in effect, @code{(defun stack-ref() (let ((a 5) (b 6) (c 7)) (+ a c)))} generates:
