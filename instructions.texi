@@ -1,14 +1,110 @@
 @node ELisp Bytecode Instructions
 @chapter ELisp Bytecode Instructions
 
+
 @menu
+* Instruction-Description Format::
 * Argument-Packing Instructions::
 * Constants-Vector Retrieval Instructions::
-* Return Instruction::
+* Control-Flow Instructions::
 * Function-Call Instructions::
 * Stack Manipulation Instructions::
 * Binding Instructions::
 @end menu
+
+@node Instruction-Description Format
+@section Instruction-Description Format
+
+In this chapter we'll document instructions of the course of the
+entire history of Emacs. (Or at least we aim to.)
+
+To simplify and regularize things we'll use a standard format and a
+small amount of jargon which is be explained here.
+
+@subsection Instruction Jargon
+@itemize
+@item @code{TOS}
+The top of the evaluations stack. Many instruction either read or push onto this
+@item @code{S}
+This is an array of evaluation stack items. @code{S[0]} is the top of the stack, or
+@code{TOS}.
+@item @math{\phi}
+This is used in describing stack effects for branching instructions
+where the stack effect is different on one branch versus the
+other. This is a function of two arguments. The first argument gives
+the stack effect on the non-nil branch and the second argument gives
+the stack effect for the nil branch. So @math{\phi(0,-1)} which is
+seen in @code{goto-if-not-nil-else-pop} means that if the jump is
+taken, the stack effect is 0, otherwise the effect removes or pops an
+evaluation-stack entry.
+@item opcode subscripting (@code{[]})
+In many opcodes such as @code{constant}, @code{varref}, you will find
+an index after the opcode. What's going on is that opcode is one of a
+number of opcodes in a class encodes an index into the opcode. We
+generally call this an ``Argument-encoding'' instruction. In the
+display of the opcode in assembly listings and in the opcode table
+chapter where we list each opcode, we will include that particular
+opcode variant in subscripts.
+
+For example consider @code{constant[0]} versus @code{constant[1]}.
+The former has opcode 192 while the latter has opcode 193. In terms of
+semantics, the former is the first or zeroth-index entry in a function's constant
+vector while the latter is the second or 1-index entry.
+
+@end itemize
+
+@subsection Instruction Description Fields
+The description of fields use for describing each instruction is as follows
+@table @strong
+@item Implements:
+A description of what the instruction does.
+@item Generated via:
+These give some ELisp constructs that may generate the instruction. Of
+course there may be many constructs and there may be limiting
+situations within that construct. We'll only give one or a few of the
+constructs, and we'll try to indicate a limiting condition where
+possible.
+@item Instruction size:
+The number of bytes in the instruction. This is 1 to 3 bytes.
+@item Stack effect:
+This describes how many stack entries are read and popped and how many
+entries stack entries are pushed. Although this is logically a tuple,
+we'll list this a tuple like @math{(-3, 2)} as a single scalar
+@math{-3+2}. In this example, we read/remove three stack entries and
+add two.  The reason we give this as @math{-3+2} rather than the tuple
+format is so that the overall effect (removing a stack entry) can be
+seen by evaluating the expression.
+@item Added in:
+This is optiona. When it is given this gives which version of Emacs
+the opcode was added. It may also give when the opcode became obsolete
+or was no longer implemented.
+@item Example:
+Some ELisp code to show how the instruction is used. For example
+the for the @code{goto} instruction we give:
+
+@code{(defun goto-eg(n) (while (n) 2))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] n
+ 1   32   call[0]
+ 2  133   goto-if-nil-else-pop [8]
+           8
+           0
+ 5  130   goto [0]
+           0
+           0
+ 8  135   return
+
+Constants Vector: [n]
+@end verbatim
+
+From the above we see that the @code{goto} instruction at program
+counter (PC) 5, has decimal opcode 130. The instruction is three bytes
+long: a one-byte opcode followed by a two-byte operand.
+
+Unless otherwise stated, all code examples were compiled in Emacs 25
+with optimization turned off.
+@end table
 
 @node Argument-Packing Instructions
 @section Argument-Packing Instructions
@@ -206,23 +302,213 @@ PC  Byte  Instruction
 Constants Vector: [n + 0 1 2 .. 61 62 63 64]
 @end verbatim
 
-@node Return Instruction
-@section Return Instruction
+@page
+@node Control-Flow Instructions
+@section Control-Flow Instructions
 
-@unnumberedsubsec @code{return} (135)
-@kindex return
-Return from function.  This is the last instruction in a function's
-bytecode sequence. The top value on the evaluation stack is the return value.
+@menu
+* goto::
+* goto-if-nil::
+* goto-if-not-nil::
+* goto-if-nil-else-pop::
+* goto-if-not-nil-else-pop::
+* return::
+@end menu
 
-@subsubsection Example
-@code{(defun one(n) 1)} generates:
+@node goto
+@unnumberedsubsec @code{goto} (130)
+@kindex goto
+@table @strong
+@item Implements:
+Jump to label given in the 16-bit operand
+@item Generated via:
+@code{while} and various control-flow constructs
+@item Instruction size:
+3 bytes
+@item Stack effect:
+@math{-0+0}
+@item Example:
+@code{(defun goto-eg(n) (while (n) 1300))} generates:
 @verbatim
 PC  Byte  Instruction
- 0  192   constant[0] 1
+ 0  192   constant[0] n
+ 1   32   call[0]
+ 2  133   goto-if-nil-else-pop [8]
+           8
+           0
+ 5  130   goto [0]
+           0
+           0
+ 8  135   return
+
+Constants Vector: [n]
+@end verbatim
+
+@end table
+
+@node goto-if-nil
+@unnumberedsubsec @code{goto-if-nil} (131)
+@kindex goto-if-not-nil
+@table @strong
+@item Implements:
+Jump to label given in the 16-bit operand if TOS is nil. In contrast to
+@code{goto-if-nil-else-pop}, the test expression, TOS, is always popped.
+@item Generated via:
+@code{if} with ``else'' clause and various control-flow constructs
+@item Instruction size:
+3 bytes
+@item Stack effect:
+@math{-1+0}
+@item Example:
+@code{(defun goto-if-nil-eg(n) (if (n) 1310 1311))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] n
+ 1   32   call[0]
+ 2  131   goto-if-nil [9]
+           9
+           0
+ 5  193   constant[1] 1310
+ 6  130   goto [10]
+          10
+           0
+ 9  194   constant[2] 1311
+10  135   return
+
+Constants Vector: [n 1310 1311]
+@end verbatim
+
+@end table
+
+@node goto-if-not-nil
+@subsection @code{goto-if-not-nil} (132)
+@kindex goto-if-not-nil
+@table @strong
+@item Implements:
+Jump to label given in the 16-bit operand if TOS is not nil.  In
+contrast to @code{goto-if-not-nil-else-pop}, the test expression, TOS, is
+always popped.
+@item Generated via:
+@code{or} inside an @code{if} with optimization and various
+control-flow constructs
+@item Instruction size:
+3 bytes
+@item Stack effect:
+@math{-1+0}
+@item Example:
+With bytecode optimization, @code{(defun goto-if-not-nil-eg(n) (if (or (n) (n)) 1320))} generates
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] n
+ 1   32   call[0]
+ 2  132   goto-if-not-nil [10]
+           7
+           0
+ 5  192   constant[0] n
+ 6   32   call[0]
+ 7  133   goto-if-nil-else-pop [11]
+          11
+           0
+10  193   constant[1] 1320
+11  135   return
+
+Constants Vector: [n 1320]
+@end verbatim
+
+Note the change in opcode when bytecode optimization is not performed.
+@end table
+
+@node goto-if-nil-else-pop
+@subsection @code{goto-if-nil-else-pop} (133)
+@kindex goto-if-nil-else-pop
+@table @strong
+@item Implements:
+Jump to label given in the 16-bit operand if TOS is nil; otherwise pop
+the TOS, the tested condition. This allows the test expression, nil,
+to be used again on the branch as the TOS.
+@item Generated via:
+@code{cond}, @code{if} and various control-flow constructs
+@item Instruction size:
+3 bytes
+@item Stack effect:
+@math{\phi(0,-1)+0}
+@item Example:
+@code{(defun goto-if-nil-else-pop-eg(n) (cond ((n) 1330)))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] n
+ 1   32   call[0]
+ 2  133   goto-if-nil-else-pop [6]
+           6
+           0
+ 5  193   constant[1] 1330
+ 6  135   return
+
+Constants Vector: [n 1330]
+@end verbatim
+@end table
+
+@node goto-if-not-nil-else-pop
+@subsection @code{goto-if-not-nil-else-pop} (134)
+@kindex goto-if-not-nil-else-pop
+@table @strong
+@item Implements:
+Jump to label given in the 16-bit operand if TOS is not nil; otherwise
+pop TOS, the tested condition. This allows the tested expression on TOS to be used
+again when the jump is taken.
+@item Generated via:
+@code{cond}, @code{if} and various control-flow constructs
+@item Instruction size:
+3 bytes
+@item Stack effect:
+@math{\phi(0,-1)+0}
+@item Example:
+@code{(defun goto-if-not-nil-else-pop-eg(n) (if (or (n) (n)) 1340))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] n
+ 1   32   call[0]
+ 2  134   goto-if-not-nil-else-pop [7]
+           7
+           0
+ 5  192   constant[0] n
+ 6   32   call[0]
+ 7  133   goto-if-nil-else-pop [11]
+          11
+           0
+10  193   constant[1] 1340
+11  135   return
+
+Constants Vector: [n 1340]
+@end verbatim
+
+Note the change in opcode when bytecode optimization is performed.
+@end table
+
+@node return
+@unnumberedsubsec @code{return} (135)
+@kindex return
+@table @strong
+@item Implements:
+Return from function.  This is the last instruction in a function's
+bytecode sequence. The top value on the evaluation stack is the return value.
+@item Generated via:
+@code{lambda}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+0}
+@item Example:
+@code{(defun return-eg(n) 1350)} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] 1350
  1  135   return
 
-Constants Vector: [1]
+Constants Vector: [1350]
 @end verbatim
+
+@end table
 
 @node Function-Call Instructions
 @section Function-Call Instructions
@@ -397,18 +683,20 @@ bytecode interpreter.
 @code{TOS <- (nth S[1] TOS)}.
 @item Generated via:
 binary @code{nth}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
-When lexical binding is in effect, @code{(defun nth-eg(l) (nth 5 l))} generates:
+When lexical binding is in effect, @code{(defun nth-eg(l) (nth 560 l))} generates:
 @verbatim
 PC  Byte  Instruction
- 0  192   constant[0] 5
+ 0  192   constant[0] 560
  1    1   stack-ref[1]
  2   56   nth
  3  135   return
 
-Constants Vector: [5]
+Constants Vector: [560]
 @end verbatim
 
 @end table
@@ -421,6 +709,8 @@ Constants Vector: [5]
 @code{TOS <- (car TOS)}.
 @item Generated via:
 unary @code{car}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-1+1}.
 @item Example:
@@ -442,6 +732,8 @@ PC  Byte  Instruction
 @code{TOS <- (cdr TOS)}.
 @item Generated via:
 unary @code{cdr}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-1+1}.
 @item Example:
@@ -464,6 +756,8 @@ PC  Byte  Instruction
 @code{TOS <- (cons S[1] TOS)}.
 @item Generated via:
 binary @code{cons}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -613,6 +907,8 @@ bytecode interpreter.
 @code{TOS <- (1- TOS)}.
 @item Generated via:
 unary @code{1-}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-1+1}.
 @item Example:
@@ -635,6 +931,8 @@ PC  Byte  Instruction
 @code{TOS <- (1+ TOS)}.
 @item Generated via:
 unary @code{-}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-1+1}.
 @item Example:
@@ -657,6 +955,8 @@ PC  Byte  Instruction
 @code{TOS <- (= TOS S[1]}.
 @item Generated via:
 binary @code{=}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -682,6 +982,8 @@ Constants Vector: [a b]
 @code{TOS <- (> TOS S[1]}.
 @item Generated via:
 binary @code{>}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -705,6 +1007,8 @@ PC  Byte  Instruction
 @code{TOS <- (< S[1] TOS}.
 @item Generated via:
 binary @code{<}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -728,8 +1032,12 @@ Constants Vector: [a b]
 @table @strong
 @item Implements:
 @code{TOS <- (<= S[1] TOS)}.
+@item Instruction size:
+1 byte
 @item Generated via:
 binary @code{<=}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -753,8 +1061,12 @@ Constants Vector: [a b]
 @table @strong
 @item Implements:
 @code{TOS <- (>= S[1] TOS}.
+@item Instruction size:
+1 byte
 @item Generated via:
 binary @code{>=}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -778,6 +1090,10 @@ PC  Byte  Instruction
 @code{TOS <- (- S[1] TOS}.
 @item Generated via:
 binary @code{-}.
+@item Instruction size:
+1 byte
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -801,6 +1117,10 @@ PC  Byte  Instruction
 @code{TOS <- (- TOS)}.
 @item Generated via:
 unary @code{-}.
+@item Instruction size:
+1 byte
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-1+1}.
 @item Example:
@@ -823,6 +1143,8 @@ PC  Byte  Instruction
 @code{TOS <- (+ S[1] TOS)}.
 @item Generated via:
 binary @code{+}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -848,6 +1170,8 @@ Constants Vector: [n]
 @code{TOS <- (* S[1] TOS)}.
 @item Generated via:
 binary @code{*}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
@@ -875,6 +1199,8 @@ Constants Vector: [n]
 @code{TOS <- (max S[1] TOS)}.
 @item Generated via:
 binary @code{max}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -900,6 +1226,8 @@ Constants Vector: [a b]
 @code{TOS <- (min(S[1] TOS)}.
 @item Generated via:
 binary @code{min}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -925,6 +1253,8 @@ Constants Vector: [a b]
 @code{TOS <- (/ S[1] TOS)}.
 @item Generated via:
 binary @verb{|/|}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -950,6 +1280,8 @@ Constants Vector: [a b]
 @code{TOS <- (\% S[1] TOS)}.
 @item generated via:
 binary @verb{|%|}
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}
 @item Added in:
