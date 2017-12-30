@@ -4,7 +4,7 @@
 In the table below, a @code{*} by the decimal number indicates an
 obsolete instruction. @xref{Instruction-Description Format} for
 abbreviations used here, a description of how to interpret an opcode
-when it contans an index, and for a description of how to interpret
+when it contains an index, and for a description of how to interpret
 the stack-effect field.
 
 @menu
@@ -515,7 +515,7 @@ the stack-effect field.
 @tab Call @code{point} with no arguments.
 @item @verb{|0141|}
 @tab @verb{| *97|}
-@tab @verb{|  save-current-buffer|}
+@tab @verb{|  save-current-buffer-OBSOLETE|}
 @tab Obsolete in 24.1
 @tab @math{-0+1}
 @item @verb{|0141|}
@@ -600,7 +600,7 @@ the stack-effect field.
 @tab @math{-1+1}
 @item @verb{|0162|}
 @tab @verb{| 114|}
-@tab @verb{|byte-save-current-buffer|}
+@tab @verb{|save-current-buffer|}
 @tab Call @code{save-current-buffer}
 @tab @math{-0}
 @item @verb{|0162|}

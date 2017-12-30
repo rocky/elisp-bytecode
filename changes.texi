@@ -175,9 +175,9 @@ The following instructions were added:
 
 The following instructions became obsolete:
 
-@unnumberedsubsec @code{save-current-buffer} (97)
+@unnumberedsubsec @code{save-current-buffer-OBSOLETE} (97)
 
-Is replaced by @code{byte-save-current-buffer} (114)
+Is replaced by @code{save-current-buffer} (114)
 
 Unless C prepocessor variable @code{BYTE_CODE_SAFE} (off by default) is
 defined, obsolete instructions below and from earlier versions are not implemented.
@@ -192,7 +192,7 @@ Instruction @code{unbind-all}, which never was generated, was marked obsolete
 in this version.
 
 The bytecode meta-comment no longer who user/hostname compiled and at what time.
-A message indcating whether utf-8 non-ASCII characters is used is included.
+A message indicating whether utf-8 non-ASCII characters is used is included.
 
 Bytecode meta-comments look like this:
 @verbatim
@@ -220,7 +220,7 @@ The following instructions were added:
 @item @code{pushcondition} (50)
 @end itemize
 
-The following obsolete instructions as of v18 can no longer can be interpreted:
+The following instructions, obsolete since version 18, can no longer be interpreted:
 @itemize
 @item @code{scan-buffer} (107)
 @item @code{set-mark} (115)
