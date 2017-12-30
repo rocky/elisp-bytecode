@@ -75,7 +75,7 @@ add two.  The reason we give this as @math{-3+2} rather than the tuple
 format is so that the overall effect (removing a stack entry) can be
 seen by evaluating the expression.
 @item Added in:
-This is optiona. When it is given this gives which version of Emacs
+This is optional. When it is given this gives which version of Emacs
 the opcode was added. It may also give when the opcode became obsolete
 or was no longer implemented.
 @item Example:
