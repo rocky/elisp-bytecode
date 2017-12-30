@@ -95,10 +95,13 @@ the instructions are in a structure which is easier to operate on.
 
 @uref{https://www.gnu.org/software/emacs/manual/html_node/elisp/Speed-of-Byte_002dCode.html,
 Silly Loop Example} in the Emacs Lisp Manual gives a program to time
-running in some code Bytecode interpreter versus running the code in the
-Lisp interpreter. When I ran this program, bytecode ran 2.5 times
-faster. The Emacs Lisp manual gets a speed improvement of about 3
-times.
+running in some code Bytecode interpreter versus running the code in
+the Lisp interpreter. When I ran this program, bytecode ran 2.5 times
+faster@footnote{Code was compiled to use dynamic binding for variable
+access, same as was probably used in the ELisp manual. We should note
+that, byte-compiling with lexical binding for variable access gives
+code that runs a bit faster than when dynamic binding is used.}. The
+Emacs Lisp manual gets a speed improvement of about 3 times.
 
 @node Emacs Lisp Virtual Machine
 @section Emacs Lisp Virtual Machine
@@ -203,14 +206,15 @@ The elements of a bytecode function literal are:
 @unnumberedsubsec Function Parameter List
 
 The first element of a bytecode-function literal is the parameter list
-for the @code{defun}. The object takes on two different forms
+for the @code{lambda}. The object takes on two different forms
 depending on whether the function is lexically or dynamically scoped. If
 the function is dynamically scoped, the argument list is exactly what
 appears in Lisp code.
 
 @subsubsection Example showing how a parameter list is transformed:
 @verbatim
-(byte-compile (lambda (a b &optional c)))
+(byte-compile
+  (lambda (a b &optional c)))
 ;; => #[(a b &optional c) "\300\207" [nil] 1]
 @end verbatim
 
@@ -300,7 +304,9 @@ literal.
 
 @subsubsection showing a constants vector:
 @verbatim
-ELISP> (byte-compile (lambda (a b) (my-func '("hi" "there") a nil 5)))
+ELISP> (byte-compile
+        (lambda (a b)
+         (my-func '("hi" "there") a nil 5)))
 #[(a b)
   "\301\302\303\304$\207"
   [a my-func
@@ -351,10 +357,14 @@ argument to @code{interactive} in the uncompiled function definition.
 
 @subsubsection Examples showing the interactive specification:
 @verbatim
-(byte-compile (lambda (n) (interactive "nNumber: ") n))
+ELISP> (byte-compile
+         (lambda (n)
+           (interactive "nNumber: ") n))
 ;; => #[(n) "\010\207" [n] 1 nil "nNumber: "]
 
-(byte-compile (lambda (n) (interactive (list (read))) n))
+ELISP> (byte-compile
+         (lambda (n)
+          (interactive (list (read))) n))
 ;; => #[(n) "\010\207" [n] 1 nil (list (read))]
 @end verbatim
 
