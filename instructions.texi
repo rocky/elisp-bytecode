@@ -147,6 +147,7 @@ run such as by setting the PC incorrectly.
 
 @subsubsection Example
 When lexical binding is in effect, @code{(defun stack-ref() (let ((a 5) (b 6) (c 7)) (+ a c)))} generates:
+@c ((lexical . t) (optimize . nil))
 @verbatim
 PC  Byte  Instruction
  0  192   constant[0] 5
@@ -278,6 +279,7 @@ Although there are special instructions to push any one of the first
 a value beyond one the first 64 entries.
 
 @c @code{(defun n64 (n) (+ n 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64))} generates
+@c ((optimize . nil))
 
 @code{(defun n64(n) (+ n 0 1 2 3 .. 64 ))} generates
 @verbatim
@@ -364,6 +366,7 @@ Jump to label given in the 16-bit operand if TOS is nil. In contrast to
 @math{-1+0}
 @item Example:
 @code{(defun goto-if-nil-eg(n) (if (n) 1310 1311))} generates:
+@c ((optimize . nil))
 @verbatim
 PC  Byte  Instruction
  0  192   constant[0] n
@@ -468,6 +471,7 @@ again when the jump is taken.
 @math{\phi(0,-1)+0}
 @item Example:
 @code{(defun goto-if-not-nil-else-pop-eg(n) (if (or (n) (n)) 1340))} generates:
+@c ((optimize . nil))
 @verbatim
 PC  Byte  Instruction
  0  192   constant[0] n
@@ -693,6 +697,7 @@ binary @code{nth}.
 @math{-2+1}.
 @item Example:
 When lexical binding is in effect, @code{(defun nth-eg(l) (nth 560 l))} generates:
+@c ((lexical . t))
 @verbatim
 PC  Byte  Instruction
  0  192   constant[0] 560
@@ -719,6 +724,7 @@ unary @code{car}.
 @math{-1+1}.
 @item Example:
 When lexical binding is in effect, @code{(defun car-eg(l) (car l))} generates:
+@c ((lexical . t))
 @verbatim
 PC  Byte  Instruction
  0  137   dup
@@ -742,6 +748,7 @@ unary @code{cdr}.
 @math{-1+1}.
 @item Example:
 When lexical binding is in effect, @code{(defun cdr-eg(l) (cdr l))} generates:
+@c ((lexical . t))
 @verbatim
 PC  Byte  Instruction
  0  137   dup
@@ -917,6 +924,7 @@ unary @code{1-}.
 @math{-1+1}.
 @item Example:
 When lexical binding is in effect, @code{(defun sub1-eg(n) (1- n))} generates:
+@c ((lexical . t))
 @verbatim
 PC  Byte  Instruction
  0  137   dup
@@ -941,6 +949,7 @@ unary @code{-}.
 @math{-1+1}.
 @item Example:
 When lexical binding is in effect, @code{(defun add1-eg(n) (1+ n))} generates:
+@c ((lexical . t))
 @verbatim
 PC  Byte  Instruction
  0  137   dup
@@ -992,6 +1001,7 @@ binary @code{>}.
 @math{-2+1}.
 @item Example:
 When lexical binding is in effect, @code{(defun gtr-eg(a b) (> a b))} generates:
+@c ((lexical . t))
 @verbatim
 PC  Byte  Instruction
  0    1   stack-ref[1]
@@ -1075,6 +1085,7 @@ binary @code{>=}.
 @math{-2+1}.
 @item Example:
 When lexical binding is in effect, @code{(defun geq-eg(a b) (>= a b))} generates:
+@c ((lexical . t))
 @verbatim
 PC  Byte  Instruction
  0    1   stack-ref[1]
@@ -1102,6 +1113,7 @@ binary @code{-}.
 @math{-2+1}.
 @item Example:
 When lexical binding is in effect, @code{(defun diff-eg(a b) (- a b))} generates:
+@c ((lexical . t))
 @verbatim
 PC  Byte  Instruction
  0    1   stack-ref[1]
@@ -1129,6 +1141,7 @@ unary @code{-}.
 @math{-1+1}.
 @item Example:
 When lexical binding is in effect, @code{(defun negate-eg(a) (- a))} generates:
+@c ((lexical . t))
 @verbatim
 PC  Byte  Instruction
  0  137   dup
@@ -1156,7 +1169,7 @@ When dynamic binding is in effect, @code{(defun plus-eg(n) (+ n n))} generates:
 @verbatim
 PC  Byte  Instruction
  0    8   varref[0] n
- 1    8   varref[0] n
+ 1  137   dup
  2   92   plus
  3  135   return
 
@@ -1185,7 +1198,7 @@ When dynamic binding is in effect, @code{(defun mult-eg(n) (* n n))} generates:
 @verbatim
 PC  Byte  Instruction
  0    8   varref[0] n
- 1    8   varref[0] n
+ 1  137   dup
  2   95   mult
  3  135   return
 
@@ -1292,6 +1305,7 @@ binary @verb{|%|}
 Emacs 19.34.
 @item Example:
 When lexical binding is in effect, @code{(defun rem-eg(a b) (% a b))} generates:
+@c ((lexical . t))
 @verbatim
 PC  Byte  Instruction
  0    1   stack-ref[1]
@@ -1669,6 +1683,7 @@ Make a copy of the top-of-stack value and push that onto the top of the evaluati
 
 @subsubsection Example
 When lexical binding is in effect, @code{(defun en(n) n)} generates:
+@c ((lexical . t) (optimize . nil))
 @verbatim
 PC  Byte  Instruction
  0  137   dup  ;; duplicates top of stack: n
