@@ -63,6 +63,8 @@ course there may be many constructs and there may be limiting
 situations within that construct. We'll only give one or a few of the
 constructs, and we'll try to indicate a limiting condition where
 possible.
+@item Instruction size:
+The number of bytes in the instruction. This is 1 to 3 bytes.
 @item Stack effect:
 This describes how many stack entries are read and popped and how many
 entries stack entries are pushed. Although this is logically a tuple,
@@ -305,7 +307,9 @@ Constants Vector: [n + 0 1 2 .. 61 62 63 64]
 
 @menu
 * goto::
+* goto-if-nil::
 * goto-if-not-nil::
+* goto-if-nil-else-pop::
 * goto-if-not-nil-else-pop::
 * return::
 @end menu
@@ -318,6 +322,8 @@ Constants Vector: [n + 0 1 2 .. 61 62 63 64]
 Jump to label given in the 16-bit operand
 @item Generated via:
 @code{while} and various control-flow constructs
+@item Instruction size:
+3 bytes
 @item Stack effect:
 @math{-0+0}
 @item Example:
@@ -338,18 +344,20 @@ Constants Vector: [n]
 @end verbatim
 @end table
 
-@node goto-if-not-nil
-@unnumberedsubsec @code{goto-if-not-nil} (131)
+@node goto-if-nil
+@unnumberedsubsec @code{goto-if-nil} (131)
 @kindex goto-if-not-nil
 @table @strong
 @item Implements:
-Jump to label given in the 16-bit operand if TOS is not nil
+Jump to label given in the 16-bit operand if TOS is nil
 @item Generated via:
 @code{if} with ``else'' clause and various control-flow constructs
+@item Instruction size:
+3 bytes
 @item Stack effect:
-@math{-0+0}
+@math{-1+0}
 @item Example:
-@code{(defun goto-if-not-nil-eg(n) (if (n) 2 3))} generates:
+@code{(defun goto-if-nil-eg(n) (if (n) 2 3))} generates:
 @verbatim
 PC  Byte  Instruction
  0  192   constant[0] n
@@ -368,8 +376,60 @@ Constants Vector: [n 2 3]
 @end verbatim
 @end table
 
+@node goto-if-not-nil
+@subsection @code{goto-if-not-nil} (132)
+@kindex goto-if-not-nil
+@table @strong
+@item Implements:
+Jump to label given in the 16-bit operand if TOS is not nil
+@item Generated via:
+@code{or} inside an @code{if} with optimization and various
+control-flow constructs
+@item Instruction size:
+3 bytes
+@item Stack effect:
+@math{-1+0}
+@item Example:
+@code{(defun goto-if-not-nil-eg(n) (if (or (n) (n)) 6))} generates
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] n
+ 1   32   call[0]
+ 2  134   goto-if-not-nil [10]
+           7
+           0
+ 5  192   constant[0] n
+ 6   32   call[0]
+ 7  133   goto-if-nil-else-pop [11]
+          11
+           0
+10  193   constant[1] 6
+11  135   return
+
+Constants Vector: [n 6]
+@end verbatim
+@end table
+
+@node goto-if-nil-else-pop
+@subsection @code{goto-if-nil-else-pop} (133)
+@kindex goto-if-not-else-pop
+@table @strong
+@item Implements:
+Jump to label given in the 16-bit operand if TOS is nil; otherwise
+pop the top stack instruction.
+@item Generated via:
+@code{cond}, @code{if} and various control-flow constructs
+@item Instruction size:
+3 bytes
+@item Stack effect:
+@math{\phi(0,-1)+0}
+@item Example:
+@verbatim
+@end verbatim
+@end table
+
 @node goto-if-not-nil-else-pop
-@unnumberedsubsec @code{goto-if-not-nil-else-pop} (133)
+@subsection @code{goto-if-not-nil-else-pop} (134)
 @kindex goto-if-not-nil-else-pop
 @table @strong
 @item Implements:
@@ -377,15 +437,17 @@ Jump to label given in the 16-bit operand if TOS is not nil; otherwise
 pop the top stack instruction.
 @item Generated via:
 @code{cond}, @code{if} and various control-flow constructs
+@item Instruction size:
+3 bytes
 @item Stack effect:
-@math{\phi(0,-1)}
+@math{\phi(0,-1)+0}
 @item Example:
 @code{(defun goto-if-not-nil-else-pop-eg(n) (if (n) 2))} generates:
 @verbatim
 PC  Byte  Instruction
  0  192   constant[0] n
  1   32   call[0]
- 2  133   goto-if-nil-else-pop [6]
+ 2  134   goto-if-nil-else-pop [6]
            6
            0
  5  193   constant[1] 2
@@ -393,7 +455,6 @@ PC  Byte  Instruction
 
 Constants Vector: [n 2]
 @end verbatim
-
 @end table
 
 @node return
@@ -405,6 +466,8 @@ Return from function.  This is the last instruction in a function's
 bytecode sequence. The top value on the evaluation stack is the return value.
 @item Generated via:
 @code{lambda}
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-1+0}
 @item Example:
@@ -416,7 +479,6 @@ PC  Byte  Instruction
 
 Constants Vector: [1]
 @end verbatim
-
 @end table
 
 @node Function-Call Instructions
@@ -592,6 +654,8 @@ bytecode interpreter.
 @code{TOS <- (nth S[1] TOS)}.
 @item Generated via:
 binary @code{nth}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -616,6 +680,8 @@ Constants Vector: [5]
 @code{TOS <- (car TOS)}.
 @item Generated via:
 unary @code{car}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-1+1}.
 @item Example:
@@ -637,6 +703,8 @@ PC  Byte  Instruction
 @code{TOS <- (cdr TOS)}.
 @item Generated via:
 unary @code{cdr}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-1+1}.
 @item Example:
@@ -659,6 +727,8 @@ PC  Byte  Instruction
 @code{TOS <- (cons S[1] TOS)}.
 @item Generated via:
 binary @code{cons}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -808,6 +878,8 @@ bytecode interpreter.
 @code{TOS <- (1- TOS)}.
 @item Generated via:
 unary @code{1-}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-1+1}.
 @item Example:
@@ -830,6 +902,8 @@ PC  Byte  Instruction
 @code{TOS <- (1+ TOS)}.
 @item Generated via:
 unary @code{-}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-1+1}.
 @item Example:
@@ -852,6 +926,8 @@ PC  Byte  Instruction
 @code{TOS <- (= TOS S[1]}.
 @item Generated via:
 binary @code{=}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -877,6 +953,8 @@ Constants Vector: [a b]
 @code{TOS <- (> TOS S[1]}.
 @item Generated via:
 binary @code{>}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -900,6 +978,8 @@ PC  Byte  Instruction
 @code{TOS <- (< S[1] TOS}.
 @item Generated via:
 binary @code{<}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -923,8 +1003,12 @@ Constants Vector: [a b]
 @table @strong
 @item Implements:
 @code{TOS <- (<= S[1] TOS)}.
+@item Instruction size:
+1 byte
 @item Generated via:
 binary @code{<=}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -948,8 +1032,12 @@ Constants Vector: [a b]
 @table @strong
 @item Implements:
 @code{TOS <- (>= S[1] TOS}.
+@item Instruction size:
+1 byte
 @item Generated via:
 binary @code{>=}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -973,6 +1061,10 @@ PC  Byte  Instruction
 @code{TOS <- (- S[1] TOS}.
 @item Generated via:
 binary @code{-}.
+@item Instruction size:
+1 byte
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -996,6 +1088,10 @@ PC  Byte  Instruction
 @code{TOS <- (- TOS)}.
 @item Generated via:
 unary @code{-}.
+@item Instruction size:
+1 byte
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-1+1}.
 @item Example:
@@ -1018,6 +1114,8 @@ PC  Byte  Instruction
 @code{TOS <- (+ S[1] TOS)}.
 @item Generated via:
 binary @code{+}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -1043,6 +1141,8 @@ Constants Vector: [n]
 @code{TOS <- (* S[1] TOS)}.
 @item Generated via:
 binary @code{*}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
@@ -1070,6 +1170,8 @@ Constants Vector: [n]
 @code{TOS <- (max S[1] TOS)}.
 @item Generated via:
 binary @code{max}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -1095,6 +1197,8 @@ Constants Vector: [a b]
 @code{TOS <- (min(S[1] TOS)}.
 @item Generated via:
 binary @code{min}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -1120,6 +1224,8 @@ Constants Vector: [a b]
 @code{TOS <- (/ S[1] TOS)}.
 @item Generated via:
 binary @verb{|/|}.
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}.
 @item Example:
@@ -1145,6 +1251,8 @@ Constants Vector: [a b]
 @code{TOS <- (\% S[1] TOS)}.
 @item generated via:
 binary @verb{|%|}
+@item Instruction size:
+1 byte
 @item Stack effect:
 @math{-2+1}
 @item Added in:

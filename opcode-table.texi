@@ -694,14 +694,24 @@ the stack-effect field.
 @tab @math{-1+0}
 @item @verb{|0203|}
 @tab @verb{| 131|}
+@tab @verb{|  goto-if-nil|}
+@tab Jump if TOS is nil
+@tab @math{-1+0}
+@item @verb{|0204|}
+@tab @verb{| 132|}
 @tab @verb{|  goto-if-not-nil|}
 @tab Jump if TOS is not nil
 @tab @math{-1+0}
 @item @verb{|0205|}
 @tab @verb{| 133|}
+@tab @verb{|  goto-if-nil-else-pop|}
+@tab Jump if TOS is nil, else pop
+@tab @math{\phi(-1,0)+0}
+@item @verb{|0206|}
+@tab @verb{| 134|}
 @tab @verb{|  goto-if-not-nil-else-pop|}
 @tab Jump if TOS is not nil, else pop
-@tab @math{\phi(-1,+0)}
+@tab @math{\phi(-1,0)+0}
 @item @verb{|0207|}
 @tab @verb{| 135|}
 @tab @verb{|  return|}
@@ -711,17 +721,17 @@ the stack-effect field.
 @tab @verb{| 136|}
 @tab @verb{|  discard|}
 @tab Discard top stack value
-@tab @math{-1}
+@tab @math{-1+0}
 @item @verb{|0211|}
 @tab @verb{| 137|}
 @tab @verb{|  dup|}
 @tab Duplicate top stack value
-@tab @math{+1}
+@tab @math{-0+1}
 @item @verb{|0212|}
 @tab @verb{| 138|}
 @tab @verb{|  save-excursion|}
 @tab Make a binding recording buffer, point, and mark.
-@tab @math{-0}
+@tab @math{-0+0}
 
 @item @verb{|0257|}
 @tab @verb{| 175|}
