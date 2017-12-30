@@ -38,7 +38,7 @@ clean: mostlyclean
 	rm -f $(DVI_TARGETS) $(HTML_TARGETS) $(PDF_TARGETS) $(PS_TARGETS)
 
 
-elisp-bytecode.pdf: $(TOP_SRC)
+elisp-bytecode.pdf: $(TOP_SRC) $(srcs)
 	$(ENVADD) $(TEXI2PDF) $<
 
 clean:
