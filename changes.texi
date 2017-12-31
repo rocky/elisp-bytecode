@@ -3,11 +3,11 @@
 @chapter Opcode Changes Between Emacs Releases
 
 @menu
-* After 17 and Starting in 18.59::
+* After 16 and Starting in 18.31::
 * After 18.59 and Starting in 19.34::
 * After 19.34 and Starting in 20.1::
 * After 20.1 and Starting in 21.1::
-* After 21.4a and Starting in 22.1::
+* After 21.4 and Starting in 22.1::
 * After 22.3 and Starting in 23.1::
 * After 23.4 and Starting in 24.1::
 * After 24.4 and Starting in 25.1::
@@ -15,8 +15,15 @@
 * After 26.1 and Starting in 27.1::
 @end menu
 
-@node After 17 and Starting in 18.59
-@section After 17 and Starting in 18.59
+@node After 16 and Starting in 18.31
+@section After 16 and Starting in 18.31
+
+The following instructions were renamed:
+@itemize
+@item @code{dot} becomes @code{mark} (97)
+@item @code{dot-min} becomes @code{point-min} (100)
+@item @code{dot-max} becomes @code{point-max} (101)
+@end itemize
 
 The following instructions became obsolete:
 @itemize
@@ -25,8 +32,30 @@ The following instructions became obsolete:
 @item @code{set-mark} (115)
 @end itemize
 
-The 18.59 tarball is dated 1992.
+@unnumberedsubsec Version 18 Release History
+@itemize
+@item Emacs 18.31 was released Nov 23, 1986
+@item Emacs 18.32 was released Dec 6, 1986
+@item Emacs 18.33 was released Dec 12, 1986
+@item Emacs 18.35 was released Jan 5, 1987
+@item Emacs 18.36 was released Jan 21, 1987
+@item Emacs 18.37 was released Feb 11, 1987
+@item Emacs 18.38 was released Mar 3,  1987
+@item Emacs 18.39 was released May 14, 1987
+@item Emacs 18.40 was released Mar 18, 1987
+@item Emacs 18.41 was released Mar 22, 1987
+@item Emacs 18.44 was released Apr 15, 1987
+@item Emacs 18.46 was released Jun 8, 1987
+@item Emacs 18.47 was released Jun 15, 1987
+@item Emacs 18.48 was released Aug 30, 1987
+@item Emacs 18.49 was released Sep 17, 1987
+@item Emacs 18.50 was released Feb 13, 1988
+@item Emacs 18.51 was released May 6, 1988
+@item Emacs 18.52 was released Aug 31, 1988
+@item Emacs 18.59 was released Oct 30, 1988
+@end itemize
 
+@page
 @node After 18.59 and Starting in 19.34
 @section After 18.59 and Starting 19.34
 
@@ -98,6 +127,38 @@ Bytecode meta-comments look like this:
 ;;; this file uses opcodes which do not exist in Emacs 18.
 @end verbatim
 
+@unnumberedsubsec Version 19 Release History
+
+@itemize
+@item Emacs 19.7 was released May 22 1993
+@item Emacs 19.8 was released May 25 1993
+@item Emacs 19.9 was released May 27 1993
+@item Emacs 19.10 was released May 30 1993
+@item Emacs 19.11 was released Jun 1, 1993
+@item Emacs 19.12 was released Jun 1, 1993
+@item Emacs 19.13 was released Jun 8, 1993
+@item Emacs 19.14 was released Jun 17, 1993
+@item Emacs 19.15 was released Jun 19, 1993
+@item Emacs 19.16 was released Jul 6, 1993
+@item Emacs 19.17 was released Jul 7, 1993
+@item Emacs 19.18 was released Aug 8, 1993
+@item Emacs 19.19 was released Aug 14, 1993
+@item Emacs 19.20 was released Nov 11, 1993
+@item Emacs 19.21 was released Nov 16, 1993
+@item Emacs 19.22 was released Nov 27, 1993
+@item Emacs 19.23 was released May 17, 1994
+@item Emacs 19.24 was released May 23, 1994
+@item Emacs 19.25 was released May 30, 1994
+@item Emacs 19.26 was released Sep 7, 1994
+@item Emacs 19.27 was released Sep 11, 1994
+@item Emacs 19.29 was released Jun 19, 1995
+@item Emacs 19.30 was released Nov 24, 1995
+@item Emacs 19.31 was released May 25, 1996
+@item Emacs 19.31 was released May 25, 1996
+@item Emacs 19.32 was released Aug 7, 1996
+@item Emacs 19.33 was released Sept 11, 1996
+@end itemize
+
 The Elisp tarball for 19.2 is Aug, 1992. (The tarball date for
 19.2 is much later; and even after the date on the 20.1 tarball.)
 
@@ -117,8 +178,16 @@ Bytecode meta-comments look like this:
 ;;; This file uses opcodes which do not exist in Emacs 18.
 @end verbatim
 
-The Emacs 20.1 tarball is dated Sep 17, 1997
+@unnumberedsubsec Version 20 Release History
 
+@itemize
+@item Emacs 20.1 was released Sep 15, 1997
+@item Emacs 20.2 was released Sep 19, 1997
+@item Emacs 20.3 was released Aug 19, 1998
+@item Emacs 20.4 was released Jul 14, 1999
+@end itemize
+
+@page
 @node After 20.1 and Starting in 21.1
 @section After 20.1 and Starting in 21.1
 
@@ -136,15 +205,17 @@ Bytecode meta-comments look like this:
 ;;; with all optimizations.
 @end verbatim
 
+@unnumberedsubsec Version 21 Release History
+
 @itemize
-@item The Emacs 21.1 tarball is dated Oct 20, 2001
-@item The Emacs 21.2 tarball is dated Mar 16, 2002
-@item The Emacs 21.3 tarball is dated Mar 19, 2003
-@item The Emacs 21.4a tarball is dated Feb 17, 2005
+@item Emacs 21.1 was released Oct 20, 2001
+@item Emacs 21.2 was released Mar 16, 2002
+@item Emacs 21.3 was released Mar 18, 2003
+@item Emacs 21.4 was released Feb 6, 2005
 @end itemize
 
-@node After 21.4a and Starting in 22.1
-@section After 21.4a and Starting in 22.1
+@node After 21.4 and Starting in 22.1
+@section After 21.4 and Starting in 22.1
 
 There were no instruction changes.
 
@@ -160,8 +231,10 @@ Bytecode meta-comments look like this:
 ;;; This file uses dynamic docstrings, first added in Emacs 19.29.
 @end verbatim
 
+@unnumberedsubsec Version 22 Release History
+
 @itemize
-@item The Emacs 22.1 tarball is dated Jun 02, 2007
+@item Emacs 22.1 was released Jun 02, 2007
 @item The Emacs 22.2 tarball is dated Mar 26  2008
 @item The Emacs 22.3 tarball is dated Sep 05  2008
 @end itemize
@@ -181,15 +254,19 @@ Bytecode meta-comments look like this:
 ;;; This file uses dynamic docstrings, first added in Emacs 19.29.
 @end verbatim
 
+@unnumberedsubsec Version 23 Release History
+
 @itemize
-@item The Emacs 23.1 tarball is dated Jul 30, 2009
-@item The Emacs 23.2b tarball is dated Nov 26, 2011
-@item The Emacs 23.3b tarball is dated Nov 26, 2011
+@item Emacs 23.1 was released Jul 29, 2009
+@item Emacs 23.2 was released May 7, 2010
+@item Emacs 23.3 was released Mar 7, 2011
 @item The Emacs 23.4 tarball is dated Jan 28, 2012
 @end itemize
 
 @node After 23.4 and Starting in 24.1
 @section After 23.4 and Starting in 24.1
+
+An error is thrown for unknown bytecodes rather than aborting.
 
 The following instructions were added:
 @itemize
@@ -200,9 +277,11 @@ The following instructions were added:
 
 The following instructions became obsolete:
 
-@unnumberedsubsec @code{save-current-buffer-OBSOLETE} (97)
+@itemize
+@code{save-current-buffer} (97)
+@end itemize
 
-Is replaced by @code{save-current-buffer} (114)
+Is replaced by @code{save-current-buffer-1} (114)
 
 Unless C prepocessor variable @code{BYTE_CODE_SAFE} (off by default) is
 defined, obsolete instructions below and from earlier versions are not implemented.
@@ -231,11 +310,14 @@ Bytecode meta-comments look like this:
 ;;; and so can be loaded in Emacs versions earlier than 23.
 @end verbatim
 
+@unnumberedsubsec Version 24 Release History
+
 @itemize
 @item The Emacs 24.1 tarball is dated Jun 10, 2012
 @item The Emacs 24.2 tarball is dated Aug 27, 2012
-@item The Emacs 24.3 tarball is dated Mar 11, 2013
-@item The Emacs 24.4 tarball is dated Oct 20, 2014
+@item Emacs 24.3 was released Mar 11, 2013
+@item Emacs 24.4 was released Oct 20, 2014
+@item Emacs 24.5 was released Apr 10, 2015
 @end itemize
 
 @node After 24.4 and Starting in 25.1
@@ -248,8 +330,8 @@ A number of changes were made to @code{bytecode.c}.
 The following instructions were added:
 @itemize
 @item @code{ophandler} (48)
-@item @code{conditioncase} (49)
-@item @code{pushcondition} (50)
+@item @code{pushconditioncase} (49)
+@item @code{pushcatch} (50)
 @end itemize
 
 The following instructions, obsolete since version 18, can no longer be interpreted:
@@ -274,10 +356,12 @@ Bytecode meta-comments look like this:
 ;;; and so can be loaded in Emacs versions earlier than 23.
 @end verbatim
 
+@unnumberedsubsec Version 25 Release History
+
 @itemize
-@item The Emacs 25.1 tarball is dated Sep 17, 2016
+@item Emacs 25.1 was released Sep 16, 2016
 @item The Emacs 25.2 tarball is dated Apr 21, 2017
-@item The Emacs 25.3 tarball is dated Sep 11, 2017
+@item Emacs 25.3 was released Sep 11, 2017
 @end itemize
 
 @node After 25.3 and Starting in 26.1
