@@ -329,7 +329,7 @@ Jump to label given in the 16-bit operand
 @item Generated via:
 @code{while} and various control-flow constructs
 @item Instruction size:
-3 bytes
+3 bytes, 16-bit jump-target operand
 @item Stack effect:
 @math{-0+0}
 @item Example:
@@ -361,7 +361,7 @@ Jump to label given in the 16-bit operand if TOS is nil. In contrast to
 @item Generated via:
 @code{if} with ``else'' clause and various control-flow constructs
 @item Instruction size:
-3 bytes
+3 bytes, 16-bit jump-target operand
 @item Stack effect:
 @math{-1+0}
 @item Example:
@@ -398,7 +398,7 @@ always popped.
 @code{or} inside an @code{if} with optimization and various
 control-flow constructs
 @item Instruction size:
-3 bytes
+3 bytes, 16-bit jump-target operand
 @item Stack effect:
 @math{-1+0}
 @item Example:
@@ -435,7 +435,7 @@ to be used again on the branch as the TOS.
 @item Generated via:
 @code{cond}, @code{if} and various control-flow constructs
 @item Instruction size:
-3 bytes
+3 bytes, 16-bit jump-target operand
 @item Stack effect:
 @math{\phi(0,-1)+0}
 @item Example:
@@ -466,7 +466,7 @@ again when the jump is taken.
 @item Generated via:
 @code{cond}, @code{if} and various control-flow constructs
 @item Instruction size:
-3 bytes
+3 bytes, 16-bit jump-target operand
 @item Stack effect:
 @math{\phi(0,-1)+0}
 @item Example:
@@ -565,93 +565,407 @@ bytecode interpreter.
 @node symbolp
 @unnumberedsubsubsec @code{symbolp} (57)
 @kindex symbolp
-Call @code{symbolp} with one argument.
+@table @strong
+@item Implements:
+@code{TOS <- (symbolp TOS)}.
+@item Generated via:
+unary @code{symbolp}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun symbolp-eg(n) (symbolp n))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1   57   symbolp
+ 2  135   return
+@end verbatim
+@end table
 
 @node consp
 @unnumberedsubsubsec @code{consp} (58)
 @kindex consp
-Call @code{consp} with one argument.
+@table @strong
+@item Implements:
+@code{TOS <- (consp TOS)}.
+@item Generated via:
+unary @code{consp}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun consp-eg(n) (consp n))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1   58   consp
+ 2  135   return
+@end verbatim
+@end table
 
 @node stringp
 @unnumberedsubsubsec @code{stringp} (59)
 @kindex stringp
-Call @code{stringp} with one argument.
+@table @strong
+@item Implements:
+@code{TOS <- (stringp TOS)}.
+@item Generated via:
+unary @code{stringp}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun stringp-eg(n) (stringp n))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1   59   stringp
+ 2  135   return
+@end verbatim
+@end table
 
 @node listp
 @unnumberedsubsubsec @code{listp} (60)
 @kindex listp
-Call @code{listp} with one argument.
+@table @strong
+@item Implements:
+@code{TOS <- (listp TOS)}.
+@item Generated via:
+unary @code{listp}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun listp-eg(n) (listp n))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1   60   listp
+ 2  135   return
+@end verbatim
+@end table
 
 @node eq
 @unnumberedsubsubsec @code{eq} (61)
 @kindex eq
-Call @code{eq} with two arguments.
+@table @strong
+@item Implements:
+@code{TOS <- (eq S[1] TOS)}.
+@item Generated via:
+binary @code{eq}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun eq-eg(a b) (eq a b))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0    1   stack-ref[1]
+ 1    1   stack-ref[1]
+ 2   61   eq
+ 3  135   return
+@end verbatim
+@end table
 
 @node memq
 @unnumberedsubsubsec @code{memq} (62)
 @kindex memq
-Call @code{memq} with two arguments.
+@table @strong
+@item Implements:
+@code{TOS <- (memq S[1] TOS)}.
+@item Generated via:
+binary @code{memq}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun memq-eg(a b) (memq a b))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0    1   stack-ref[1]
+ 1    1   stack-ref[1]
+ 2   62   memq
+ 3  135   return
+@end verbatim
+@end table
 
 @node not
 @unnumberedsubsubsec @code{not} (63)
 @kindex not
-Call @code{not} with one argument.
+@table @strong
+@item Implements:
+@code{TOS <- (not TOS)}.
+@item Generated via:
+unary @code{not}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun not-eg(a) (not a))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1   63   not
+ 2  135   return
+@end verbatim
+@end table
 
 @node symbol-value
 @unnumberedsubsubsec @code{symbol-value} (74)
 @kindex symbol-value
-Call @code{symbol-value} with one argument.
+@table @strong
+@item Implements:
+@code{TOS <- (symbol-value TOS)}.
+@item Generated via:
+unary @code{symbol-value}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun symbol-value-eg(a) (symbol-value a))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1   74   symbol-value
+ 2  135   return
+@end verbatim
+@end table
 
 @node symbol-function
 @unnumberedsubsubsec @code{symbol-function} (75)
 @kindex symbol-function
-Call @code{symbol-function} with one argument.
+@table @strong
+@item Implements:
+@code{TOS <- (symbol-function TOS)}.
+@item Generated via:
+unary @code{symbol-function}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun symbol-function-eg(a) (symbol-function a))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1   75   symbol-function
+ 2  135   return
+@end verbatim
+@end table
 
 @node set
 @unnumberedsubsubsec @code{set} (76)
 @kindex set
-Call @code{set} with two arguments.
+@table @strong
+@item Implements:
+@code{TOS <- (set S[1] TOS)}.
+@item Generated via:
+binary @code{set}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun set-eg(a b) (set a b))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0    1   stack-ref[1]
+ 1    1   stack-ref[1]
+ 2   76   set
+ 3  135   return
+@end verbatim
+@end table
 
 @node fset
 @unnumberedsubsubsec @code{fset} (77)
 @kindex fset
-Call @code{fset} with two arguments.
+@table @strong
+@item Implements:
+@code{TOS <- (fset S[1] TOS)}.
+@item Generated via:
+binary @code{fset}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun fset-eg(a b) (fset a b))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0    1   stack-ref[1]
+ 1    1   stack-ref[1]
+ 2   77   fset
+ 3  135   return
+@end verbatim
+@end table
 
 @node get
 @unnumberedsubsubsec @code{get} (78)
 @kindex get
-Call @code{get} with two arguments.
+@table @strong
+@item Implements:
+@code{TOS <- (get S[1] TOS)}.
+@item Generated via:
+binary @code{get}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun get-eg(a b) (get a b))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0    1   stack-ref[1]
+ 1    1   stack-ref[1]
+ 2   78   get
+ 3  135   return
+@end verbatim
+@end table
 
 @node equal
 @unnumberedsubsubsec @code{equal} (154)
 @kindex equal
-Call @code{equal} with two arguments.
-
-Added in Emacs 19.34.
+@table @strong
+@item Implements:
+@code{TOS <- (equal S[1] TOS)}.
+@item Generated via:
+binary @code{equal}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Added in:
+Emacs 19.34
+@item Example:
+When lexical binding is in effect, @code{(defun equal-eg(a b) (equal a b))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0    1   stack-ref[1]
+ 1    1   stack-ref[1]
+ 2  154   equal
+ 3  135   return
+@end verbatim
+@end table
 
 @node member
 @unnumberedsubsubsec @code{member} (157)
 @kindex member
-Call @code{member} with two arguments.
+@table @strong
+@item Implements:
+@code{TOS <- (member S[1] TOS)}.
+@item Generated via:
+binary @code{member}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun member-eg(a b) (member a b))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0    1   stack-ref[1]
+ 1    1   stack-ref[1]
+ 2  157   member
+ 3  135   return
+@end verbatim
+@end table
 
 @node assq
 @unnumberedsubsubsec @code{assq} (158)
 @kindex assq
-Call @code{assq} with two arguments.
+@table @strong
+@item Implements:
+@code{TOS <- (assq S[1] TOS)}.
+@item Generated via:
+binary @code{assq}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+When lexical binding is in effect, @code{(defun assq-eg(a b) (assq a b))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0    1   stack-ref[1]
+ 1    1   stack-ref[1]
+ 2  158   assq
+ 3  135   return
+@end verbatim
+@end table
 
 @node numberp
 @unnumberedsubsubsec @code{numberp} (167)
 @kindex numberp
-Call @code{numberp} with one argument.
-
-Added in Emacs 19.34.
+@table @strong
+@item Implements:
+@code{TOS <- (numberp TOS)}.
+@item Generated via:
+unary @code{numberp}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Added in:
+Emacs 19.34
+@item Example:
+When lexical binding is in effect, @code{(defun numberp-eg(a) (numberp a))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1  167   numberp
+ 2  135   return
+@end verbatim
+@end table
 
 @node integerp
 @unnumberedsubsubsec @code{integerp} (168)
 @kindex integerp
-Call @code{integerp} with one argument.
-
-Added in Emacs 19.34.
+@table @strong
+@item Implements:
+@code{TOS <- (integerp TOS)}.
+@item Generated via:
+unary @code{integerp}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Added in:
+Emacs 19.34
+@item Example:
+When lexical binding is in effect, @code{(defun integerp-eg(a) (integerp a))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1  168   integerp
+ 2  135   return
+@end verbatim
+@end table
 
 @node List Function Instructions
 @subsection List Function Instructions
@@ -970,7 +1284,7 @@ PC  Byte  Instruction
 
 @table @strong
 @item Implements:
-@code{TOS <- (= TOS S[1])}.
+@code{TOS <- (= S[1] TOS)}.
 @item Generated via:
 binary @code{=}.
 @item Instruction size:
@@ -997,7 +1311,7 @@ Constants Vector: [a b]
 
 @table @strong
 @item Implements:
-@code{TOS <- (> TOS S[1])}.
+@code{TOS <- (> S[1] TOS)}.
 @item Generated via:
 binary @code{>}.
 @item Instruction size:
