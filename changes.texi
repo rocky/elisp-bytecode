@@ -6,12 +6,12 @@
 * After 17 and Starting in 18.59::
 * After 18.59 and Starting in 19.34::
 * After 19.34 and Starting in 20.1::
-* After 20.1 and Starting in 21.4::
-* After 21.1 and Starting in 22.1::
-* After 22.1 and Starting in 23.1::
-* After 23.1 and Starting in 24.1::
-* After 24.1 and Starting in 25.1::
-* After 25.1 and Starting in 26.1::
+* After 20.1 and Starting in 21.1::
+* After 21.4a and Starting in 22.1::
+* After 22.3 and Starting in 23.1::
+* After 23.4 and Starting in 24.1::
+* After 24.4 and Starting in 25.1::
+* After 25.3 and Starting in 26.1::
 * After 26.1 and Starting in 27.1::
 @end menu
 
@@ -24,6 +24,8 @@ The following instructions became obsolete:
 @item @code{scan-buffer} (107)
 @item @code{set-mark} (115)
 @end itemize
+
+The 18.59 tarball is dated 1992.
 
 @node After 18.59 and Starting in 19.34
 @section After 18.59 and Starting 19.34
@@ -96,6 +98,8 @@ Bytecode meta-comments look like this:
 ;;; this file uses opcodes which do not exist in Emacs 18.
 @end verbatim
 
+The Elisp tarball for 19.2 is Aug, 1992. (The tarball date for
+19.2 is much later; and even after the date on the 20.1 tarball.)
 
 @node After 19.34 and Starting in 20.1
 @section After 19.34 and Starting in 20.1
@@ -113,9 +117,10 @@ Bytecode meta-comments look like this:
 ;;; This file uses opcodes which do not exist in Emacs 18.
 @end verbatim
 
+The Emacs 20.1 tarball is dated Sep 17, 1997
 
-@node After 20.1 and Starting in 21.4
-@section Ater 20.1 and Starting in 21.4
+@node After 20.1 and Starting in 21.1
+@section After 20.1 and Starting in 21.1
 
 There were no instruction changes. However there were major
 changes in the bytecode interpreter.
@@ -131,8 +136,15 @@ Bytecode meta-comments look like this:
 ;;; with all optimizations.
 @end verbatim
 
-@node After 21.1 and Starting in 22.1
-@section After 21.1 and Starting in 22.1
+@itemize
+@item The Emacs 21.1 tarball is dated Oct 20, 2001
+@item The Emacs 21.2 tarball is dated Mar 16, 2002
+@item The Emacs 21.3 tarball is dated Mar 19, 2003
+@item The Emacs 21.4a tarball is dated Feb 17, 2005
+@end itemize
+
+@node After 21.4a and Starting in 22.1
+@section After 21.4a and Starting in 22.1
 
 There were no instruction changes.
 
@@ -148,8 +160,14 @@ Bytecode meta-comments look like this:
 ;;; This file uses dynamic docstrings, first added in Emacs 19.29.
 @end verbatim
 
-@node After 22.1 and Starting in 23.1
-@section After 22.1 and Starting in 23.1
+@itemize
+@item The Emacs 22.1 tarball is dated Jun 02, 2007
+@item The Emacs 22.2 tarball is dated Mar 26  2008
+@item The Emacs 22.3 tarball is dated Sep 05  2008
+@end itemize
+
+@node After 22.3 and Starting in 23.1
+@section After 22.3 and Starting in 23.1
 
 There were no instruction changes.
 
@@ -163,8 +181,15 @@ Bytecode meta-comments look like this:
 ;;; This file uses dynamic docstrings, first added in Emacs 19.29.
 @end verbatim
 
-@node After 23.1 and Starting in 24.1
-@section After 23.1 and Starting in 24.1
+@itemize
+@item The Emacs 23.1 tarball is dated Jul 30, 2009
+@item The Emacs 23.2b tarball is dated Nov 26, 2011
+@item The Emacs 23.3b tarball is dated Nov 26, 2011
+@item The Emacs 23.4 tarball is dated Jan 28, 2012
+@end itemize
+
+@node After 23.4 and Starting in 24.1
+@section After 23.4 and Starting in 24.1
 
 The following instructions were added:
 @itemize
@@ -206,8 +231,15 @@ Bytecode meta-comments look like this:
 ;;; and so can be loaded in Emacs versions earlier than 23.
 @end verbatim
 
-@node After 24.1 and Starting in 25.1
-@section After 24.1 and Starting in 25.1
+@itemize
+@item The Emacs 24.1 tarball is dated Jun 10, 2012
+@item The Emacs 24.2 tarball is dated Aug 27, 2012
+@item The Emacs 24.3 tarball is dated Mar 11, 2013
+@item The Emacs 24.4 tarball is dated Oct 20, 2014
+@end itemize
+
+@node After 24.4 and Starting in 25.1
+@section After 24.4 and Starting in 25.1
 
 Instruction 0 becomes an error rather than aborting emacs.
 
@@ -242,8 +274,14 @@ Bytecode meta-comments look like this:
 ;;; and so can be loaded in Emacs versions earlier than 23.
 @end verbatim
 
-@node After 25.1 and Starting in 26.1
-@section After 25.1 and Starting in 26.1
+@itemize
+@item The Emacs 25.1 tarball is dated Sep 17, 2016
+@item The Emacs 25.2 tarball is dated Apr 21, 2017
+@item The Emacs 25.3 tarball is dated Sep 11, 2017
+@end itemize
+
+@node After 25.3 and Starting in 26.1
+@section After 25.3 and Starting in 26.1
 
 The following instruction was added:
 @itemize
