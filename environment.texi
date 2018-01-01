@@ -175,7 +175,7 @@ used in the file and with the inclusion of those comes a lack of any
 suppose there's nothing stopping you from using doing likewise in your
 source code.
 
-In fact, you can take file with the @code{.elc} extension, rename it
+In fact, you can take a file with the @code{.elc} extension, rename it
 to have an @code{.el} extension instead and @code{load} that. And that
 will run exactly the same if it had been loaded as a byte-code
 file@footnote{If you go the other direction and rename a Lisp file as
@@ -184,7 +184,7 @@ of the file is a header that Emacs checks. But if you add a
 reasonable-looking header you can go that direction as well.}.
 
 Similarly, just as you can concatenate any number of independent Emacs
-Lisp source code files into one file@footnote{and this is sometiems
+Lisp source code files into one file@footnote{and this is sometimes
 done as a poor-man's way to create a package}, you can do the same
 with Emacs Lisp bytecode files.
 

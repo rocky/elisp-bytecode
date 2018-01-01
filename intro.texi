@@ -166,7 +166,7 @@ The print syntax of this type is similar to vector syntax, except
 @verb{|#[...]|} is displayed to display a bytecode literal instead of
 (@verb{|[...]|} as is used in a vector.
 
-In contrast to vector object, there are no functions index or extract
+In contrast to vector object, there are no functions to index or extract
 parts of a code object once it is build, and a byte-code object can be
 evaluated as a function.  Valid byte-code objects have 4 to 6 elements
 and each element has a particular structure elaborated on below.
