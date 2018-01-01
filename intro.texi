@@ -292,25 +292,28 @@ more about the byte-code below.
 @node Constants Vector
 @unnumberedsubsec Constants Vector
 
-The third object in a bytecode-function literal is a ``constants''
+The third object in a bytecode-function literal is a constants
 vector. It's a normal Elisp vector and can be created with
 @code{(vector ...)} or a vector literal.
 
 In addition to the normal kinds of things one thinks of as constants
---- numbers, strings, and vectors of these --- the constants vector
-also importantly contains symbols of the dynamic variables and
-functions that are referred to in instructions of the byte-code
-unibyte string.
+--- numbers, strings, and compositions of these --- the constants
+vector importantly contains symbol constants of those dynamic
+variables and function names which are referred to by the instructions
+of the byte-code unibyte string.
 
-Emacs Lisp byte-code has a limited number of kinds of operand. Most
-operands are only a few bits in length, some fill an entire byte, and
-occasionally an operand can be two bytes in length. Generally you
-can't have an arbitrary symbol or structured constant listed directly
-inside an operand. So instead, operands reference either the constants
-vector or they index into the stack itself.
+The amount of space used by an Emacs byte-code instruction, and the
+number of ways an operand in an instruction can refer to an Lisp
+object is rather limited. Most operands are only a few bits in length,
+some fill an entire byte, and occasionally an operand can be two bytes
+in length. Given this, you can't have an arbitrary string or
+structured Lisp object listed directly inside an operand. Instead,
+operands reference either the constants vector or they index into the
+evaluation stack itself.
 
 
-@subsubsection showing a constants vector:
+@subsubsection Example showing a constants vector:
+
 @verbatim
 ELISP> (byte-compile
         (lambda (a b)
@@ -323,17 +326,29 @@ ELISP> (byte-compile
   5]
 @end verbatim
 
+The above assumes that dynamic binding is in effect.
+
 The constants vector in the above example contains 5 elements:
 @itemize
-@item @code{a} --- the variable symbol ``a''; note that ``b'' is not listed
-@item @code{myfunc} the external function symbol ``myfunc''
+@item @code{a} --- the symbol @code{a} which refers to a variable
+@item @code{myfunc} the symbol @code{myfunc} which likely refers to an external function
 @item @code{("hi" "there")} a list constant containing two strings
 @item @code{nil} the nil constant
 @item @code{5} the integer constant 5
 @end itemize
 
-If this were a lexically-scoped function, the constants vector wouldn't
-have the variable symbol ``a'' listed.
+The properties of symbol @code{a} and symbol @code{myfunc} are
+consulted at run time, so as such there is no knowledge in the
+bytecode representing the fact that @code{a} is a dynamically-bound
+parmeter while @code{my-func} is probably an external function.
+
+If the lambda were a lexically-scoped, the constants vector would not
+have the variable symbol @code{a} listed, but instead there would be a
+stack entry.
+
+Note that although the symbol @code{b} is a parameter of the lambda,
+it doesn't appear in the constants vector, since it is not used in the
+body of the function.
 
 @node Maximum Stack Usage
 @unnumberedsubsec Maximum Stack Usage
@@ -344,6 +359,13 @@ derived from the byte-code itself, but it's pre-computed so that the
 byte-code interpreter can quickly check for stack
 overflow. Under-reporting this value is probably another way to crash
 Emacs.
+
+In our example above, maximum-stack value is five since function
+@code{myfunc} is called with four parameters which are pushed onto the
+stack, and there is an additional stack entry pushed the @code{myfunc}
+symbol itself. All of this needs to be in place on the stack just
+before a @code{call} instruction runs to perform the @code{myfunc}
+call.
 
 @node Docstring
 @unnumberedsubsec Docstring
