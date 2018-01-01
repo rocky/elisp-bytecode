@@ -278,7 +278,7 @@ The following instructions were added:
 The following instructions became obsolete:
 
 @itemize
-@code{save-current-buffer} (97)
+@item @code{save-current-buffer} (97)
 @end itemize
 
 Is replaced by @code{save-current-buffer-1} (114)
