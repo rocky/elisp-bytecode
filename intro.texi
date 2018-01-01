@@ -5,7 +5,7 @@
 * Why is ELisp Bytecode important and how is Emacs as a program different?::
 * ELisp Bytecode and LAP::
 * Emacs Lisp Virtual Machine::
-* The Byte-code Function Literal::
+* The Byte-code Function Type and Literal::
 @end menu
 
 @node Why is ELisp Bytecode important and how is Emacs as a program different?
@@ -153,18 +153,23 @@ operand or a single intermediate value. Some operands are packed into
 the opcode byte.
 
 
-@node The Byte-code Function Literal
-@section The Byte-code Function Literal
+@node The Byte-code Function Type and Literal
+@section The Byte-code Function Type and Literal
 
 @emph{This section is largely lifted from Chris Wellon's Emacs
 Byte-code Internals.  See references at the end of this doc.}
 
-A byte-code object is functionally equivalent to a normal Elisp vector
-except that it can be evaluated as a function. Elements are accessed
-in constant time, the syntax is similar to vector syntax
-(@verb{|[...]|} vs. @verb{|#[...]|}), and it can be of any length,
-though valid functions must have 4 to 6 elements where the elements
-have a particular structure elaborated on below.
+An Emacs Lisp object of a byte-code type is analogous to an Elisp
+vector. As with a vector, elements are accessed in constant time.
+
+The print syntax of this type is similar to vector syntax, except
+@verb{|#[...]|} is displayed to display a bytecode literal instead of
+(@verb{|[...]|} as is used in a vector.
+
+In contrast to vector object, there are no functions index or extract
+parts of a code object once it is build, and a byte-code object can be
+evaluated as a function.  Valid byte-code objects have 4 to 6 elements
+and each element has a particular structure elaborated on below.
 
 There are two ways to create a byte-code object: using a byte-code
 object literal or with @code{make-byte-code}. Like vector literals,
@@ -288,19 +293,22 @@ more about the byte-code below.
 @unnumberedsubsec Constants Vector
 
 The third object in a bytecode-function literal is a ``constants''
-vector; it lists all of the symbols and constants used the function
-and referred to in its instructions.
+vector. It's a normal Elisp vector and can be created with
+@code{(vector ...)} or a vector literal.
 
-Byte-code has a limited number of kinds of operand. Most operands are
-only a few bits in length, some fill an entire byte, and occasionally
-an operand can be two bytes in length. Generally you can't have an
-arbitrary symbol or structured constant listed directly inside an
-operand. So instead, operands reference either the constants vector or
-they index into the stack itself. Given this, the constants vector is
-pretty hefty.
+In addition to the normal kinds of things one thinks of as constants
+--- numbers, strings, and vectors of these --- the constants vector
+also importantly contains symbols of the dynamic variables and
+functions that are referred to in instructions of the byte-code
+unibyte string.
 
-It's a normal Elisp vector and can be created with vector or a vector
-literal.
+Emacs Lisp byte-code has a limited number of kinds of operand. Most
+operands are only a few bits in length, some fill an entire byte, and
+occasionally an operand can be two bytes in length. Generally you
+can't have an arbitrary symbol or structured constant listed directly
+inside an operand. So instead, operands reference either the constants
+vector or they index into the stack itself.
+
 
 @subsubsection showing a constants vector:
 @verbatim
