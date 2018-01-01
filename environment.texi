@@ -30,7 +30,7 @@ bytecode using the @code{byte-compile-function-p} predicate
 function. Although there aren't methods to extract the components of
 bytecode once it is built, the bytecode object is made up of other
 normal Emacs Lisp objects described in @pxref{The Byte-code Function
-Literal}. Bytecode is created using the @code{byte-compile} function.
+Type and Literal}. Bytecode is created using the @code{byte-compile} function.
 
 One important component of the bytecode object is the ``constants
 vector.''  It contains important Lisp Objects that are required to
