@@ -205,15 +205,22 @@ used in determining whether the bytecode file can be run or not.
 This has the benefit of being able to run bytecode compiled in
 different Emacs version than the version you are currently
 running. Since Emacs bytecode instructions do not change that often,
-this largely works.
+this largely works. The scary part though is that opcode meanings have
+changed over the 30 years, and the interpreter is and has been
+sometimes lacking in checks. (In the past the interpreter has aborted
+when running an invalid bytecode). So Emacs doesn't even know that you
+are running bytecode from a different interpreter. There is no check
+that you aren't going off a cliff running older or newer bytecode.
 
-Emacs developer(s) maintain that they try to keep backward
-compatability between versions. In other words, bytecode that was
-generated in an older version of Emacs but is no longer generated will
-often still be interpreted in the new version of Emacs. While this is
-a nice intention, the facts seem to suggest that this isn't always the
-case. (Nor could it be in reality for a program that is 30 years old or
-so).
+However, Emacs developer(s) maintain that in practice problems haven't
+occurred with such frequency that it has been reported happened enough
+to be a problem.  Also, they try to keep backward compatability
+between versions. In other words, bytecode that was generated in an
+older version of Emacs but is no longer generated will often still be
+interpreted in the new version of Emacs. While this is a nice
+intention, the facts seem to suggest that this isn't always the
+case. (Nor could it be in reality for a program that is 30 years old
+or so).
 
 @xref{Opcode Changes Between Emacs Releases} then for when this is
 likely to work and in what cases it won't. And although running newer
