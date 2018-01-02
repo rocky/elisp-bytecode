@@ -23,8 +23,15 @@ small amount of jargon which is explained here.
 
 @subsection Instruction Jargon
 @itemize
+@item @code{top}
+A pointer to the the top of the evaluation stack. In C this would be
+@code{&TOS}. When we want the stack to increase in size, we add to top. For
+example, to push a single new value, we can use @code{top++}.
+
+Note that in changing @code{top}, the value accessed by @code{TOS} or
+@code{S} values (described next) all change.
 @item @code{TOS}
-The top of the evaluations stack. Many instruction either read or push onto this
+The value of top of the evaluation stack. Many instructions either read or push onto this.
 @item @code{S}
 This is an array of evaluation stack items. @code{S[0]} is the top of the stack, or
 @code{TOS}.
@@ -82,7 +89,7 @@ or was no longer implemented.
 Some ELisp code to show how the instruction is used. For example
 the for the @code{goto} instruction we give:
 
-@code{(defun goto-eg(n) (while (n) 2))} generates:
+@code{(defun goto-eg(n) (while (n) 1300))} generates:
 @verbatim
 PC  Byte  Instruction
  0  192   constant[0] n
@@ -106,6 +113,7 @@ Unless otherwise stated, all code examples were compiled in Emacs 25
 with optimization turned off.
 @end table
 
+@page
 @node Argument-Packing Instructions
 @section Argument-Packing Instructions
 
@@ -128,11 +136,46 @@ opcode, in little-endian byte order.
 @unnumberedsubsec @code{stack-ref} (1--7)
 @kindex stack-ref
 
-A stack reference. This is used only in lexical binding.
-
+@table @strong
+@item Implements:
+@code{top++; TOS <- S[i+1]} where @code{i}  is the index of the stack reference.
+@item Generated via:
+@code{let}, @code{let*} and lambda arguments.
+@item Instruction size:
+1 byte for @code{stack-ref[0]} .. @code{stack-ref[4]}; 2 bytes for @code{stack-ref[5]}, 8-bit operand;
+3 bytes for @code{stack-ref[6]}, 16-bit operand.
+@item Stack effect:
+@math{-0+1}.
+@item Added in:
 Added in Emacs 24.1
+@item Example:
+When lexical binding is in effect,
+@verbatim
+(defun stack-ref-eg()
+  (let ((a 5) (_b 6) (c 7))
+    (+ a c)))}
+@end verbatim
+generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] 5
+ 1  193   constant[1] 6
+ 2  194   constant[2] 7
+ 3    2   stack-ref[2]
+ 4    1   stack-ref[1]
+ 5   92   plus
+ 6  178   stack-set [3] ;; Set return value
+          3             ;; before discarding stack entries
+ 8  136   discard
+ 9  136   discard
+10  135   return
 
-@subsubsection Warning
+Constants Vector: [5 6 7]
+@end verbatim
+@end table
+
+@strong{Warning}
 Running an instruction with opcode 0 (logically this would be called
 @code{stack-ref[0]}), will cause an immediate abort of Emacs in
 versions after version 20 and before version 25! The abort of the
@@ -145,34 +188,29 @@ hasn't been written to yet. By having it be an invalid instruction, it
 is more likely to catch situations where random sections of memory are
 run such as by setting the PC incorrectly.
 
-@subsubsection Example
-When lexical binding is in effect, @code{(defun stack-ref() (let ((a 5) (_b 6) (c 7)) (+ a c)))} generates:
-@c ((lexical . t) (optimize . nil))
-@verbatim
-PC  Byte  Instruction
- 0  192   constant[0] 5
- 1  193   constant[1] 6
- 2  194   constant[2] 7
- 3    2   stack-ref[2]
- 4    1   stack-ref[1]
- 5   92   plus
- 6  178   stack-set [3]
-           3
- 8  136   discard
- 9  136   discard
-10  135   return
-
-Constants Vector: [5 6 7]
-@end verbatim
 
 @node varref
 @unnumberedsubsec @code{varref} (8--15)
 @kindex varref
-Pushes the value of a variable reference onto the evaluation stack.
+@table @strong
+@item Implements:
+Pushes the value of the symbol in the constants vector onto the
+evaluation stack.
 
-@subsubsection Example
-
-When dynamic binding is in effect, @code{(defun varref(n) n)} generates:
+@code{top++; TOS <- (eval constants_vector[i])}
+@item Generated via:
+dynamic variable access
+@item Instruction size:
+1 byte for @code{varref[0]} .. @code{varref[4]}; 2 bytes for @code{varref[5]},
+8-bit operand; 3 bytes for @code{varref[6]}, 16-bit operand.
+@item Stack effect:
+@math{-0+1}.
+@item Example:
+When dynamic binding is in effect,
+@verbatim
+defun varref-eg(n) n)
+@end verbatim
+generates:
 @verbatim
 PC  Byte  Instruction
  0    8   varref[0] n
@@ -180,17 +218,28 @@ PC  Byte  Instruction
 
 Constants Vector: [n]
 @end verbatim
+@end table
 
 @node varset
 @unnumberedsubsec @code{varset} (16--23)
 @kindex varset
-
-Sets a variable given in the operand to the value that is on the top
+@table @strong
+@item Implements:
+Sets a variable listed in the constants vector to the TOS value
 of the stack.
-
-@subsubsection Example
-
-When dynamic binding is in effect, @code{(defun varset(n) (setq n 5))} generates:
+@code{constants_vector[i] <- TOS; top--}
+@item Instruction size:
+1 byte for @code{varset[0]} .. @code{varset[4]}; 2 bytes for @code{varset[5]},
+8-bit operand; 3 bytes for @code{varset[6]}, 16-bit operand.
+@item Stack effect:
+@math{-0+1}.
+@item Example:
+When dynamic binding is in effect,
+@verbatim
+defun varset(n)
+  (setq n 5))
+@end verbatim
+generates:
 @verbatim
 PC  Byte  Instruction
  0  193   constant[1] 5
@@ -200,6 +249,7 @@ PC  Byte  Instruction
 
 Constants Vector: [n 5]
 @end verbatim
+@end table
 
 @node varbind
 @unnumberedsubsec @code{varbind} (24--31)
@@ -659,7 +709,7 @@ PC  Byte  Instruction
 @kindex eq
 @table @strong
 @item Implements:
-@code{TOS <- (eq S[1] TOS)}.
+@code{S[1] <- (eq S[1] TOS; top--); }.
 @item Generated via:
 binary @code{eq}.
 @item Instruction size:
@@ -683,7 +733,7 @@ PC  Byte  Instruction
 @kindex memq
 @table @strong
 @item Implements:
-@code{TOS <- (memq S[1] TOS)}.
+@code{S[1] <- (memq S[1] TOS; top--)}.
 @item Generated via:
 binary @code{memq}.
 @item Instruction size:
@@ -776,7 +826,7 @@ PC  Byte  Instruction
 @kindex set
 @table @strong
 @item Implements:
-@code{TOS <- (set S[1] TOS)}.
+@code{S[1] <- (set S[1] TOS; top--)}.
 @item Generated via:
 binary @code{set}.
 @item Instruction size:
@@ -800,7 +850,7 @@ PC  Byte  Instruction
 @kindex fset
 @table @strong
 @item Implements:
-@code{TOS <- (fset S[1] TOS)}.
+@code{S[1] <- (fset S[1] TOS; top--)}.
 @item Generated via:
 binary @code{fset}.
 @item Instruction size:
@@ -824,7 +874,7 @@ PC  Byte  Instruction
 @kindex get
 @table @strong
 @item Implements:
-@code{TOS <- (get S[1] TOS)}.
+@code{S[1] <- (get S[1] TOS; top--)}.
 @item Generated via:
 binary @code{get}.
 @item Instruction size:
@@ -848,7 +898,7 @@ PC  Byte  Instruction
 @kindex equal
 @table @strong
 @item Implements:
-@code{TOS <- (equal S[1] TOS)}.
+@code{S[1] <- (equal S[1] TOS; top--)}.
 @item Generated via:
 binary @code{equal}.
 @item Instruction size:
@@ -874,7 +924,7 @@ PC  Byte  Instruction
 @kindex member
 @table @strong
 @item Implements:
-@code{TOS <- (member S[1] TOS)}.
+@code{S[1] <- (member S[1] TOS; top--)}.
 @item Generated via:
 binary @code{member}.
 @item Instruction size:
@@ -898,7 +948,7 @@ PC  Byte  Instruction
 @kindex assq
 @table @strong
 @item Implements:
-@code{TOS <- (assq S[1] TOS)}.
+@code{S[1] <- (assq S[1] TOS; top--)}.
 @item Generated via:
 binary @code{assq}.
 @item Instruction size:
@@ -1002,7 +1052,7 @@ bytecode interpreter.
 @kindex nth
 @table @strong
 @item Implements:
-@code{TOS <- (nth S[1] TOS)}.
+@code{S[1] <- (nth S[1] TOS; top--)}.
 @item Generated via:
 binary @code{nth}.
 @item Instruction size:
@@ -1082,7 +1132,7 @@ Constants Vector: [l]
 
 @table @strong
 @item Implements:
-@code{TOS <- (cons S[1] TOS)}.
+@code{S[1] <- (cons S[1] TOS; top--)}.
 @item Generated via:
 binary @code{cons}.
 @item Instruction size:
@@ -1284,7 +1334,7 @@ PC  Byte  Instruction
 
 @table @strong
 @item Implements:
-@code{TOS <- (= S[1] TOS)}.
+@code{S[1] <- (= S[1] TOS; top--)}.
 @item Generated via:
 binary @code{=}.
 @item Instruction size:
@@ -1311,7 +1361,7 @@ Constants Vector: [a b]
 
 @table @strong
 @item Implements:
-@code{TOS <- (> S[1] TOS)}.
+@code{S[1] <- (> S[1] TOS; top--)}.
 @item Generated via:
 binary @code{>}.
 @item Instruction size:
@@ -1337,7 +1387,7 @@ PC  Byte  Instruction
 
 @table @strong
 @item Implements:
-@code{TOS <- (< S[1] TOS)}.
+@code{S[1] <- (< S[1] TOS; top--)}.
 @item Generated via:
 binary @code{<}.
 @item Instruction size:
@@ -1364,7 +1414,7 @@ Constants Vector: [a b]
 
 @table @strong
 @item Implements:
-@code{TOS <- (<= S[1] TOS)}.
+@code{S[1] <- (<= S[1] TOS; top--)}.
 @item Instruction size:
 1 byte
 @item Generated via:
@@ -1393,7 +1443,7 @@ Constants Vector: [a b]
 
 @table @strong
 @item Implements:
-@code{TOS <- (>= S[1] TOS)}.
+@code{S[1] <- (>= S[1] TOS; top--)}.
 @item Instruction size:
 1 byte
 @item Generated via:
@@ -1421,7 +1471,7 @@ PC  Byte  Instruction
 
 @table @strong
 @item Implements:
-@code{TOS <- (- S[1] TOS)}.
+@code{S[1] <- (- S[1] TOS; top--)}.
 @item Generated via:
 binary @code{-}.
 @item Instruction size:
@@ -1478,7 +1528,7 @@ Constants Vector: [a]
 
 @table @strong
 @item Implements:
-@code{TOS <- (+ S[1] TOS)}.
+@code{S[1] <- (+ S[1] TOS; top--)}.
 @item Generated via:
 binary @code{+}.
 @item Instruction size:
@@ -1505,7 +1555,7 @@ Constants Vector: [n]
 
 @table @strong
 @item Implements:
-@code{TOS <- (* S[1] TOS)}.
+@code{S[1] <- (* S[1] TOS; top--)}.
 @item Generated via:
 binary @code{*}.
 @item Instruction size:
@@ -1534,7 +1584,7 @@ Constants Vector: [n]
 
 @table @strong
 @item Implements:
-@code{TOS <- (max S[1] TOS)}.
+@code{S[1] <- (max S[1] TOS; top--)}.
 @item Generated via:
 binary @code{max}.
 @item Instruction size:
@@ -1588,7 +1638,7 @@ Constants Vector: [a b]
 
 @table @strong
 @item Implements:
-@code{TOS <- (/ S[1] TOS)}.
+@code{S[1] <- (/ S[1] TOS; top--)}.
 @item Generated via:
 binary @verb{|/|}.
 @item Instruction size:
@@ -1615,7 +1665,7 @@ Constants Vector: [a b]
 
 @table @strong
 @item implements:
-@code{TOS <- (% S[1] TOS)}.
+@code{S[1] <- (% S[1] TOS; top--)}.
 @item generated via:
 binary @verb{|%|}
 @item Instruction size:
