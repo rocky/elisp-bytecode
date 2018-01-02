@@ -23,18 +23,19 @@ small amount of jargon which is explained here.
 
 @subsection Instruction Jargon
 @itemize
-@item @code{top}
-A pointer to the the top of the evaluation stack. In C this would be
-@code{&TOS}. When we want the stack to increase in size, we add to top. For
-example, to push a single new value, we can use @code{top++}.
-
-Note that in changing @code{top}, the value accessed by @code{TOS} or
-@code{S} values (described next) all change.
 @item @code{TOS}
 The value of top of the evaluation stack. Many instructions either read or push onto this.
 @item @code{S}
 This is an array of evaluation stack items. @code{S[0]} is the top of the stack, or
 @code{TOS}.
+@item @code{top}
+A pointer to the the top of the evaluation stack. In C this would be
+@code{&TOS}. When we want the stack to increase in size, we add to
+top. For example, to makes space to store a new single new value, we
+can use @code{top++} and then assign to @code{TOS}.
+
+Note that in changing @code{top}, the value accessed by @code{TOS} or
+@code{S} values all change.
 @item @math{\phi}
 This is used in describing stack effects for branching instructions
 where the stack effect is different on one branch versus the
@@ -136,9 +137,12 @@ opcode, in little-endian byte order.
 @unnumberedsubsec @code{stack-ref} (1--7)
 @kindex stack-ref
 
+Reference a value from the evaluation stack.
+
 @table @strong
 @item Implements:
-@code{top++; TOS <- S[i+1]} where @code{i}  is the index of the stack reference.
+@code{top++; TOS <- S[i+1]} where @code{i} is the value of the
+instruction operand.
 @item Generated via:
 @code{let}, @code{let*} and lambda arguments.
 @item Instruction size:
@@ -191,13 +195,15 @@ run such as by setting the PC incorrectly.
 
 @node varref
 @unnumberedsubsec @code{varref} (8--15)
-@kindex varref
-@table @strong
-@item Implements:
+
 Pushes the value of the symbol in the constants vector onto the
 evaluation stack.
 
-@code{top++; TOS <- (eval constants_vector[i])}
+@kindex varref
+@table @strong
+@item Implements:
+@code{top++; TOS <- (eval constants_vector[i])} where @code{i} is the
+value of instruction operand
 @item Generated via:
 dynamic variable access
 @item Instruction size:
@@ -222,12 +228,15 @@ Constants Vector: [n]
 
 @node varset
 @unnumberedsubsec @code{varset} (16--23)
+
+Sets a variable listed in the constants vector to the TOS value
+of the stack.
+
 @kindex varset
 @table @strong
 @item Implements:
-Sets a variable listed in the constants vector to the TOS value
-of the stack.
-@code{constants_vector[i] <- TOS; top--}
+@code{constants_vector[i] <- TOS; top--} where @code{i} is the value of the
+instruction operand.
 @item Instruction size:
 1 byte for @code{varset[0]} .. @code{varset[4]}; 2 bytes for @code{varset[5]},
 8-bit operand; 3 bytes for @code{varset[6]}, 16-bit operand.
@@ -255,7 +264,38 @@ Constants Vector: [n 5]
 @unnumberedsubsec @code{varbind} (24--31)
 @kindex varbind
 
-Binds a variable
+Binds a variable to a symbol in the constants vector, and adds the
+symbol to a special-bindings stack.
+
+@table @strong
+@item Implements:
+@code{(set_internal(constants_vector[i])} where @code{i} is the value of the
+instruction operand.
+@item Instruction size:
+1 byte for @code{varset[0]} .. @code{varset[4]}; 2 bytes for @code{varset[5]},
+8-bit operand; 3 bytes for @code{varset[6]}, 16-bit operand.
+@item Stack effect:
+@math{-0+1}.
+@item Example:
+When dynamic binding is in effect,
+@verbatim
+defun varbind-eg()
+  (let ((c 1))
+    (1+ c)))
+@end verbatim
+generates:
+@verbatim
+PC  Byte  Instruction
+ 0  193   constant[1] 1
+ 1  137   dup
+ 2   24   varbind[0] c ;; creates variable c
+ 3   84   add1
+ 4   41   unbind[1]    ;; removes variable c
+ 5  135   return
+
+Constants Vector: [c 1]
+@end verbatim
+@end table
 
 @node call
 @unnumberedsubsec @code{call} (32--39)
@@ -265,23 +305,72 @@ Calls a function.  The opcode argument specifies the number of
 arguments to pass to the function from the stack, excluding the
 function itself.
 
-@subsubsection Example
-
-@code{(exchange-point-and-mark)} generates:
+@table @strong
+@item Implements:
+@code{(set_internal(constants_vector[i])} where @code{i} is the value of the
+instruction operand.
+@item Instruction size:
+1 byte for @code{varset[0]} .. @code{varset[4]}; 2 bytes for @code{varset[5]},
+8-bit operand; 3 bytes for @code{varset[6]}, 16-bit operand.
+@item Stack effect:
+@math{-0+1}.
+@item Example:
+@verbatim
+(defun call-eg()
+  (exchange-point-and-mark)
+  (next-line 2))
+@end verbatim
+generates:
 @verbatim
 PC  Byte  Instruction
  0  192   constant[0] exchange-point-and-mark
  1   32   call[0]
- 2  135   return
+ 2  136   discard
+ 3  193   constant[1] next-line
+ 4  194   constant[2] 2
+ 5   33   call[1]
+ 6  135   return
 
-Constants Vector: [exchange-point-and-mark]
+Constants Vector: [exchange-point-and-mark next-line 2]
 @end verbatim
+@end table
 
 @node unbind
 @unnumberedsubsec @code{unbind} (40--47)
 @kindex unbind
 
-Unbinds special bindings
+Remove the binding of a variable to symbol and from the special
+stack. This is done when the variable is no longer needed.
+
+@table @strong
+@item Implements:
+@code{(set_internal(constants_vector[i])}
+@item Instruction size:
+1 byte for @code{varset[0]} .. @code{varset[4]}; 2 bytes for @code{varset[5]},
+8-bit operand; 3 bytes for @code{varset[6]}, 16-bit operand.
+@item Stack effect:
+@math{-0+1}.
+@item Example:
+When dynamic binding is in effect,
+@verbatim
+defun varbind-eg()
+  (let ((c 1))
+    (1+ c)))
+@end verbatim
+generates:
+@verbatim
+PC  Byte  Instruction
+ 0  193   constant[1] 1
+ 1  137   dup
+ 2   24   varbind[0] c ;; creates variable c
+ 3   84   add1
+ 4   41   unbind[1]    ;; removes variable c
+ 5  135   return
+
+Constants Vector: [c 1]
+@end verbatim
+@end table
+
 
 @node Constants-Vector Retrieval Instructions
 @section Constants-Vector Retrieval Instructions
