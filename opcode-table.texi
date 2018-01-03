@@ -15,331 +15,391 @@ the stack-effect field.
 @end menu
 
 @node Opcodes (0000-0077)
-@section Opcodes (0000-0177)
-@multitable @columnfractions .09 .09 .31 .55 .18
+@section Opcodes (0000-0077)
+@multitable @columnfractions .09 .09 .31 .08 .43 .18
 @headitem
 @verb{| |}Oct
 @tab @verb{| |}Dec
 @tab @verb{| |} Instruction
+@tab Size
 @tab Description
 @tab Stack
 
 @item @verb{|  00|}
 @tab @verb{|   0|}
-@tab @tab An error. Before 25.1 it is an immediate program abort! Logically @code{stack-ref[0]} but @code{dup} should be used instead.
+@tab @tab
+@tab An error. Before 25.1 it is an immediate program abort! Logically @code{stack-ref[0]} but @code{dup} should be used instead.
 
 @item @verb{|  01|}
 @tab @verb{|   1|}
 @tab @verb{|  stack-ref[1]|}
-@tab stack reference 1
+@tab 1
+@tab @xref{stack-ref}
 @tab @math{+1}
 @item @verb{|  02|}
 @tab @verb{|   2|}
 @tab @verb{|  stack-ref[2]|}
-@tab stack reference 2
+@tab 1
+@tab @xref{stack-ref}
 @tab @math{+1}
 @item @verb{|  03|}
 @tab @verb{|   3|}
 @tab @verb{|  stack-ref[3]|}
-@tab stack reference 3
+@tab 1
+@tab @xref{stack-ref}
 @tab @math{+1}
 @item @verb{|  04|}
 @tab @verb{|   4|}
 @tab @verb{|  stack-ref[4]|}
-@tab stack reference 4
+@tab 1
+@tab @xref{stack-ref}
 @tab @math{+1}
 @item @verb{|  05|}
 @tab @verb{|   5|}
 @tab @verb{|  stack-ref[5]|}
-@tab stack reference 5
+@tab 1
+@tab @xref{stack-ref}
 @tab @math{+1}
 @item @verb{|  06|}
 @tab @verb{|   6|}
 @tab @verb{|  stack-ref[6]|}
-@tab stack reference 0--255
+@tab 2
+@tab @xref{stack-ref}
 @tab @math{+1}
 @item @verb{|  07|}
 @tab @verb{|   7|}
 @tab @verb{|  stack-ref[7]|}
-@tab stack reference 0--65535
+@tab 3
+@tab @xref{stack-ref}
 @tab @math{+1}
 
 @item @verb{| 010|}
 @tab @verb{|   8|}
 @tab @verb{|  varref[0]|}
-@tab variable reference 0
+@tab 1
+@tab @xref{varref}
 @tab @math{+1}
 @item @verb{| 011|}
 @tab @verb{|   9|}
 @tab @verb{|  varref[1]|}
-@tab variable reference 1
+@tab 1
+@tab @xref{varref}
 @tab @math{+1}
 @item @verb{| 012|}
 @tab @verb{|  10|}
 @tab @verb{|  varref[2]|}
-@tab variable reference 2
+@tab 1
+@tab @xref{varref}
 @tab @math{+1}
 @item @verb{| 013|}
 @tab @verb{|  11|}
 @tab @verb{|  varref[3]|}
-@tab variable reference 3
+@tab 1
+@tab @xref{varref}
 @tab @math{+1}
 @item @verb{| 014|}
 @tab @verb{|  12|}
 @tab @verb{|  varref[4]|}
-@tab variable reference 4
+@tab 1
+@tab @xref{varref}
 @tab @math{+1}
 @item @verb{| 015|}
 @tab @verb{|  13|}
 @tab @verb{|  varref[5]|}
-@tab variable reference 5
+@tab 1
+@tab @xref{varref}
 @tab @math{+1}
 @item @verb{| 016|}
 @tab @verb{|  14|}
 @tab @verb{|  varref[6]|}
-@tab variable reference 0--255
+@tab 2
+@tab @xref{varref}
 @tab @math{+1}
 @item @verb{| 017|}
 @tab @verb{|  15|}
 @tab @verb{|  varref[7]|}
-@tab variable reference 0--65535
+@tab 3
+@tab @xref{varref}
 @tab @math{+1}
 
 @item @verb{| 020|}
 @tab @verb{|  16|}
 @tab @verb{|  varset[0]|}
-@tab Sets variable 0
+@tab 1
+@tab @xref{varset}
 @tab @math{-1}
 @item @verb{| 021|}
 @tab @verb{|  17|}
 @tab @verb{|  varset[1]|}
-@tab Sets variable 1
+@tab 1
+@tab @xref{varset}
 @tab @math{-1}
 @item @verb{| 022|}
 @tab @verb{|  18|}
 @tab @verb{|  varset[2]|}
-@tab Sets variable 2
+@tab 1
+@tab @xref{varset}
 @tab @math{-1}
 @item @verb{| 023|}
 @tab @verb{|  19|}
 @tab @verb{|  varset[3]|}
-@tab Sets variable 3
+@tab 1
+@tab @xref{varset}
 @tab @math{-1}
 @item @verb{| 024|}
 @tab @verb{|  20|}
 @tab @verb{|  varset[4]|}
-@tab Sets variable 4
+@tab 1
+@tab @xref{varset}
 @tab @math{-1}
 @item @verb{| 025|}
 @tab @verb{|  21|}
 @tab @verb{|  varset[5]|}
-@tab Sets variable 5
+@tab 1
+@tab @xref{varset}
 @tab @math{-1}
 @item @verb{| 026|}
 @tab @verb{|  22|}
 @tab @verb{|  varset[6]|}
-@tab Sets variable 6
+@tab 2
+@tab @xref{varset}
 @tab @math{-1}
 @item @verb{| 027|}
 @tab @verb{|  23|}
 @tab @verb{|  varset[7]|}
-@tab Sets variable 7
+@tab 3
+@tab @xref{varset}
 @tab @math{-1}
 
 @item @verb{| 030|}
 @tab @verb{|  24|}
 @tab @verb{|  varbind[0]|}
-@tab Bind variable 0
+@tab 1
+@tab @xref{varbind}
 @tab @math{-1}
 @item @verb{| 031|}
 @tab @verb{|  25|}
 @tab @verb{|  varbind[1]|}
-@tab Bind variable 1
+@tab 1
+@tab @xref{varbind}
 @tab @math{-1}
 @item @verb{| 032|}
 @tab @verb{|  26|}
 @tab @verb{|  varbind[2]|}
-@tab Bind variable 2
+@tab 1
+@tab @xref{varbind}
 @tab @math{-1}
 @item @verb{| 033|}
 @tab @verb{|  27|}
 @tab @verb{|  varbind[3]|}
-@tab Bind variable 3
+@tab 1
+@tab @xref{varbind}
 @tab @math{-1}
 @item @verb{| 034|}
 @tab @verb{|  28|}
 @tab @verb{|  varbind[4]|}
-@tab Bind variable 4
+@tab 1
+@tab @xref{varbind}
 @tab @math{-1}
 @item @verb{| 035|}
 @tab @verb{|  29|}
 @tab @verb{|  varbind[5]|}
-@tab Bind variable 5
+@tab 1
+@tab @xref{varbind}
 @tab @math{-1}
 @item @verb{| 036|}
 @tab @verb{|  30|}
 @tab @verb{|  varbind[6]|}
-@tab Bind variable 6
+@tab 2
+@tab @xref{varbind}
 @tab @math{-1}
 @item @verb{| 037|}
 @tab @verb{|  31|}
 @tab @verb{|  varbind[7]|}
-@tab Bind variable 7
+@tab 3
+@tab @xref{varbind}
 @tab @math{-1}
 
 @item @verb{| 040|}
 @tab @verb{|  32|}
 @tab @verb{|  call0|}
-@tab Calls a function
+@tab 1
+@tab @xref{call}
 @tab @math{-1+1}
 @item @verb{| 041|}
 @tab @verb{|  33|}
 @tab @verb{|  call1|}
-@tab Calls a function
+@tab 1
+@tab @xref{call}
 @tab @math{-2+1}
 @item @verb{| 042|}
 @tab @verb{|  34|}
 @tab @verb{|  call2|}
-@tab Calls a function
+@tab 1
+@tab @xref{call}
 @tab @math{-3+1}
 @item @verb{| 043|}
 @tab @verb{|  35|}
 @tab @verb{|  call3|}
-@tab Calls a function
+@tab 1
+@tab @xref{call}
 @tab @math{-4+1}
 @item @verb{| 044|}
 @tab @verb{|  36|}
 @tab @verb{|  call4|}
-@tab Calls a function
+@tab 1
+@tab @xref{call}
 @tab @math{-5+1}
 @item @verb{| 045|}
 @tab @verb{|  37|}
 @tab @verb{|  call5|}
-@tab Calls a function
+@tab 1
+@tab @xref{call}
 @tab @math{-6+1}
 @item @verb{| 046|}
 @tab @verb{|  38|}
 @tab @verb{|  call6|}
-@tab Calls a function
+@tab 2
+@tab @xref{call}
 @tab @math{-n-1+1}
 @item @verb{| 047|}
 @tab @verb{|  39|}
 @tab @verb{|  call7|}
-@tab Calls a function
+@tab 3
+@tab @xref{call}
 @tab @math{-n-1+1}
 
 @item @verb{| 050|}
 @tab @verb{|  40|}
 @tab @verb{|  unbind0|}
-@tab Unbinds special bindings
+@tab 1
+@tab @xref{unbind}
 @tab @math{-0}
 @item @verb{| 051|}
 @tab @verb{|  41|}
 @tab @verb{|  unbind1|}
-@tab Unbinds special bindings
+@tab 1
+@tab @xref{unbind}
 @tab @math{-0}
 @item @verb{| 052|}
 @tab @verb{|  42|}
 @tab @verb{|  unbind2|}
-@tab Unbinds special bindings
+@tab 1
+@tab @xref{unbind}
 @tab @math{-0}
 @item @verb{| 053|}
 @tab @verb{|  43|}
 @tab @verb{|  unbind3|}
-@tab Unbinds special bindings
+@tab 1
+@tab @xref{unbind}
 @tab @math{-0}
 @item @verb{| 054|}
 @tab @verb{|  44|}
 @tab @verb{|  unbind4|}
-@tab Unbinds special bindings
+@tab 1
+@tab @xref{unbind}
 @tab @math{-0}
 @item @verb{| 055|}
 @tab @verb{|  45|}
 @tab @verb{|  unbind5|}
-@tab Unbinds special bindings
+@tab 1
+@tab @xref{unbind}
 @tab @math{-0}
 @item @verb{| 056|}
 @tab @verb{|  46|}
 @tab @verb{|  unbind6|}
-@tab Unbinds special bindings
+@tab 2
+@tab @xref{unbind}
 @tab @math{-0}
 @item @verb{| 057|}
 @tab @verb{|  47|}
 @tab @verb{|  unbind7|}
-@tab Unbinds special bindings
+@tab 3
+@tab @xref{unbind}
 @tab @math{-0}
 
 @item @verb{| 060|}
 @tab @verb{|  48|}
 @tab @verb{|  ophandler|}
+@tab 1
 @tab
 @tab @math{-0}
 @item @verb{| 061|}
 @tab @verb{|  49|}
 @tab @verb{|  conditioncase|}
+@tab 3
 @tab
-@tab @math{-0}
+@tab @math{-1+\phi(0,+1)}
 @item @verb{| 062|}
 @tab @verb{|  50|}
 @tab @verb{|  pushconditioncase|}
+@tab 1
 @tab
-
 @tab @math{-0}
+
 @item @verb{| 063|}
 @tab @verb{|  51|}
-@tab @tab Unused
+@tab @tab @tab Unused
 @item @verb{| 064|}
 @tab @verb{|  52|}
-@tab @tab Unused
+@tab @tab @tab Unused
 @item @verb{| 065|}
 @tab @verb{|  53|}
-@tab @tab Unused
+@tab @tab @tab Unused
 @item @verb{| 066|}
 @tab @verb{|  54|}
-@tab @tab Unused
+@tab @tab @tab Unused
 @item @verb{| 067|}
 @tab @verb{|  55|}
-@tab @tab Unused
+@tab @tab @tab Unused
 
 @item @verb{| 070|}
 @tab @verb{|  56|}
 @tab @verb{|  nth|}
-@tab Call @code{nth} with two arguments.
+@tab 1
+@tab @xref{nth}
 @tab @math{-2+1}
 @item @verb{| 071|}
 @tab @verb{|  57|}
 @tab @verb{|  symbolp|}
-@tab Call @code{symbolp} with one argument.
+@tab 1
+@tab @xref{symbolp}
 @tab @math{-1+1}
 @item @verb{| 072|}
 @tab @verb{|  58|}
 @tab @verb{|  consp|}
-@tab Call @code{consp} with one argument.
+@tab 1
+@tab @xref{consp}
 @tab @math{-1+1}
 @item @verb{| 073|}
 @tab @verb{|  59|}
 @tab @verb{|  stringp|}
-@tab Call @code{stringp} with one argument.
+@tab 1
+@tab @xref{stringp}
 @tab @math{-1+1}
 @item @verb{| 074|}
 @tab @verb{|  60|}
 @tab @verb{|  listp|}
-@tab Call @code{listp} with one argument.
+@tab 1
+@tab @xref{listp}
 @tab @math{-1+1}
 @item @verb{| 075|}
 @tab @verb{|  61|}
 @tab @verb{|  eq|}
-@tab Call @code{eq} with two arguments.
+@tab 1
+@tab @xref{eq}
 @tab @math{-2+1}
 @item @verb{| 076|}
 @tab @verb{|  62|}
 @tab @verb{|  memq|}
-@tab Call @code{memq} with two arguments.
+@tab 1
+@tab @xref{memq}
 @tab @math{-2+1}
 @item @verb{| 077|}
 @tab @verb{|  63|}
 @tab @verb{|  not|}
-@tab Call @code{not} with one argument.
+@tab 1
+@tab @xref{not}
 @tab @math{-1+1}
 
 @end multitable
@@ -515,7 +575,7 @@ the stack-effect field.
 @tab Call @code{point} with no arguments.
 @item @verb{|0141|}
 @tab @verb{| *97|}
-@tab @verb{|  save-current-buffer-OBSOLETE|}
+@tab @verb{|  save-current-buffer|}
 @tab Obsolete in 24.1
 @tab @math{-0+1}
 @item @verb{|0141|}
@@ -709,12 +769,14 @@ the stack-effect field.
 @tab @math{-1+0}
 @item @verb{|0205|}
 @tab @verb{| 133|}
-@tab @verb{|  goto-if-nil-else-pop|}
+@tab @verb{|  goto-if-nil-
+ else-pop|}
 @tab Jump if TOS is nil, else pop
 @tab @math{\phi(-1,0)+0}
 @item @verb{|0206|}
 @tab @verb{| 134|}
-@tab @verb{|  goto-if-not-nil-else-pop|}
+@tab @verb{|  goto-if-not-
+ nil-else-pop|}
 @tab Jump if TOS is not nil, else pop
 @tab @math{\phi(-1,0)+0}
 @item @verb{|0207|}

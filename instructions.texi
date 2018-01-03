@@ -218,7 +218,8 @@ dynamic variable access
 @item Example:
 When dynamic binding is in effect,
 @verbatim
-defun varref-eg(n) n)
+(defun varref-eg(n)
+  n)
 @end verbatim
 generates:
 @verbatim
