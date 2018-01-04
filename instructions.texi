@@ -18,8 +18,41 @@
 In this chapter we'll document instructions of the course of the
 entire history of Emacs. (Or at least we aim to.)
 
-To simplify and regularize things we'll use a standard format and a
-small amount of jargon which is explained here.
+For the names of the instructions, we will prefer canonicalized names
+from the Emacs C source @code{bytecode.c} (under directory
+@code{src/}) when those differ from the names in @code{bytecomp.el}
+(under directory @code{lisp/emacs-lisp}). Names in @code{bytecode.c}
+follow C conventions and must be adjusted to harmonize with other C
+names used, and this aspect isn't of use here. So we canonicalize
+those aspects away.
+
+For example, in @code{bytecode.c} there is an instruction opcode
+called @code{Bbuffer_substring}. We will drop the initial @code{B} and
+replace all underscores (@verb{|_|}) with dashes
+(@verb{|-|}). Therefore this name appears below as
+@code{buffer-substring} here.
+
+The corresponding name for that opcode in @code{bytecomp.el} is
+@code{byte-buffer-substring}.  For the most part, if you drop the
+initial @code{byte-} prefix in the @code{bytecomp.el} name you will
+often get the canonic name from @code{bytecode.c}. However this isn't
+always true.
+
+In particular, consider opcodes 97 and 114; 97 became obsolete in
+Emacs 24.1 but implemented some kind of @code{save-current-buffer}
+instruction. Opcode 97 was then reused. When the
+@code{save-current-buffer} instruction was reintroduced, it got added
+as opcode 114. In @code{bytecomp.el} only the name
+@code{byte-save-current-buffer} appears, while in the C code the name
+@code{B_save_current_buffer} is used for opcode 97 and
+@code{B_save_current_buffer_1} is used for opcode 114.  And that is
+why we go with the @code{bytecode.c} name.  The names we use are
+@code{save-current-buffer} and @code{save-current-buffer-1}.
+
+To shorten and regularize instruction descriptions, each instruction
+is described a standard format. We will also require a small
+amount of jargon. This jargon are explained below.
+
 
 @subsection Instruction Jargon
 @itemize
