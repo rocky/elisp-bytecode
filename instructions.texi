@@ -485,8 +485,10 @@ a value beyond one the first 64 entries.
 @item Implements:
 @code{top++; TOS <- constants_vector[i]} where @code{i} is the value of the
 instruction operand.
+@item Operand:
+a 16-bit index into the constants vector.
 @item Instruction size:
-3 bytes, 16-bit operand
+3 bytes
 @item Stack effect:
 @math{-0+1}.
 @item Example:
@@ -609,7 +611,7 @@ Emacs 24.4
 @table @strong
 @item Implements:
 Pops the TOS which is some sort of condition to test on and
-registers that. If any of the instructions errors with that condition
+registers that. If any of the instructions errors with that condition,
 a jump to the operand occurs.
 @item Operand:
 16-bit PC address
@@ -1015,7 +1017,7 @@ PC  Byte  Instruction
 @kindex eq
 @table @strong
 @item Implements:
-@code{S[1] <- (eq S[1] TOS; top--); }.
+@code{S[1] <- (eq S[1] TOS); top--}.
 @item Generated via:
 binary @code{eq}.
 @item Instruction size:
@@ -1039,7 +1041,7 @@ PC  Byte  Instruction
 @kindex memq
 @table @strong
 @item Implements:
-@code{S[1] <- (memq S[1] TOS; top--)}.
+@code{S[1] <- (memq S[1] TOS); top--}.
 @item Generated via:
 binary @code{memq}.
 @item Instruction size:
@@ -1132,7 +1134,7 @@ PC  Byte  Instruction
 @kindex set
 @table @strong
 @item Implements:
-@code{S[1] <- (set S[1] TOS; top--)}.
+@code{S[1] <- (set S[1] TOS); top--}.
 @item Generated via:
 binary @code{set}.
 @item Instruction size:
@@ -1156,7 +1158,7 @@ PC  Byte  Instruction
 @kindex fset
 @table @strong
 @item Implements:
-@code{S[1] <- (fset S[1] TOS; top--)}.
+@code{S[1] <- (fset S[1] TOS); top--}.
 @item Generated via:
 binary @code{fset}.
 @item Instruction size:
@@ -1180,7 +1182,7 @@ PC  Byte  Instruction
 @kindex get
 @table @strong
 @item Implements:
-@code{S[1] <- (get S[1] TOS; top--)}.
+@code{S[1] <- (get S[1] TOS); top--}.
 @item Generated via:
 binary @code{get}.
 @item Instruction size:
@@ -1204,7 +1206,7 @@ PC  Byte  Instruction
 @kindex equal
 @table @strong
 @item Implements:
-@code{S[1] <- (equal S[1] TOS; top--)}.
+@code{S[1] <- (equal S[1] TOS); top--}.
 @item Generated via:
 binary @code{equal}.
 @item Instruction size:
@@ -1230,7 +1232,7 @@ PC  Byte  Instruction
 @kindex member
 @table @strong
 @item Implements:
-@code{S[1] <- (member S[1] TOS; top--)}.
+@code{S[1] <- (member S[1] TOS); top--}.
 @item Generated via:
 binary @code{member}.
 @item Instruction size:
@@ -1254,7 +1256,7 @@ PC  Byte  Instruction
 @kindex assq
 @table @strong
 @item Implements:
-@code{S[1] <- (assq S[1] TOS; top--)}.
+@code{S[1] <- (assq S[1] TOS); top--}.
 @item Generated via:
 binary @code{assq}.
 @item Instruction size:
@@ -1356,9 +1358,12 @@ bytecode interpreter.
 @node nth
 @unnumberedsubsubsec @code{nth} (56)
 @kindex nth
+
+Calls @code{nth}.
+
 @table @strong
 @item Implements:
-@code{S[1] <- (nth S[1] TOS; top--)}.
+@code{S[1] <- (nth S[1] TOS); top--}.
 @item Generated via:
 binary @code{nth}.
 @item Instruction size:
@@ -1383,6 +1388,10 @@ Constants Vector: [560]
 @node car
 @unnumberedsubsubsec @code{car} (64)
 @kindex car
+
+Calls @code{car}.
+
+
 @table @strong
 @item Implements:
 @code{TOS <- (car TOS)}.
@@ -1409,6 +1418,9 @@ Constants Vector: [l]
 @node cdr
 @unnumberedsubsubsec @code{cdr} (65)
 @kindex cdr
+
+Calls @code{cdr}.
+
 @table @strong
 @item Implements:
 @code{TOS <- (cdr TOS)}.
@@ -1436,9 +1448,11 @@ Constants Vector: [l]
 @unnumberedsubsubsec @code{cons} (66)
 @kindex cons
 
+Calls @code{cons}.
+
 @table @strong
 @item Implements:
-@code{S[1] <- (cons S[1] TOS; top--)}.
+@code{S[1] <- (cons S[1] TOS); top--}.
 @item Generated via:
 binary @code{cons}.
 @item Instruction size:
@@ -1464,30 +1478,165 @@ Constants Vector: [a b]
 @node list1
 @unnumberedsubsubsec @code{list1} (67)
 @kindex list1
+
+Calls @code{list} with one item.
+
+@table @strong
+@item Implements:
+@code{TOS] <- (list TOS))}.
+@item Generated via:
+binary @code{list}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+@code{(defun list1-eg() (list 'a))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] a
+ 1   67   list1
+ 2  135   return
+
+Constants Vector: [a]
+@end verbatim
+
+@end table
+
 Call @code{list} with one argument.
 
 @node list2
 @unnumberedsubsubsec @code{list2} (68)
+
 @kindex list2
-Call @code{list} with two arguments.
+
+Calls @code{list} with two items.
+
+@table @strong
+@item Implements:
+@code{S[1] <- (list S[1] TOS); top--}.
+@item Generated via:
+binary @code{list}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+@code{(defun list2-eg() (list 'a 'b))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] a
+ 1  193   constant[1] b
+ 2   68   list2
+ 3  135   return
+
+Constants Vector: [a b]
+@end verbatim
+
+@end table
 
 @node list3
 @unnumberedsubsubsec @code{list3} (69)
 @kindex list3
-Call @code{list} with three arguments.
+
+Calls @code{list} with three items.
+
+@table @strong
+@item Implements:
+@code{S[2] <- (list S[2] S[1] TOS); top -= 2}.
+@item Generated via:
+binary @code{list}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-3+1}.
+@item Example:
+@code{(defun list3-eg() (list 'a 'b 'c))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] a
+ 1  193   constant[1] b
+ 2  194   constant[2] c
+ 3   69   list3
+ 4  135   return
+
+Constants Vector: [a b c]
+@end verbatim
+
+@end table
 
 @node list4
 @unnumberedsubsubsec @code{list4} (70)
 @kindex list4
-Call @code{list} with four arguments.
+Call @code{list} with four items.
+
+@table @strong
+@item Implements:
+@code{S[3] <- (list S[3] S[2] S[1] TOS); top -= 2}.
+@item Generated via:
+binary @code{list}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-4+1}.
+@item Example:
+@code{(defun list4-eg() (list 'a 'b 'c 'd))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] a
+ 1  193   constant[1] b
+ 2  194   constant[2] c
+ 3  195   constant[3] d
+ 4   70   list4
+ 5  135   return
+
+Constants Vector: [a b c d]
+@end verbatim
+
+@end table
 
 @node listN
 @unnumberedsubsubsec @code{listN} (175)
 @kindex listN
-Call @code{list} on up to 255 arguments. Note special instructions for
-the case where there are 1 to 4 items in the list.
+Call @code{list} on up to 255 items. Note that there are special
+instructions for the case where there are 1 to 4 items in the list.
 
+@table @strong
+@item Implements:
+@code{S[n-1] <- (list S[n-1] S[n-2] ... TOS); top -= (n-1)}.
+@item Generated via:
+binary @code{list}.
+@item Operand:
+8-bit number of items in list
+@item Instruction size:
+2 bytes
+@item Stack effect:
+@math{-n+1} where @math{n} is the value of the instruction operand.
+@item
 Added in Emacs 19.34.
+@item Example:
+@code{(defun list4-eg() (list 'a 'b 'c 'd 'e))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] a
+ 1  193   constant[1] b
+ 2  194   constant[2] c
+ 3  195   constant[3] d
+ 4  196   constant[4] e
+ 5  175   listN [5]
+           5
+ 7  135   return
+
+Constants Vector: [a b c d e]
+@end verbatim
+
+@end table
+
 
 @node length
 @unnumberedsubsubsec @code{length} (71)
