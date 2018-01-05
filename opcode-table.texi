@@ -533,126 +533,150 @@ and for a description of how to interpret the stack-effect field.
 @tab 1
 @tab @xref{concat4}
 @tab @math{-4+1}
-@end multitable
 
-@multitable @columnfractions .09 .09 .31 .55 .18
 @item @verb{|0123|}
 @tab @verb{|  83|}
 @tab @verb{|  sub1|}
-@tab Call @code{1-} with one argument, subtracting one from the top-of-stack value.
+@tab 1
+@tab @xref{sub1}
 @tab @math{-1+1}
 @item @verb{|0124|}
 @tab @verb{|  84|}
 @tab @verb{|  add1|}
-@tab Call @code{1+} with one argument, adding one to the top-of-stack value.
+@tab 1
+@tab @xref{add1}
 @tab @math{-1+1}
 @item @verb{|0125|}
 @tab @verb{|  85|}
 @tab @verb{|  eqlsign|}
-@tab Call @code{=} with two arguments, comparing the two values at the top of the stack for numerical or strict equality.
+@tab 1
+@tab @xref{eqlsign}
 @tab @math{-2+1}
 @item @verb{|0126|}
 @tab @verb{|  86|}
 @tab @verb{|  gtr|}
-@tab Call @code{>} with two arguments, comparing the two values at the top of the stack with the numerical greater-than relation.
+@tab 1
+@tab @xref{gtr}
 @tab @math{-2+1}
 @item @verb{|0127|}
 @tab @verb{|  87|}
 @tab @verb{|  lss|}
-@tab Call @code{<} with two arguments, comparing the two values at the top of the stack with the numerical less-than relation.
+@tab 1
+@tab @xref{lss}
 @tab @math{-2+1}
 @item @verb{|0130|}
 @tab @verb{|  88|}
 @tab @verb{|  leq|}
-@tab Call @code{<=} with two arguments, comparing the two values at the top of the stack with the numerical less-than-or-equals relation.
+@tab 1
+@tab @xref{leq}
 @tab @math{-2+1}
 @item @verb{|0131|}
 @tab @verb{|  89|}
 @tab @verb{|  geq|}
-@tab Call @code{>=} with two arguments, comparing the two values at the top of the stack with the numerical less-than-or-equals relation.
+@tab 1
+@tab @xref{geq}
 @tab @math{-2+1}
 @item @verb{|0132|}
 @tab @verb{|  90|}
 @tab @verb{|  diff|}
-@tab Call @code{-} with two arguments, subtracting the two values at the top of the stack.
+@tab 1
+@tab @xref{diff}
 @tab @math{-2+1}
 @item @verb{|0133|}
 @tab @verb{|  91|}
 @tab @verb{|  negate|}
-@tab Call @code{-} with one argument, negating the top-of-stack value.
+@tab 1
+@tab @xref{negate}
 @tab @math{-1+1}
 @item @verb{|0134|}
 @tab @verb{|  92|}
 @tab @verb{|  plus|}
-@tab Call @code{+} with two arguments, adding the two values at the top of the stack.
+@tab 1
+@tab @xref{plus}
 @tab @math{-2+1}
 @item @verb{|0135|}
 @tab @verb{|  93|}
 @tab @verb{|  max|}
-@tab Call @code{max} with two arguments.
+@tab 1
+@tab @xref{max}
 @tab @math{-2+1}
 @item @verb{|0136|}
 @tab @verb{|  94|}
 @tab @verb{|  min|}
-@tab Call @code{min} with two arguments.
+@tab 1
+@tab @xref{min}
 @item @verb{|0135|}
 @tab @verb{|  95|}
 @tab @verb{|  mult|}
-@tab Call @code{*} with two arguments, multiplying the two values at the top of the stack.
+@tab 1
+@tab @xref{mult}
 @tab @math{-2+1}
+
 @item @verb{|0140|}
 @tab @verb{|  96|}
 @tab @verb{|  point|}
-@tab Call @code{point} with no arguments.
+@tab 1
+@tab @xref{point}
 @item @verb{|0141|}
 @tab @verb{| !97|}
 @tab @verb{| !save-current-buffer|}
-@tab Obsolete in 24.1
-@tab @math{-0+1}
+@tab
+@tab
+@tab
+@math{-0+1}
 @item @verb{|0141|}
 @tab @verb{| *97|}
 @tab @verb{| *bmark|}
+@tab 1
 @tab used in v17
 @tab @math{-0+1}
 @item @verb{|0142|}
 @tab @verb{|  98|}
 @tab @verb{|  goto-char|}
-@tab Call @code{goto-char} with one argument.
+@tab 1
+@tab @xref{goto-char}
 @tab @math{-1+1}
 @item @verb{|0143|}
 @tab @verb{|  99|}
 @tab @verb{|  insert|}
-@tab Call @code{insert} with one argument.
+@tab 1
+@tab @xref{insert}
 @tab @math{-1+1}
 @item @verb{|0145|}
 @tab @verb{| 100|}
 @tab @verb{|  point-max|}
-@tab Call @code{point-max} with no arguments.
+@tab 1
+@tab @xref{point-max}
 @tab @math{-0+1}
 @item @verb{|0146|}
 @tab @verb{| 101|}
 @tab @verb{|  point-min|}
-@tab Call @code{point-min} with no arguments.
+@tab 1
+@tab @xref{point-min}
 @tab @math{-0+1}
 @item @verb{|0144|}
 @tab @verb{| 102|}
 @tab @verb{|  char-after|}
-@tab Call @code{char-after} with one argument.
+@tab 1
+@tab @xref{char-after}
 @tab @math{-1+1}
 @item @verb{|0147|}
 @tab @verb{| 103|}
 @tab @verb{|  following-char|}
-@tab Call @code{following-char} with no arguments.
+@tab 1
+@tab @xref{following-char}
 @tab @math{-0+1}
 @item @verb{|0150|}
 @tab @verb{| 104|}
 @tab @verb{|  preceding-char|}
-@tab Call @code{preceding-char} with no arguments.
+@tab 1
+@tab @xref{preceding-char}
 @tab @math{-0+1}
 @item @verb{|0151|}
 @tab @verb{| 105|}
 @tab @verb{|  current-column|}
-@tab Call @code{current-column} with no arguments.
+@tab 1
+@tab @xref{current-column}
 @tab @math{-0+1}
 @item @verb{|0153|}
 @tab @verb{|*107|}
@@ -662,54 +686,69 @@ and for a description of how to interpret the stack-effect field.
 @item @verb{|0154|}
 @tab @verb{| 108|}
 @tab @verb{|  eolp|}
-@tab Call @code{eolp} with no arguments.
+@tab 1
+@tab @xref{eolp}
 @tab @math{-0+1}
 @item @verb{|0155|}
 @tab @verb{| 109|}
 @tab @verb{|  eobp|}
-@tab Call @code{eobp}
+@tab 1
+@tab @xref{eobp}
 @tab @math{-0+1}
 @item @verb{|0156|}
 @tab @verb{| 110|}
 @tab @verb{|  bolp|}
-@tab Call @code{bolp}
+@tab 1
+@tab @xref{bolp}
 @tab @math{-0+1}
 @item @verb{|0157|}
 @tab @verb{| 111|}
 @tab @verb{|  bobp|}
-@tab Call @code{bobp}
+@tab 1
+@tab @xref{bobp}
 @tab @math{-0+1}
 @item @verb{|0160|}
 @tab @verb{| 112|}
 @tab @verb{|  current-buffer|}
-@tab Call @code{current-buffer}
+@tab 1
+@tab @xref{current-buffer}
 @tab @math{-0+1}
 @item @verb{|0161|}
 @tab @verb{| 113|}
 @tab @verb{|  set-buffer|}
-@tab Call @code{set-buffer}
+@tab 1
+@tab @xref{set-buffer}
 @tab @math{-1+1}
 @item @verb{|0162|}
 @tab @verb{| 114|}
 @tab @verb{|  save-current-
  buffer-1|}
-@tab Call @code{save-current-buffer}
-@tab @math{-0}
+@tab 1
+@tab @xref{save-current-buffer}
+@tab
+@math{-0}
+
 @item @verb{|0162|}
 @tab @verb{|*114|}
 @tab @verb{| *read-char|}
-@tab Obsolete starting with v19
+@tab 1
+@tab
 @tab @math{+1}
 @item @verb{|0163|}
 @tab @verb{|*115|}
 @tab @verb{| *set-mark|}
-@tab Obsolete starting with v18
+@tab 1
+@tab
 @tab @math{-0}
 @item @verb{|0164|}
 @tab @verb{|*116|}
 @tab @verb{| *interactive-p|}
-@tab Obsolete starting with v18
+@tab 1
+@tab
 @tab @math{+1}
+@end multitable
+
+@multitable @columnfractions .09 .09 .31 .55 .18
 @item @verb{|0165|}
 @tab @verb{| 117|}
 @tab @verb{|  forward-char|}
