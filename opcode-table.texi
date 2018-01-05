@@ -410,103 +410,132 @@ and for a description of how to interpret the stack-effect field.
 @node Opcodes (0100-0177)
 @section Opcodes (0100-0177)
 
-@multitable @columnfractions .09 .09 .31 .55 .18
+@multitable @columnfractions .09 .09 .31 .08 .43 .18
+@headitem
+@verb{| |}Oct
+@tab @verb{| |}Dec
+@tab @verb{| |} Instruction
+@tab Size
+@tab Description
+@tab Stack
+
 @item @verb{|0100|}
 @tab @verb{|  64|}
 @tab @verb{|  car|}
-@tab Call @code{car} with one argument.
+@tab 1
+@tab @xref{car}
 @tab @math{-1+1}
 @item @verb{|0101|}
 @tab @verb{|  65|}
 @tab @verb{|  cdr|}
-@tab Call @code{cdr} with one argument.
+@tab 1
+@tab @xref{cdr}
 @tab @math{-1+1}
 @item @verb{|0102|}
 @tab @verb{|  66|}
 @tab @verb{|  cons|}
-@tab Call @code{cons} with two arguments.
+@tab 1
+@tab @xref{cons}
 @tab @math{-2+1}
 @item @verb{|0103|}
 @tab @verb{|  67|}
 @tab @verb{|  list1|}
-@tab Call @code{list} with one argument.
+@tab 1
+@tab @xref{list1}
 @tab @math{-1+1}
 @item @verb{|0104|}
 @tab @verb{|  68|}
 @tab @verb{|  list2|}
-@tab Call @code{list} with two arguments.
+@tab 1
+@tab @xref{list2}
 @tab @math{-2+1}
 @item @verb{|0105|}
 @tab @verb{|  69|}
 @tab @verb{|  list3|}
-@tab Call @code{list} with three arguments.
+@tab 1
+@tab @xref{list3}
 @tab @math{-3+1}
 @item @verb{|0106|}
 @tab @verb{|  70|}
 @tab @verb{|  list4|}
-@tab Call @code{list} with four arguments.
+@tab 1
+@tab @xref{list4}
 @tab @math{-4+1}
 @item @verb{|0107|}
 @tab @verb{|  71|}
 @tab @verb{|  length|}
-@tab Call @code{length} with one argument.
+@tab 1
+@tab @xref{length}
 @tab @math{-1+1}
 @item @verb{|0110|}
 @tab @verb{|  72|}
 @tab @verb{|  aref|}
-@tab Call @code{aref} with two arguments.
+@tab 1
+@tab @xref{aref}
 @tab @math{-2+1}
 @item @verb{|0111|}
 @tab @verb{|  73|}
 @tab @verb{|  aset|}
-@tab Call @code{aset} with three arguments.
+@tab 1
+@tab @xref{aset}
 @tab @math{-3+1}
 @item @verb{|0112|}
 @tab @verb{|  74|}
 @tab @verb{|  symbol-value|}
-@tab Call @code{symbol-value} with one argument.
+@tab 1
+@tab @xref{symbol-value}
 @tab @math{-1+1}
 @item @verb{|0113|}
 @tab @verb{|  75|}
 @tab @verb{|  symbol-function|}
-@tab Call @code{symbol-function} with one argument.
+@tab 1
+@tab @xref{symbol-function}
 @tab @math{-1+1}
 @item @verb{|0114|}
 @tab @verb{|  76|}
 @tab @verb{|  set|}
-@tab Call @code{set} with two arguments.
+@tab 1
+@tab @xref{set}
 @tab @math{-2+1}
 @item @verb{|0115|}
 @tab @verb{|  77|}
 @tab @verb{|  fset|}
-@tab Call @code{fset} with two arguments.
+@tab 1
+@tab @xref{fset}
 @tab @math{-2+1}
 @item @verb{|0116|}
 @tab @verb{|  78|}
 @tab @verb{|  get|}
-@tab Call @code{get} with two arguments.
+@tab 1
+@tab @xref{get}
 @tab @math{-2+1}
 @item @verb{|0117|}
 @tab @verb{|  79|}
 @tab @verb{|  substring|}
-@tab Call @code{substring} with three arguments.
+@tab 1
+@tab @xref{substring}
 @tab @math{-3+1}
 @item @verb{|0120|}
 @tab @verb{|  80|}
 @tab @verb{|  concat2|}
-@tab Call @code{concat} with two arguments.
+@tab 1
+@tab @xref{concat2}
 @tab @math{-2+1}
 @item @verb{|0121|}
 @tab @verb{|  81|}
 @tab @verb{|  concat3|}
-@tab Call @code{concat} with three arguments.
+@tab 1
+@tab @xref{concat3}
 @tab @math{-3+1}
 @item @verb{|0122|}
 @tab @verb{|  82|}
 @tab @verb{|  concat4|}
-@tab Call @code{concat} with four arguments.
+@tab 1
+@tab @xref{concat4}
 @tab @math{-4+1}
+@end multitable
 
+@multitable @columnfractions .09 .09 .31 .55 .18
 @item @verb{|0123|}
 @tab @verb{|  83|}
 @tab @verb{|  sub1|}

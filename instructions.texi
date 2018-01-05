@@ -1287,7 +1287,7 @@ PC  Byte  Instruction
 @item Implements:
 @code{TOS <- (numberp TOS)}.
 @item Generated via:
-unary @code{numberp}.
+@code{numberp}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1312,7 +1312,7 @@ PC  Byte  Instruction
 @item Implements:
 @code{TOS <- (integerp TOS)}.
 @item Generated via:
-unary @code{integerp}.
+@code{integerp}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1364,13 +1364,13 @@ bytecode interpreter.
 @unnumberedsubsubsec @code{nth} (56)
 @kindex nth
 
-Calls @code{nth}.
+Call @code{nth} with two stack arguments.
 
 @table @strong
 @item Implements:
 @code{S[1] <- (nth S[1] TOS); top--}.
 @item Generated via:
-binary @code{nth}.
+@code{nth}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1394,14 +1394,14 @@ Constants Vector: [560]
 @unnumberedsubsubsec @code{car} (64)
 @kindex car
 
-Calls @code{car}.
+Call @code{car} with one stack argument.
 
 
 @table @strong
 @item Implements:
 @code{TOS <- (car TOS)}.
 @item Generated via:
-unary @code{car}.
+@code{car}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1411,11 +1411,9 @@ When lexical binding is in effect, @code{(defun car-eg(l) (car l))} generates:
 @c ((lexical . t))
 @verbatim
 PC  Byte  Instruction
- 0    8   varref[0] l
+ 0  137   dup
  1   64   car
  2  135   return
-
-Constants Vector: [l]
 @end verbatim
 
 @end table
@@ -1424,13 +1422,13 @@ Constants Vector: [l]
 @unnumberedsubsubsec @code{cdr} (65)
 @kindex cdr
 
-Calls @code{cdr}.
+Call @code{cdr} with one stack argument.
 
 @table @strong
 @item Implements:
 @code{TOS <- (cdr TOS)}.
 @item Generated via:
-unary @code{cdr}.
+@code{cdr}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1440,11 +1438,9 @@ When lexical binding is in effect, @code{(defun cdr-eg(l) (cdr l))} generates:
 @c ((lexical . t))
 @verbatim
 PC  Byte  Instruction
- 0    8   varref[0] l
+ 0  137   dup
  1   65   cdr
  2  135   return
-
-Constants Vector: [l]
 @end verbatim
 
 @end table
@@ -1453,13 +1449,13 @@ Constants Vector: [l]
 @unnumberedsubsubsec @code{cons} (66)
 @kindex cons
 
-Calls @code{cons}.
+Call @code{cons} with two stack arguments.
 
 @table @strong
 @item Implements:
 @code{S[1] <- (cons S[1] TOS); top--}.
 @item Generated via:
-binary @code{cons}.
+@code{cons}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1484,11 +1480,11 @@ Constants Vector: [a b]
 @unnumberedsubsubsec @code{list1} (67)
 @kindex list1
 
-Calls @code{list} with one item.
+Call @code{list} with one stack item.
 
 @table @strong
 @item Implements:
-@code{TOS] <- (list TOS)}.
+@code{TOS <- (list TOS)}.
 @item Generated via:
 @code{list}.
 @item Instruction size:
@@ -1509,14 +1505,14 @@ Constants Vector: [a]
 
 @end table
 
-Call @code{list} with one argument.
+Call @code{list} with one stack item.
 
 @node list2
 @unnumberedsubsubsec @code{list2} (68)
 
 @kindex list2
 
-Calls @code{list} with two items.
+Call @code{list} with two stack items.
 
 @table @strong
 @item Implements:
@@ -1546,7 +1542,7 @@ Constants Vector: [a b]
 @unnumberedsubsubsec @code{list3} (69)
 @kindex list3
 
-Calls @code{list} with three items.
+Call @code{list} with three stack items.
 
 @table @strong
 @item Implements:
@@ -1646,29 +1642,128 @@ Constants Vector: [a b c d e]
 @node length
 @unnumberedsubsubsec @code{length} (71)
 @kindex length
-Call @code{length} with one argument.
+Call @code{length} with one stack argument.
+
+@table @strong
+@item Implements:
+@code{TOS <- (length TOS)}.
+@item Generated via:
+@code{length}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+@code{(defun length-eg() (length '(a b)))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] (a b)
+ 1   71   length
+ 2  135   return
+
+Constants Vector: [(a b)]
+@end verbatim
+
+@end table
 
 @node aref
 @unnumberedsubsubsec @code{aref} (72)
 @kindex aref
-Call @code{aref} with two arguments.
+Call @code{aref} with two stack arguments.
+
+@table @strong
+@item Implements:
+@code{S[1] <- (aref S[1] TOS); top--}.
+@item Generated via:
+@code{aref}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+@code{(defun aref-eg() (aref '[720 721 722] 0))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] [720 721 722]
+ 1  193   constant[1] 0
+ 2   72   aref
+ 3  135   return
+
+Constants Vector: [[720 721 722] 0]
+@end verbatim
+
+@end table
 
 @node aset
 @unnumberedsubsubsec @code{aset} (73)
 @kindex aset
-Call @code{aset} with three arguments.
+Call @code{aset} with three stack arguments.
+
+@table @strong
+@item Implements:
+@code{S[1] <- (aref S[1] TOS); top--}.
+@item Generated via:
+@code{aset}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+@code{(defun aset-eg() (aset array-var 0 730))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] array-var
+ 1  193   constant[1] 0
+ 2  194   constant[2] 730
+ 3   73   aset
+ 4  135   return
+
+Constants Vector: [array-var 0 730]
+@end verbatim
+
+@end table
+
 
 @node nthcdr
 @unnumberedsubsubsec @code{nthcdr} (155)
 @kindex nthcdr
-Call @code{nthcdr} with two arguments.
+Call @code{nthcdr} with two stack arguments.
 
-Added in Emacs 19.34.
+@table @strong
+@item Implements:
+@code{S[1] <- (nthcdr S[1] TOS); top --}.
+@item Generated via:
+@code{aset}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Added in:
+Emacs 19.34.
+@item Example:
+@code{(defun ntthcdr() (ntchcdr '(1550 1551 1552) 2))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] ntchcdr
+ 1  193   constant[1] (1550 1551 1552)
+ 2  194   constant[2] 2
+ 3   34   call[2]
+ 4  135   return
+
+Constants Vector: [ntchcdr (1550 1551 1552) 2]
+@end verbatim
+
+@end table
+
 
 @node elt
 @unnumberedsubsubsec @code{elt} (156)
 @kindex elt
-Call @code{elt} with two arguments.
+Call @code{elt} with two stack arguments.
 
 Added in Emacs 19.34.
 
@@ -1682,14 +1777,14 @@ Added in Emacs 19.34.
 @node setcar
 @unnumberedsubsubsec @code{setcar} (160)
 @kindex setcar
-Call @code{setcar} with two arguments.
+Call @code{setcar} with two stack arguments.
 
 Added in Emacs 19.34.
 
 @node setcdr
 @unnumberedsubsubsec @code{setcdr} (161)
 @kindex setcdr
-Call @code{setcdr} with two arguments.
+Call @code{setcdr} with two stack arguments.
 
 Added in Emacs 19.34.
 
@@ -1709,7 +1804,7 @@ Added in Emacs 19.34.
 @node nconc
 @unnumberedsubsubsec @code{nconc} (164)
 @kindex nconc
-Call @code{nconc} with two arguments.
+Call @code{nconc} with two stack arguments.
 
 Added in Emacs 19.34.
 
@@ -1746,7 +1841,7 @@ bytecode interpreter.
 @item Implements:
 @code{TOS <- (1- TOS)}.
 @item Generated via:
-unary @code{1-}.
+@code{1-}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -2169,29 +2264,29 @@ function for them.
 @node substring
 @unnumberedsubsubsec @code{substring} (79)
 @kindex substring
-Call @code{substring} with three arguments.
+Call @code{substring} with three stack arguments.
 
 @node concat2
 @unnumberedsubsubsec @code{concat2} (80)
 @kindex concat2
-Call @code{concat} with two arguments.
+Call @code{concat} with two stack arguments.
 
 @node concat3
 @unnumberedsubsubsec @code{concat3} (81)
 @kindex concat3
-Call @code{concat} with three arguments.
+Call @code{concat} with three stack arguments.
 
 @node concat4
 @unnumberedsubsubsec @code{concat4} (82)
 @kindex concat4
-Call @code{concat} with four arguments.
+Call @code{concat} with four stack stack arguments.
 
 
 @node concatN
 @unnumberedsubsubsec @code{concatN} (174)
 @kindex concatN
 
-Call @code{concat} on up to 255 arguments.  Note there are
+Call @code{concat} on up to 255 stack arguments.  Note there are
 special instructions for the case where there are 2 to 4 items to
 concatenate.
 
@@ -2269,7 +2364,7 @@ but simply call the corresponding C function.
 @node point
 @unnumberedsubsubsec @code{point} (96)
 @kindex point
-Call @code{point} with no arguments.
+Call @code{point}.
 
 @node goto-char
 @unnumberedsubsubsec @code{goto-char} (98)
@@ -2284,7 +2379,7 @@ Call @code{insert} with one argument.
 @node insertN
 @unnumberedsubsubsec @code{insert} (99)
 @kindex insertN
-Call @code{insert} on up to 255 arguments.  Note there are special
+Call @code{insert} on up to 255 stack arguments.  Note there are special
 instructions when there is only one argument.
 
 Added in Emacs 19.34.
@@ -2292,12 +2387,12 @@ Added in Emacs 19.34.
 @node point-max
 @unnumberedsubsubsec @code{point-max} (100)
 @kindex point-max
-Call @code{point-max} with no arguments.
+Call @code{point-max}.
 
 @node point-min
 @unnumberedsubsubsec @code{point-min} (101)
 @kindex point-min
-Call @code{point-min} with no arguments.
+Call @code{point-min}.
 
 @node char-after
 @unnumberedsubsubsec @code{char-after} (102)
@@ -2307,42 +2402,42 @@ Call @code{char-after} with one argument.
 @node following-char
 @unnumberedsubsubsec @code{following-char} (103)
 @kindex following-char
-Call @code{following-char} with no arguments.
+Call @code{following-char}.
 
 @node preceding-char
 @unnumberedsubsubsec @code{preceding-char} (104)
 @kindex preceding-char
-Call @code{preceding-char} with no arguments.
+Call @code{preceding-char}.
 
 @node current-column
 @unnumberedsubsubsec @code{current-column} (105)
 @kindex current-column
-Call @code{current-column} with no arguments.
+Call @code{current-column}.
 
 @node eolp
 @unnumberedsubsubsec @code{eolp} (108)
 @kindex eolp
-Call @code{eolp} with no arguments.
+Call @code{eolp}.
 
 @node eobp
 @unnumberedsubsubsec @code{eobp} (109)
 @kindex eobp
-Call @code{eobp} with no arguments.
+Call @code{eobp}.
 
 @node bolp
 @unnumberedsubsubsec @code{bolp} (110)
 @kindex bolp
-Call @code{bolp} with no arguments.
+Call @code{bolp}.
 
 @node bobp
 @unnumberedsubsubsec @code{bobp} (111)
 @kindex bobp
-Call @code{bobp} with no arguments.
+Call @code{bobp}.
 
 @node current-buffer
 @unnumberedsubsubsec @code{current-buffer} (112)
 @kindex current-buffer
-Call @code{current-buffer} with no arguments.
+Call @code{current-buffer}.
 
 @node set-buffer
 @unnumberedsubsubsec @code{set-buffer} (113)
@@ -2402,14 +2497,14 @@ Added in Emacs 19.34.
 @node skip-chars-forward
 @unnumberedsubsubsec @code{skip-chars-forward} (119)
 @kindex skip-chars-forward
-Call @code{skip-chars-forward} with two arguments.
+Call @code{skip-chars-forward} with two stack arguments.
 
 Added in Emacs 19.34.
 
 @node skip-chars-backward
 @unnumberedsubsubsec @code{skip-chars-backward} (120)
 @kindex skip-chars-backward
-Call @code{skip-chars-backward} with two arguments.
+Call @code{skip-chars-backward} with two stack arguments.
 
 Added in Emacs 19.34.
 
@@ -2430,28 +2525,28 @@ Added in Emacs 19.34.
 @node buffer-substring
 @unnumberedsubsubsec @code{buffer-substring} (123)
 @kindex buffer-substring
-Call @code{buffer-substring} with two arguments.
+Call @code{buffer-substring} with two stack arguments.
 
 Added in Emacs 19.34.
 
 @node delete-region
 @unnumberedsubsubsec @code{delete-region} (124)
 @kindex delete-region
-Call @code{delete-region} with two arguments.
+Call @code{delete-region} with two stack arguments.
 
 Added in Emacs 19.34.
 
 @node narrow-to-region
 @unnumberedsubsubsec @code{narrow-to-region} (125)
 @kindex narrow-to-region
-Call @code{narrow-to-region} with two arguments.
+Call @code{narrow-to-region} with two stack arguments.
 
 Added in Emacs 19.34.
 
 @node widen
 @unnumberedsubsubsec @code{widen} (126)
 @kindex widen
-Call @code{widen} with no arguments.
+Call @code{widen}.
 
 Added in Emacs 19.34.
 
@@ -2465,7 +2560,7 @@ Added in Emacs 19.34.
 @node set-marker
 @unnumberedsubsubsec @code{set-marker} (147)
 @kindex set-marker
-Call @code{set-marker} with three arguments.
+Call @code{set-marker} with three stack arguments.
 
 Added in Emacs 19.34.
 
@@ -2532,7 +2627,7 @@ Added in Emacs 24.1
 @unnumberedsubsec @code{stack-setN} (181)
 @kindex stack-set2
 Like discardN. [What's the difference?]
-Can handle up to 255 arguments.  Note there is a special
+Can handle up to 255 stack arguments.  Note there is a special
 instruction when there is only one argument.
 
 Added in Emacs 24.1
