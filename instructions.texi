@@ -6,6 +6,7 @@
 * Instruction-Description Format::
 * Argument-Packing Instructions::
 * Constants-Vector Retrieval Instructions::
+* Exception-Handling Instructions::
 * Control-Flow Instructions::
 * Function-Call Instructions::
 * Stack Manipulation Instructions::
@@ -105,6 +106,10 @@ course there may be many constructs and there may be limiting
 situations within that construct. We'll only give one or a few of the
 constructs, and we'll try to indicate a limiting condition where
 possible.
+@item Operand:
+When an instruction has an operand, this descripts the type of the
+operand.  Note that the size of the operand (or in some cases the
+operand value) will determine the instruction size.
 @item Instruction size:
 The number of bytes in the instruction. This is 1 to 3 bytes.
 @item Stack effect:
@@ -182,6 +187,8 @@ Reference a value from the evaluation stack.
 instruction operand.
 @item Generated via:
 @code{let}, @code{let*} and lambda arguments.
+@item Operand:
+A stack index
 @item Instruction size:
 1 byte for @code{stack-ref[0]} .. @code{stack-ref[4]}; 2 bytes for @code{stack-ref[5]}, 8-bit operand;
 3 bytes for @code{stack-ref[6]}, 16-bit operand.
@@ -243,6 +250,8 @@ evaluation stack.
 value of instruction operand
 @item Generated via:
 dynamic variable access
+@item Operand:
+A constants vector index. The constants vector item should be a variable symbol.
 @item Instruction size:
 1 byte for @code{varref[0]} .. @code{varref[4]}; 2 bytes for @code{varref[5]},
 8-bit operand; 3 bytes for @code{varref[6]}, 16-bit operand.
@@ -275,6 +284,8 @@ of the stack.
 @item Implements:
 @code{constants_vector[i] <- TOS; top--} where @code{i} is the value of the
 instruction operand.
+@item Operand:
+A constants vector index. The constants vector item should be a variable symbol.
 @item Instruction size:
 1 byte for @code{varset[0]} .. @code{varset[4]}; 2 bytes for @code{varset[5]},
 8-bit operand; 3 bytes for @code{varset[6]}, 16-bit operand.
@@ -439,6 +450,8 @@ instruction operand.
 1 byte
 @item Stack effect:
 @math{-0+1}.
+@item Added in:
+Emacs 25.1
 @item Example:
 @verbatim
 defun n3(n)
@@ -512,6 +525,135 @@ Constants Vector: [n + 0 1 2 .. 61 62 63 64]
 @end table
 
 @page
+@node Exception-Handling Instructions
+@section Exception-Handling Instructions
+
+@menu
+* pophandler::
+* conditioncase::
+* pushconditioncase::
+@end menu
+
+@node pophandler
+@unnumberedsubsec @code{pophandler} (48)
+@kindex pophandler
+
+@table @strong
+@item Implements:
+Removes last condition pushed by @code{pushconditioncase}
+@item Generated via:
+@code{condition-case}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-0+0}.
+@item Added in:
+Emacs 24.4
+@item Example:
+@verbatim
+(defun pushconditioncase-eg()
+  (condition-case nil
+    5
+    (one-error 6)
+    (another-error 7)))
+@end verbatim
+generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] (another-error)
+ 1   49   pushconditioncase [16]
+          16
+           0
+ 4  193   constant[1] (one-error)
+ 5   49   pushconditioncase [12]
+          12
+           0
+ 8  194   constant[2] 5
+ 9   48   pophandler
+10   48   pophandler
+11  135   return
+12   48   pophandler
+13  136   discard
+14  195   constant[3] 6
+15  135   return
+16  136   discard
+17  196   constant[4] 7
+18  135   return
+
+Constants Vector: [(another-error) (one-error) 5 6 7]
+@end verbatim
+
+@end table
+
+@node conditioncase
+@unnumberedsubsec @code{conditioncase} (49)
+@kindex conditioncase
+
+@table @strong
+@item Implements:
+?
+@item Instruction size:
+3 bytes ?
+@item Stack effect:
+@math{-0+0}.
+@item Added in:
+Emacs 24.4
+@item Example:
+?
+@end table
+
+@node pushconditioncase
+@unnumberedsubsec @code{pushconditioncase} (50)
+@kindex pushconditioncase
+
+@table @strong
+@item Implements:
+Pops the TOS which is some sort of condition to test on and
+registers that. If any of the instructions errors with that condition
+a jump to the operand occurs.
+@item Operand:
+16-bit PC address
+@item Instruction size:
+3 bytes
+@item Stack effect:
+@math{-1+0}.
+@item Added in:
+Emacs 24.4
+@item Example:
+@verbatim
+(defun pushconditioncase-eg()
+  (condition-case nil
+    5
+    (one-error 6)
+    (another-error 7)))
+@end verbatim
+generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] (another-error)
+ 1   49   pushconditioncase [16]
+          16
+           0
+ 4  193   constant[1] (one-error)
+ 5   49   pushconditioncase [12]
+          12
+           0
+ 8  194   constant[2] 5
+ 9   48   pophandler
+10   48   pophandler
+11  135   return
+12   48   pophandler
+13  136   discard
+14  195   constant[3] 6
+15  135   return
+16  136   discard
+17  196   constant[4] 7
+18  135   return
+
+Constants Vector: [(another-error) (one-error) 5 6 7]
+@end verbatim
+@end table
+
 @node Control-Flow Instructions
 @section Control-Flow Instructions
 
@@ -532,8 +674,10 @@ Constants Vector: [n + 0 1 2 .. 61 62 63 64]
 Jump to label given in the 16-bit operand
 @item Generated via:
 @code{while} and various control-flow constructs
+@item Operand:
+16-bit PC address
 @item Instruction size:
-3 bytes, 16-bit jump-target operand
+3 bytes
 @item Stack effect:
 @math{-0+0}
 @item Example:
@@ -564,8 +708,10 @@ Jump to label given in the 16-bit operand if TOS is nil. In contrast to
 @code{goto-if-nil-else-pop}, the test expression, TOS, is always popped.
 @item Generated via:
 @code{if} with ``else'' clause and various control-flow constructs
+@item Operand:
+16-bit PC address
 @item Instruction size:
-3 bytes, 16-bit jump-target operand
+3 bytes
 @item Stack effect:
 @math{-1+0}
 @item Example:
@@ -601,8 +747,10 @@ always popped.
 @item Generated via:
 @code{or} inside an @code{if} with optimization and various
 control-flow constructs
+@item Operand:
+16-bit PC address
 @item Instruction size:
-3 bytes, 16-bit jump-target operand
+3 bytes
 @item Stack effect:
 @math{-1+0}
 @item Example:
@@ -638,8 +786,10 @@ the TOS, the tested condition. This allows the test expression, nil,
 to be used again on the branch as the TOS.
 @item Generated via:
 @code{cond}, @code{if} and various control-flow constructs
+@item Operand:
+16-bit PC address
 @item Instruction size:
-3 bytes, 16-bit jump-target operand
+3 bytes
 @item Stack effect:
 @math{\phi(0,-1)+0}
 @item Example:
@@ -669,8 +819,10 @@ pop TOS, the tested condition. This allows the tested expression on TOS to be us
 again when the jump is taken.
 @item Generated via:
 @code{cond}, @code{if} and various control-flow constructs
+@item Operand:
+16-bit PC address
 @item Instruction size:
-3 bytes, 16-bit jump-target operand
+3 bytes
 @item Stack effect:
 @math{\phi(0,-1)+0}
 @item Example:

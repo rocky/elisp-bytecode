@@ -312,6 +312,14 @@ Bytecode meta-comments look like this:
 
 @unnumberedsubsec Version 24 Release History
 
+The following instructions were added in 24.4:
+@itemize
+@item @code{pophandler} (48)
+@item @code{pushconditioncase} (49)
+@item @code{pushcatch} (50)
+@end itemize
+
+
 @itemize
 @item The Emacs 24.1 tarball is dated Jun 10, 2012
 @item The Emacs 24.2 tarball is dated Aug 27, 2012
@@ -326,13 +334,6 @@ Bytecode meta-comments look like this:
 Instruction 0 becomes an error rather than aborting emacs.
 
 A number of changes were made to @code{bytecode.c}.
-
-The following instructions were added:
-@itemize
-@item @code{ophandler} (48)
-@item @code{pushconditioncase} (49)
-@item @code{pushcatch} (50)
-@end itemize
 
 The following instructions, obsolete since version 18, can no longer be interpreted:
 @itemize

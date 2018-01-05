@@ -322,7 +322,7 @@ and for a description of how to interpret the stack-effect field.
 
 @item @verb{| 060|}
 @tab @verb{|  48|}
-@tab @verb{|  ophandler|}
+@tab @verb{|  pophandler|}
 @tab 1
 @tab
 @tab @math{-0}
