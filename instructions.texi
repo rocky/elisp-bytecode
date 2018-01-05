@@ -16,19 +16,19 @@
 @node Instruction-Description Format
 @section Instruction-Description Format
 
-In this chapter we'll document instructions of the course of the
-entire history of Emacs. (Or at least we aim to.)
+In this chapter we'll document instructions over the course of the
+entire history of Emacs. Or at least we aim to.
 
-For the names of the instructions, we will prefer canonicalized names
-from the Emacs C source @code{bytecode.c} (under directory
-@code{src/}) when those differ from the names in @code{bytecomp.el}
-(under directory @code{lisp/emacs-lisp}). Names in @code{bytecode.c}
-follow C conventions and must be adjusted to harmonize with other C
-names used, and this aspect isn't of use here. So we canonicalize
-those aspects away.
+For the opcode names, we will prefer canonicalized names from the
+Emacs C source @code{bytecode.c} (under directory @code{src/}) when
+those differ from the names in @code{bytecomp.el} (under directory
+@code{lisp/emacs-lisp}). Names in @code{bytecode.c} follow C
+conventions and must be adjusted to harmonize with other C names used,
+and this aspect isn't of use here. So we canonicalize those aspects
+away.
 
-For example, in @code{bytecode.c} there is an instruction opcode
-called @code{Bbuffer_substring}. We will drop the initial @code{B} and
+For example, in @code{bytecode.c} there is an opcode whose name is
+@code{Bbuffer_substring}. We will drop the initial @code{B} and
 replace all underscores (@verb{|_|}) with dashes
 (@verb{|-|}). Therefore this name appears below as
 @code{buffer-substring} here.
@@ -80,13 +80,13 @@ seen in @code{goto-if-not-nil-else-pop} means that if the jump is
 taken, the stack effect is 0, otherwise the effect removes or pops an
 evaluation-stack entry.
 @item opcode subscripting (@code{[]})
-In many opcodes such as @code{constant}, @code{varref}, you will find
-an index after the opcode. What's going on is that opcode is one of a
-number of opcodes in a class encodes an index into the opcode. We
-generally call this an ``Argument-encoding'' instruction. In the
-display of the opcode in assembly listings and in the opcode table
-chapter where we list each opcode, we will include that particular
-opcode variant in subscripts.
+In many instructions such as @code{constant}, @code{varref}, you will
+find an index after the opcode. What's going on is that opcode name is
+one of a number of opcodes in a class encodes an index into the
+instruction. We generally call this an ``Argument-encoding''
+instruction. In the display of the opcode in assembly listings and in
+the opcode table chapter where we list each opcode, we will include
+that particular instruction variant in subscripts.
 
 For example consider @code{constant[0]} versus @code{constant[1]}.
 The former has opcode 192 while the latter has opcode 193. In terms of
@@ -161,10 +161,10 @@ with optimization turned off.
 @section Argument-Packing Instructions
 
 These instructions from opcode 1 to 47 encode an operand value from 0
-to 7 as part of the opcode.  If the encoded value is 6, the actual
+to 7 encoded into the first byte.  If the encoded value is 6, the actual
 operand value is the byte following the opcode.  If the encoded value
 is 7, the actual operand value is the two-byte number following the
-opcode, in little-endian byte order.
+opcode, in Little-Endian byte order.
 
 @menu
 * stack-ref::
@@ -350,7 +350,7 @@ Constants Vector: [c 1]
 @unnumberedsubsec @code{call} (32--39)
 @kindex call
 
-Calls a function.  The opcode argument specifies the number of
+Calls a function.  The instruction argument specifies the number of
 arguments to pass to the function from the stack, excluding the
 function itself.
 
@@ -828,8 +828,13 @@ again when the jump is taken.
 @item Stack effect:
 @math{\phi(0,-1)+0}
 @item Example:
-@code{(defun goto-if-not-nil-else-pop-eg(n) (if (or (n) (n)) 1340))} generates:
 @c ((optimize . nil))
+@verbatim
+(defun goto-if-not-nil-else-pop-eg(n)
+  (if (or (n) (n))
+    1340))
+@end verbatim
+generates:
 @verbatim
 PC  Byte  Instruction
  0  192   constant[0] n
@@ -1483,9 +1488,9 @@ Calls @code{list} with one item.
 
 @table @strong
 @item Implements:
-@code{TOS] <- (list TOS))}.
+@code{TOS] <- (list TOS)}.
 @item Generated via:
-binary @code{list}.
+@code{list}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1517,7 +1522,7 @@ Calls @code{list} with two items.
 @item Implements:
 @code{S[1] <- (list S[1] TOS); top--}.
 @item Generated via:
-binary @code{list}.
+@code{list}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1547,7 +1552,7 @@ Calls @code{list} with three items.
 @item Implements:
 @code{S[2] <- (list S[2] S[1] TOS); top -= 2}.
 @item Generated via:
-binary @code{list}.
+@code{list}
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1577,7 +1582,7 @@ Call @code{list} with four items.
 @item Implements:
 @code{S[3] <- (list S[3] S[2] S[1] TOS); top -= 2}.
 @item Generated via:
-binary @code{list}.
+@code{list}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1609,15 +1614,15 @@ instructions for the case where there are 1 to 4 items in the list.
 @item Implements:
 @code{S[n-1] <- (list S[n-1] S[n-2] ... TOS); top -= (n-1)}.
 @item Generated via:
-binary @code{list}.
+@code{list}.
 @item Operand:
 8-bit number of items in list
 @item Instruction size:
 2 bytes
 @item Stack effect:
 @math{-n+1} where @math{n} is the value of the instruction operand.
-@item
-Added in Emacs 19.34.
+@item Added in:
+Emacs 19.34.
 @item Example:
 @code{(defun list4-eg() (list 'a 'b 'c 'd 'e))} generates:
 @c ((lexical . t) (optimize . nil))
