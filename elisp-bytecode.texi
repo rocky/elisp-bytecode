@@ -25,6 +25,7 @@
 * Opcode Table::                 Table of Bytecode Instruction ordered by Opcode Number
 * References::
 * Instruction Index::
+* Bytecode Function Index::
 @end menu
 
 @include intro.texi
@@ -37,5 +38,10 @@
 @node Instruction Index
 @unnumbered Instruction Index
 @printindex ky
+
+@node Bytecode Function Index
+@unnumbered Bytecode Function Index
+@printindex fn
+
 
 @bye

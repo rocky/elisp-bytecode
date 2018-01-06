@@ -6,6 +6,7 @@
 * Instruction-Description Format::
 * Argument-Packing Instructions::
 * Constants-Vector Retrieval Instructions::
+* Exception-Handling Instructions::
 * Control-Flow Instructions::
 * Function-Call Instructions::
 * Stack Manipulation Instructions::
@@ -15,11 +16,44 @@
 @node Instruction-Description Format
 @section Instruction-Description Format
 
-In this chapter we'll document instructions of the course of the
-entire history of Emacs. (Or at least we aim to.)
+In this chapter we'll document instructions over the course of the
+entire history of Emacs. Or at least we aim to.
 
-To simplify and regularize things we'll use a standard format and a
-small amount of jargon which is explained here.
+For the opcode names, we will prefer canonicalized names from the
+Emacs C source @code{bytecode.c} (under directory @code{src/}) when
+those differ from the names in @code{bytecomp.el} (under directory
+@code{lisp/emacs-lisp}). Names in @code{bytecode.c} follow C
+conventions and must be adjusted to harmonize with other C names used,
+and this aspect isn't of use here. So we canonicalize those aspects
+away.
+
+For example, in @code{bytecode.c} there is an opcode whose name is
+@code{Bbuffer_substring}. We will drop the initial @code{B} and
+replace all underscores (@verb{|_|}) with dashes
+(@verb{|-|}). Therefore this name appears below as
+@code{buffer-substring} here.
+
+The corresponding name for that opcode in @code{bytecomp.el} is
+@code{byte-buffer-substring}.  For the most part, if you drop the
+initial @code{byte-} prefix in the @code{bytecomp.el} name you will
+often get the canonic name from @code{bytecode.c}. However this isn't
+always true.
+
+In particular, consider opcodes 97 and 114; 97 became obsolete in
+Emacs 24.1 but implemented some kind of @code{save-current-buffer}
+instruction. Opcode 97 was then reused. When the
+@code{save-current-buffer} instruction was reintroduced, it got added
+as opcode 114. In @code{bytecomp.el} only the name
+@code{byte-save-current-buffer} appears, while in the C code the name
+@code{B_save_current_buffer} is used for opcode 97 and
+@code{B_save_current_buffer_1} is used for opcode 114.  And that is
+why we go with the @code{bytecode.c} name.  The names we use are
+@code{save-current-buffer} and @code{save-current-buffer-1}.
+
+To shorten and regularize instruction descriptions, each instruction
+is described a standard format. We will also require a small
+amount of jargon. This jargon are explained below.
+
 
 @subsection Instruction Jargon
 @itemize
@@ -46,13 +80,13 @@ seen in @code{goto-if-not-nil-else-pop} means that if the jump is
 taken, the stack effect is 0, otherwise the effect removes or pops an
 evaluation-stack entry.
 @item opcode subscripting (@code{[]})
-In many opcodes such as @code{constant}, @code{varref}, you will find
-an index after the opcode. What's going on is that opcode is one of a
-number of opcodes in a class encodes an index into the opcode. We
-generally call this an ``Argument-encoding'' instruction. In the
-display of the opcode in assembly listings and in the opcode table
-chapter where we list each opcode, we will include that particular
-opcode variant in subscripts.
+In many instructions such as @code{constant}, @code{varref}, you will
+find an index after the opcode. What's going on is that opcode name is
+one of a number of opcodes in a class encodes an index into the
+instruction. We generally call this an ``Argument-encoding''
+instruction. In the display of the opcode in assembly listings and in
+the opcode table chapter where we list each opcode, we will include
+that particular instruction variant in subscripts.
 
 For example consider @code{constant[0]} versus @code{constant[1]}.
 The former has opcode 192 while the latter has opcode 193. In terms of
@@ -72,6 +106,10 @@ course there may be many constructs and there may be limiting
 situations within that construct. We'll only give one or a few of the
 constructs, and we'll try to indicate a limiting condition where
 possible.
+@item Operand:
+When an instruction has an operand, this descripts the type of the
+operand.  Note that the size of the operand (or in some cases the
+operand value) will determine the instruction size.
 @item Instruction size:
 The number of bytes in the instruction. This is 1 to 3 bytes.
 @item Stack effect:
@@ -123,10 +161,10 @@ with optimization turned off.
 @section Argument-Packing Instructions
 
 These instructions from opcode 1 to 47 encode an operand value from 0
-to 7 as part of the opcode.  If the encoded value is 6, the actual
+to 7 encoded into the first byte.  If the encoded value is 6, the actual
 operand value is the byte following the opcode.  If the encoded value
 is 7, the actual operand value is the two-byte number following the
-opcode, in little-endian byte order.
+opcode, in Little-Endian byte order.
 
 @menu
 * stack-ref::
@@ -149,6 +187,8 @@ Reference a value from the evaluation stack.
 instruction operand.
 @item Generated via:
 @code{let}, @code{let*} and lambda arguments.
+@item Operand:
+A stack index
 @item Instruction size:
 1 byte for @code{stack-ref[0]} .. @code{stack-ref[4]}; 2 bytes for @code{stack-ref[5]}, 8-bit operand;
 3 bytes for @code{stack-ref[6]}, 16-bit operand.
@@ -210,6 +250,8 @@ evaluation stack.
 value of instruction operand
 @item Generated via:
 dynamic variable access
+@item Operand:
+A constants vector index. The constants vector item should be a variable symbol.
 @item Instruction size:
 1 byte for @code{varref[0]} .. @code{varref[4]}; 2 bytes for @code{varref[5]},
 8-bit operand; 3 bytes for @code{varref[6]}, 16-bit operand.
@@ -218,7 +260,8 @@ dynamic variable access
 @item Example:
 When dynamic binding is in effect,
 @verbatim
-defun varref-eg(n) n)
+(defun varref-eg(n)
+  n)
 @end verbatim
 generates:
 @verbatim
@@ -241,6 +284,8 @@ of the stack.
 @item Implements:
 @code{constants_vector[i] <- TOS; top--} where @code{i} is the value of the
 instruction operand.
+@item Operand:
+A constants vector index. The constants vector item should be a variable symbol.
 @item Instruction size:
 1 byte for @code{varset[0]} .. @code{varset[4]}; 2 bytes for @code{varset[5]},
 8-bit operand; 3 bytes for @code{varset[6]}, 16-bit operand.
@@ -305,7 +350,7 @@ Constants Vector: [c 1]
 @unnumberedsubsec @code{call} (32--39)
 @kindex call
 
-Calls a function.  The opcode argument specifies the number of
+Calls a function.  The instruction argument specifies the number of
 arguments to pass to the function from the stack, excluding the
 function itself.
 
@@ -405,6 +450,8 @@ instruction operand.
 1 byte
 @item Stack effect:
 @math{-0+1}.
+@item Added in:
+Emacs 25.1
 @item Example:
 @verbatim
 defun n3(n)
@@ -438,8 +485,10 @@ a value beyond one the first 64 entries.
 @item Implements:
 @code{top++; TOS <- constants_vector[i]} where @code{i} is the value of the
 instruction operand.
+@item Operand:
+a 16-bit index into the constants vector.
 @item Instruction size:
-3 bytes, 16-bit operand
+3 bytes
 @item Stack effect:
 @math{-0+1}.
 @item Example:
@@ -478,6 +527,135 @@ Constants Vector: [n + 0 1 2 .. 61 62 63 64]
 @end table
 
 @page
+@node Exception-Handling Instructions
+@section Exception-Handling Instructions
+
+@menu
+* pophandler::
+* conditioncase::
+* pushconditioncase::
+@end menu
+
+@node pophandler
+@unnumberedsubsec @code{pophandler} (48)
+@kindex pophandler
+
+@table @strong
+@item Implements:
+Removes last condition pushed by @code{pushconditioncase}
+@item Generated via:
+@code{condition-case}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-0+0}.
+@item Added in:
+Emacs 24.4
+@item Example:
+@verbatim
+(defun pushconditioncase-eg()
+  (condition-case nil
+    5
+    (one-error 6)
+    (another-error 7)))
+@end verbatim
+generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] (another-error)
+ 1   49   pushconditioncase [16]
+          16
+           0
+ 4  193   constant[1] (one-error)
+ 5   49   pushconditioncase [12]
+          12
+           0
+ 8  194   constant[2] 5
+ 9   48   pophandler
+10   48   pophandler
+11  135   return
+12   48   pophandler
+13  136   discard
+14  195   constant[3] 6
+15  135   return
+16  136   discard
+17  196   constant[4] 7
+18  135   return
+
+Constants Vector: [(another-error) (one-error) 5 6 7]
+@end verbatim
+
+@end table
+
+@node conditioncase
+@unnumberedsubsec @code{conditioncase} (49)
+@kindex conditioncase
+
+@table @strong
+@item Implements:
+?
+@item Instruction size:
+3 bytes ?
+@item Stack effect:
+@math{-0+0}.
+@item Added in:
+Emacs 24.4
+@item Example:
+?
+@end table
+
+@node pushconditioncase
+@unnumberedsubsec @code{pushconditioncase} (50)
+@kindex pushconditioncase
+
+@table @strong
+@item Implements:
+Pops the TOS which is some sort of condition to test on and
+registers that. If any of the instructions errors with that condition,
+a jump to the operand occurs.
+@item Operand:
+16-bit PC address
+@item Instruction size:
+3 bytes
+@item Stack effect:
+@math{-1+0}.
+@item Added in:
+Emacs 24.4
+@item Example:
+@verbatim
+(defun pushconditioncase-eg()
+  (condition-case nil
+    5
+    (one-error 6)
+    (another-error 7)))
+@end verbatim
+generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] (another-error)
+ 1   49   pushconditioncase [16]
+          16
+           0
+ 4  193   constant[1] (one-error)
+ 5   49   pushconditioncase [12]
+          12
+           0
+ 8  194   constant[2] 5
+ 9   48   pophandler
+10   48   pophandler
+11  135   return
+12   48   pophandler
+13  136   discard
+14  195   constant[3] 6
+15  135   return
+16  136   discard
+17  196   constant[4] 7
+18  135   return
+
+Constants Vector: [(another-error) (one-error) 5 6 7]
+@end verbatim
+@end table
+
 @node Control-Flow Instructions
 @section Control-Flow Instructions
 
@@ -498,8 +676,10 @@ Constants Vector: [n + 0 1 2 .. 61 62 63 64]
 Jump to label given in the 16-bit operand
 @item Generated via:
 @code{while} and various control-flow constructs
+@item Operand:
+16-bit PC address
 @item Instruction size:
-3 bytes, 16-bit jump-target operand
+3 bytes
 @item Stack effect:
 @math{-0+0}
 @item Example:
@@ -530,8 +710,10 @@ Jump to label given in the 16-bit operand if TOS is nil. In contrast to
 @code{goto-if-nil-else-pop}, the test expression, TOS, is always popped.
 @item Generated via:
 @code{if} with ``else'' clause and various control-flow constructs
+@item Operand:
+16-bit PC address
 @item Instruction size:
-3 bytes, 16-bit jump-target operand
+3 bytes
 @item Stack effect:
 @math{-1+0}
 @item Example:
@@ -567,8 +749,10 @@ always popped.
 @item Generated via:
 @code{or} inside an @code{if} with optimization and various
 control-flow constructs
+@item Operand:
+16-bit PC address
 @item Instruction size:
-3 bytes, 16-bit jump-target operand
+3 bytes
 @item Stack effect:
 @math{-1+0}
 @item Example:
@@ -604,8 +788,10 @@ the TOS, the tested condition. This allows the test expression, nil,
 to be used again on the branch as the TOS.
 @item Generated via:
 @code{cond}, @code{if} and various control-flow constructs
+@item Operand:
+16-bit PC address
 @item Instruction size:
-3 bytes, 16-bit jump-target operand
+3 bytes
 @item Stack effect:
 @math{\phi(0,-1)+0}
 @item Example:
@@ -635,13 +821,20 @@ pop TOS, the tested condition. This allows the tested expression on TOS to be us
 again when the jump is taken.
 @item Generated via:
 @code{cond}, @code{if} and various control-flow constructs
+@item Operand:
+16-bit PC address
 @item Instruction size:
-3 bytes, 16-bit jump-target operand
+3 bytes
 @item Stack effect:
 @math{\phi(0,-1)+0}
 @item Example:
-@code{(defun goto-if-not-nil-else-pop-eg(n) (if (or (n) (n)) 1340))} generates:
 @c ((optimize . nil))
+@verbatim
+(defun goto-if-not-nil-else-pop-eg(n)
+  (if (or (n) (n))
+    1340))
+@end verbatim
+generates:
 @verbatim
 PC  Byte  Instruction
  0  192   constant[0] n
@@ -829,7 +1022,7 @@ PC  Byte  Instruction
 @kindex eq
 @table @strong
 @item Implements:
-@code{S[1] <- (eq S[1] TOS; top--); }.
+@code{S[1] <- (eq S[1] TOS); top--}.
 @item Generated via:
 binary @code{eq}.
 @item Instruction size:
@@ -853,7 +1046,7 @@ PC  Byte  Instruction
 @kindex memq
 @table @strong
 @item Implements:
-@code{S[1] <- (memq S[1] TOS; top--)}.
+@code{S[1] <- (memq S[1] TOS); top--}.
 @item Generated via:
 binary @code{memq}.
 @item Instruction size:
@@ -946,7 +1139,7 @@ PC  Byte  Instruction
 @kindex set
 @table @strong
 @item Implements:
-@code{S[1] <- (set S[1] TOS; top--)}.
+@code{S[1] <- (set S[1] TOS); top--}.
 @item Generated via:
 binary @code{set}.
 @item Instruction size:
@@ -970,7 +1163,7 @@ PC  Byte  Instruction
 @kindex fset
 @table @strong
 @item Implements:
-@code{S[1] <- (fset S[1] TOS; top--)}.
+@code{S[1] <- (fset S[1] TOS); top--}.
 @item Generated via:
 binary @code{fset}.
 @item Instruction size:
@@ -994,7 +1187,7 @@ PC  Byte  Instruction
 @kindex get
 @table @strong
 @item Implements:
-@code{S[1] <- (get S[1] TOS; top--)}.
+@code{S[1] <- (get S[1] TOS); top--}.
 @item Generated via:
 binary @code{get}.
 @item Instruction size:
@@ -1018,7 +1211,7 @@ PC  Byte  Instruction
 @kindex equal
 @table @strong
 @item Implements:
-@code{S[1] <- (equal S[1] TOS; top--)}.
+@code{S[1] <- (equal S[1] TOS); top--}.
 @item Generated via:
 binary @code{equal}.
 @item Instruction size:
@@ -1044,7 +1237,7 @@ PC  Byte  Instruction
 @kindex member
 @table @strong
 @item Implements:
-@code{S[1] <- (member S[1] TOS; top--)}.
+@code{S[1] <- (member S[1] TOS); top--}.
 @item Generated via:
 binary @code{member}.
 @item Instruction size:
@@ -1068,7 +1261,7 @@ PC  Byte  Instruction
 @kindex assq
 @table @strong
 @item Implements:
-@code{S[1] <- (assq S[1] TOS; top--)}.
+@code{S[1] <- (assq S[1] TOS); top--}.
 @item Generated via:
 binary @code{assq}.
 @item Instruction size:
@@ -1094,7 +1287,7 @@ PC  Byte  Instruction
 @item Implements:
 @code{TOS <- (numberp TOS)}.
 @item Generated via:
-unary @code{numberp}.
+@code{numberp}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1119,7 +1312,7 @@ PC  Byte  Instruction
 @item Implements:
 @code{TOS <- (integerp TOS)}.
 @item Generated via:
-unary @code{integerp}.
+@code{integerp}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1170,11 +1363,14 @@ bytecode interpreter.
 @node nth
 @unnumberedsubsubsec @code{nth} (56)
 @kindex nth
+
+Call @code{nth} with two stack arguments.
+
 @table @strong
 @item Implements:
-@code{S[1] <- (nth S[1] TOS; top--)}.
+@code{S[1] <- (nth S[1] TOS); top--}.
 @item Generated via:
-binary @code{nth}.
+@code{nth}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1197,11 +1393,15 @@ Constants Vector: [560]
 @node car
 @unnumberedsubsubsec @code{car} (64)
 @kindex car
+
+Call @code{car} with one stack argument.
+
+
 @table @strong
 @item Implements:
 @code{TOS <- (car TOS)}.
 @item Generated via:
-unary @code{car}.
+@code{car}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1211,11 +1411,9 @@ When lexical binding is in effect, @code{(defun car-eg(l) (car l))} generates:
 @c ((lexical . t))
 @verbatim
 PC  Byte  Instruction
- 0    8   varref[0] l
+ 0  137   dup
  1   64   car
  2  135   return
-
-Constants Vector: [l]
 @end verbatim
 
 @end table
@@ -1223,11 +1421,14 @@ Constants Vector: [l]
 @node cdr
 @unnumberedsubsubsec @code{cdr} (65)
 @kindex cdr
+
+Call @code{cdr} with one stack argument.
+
 @table @strong
 @item Implements:
 @code{TOS <- (cdr TOS)}.
 @item Generated via:
-unary @code{cdr}.
+@code{cdr}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1237,11 +1438,9 @@ When lexical binding is in effect, @code{(defun cdr-eg(l) (cdr l))} generates:
 @c ((lexical . t))
 @verbatim
 PC  Byte  Instruction
- 0    8   varref[0] l
+ 0  137   dup
  1   65   cdr
  2  135   return
-
-Constants Vector: [l]
 @end verbatim
 
 @end table
@@ -1250,11 +1449,13 @@ Constants Vector: [l]
 @unnumberedsubsubsec @code{cons} (66)
 @kindex cons
 
+Call @code{cons} with two stack arguments.
+
 @table @strong
 @item Implements:
-@code{S[1] <- (cons S[1] TOS; top--)}.
+@code{S[1] <- (cons S[1] TOS); top--}.
 @item Generated via:
-binary @code{cons}.
+@code{cons}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1278,57 +1479,291 @@ Constants Vector: [a b]
 @node list1
 @unnumberedsubsubsec @code{list1} (67)
 @kindex list1
-Call @code{list} with one argument.
+
+Call @code{list} with one stack item.
+
+@table @strong
+@item Implements:
+@code{TOS <- (list TOS)}.
+@item Generated via:
+@code{list}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+@code{(defun list1-eg() (list 'a))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] a
+ 1   67   list1
+ 2  135   return
+
+Constants Vector: [a]
+@end verbatim
+
+@end table
+
+Call @code{list} with one stack item.
 
 @node list2
 @unnumberedsubsubsec @code{list2} (68)
+
 @kindex list2
-Call @code{list} with two arguments.
+
+Call @code{list} with two stack items.
+
+@table @strong
+@item Implements:
+@code{S[1] <- (list S[1] TOS); top--}.
+@item Generated via:
+@code{list}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+@code{(defun list2-eg() (list 'a 'b))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] a
+ 1  193   constant[1] b
+ 2   68   list2
+ 3  135   return
+
+Constants Vector: [a b]
+@end verbatim
+
+@end table
 
 @node list3
 @unnumberedsubsubsec @code{list3} (69)
 @kindex list3
-Call @code{list} with three arguments.
+
+Call @code{list} with three stack items.
+
+@table @strong
+@item Implements:
+@code{S[2] <- (list S[2] S[1] TOS); top -= 2}.
+@item Generated via:
+@code{list}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-3+1}.
+@item Example:
+@code{(defun list3-eg() (list 'a 'b 'c))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] a
+ 1  193   constant[1] b
+ 2  194   constant[2] c
+ 3   69   list3
+ 4  135   return
+
+Constants Vector: [a b c]
+@end verbatim
+
+@end table
 
 @node list4
 @unnumberedsubsubsec @code{list4} (70)
 @kindex list4
-Call @code{list} with four arguments.
+Call @code{list} with four items.
+
+@table @strong
+@item Implements:
+@code{S[3] <- (list S[3] S[2] S[1] TOS); top -= 2}.
+@item Generated via:
+@code{list}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-4+1}.
+@item Example:
+@code{(defun list4-eg() (list 'a 'b 'c 'd))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] a
+ 1  193   constant[1] b
+ 2  194   constant[2] c
+ 3  195   constant[3] d
+ 4   70   list4
+ 5  135   return
+
+Constants Vector: [a b c d]
+@end verbatim
+
+@end table
 
 @node listN
 @unnumberedsubsubsec @code{listN} (175)
 @kindex listN
-Call @code{list} on up to 255 arguments. Note special instructions for
-the case where there are 1 to 4 items in the list.
+Call @code{list} on up to 255 items. Note that there are special
+instructions for the case where there are 1 to 4 items in the list.
 
-Added in Emacs 19.34.
+@table @strong
+@item Implements:
+@code{S[n-1] <- (list S[n-1] S[n-2] ... TOS); top -= (n-1)}.
+@item Generated via:
+@code{list}.
+@item Operand:
+8-bit number of items in list
+@item Instruction size:
+2 bytes
+@item Stack effect:
+@math{-n+1} where @math{n} is the value of the instruction operand.
+@item Added in:
+Emacs 19.34.
+@item Example:
+@code{(defun list4-eg() (list 'a 'b 'c 'd 'e))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] a
+ 1  193   constant[1] b
+ 2  194   constant[2] c
+ 3  195   constant[3] d
+ 4  196   constant[4] e
+ 5  175   listN [5]
+           5
+ 7  135   return
+
+Constants Vector: [a b c d e]
+@end verbatim
+
+@end table
+
 
 @node length
 @unnumberedsubsubsec @code{length} (71)
 @kindex length
-Call @code{length} with one argument.
+Call @code{length} with one stack argument.
+
+@table @strong
+@item Implements:
+@code{TOS <- (length TOS)}.
+@item Generated via:
+@code{length}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+@code{(defun length-eg() (length '(a b)))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] (a b)
+ 1   71   length
+ 2  135   return
+
+Constants Vector: [(a b)]
+@end verbatim
+
+@end table
 
 @node aref
 @unnumberedsubsubsec @code{aref} (72)
 @kindex aref
-Call @code{aref} with two arguments.
+Call @code{aref} with two stack arguments.
+
+@table @strong
+@item Implements:
+@code{S[1] <- (aref S[1] TOS); top--}.
+@item Generated via:
+@code{aref}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+@code{(defun aref-eg() (aref '[720 721 722] 0))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] [720 721 722]
+ 1  193   constant[1] 0
+ 2   72   aref
+ 3  135   return
+
+Constants Vector: [[720 721 722] 0]
+@end verbatim
+
+@end table
 
 @node aset
 @unnumberedsubsubsec @code{aset} (73)
 @kindex aset
-Call @code{aset} with three arguments.
+Call @code{aset} with three stack arguments.
+
+@table @strong
+@item Implements:
+@code{S[1] <- (aref S[1] TOS); top--}.
+@item Generated via:
+@code{aset}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+@code{(defun aset-eg() (aset array-var 0 730))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] array-var
+ 1  193   constant[1] 0
+ 2  194   constant[2] 730
+ 3   73   aset
+ 4  135   return
+
+Constants Vector: [array-var 0 730]
+@end verbatim
+
+@end table
+
 
 @node nthcdr
 @unnumberedsubsubsec @code{nthcdr} (155)
 @kindex nthcdr
-Call @code{nthcdr} with two arguments.
+Call @code{nthcdr} with two stack arguments.
 
-Added in Emacs 19.34.
+@table @strong
+@item Implements:
+@code{S[1] <- (nthcdr S[1] TOS); top --}.
+@item Generated via:
+@code{aset}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Added in:
+Emacs 19.34.
+@item Example:
+@code{(defun ntthcdr() (ntchcdr '(1550 1551 1552) 2))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] ntchcdr
+ 1  193   constant[1] (1550 1551 1552)
+ 2  194   constant[2] 2
+ 3   34   call[2]
+ 4  135   return
+
+Constants Vector: [ntchcdr (1550 1551 1552) 2]
+@end verbatim
+
+@end table
+
 
 @node elt
 @unnumberedsubsubsec @code{elt} (156)
 @kindex elt
-Call @code{elt} with two arguments.
+Call @code{elt} with two stack arguments.
 
 Added in Emacs 19.34.
 
@@ -1342,14 +1777,14 @@ Added in Emacs 19.34.
 @node setcar
 @unnumberedsubsubsec @code{setcar} (160)
 @kindex setcar
-Call @code{setcar} with two arguments.
+Call @code{setcar} with two stack arguments.
 
 Added in Emacs 19.34.
 
 @node setcdr
 @unnumberedsubsubsec @code{setcdr} (161)
 @kindex setcdr
-Call @code{setcdr} with two arguments.
+Call @code{setcdr} with two stack arguments.
 
 Added in Emacs 19.34.
 
@@ -1369,7 +1804,7 @@ Added in Emacs 19.34.
 @node nconc
 @unnumberedsubsubsec @code{nconc} (164)
 @kindex nconc
-Call @code{nconc} with two arguments.
+Call @code{nconc} with two stack arguments.
 
 Added in Emacs 19.34.
 
@@ -1406,7 +1841,7 @@ bytecode interpreter.
 @item Implements:
 @code{TOS <- (1- TOS)}.
 @item Generated via:
-unary @code{1-}.
+@code{1-}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1829,29 +2264,29 @@ function for them.
 @node substring
 @unnumberedsubsubsec @code{substring} (79)
 @kindex substring
-Call @code{substring} with three arguments.
+Call @code{substring} with three stack arguments.
 
 @node concat2
 @unnumberedsubsubsec @code{concat2} (80)
 @kindex concat2
-Call @code{concat} with two arguments.
+Call @code{concat} with two stack arguments.
 
 @node concat3
 @unnumberedsubsubsec @code{concat3} (81)
 @kindex concat3
-Call @code{concat} with three arguments.
+Call @code{concat} with three stack arguments.
 
 @node concat4
 @unnumberedsubsubsec @code{concat4} (82)
 @kindex concat4
-Call @code{concat} with four arguments.
+Call @code{concat} with four stack stack arguments.
 
 
 @node concatN
 @unnumberedsubsubsec @code{concatN} (174)
 @kindex concatN
 
-Call @code{concat} on up to 255 arguments.  Note there are
+Call @code{concat} on up to 255 stack arguments.  Note there are
 special instructions for the case where there are 2 to 4 items to
 concatenate.
 
@@ -1929,7 +2364,7 @@ but simply call the corresponding C function.
 @node point
 @unnumberedsubsubsec @code{point} (96)
 @kindex point
-Call @code{point} with no arguments.
+Call @code{point}.
 
 @node goto-char
 @unnumberedsubsubsec @code{goto-char} (98)
@@ -1944,7 +2379,7 @@ Call @code{insert} with one argument.
 @node insertN
 @unnumberedsubsubsec @code{insert} (99)
 @kindex insertN
-Call @code{insert} on up to 255 arguments.  Note there are special
+Call @code{insert} on up to 255 stack arguments.  Note there are special
 instructions when there is only one argument.
 
 Added in Emacs 19.34.
@@ -1952,12 +2387,12 @@ Added in Emacs 19.34.
 @node point-max
 @unnumberedsubsubsec @code{point-max} (100)
 @kindex point-max
-Call @code{point-max} with no arguments.
+Call @code{point-max}.
 
 @node point-min
 @unnumberedsubsubsec @code{point-min} (101)
 @kindex point-min
-Call @code{point-min} with no arguments.
+Call @code{point-min}.
 
 @node char-after
 @unnumberedsubsubsec @code{char-after} (102)
@@ -1967,42 +2402,42 @@ Call @code{char-after} with one argument.
 @node following-char
 @unnumberedsubsubsec @code{following-char} (103)
 @kindex following-char
-Call @code{following-char} with no arguments.
+Call @code{following-char}.
 
 @node preceding-char
 @unnumberedsubsubsec @code{preceding-char} (104)
 @kindex preceding-char
-Call @code{preceding-char} with no arguments.
+Call @code{preceding-char}.
 
 @node current-column
 @unnumberedsubsubsec @code{current-column} (105)
 @kindex current-column
-Call @code{current-column} with no arguments.
+Call @code{current-column}.
 
 @node eolp
 @unnumberedsubsubsec @code{eolp} (108)
 @kindex eolp
-Call @code{eolp} with no arguments.
+Call @code{eolp}.
 
 @node eobp
 @unnumberedsubsubsec @code{eobp} (109)
 @kindex eobp
-Call @code{eobp} with no arguments.
+Call @code{eobp}.
 
 @node bolp
 @unnumberedsubsubsec @code{bolp} (110)
 @kindex bolp
-Call @code{bolp} with no arguments.
+Call @code{bolp}.
 
 @node bobp
 @unnumberedsubsubsec @code{bobp} (111)
 @kindex bobp
-Call @code{bobp} with no arguments.
+Call @code{bobp}.
 
 @node current-buffer
 @unnumberedsubsubsec @code{current-buffer} (112)
 @kindex current-buffer
-Call @code{current-buffer} with no arguments.
+Call @code{current-buffer}.
 
 @node set-buffer
 @unnumberedsubsubsec @code{set-buffer} (113)
@@ -2062,14 +2497,14 @@ Added in Emacs 19.34.
 @node skip-chars-forward
 @unnumberedsubsubsec @code{skip-chars-forward} (119)
 @kindex skip-chars-forward
-Call @code{skip-chars-forward} with two arguments.
+Call @code{skip-chars-forward} with two stack arguments.
 
 Added in Emacs 19.34.
 
 @node skip-chars-backward
 @unnumberedsubsubsec @code{skip-chars-backward} (120)
 @kindex skip-chars-backward
-Call @code{skip-chars-backward} with two arguments.
+Call @code{skip-chars-backward} with two stack arguments.
 
 Added in Emacs 19.34.
 
@@ -2090,28 +2525,28 @@ Added in Emacs 19.34.
 @node buffer-substring
 @unnumberedsubsubsec @code{buffer-substring} (123)
 @kindex buffer-substring
-Call @code{buffer-substring} with two arguments.
+Call @code{buffer-substring} with two stack arguments.
 
 Added in Emacs 19.34.
 
 @node delete-region
 @unnumberedsubsubsec @code{delete-region} (124)
 @kindex delete-region
-Call @code{delete-region} with two arguments.
+Call @code{delete-region} with two stack arguments.
 
 Added in Emacs 19.34.
 
 @node narrow-to-region
 @unnumberedsubsubsec @code{narrow-to-region} (125)
 @kindex narrow-to-region
-Call @code{narrow-to-region} with two arguments.
+Call @code{narrow-to-region} with two stack arguments.
 
 Added in Emacs 19.34.
 
 @node widen
 @unnumberedsubsubsec @code{widen} (126)
 @kindex widen
-Call @code{widen} with no arguments.
+Call @code{widen}.
 
 Added in Emacs 19.34.
 
@@ -2125,7 +2560,7 @@ Added in Emacs 19.34.
 @node set-marker
 @unnumberedsubsubsec @code{set-marker} (147)
 @kindex set-marker
-Call @code{set-marker} with three arguments.
+Call @code{set-marker} with three stack arguments.
 
 Added in Emacs 19.34.
 
@@ -2192,7 +2627,7 @@ Added in Emacs 24.1
 @unnumberedsubsec @code{stack-setN} (181)
 @kindex stack-set2
 Like discardN. [What's the difference?]
-Can handle up to 255 arguments.  Note there is a special
+Can handle up to 255 stack arguments.  Note there is a special
 instruction when there is only one argument.
 
 Added in Emacs 24.1

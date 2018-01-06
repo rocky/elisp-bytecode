@@ -10,7 +10,7 @@
 * After 21.4 and Starting in 22.1::
 * After 22.3 and Starting in 23.1::
 * After 23.4 and Starting in 24.1::
-* After 24.4 and Starting in 25.1::
+* After 24.5 and Starting in 25.1::
 * After 25.3 and Starting in 26.1::
 * After 26.1 and Starting in 27.1::
 @end menu
@@ -298,6 +298,14 @@ in this version.
 The bytecode meta-comment no longer who user/hostname compiled and at what time.
 A message indicating whether utf-8 non-ASCII characters is used is included.
 
+The following instructions were added in 24.4:
+@itemize
+@item @code{pophandler} (48)
+@item @code{pushconditioncase} (49)
+@item @code{pushcatch} (50)
+@end itemize
+
+
 Bytecode meta-comments look like this:
 @verbatim
 ;;; from file /misc/emacs/bzr/emacs24-merge/lisp/emacs-lisp/bytecomp.el
@@ -320,19 +328,12 @@ Bytecode meta-comments look like this:
 @item Emacs 24.5 was released Apr 10, 2015
 @end itemize
 
-@node After 24.4 and Starting in 25.1
-@section After 24.4 and Starting in 25.1
+@node After 24.5 and Starting in 25.1
+@section After 24.5 and Starting in 25.1
 
 Instruction 0 becomes an error rather than aborting emacs.
 
 A number of changes were made to @code{bytecode.c}.
-
-The following instructions were added:
-@itemize
-@item @code{ophandler} (48)
-@item @code{pushconditioncase} (49)
-@item @code{pushcatch} (50)
-@end itemize
 
 The following instructions, obsolete since version 18, can no longer be interpreted:
 @itemize

@@ -81,17 +81,37 @@ You can, however, make a faster pig.
 ELisp bytecode is the custom lower-level language used by Emacs'
 bytecode interpreter. As with all bytecode, bytecode instructions are
 compact. For display purposes, there is a @code{disassemble} command
-that unpacks the fields of the instruction. With this and using the
+that unpacks the fields of the instruction. With this and the
 constants vector, bytecode can be printed in an assembly-language-like
 format.
 
 I'll often use Elisp bytecode instruction refer to an assembly
 representation of an Elisp bytecode instruction.
 
-LAP stands for Lisp Assembly Program. It seems to be an internal
-representation of bytecode in a more symbolic form. It is used behind
-the scenes to that make bytecode more amenable to optimization, since
-the instructions are in a structure which is easier to operate on.
+LAP stands for Lisp Assembly Program. It is an internal representation
+of the bytecode instructions in a more symbolic form. It is used
+behind the scenes to that make bytecode more amenable to optimization,
+since the instructions are in a structure which is easier to operate
+on.
+
+If you want to write the instruction sequence in this symbolic form
+rather than give a byte-encoded form, you can do that using the
+function @code{byte-compile-lapcode}.
+
+@unnumberedsubsec Example showing use of @code{byte-compile-lapcode}
+@findex byte-compile-lapcode
+@findex make-byte-code
+@verbatim
+(defalias 'get-foo
+  (make-byte-code
+    #x000                  ;; lexical parameter counts
+    (byte-compile-lapcode
+      '((byte-varref . 0)
+        (byte-return)))    ;; instruction sequence
+    [foo]                  ;; constants vector
+    1))                    ;; max stack usage
+@end verbatim
+
 
 @uref{https://www.gnu.org/software/emacs/manual/html_node/elisp/Speed-of-Byte_002dCode.html,
 Silly Loop Example} in the Emacs Lisp Manual gives a program to time
@@ -176,6 +196,7 @@ object literal or with @code{make-byte-code}. Like vector literals,
 byte-code functions don't need to be quoted.
 
 Examples of calling @code{make-byte-code}:
+@findex make-byte-code
 @verbatim
 (make-byte-code 0 "" [] 0)
 ;; => #[0 "" [] 0]
@@ -217,6 +238,7 @@ the function is dynamically scoped, the argument list is exactly what
 appears in Lisp code.
 
 @subsubsection Example showing how a parameter list is transformed:
+@findex byte-compile
 @verbatim
 (byte-compile
   (lambda (a b &optional c)))
@@ -246,6 +268,7 @@ really easy to parse these in your head when viewed as hexadecimal
 because each portion almost always fits inside its own ``digit.''
 
 @subsubsection Example showing how lexical parameters are encoded:
+@findex byte-compile-make-args-desc
 @verbatim
 (byte-compile-make-args-desc '())
 ;; => #x000  (0 args, 0 rest, 0 required)
