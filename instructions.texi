@@ -928,11 +928,14 @@ bytecode interpreter.
 @node symbolp
 @unnumberedsubsubsec @code{symbolp} (57)
 @kindex symbolp
+
+Call @code{symbolp}.
+
 @table @strong
 @item Implements:
 @code{TOS <- (symbolp TOS)}.
 @item Generated via:
-unary @code{symbolp}.
+@code{symbolp}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -951,11 +954,14 @@ PC  Byte  Instruction
 @node consp
 @unnumberedsubsubsec @code{consp} (58)
 @kindex consp
+
+Call @code{consp}.
+
 @table @strong
 @item Implements:
 @code{TOS <- (consp TOS)}.
 @item Generated via:
-unary @code{consp}.
+@code{consp}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -973,6 +979,9 @@ PC  Byte  Instruction
 
 @node stringp
 @unnumberedsubsubsec @code{stringp} (59)
+
+Call @code{stringp}.
+
 @kindex stringp
 @table @strong
 @item Implements:
@@ -997,6 +1006,9 @@ PC  Byte  Instruction
 @node listp
 @unnumberedsubsubsec @code{listp} (60)
 @kindex listp
+
+Call @code{listp}.
+
 @table @strong
 @item Implements:
 @code{TOS <- (listp TOS)}.
@@ -1019,6 +1031,9 @@ PC  Byte  Instruction
 
 @node eq
 @unnumberedsubsubsec @code{eq} (61)
+
+Call @code{eq}.
+
 @kindex eq
 @table @strong
 @item Implements:
@@ -1044,6 +1059,9 @@ PC  Byte  Instruction
 @node memq
 @unnumberedsubsubsec @code{memq} (62)
 @kindex memq
+
+Call @code{memq}.
+
 @table @strong
 @item Implements:
 @code{S[1] <- (memq S[1] TOS); top--}.
@@ -1068,6 +1086,9 @@ PC  Byte  Instruction
 @node not
 @unnumberedsubsubsec @code{not} (63)
 @kindex not
+
+Call @code{not}.
+
 @table @strong
 @item Implements:
 @code{TOS <- (not TOS)}.
@@ -1091,11 +1112,14 @@ PC  Byte  Instruction
 @node symbol-value
 @unnumberedsubsubsec @code{symbol-value} (74)
 @kindex symbol-value
+
+Call @code{symbol-value}.
+
 @table @strong
 @item Implements:
 @code{TOS <- (symbol-value TOS)}.
 @item Generated via:
-unary @code{symbol-value}.
+@code{symbol-value}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1114,11 +1138,14 @@ PC  Byte  Instruction
 @node symbol-function
 @unnumberedsubsubsec @code{symbol-function} (75)
 @kindex symbol-function
+
+Call @code{symbol-function}.
+
 @table @strong
 @item Implements:
 @code{TOS <- (symbol-function TOS)}.
 @item Generated via:
-unary @code{symbol-function}.
+@code{symbol-function}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1136,12 +1163,15 @@ PC  Byte  Instruction
 
 @node set
 @unnumberedsubsubsec @code{set} (76)
+
+Call @code{set}.
+
 @kindex set
 @table @strong
 @item Implements:
 @code{S[1] <- (set S[1] TOS); top--}.
 @item Generated via:
-binary @code{set}.
+@code{set}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1161,6 +1191,9 @@ PC  Byte  Instruction
 @node fset
 @unnumberedsubsubsec @code{fset} (77)
 @kindex fset
+
+Call @code{fset}.
+
 @table @strong
 @item Implements:
 @code{S[1] <- (fset S[1] TOS); top--}.
@@ -1185,6 +1218,9 @@ PC  Byte  Instruction
 @node get
 @unnumberedsubsubsec @code{get} (78)
 @kindex get
+
+Call @code{get}.
+
 @table @strong
 @item Implements:
 @code{S[1] <- (get S[1] TOS); top--}.
@@ -1209,6 +1245,9 @@ PC  Byte  Instruction
 @node equal
 @unnumberedsubsubsec @code{equal} (154)
 @kindex equal
+
+Call @code{equal}.
+
 @table @strong
 @item Implements:
 @code{S[1] <- (equal S[1] TOS); top--}.
@@ -1234,12 +1273,15 @@ PC  Byte  Instruction
 
 @node member
 @unnumberedsubsubsec @code{member} (157)
+
+Call @code{member}.
+
 @kindex member
 @table @strong
 @item Implements:
 @code{S[1] <- (member S[1] TOS); top--}.
 @item Generated via:
-binary @code{member}.
+@code{member}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1259,6 +1301,9 @@ PC  Byte  Instruction
 @node assq
 @unnumberedsubsubsec @code{assq} (158)
 @kindex assq
+
+Call @code{assq}.
+
 @table @strong
 @item Implements:
 @code{S[1] <- (assq S[1] TOS); top--}.
@@ -1283,6 +1328,9 @@ PC  Byte  Instruction
 @node numberp
 @unnumberedsubsubsec @code{numberp} (167)
 @kindex numberp
+
+Call @code{numberp}.
+
 @table @strong
 @item Implements:
 @code{TOS <- (numberp TOS)}.
@@ -1308,6 +1356,9 @@ PC  Byte  Instruction
 @node integerp
 @unnumberedsubsubsec @code{integerp} (168)
 @kindex integerp
+
+Call @code{integerp}.
+
 @table @strong
 @item Implements:
 @code{TOS <- (integerp TOS)}.
@@ -1837,6 +1888,8 @@ bytecode interpreter.
 @unnumberedsubsubsec @code{sub1} (83)
 @kindex sub1
 
+Call @code{1-}.
+
 @table @strong
 @item Implements:
 @code{TOS <- (1- TOS)}.
@@ -1862,6 +1915,8 @@ PC  Byte  Instruction
 @unnumberedsubsubsec @code{add1} (84)
 @kindex add1
 
+Call @code{1+}.
+
 @table @strong
 @item Implements:
 @code{TOS <- (1+ TOS)}.
@@ -1886,6 +1941,8 @@ PC  Byte  Instruction
 @node eqlsign
 @unnumberedsubsubsec @code{eqlsign} (85)
 @kindex eqlsign
+
+Call @code{=}.
 
 @table @strong
 @item Implements:
@@ -1914,11 +1971,13 @@ Constants Vector: [a b]
 @unnumberedsubsubsec @code{gtr} (86)
 @kindex gtr
 
+Call @code{>}.
+
 @table @strong
 @item Implements:
 @code{S[1] <- (> S[1] TOS; top--)}.
 @item Generated via:
-binary @code{>}.
+@code{>}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1940,11 +1999,13 @@ PC  Byte  Instruction
 @unnumberedsubsubsec @code{lss} (87)
 @kindex lss
 
+Call @code{<}.
+
 @table @strong
 @item Implements:
 @code{S[1] <- (< S[1] TOS; top--)}.
 @item Generated via:
-binary @code{<}.
+@code{<}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1967,13 +2028,15 @@ Constants Vector: [a b]
 @unnumberedsubsubsec @code{leq} (88)
 @kindex leq
 
+Call @code{<=}.
+
 @table @strong
 @item Implements:
 @code{S[1] <- (<= S[1] TOS; top--)}.
 @item Instruction size:
 1 byte
 @item Generated via:
-binary @code{<=}.
+@code{<=}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1996,13 +2059,15 @@ Constants Vector: [a b]
 @unnumberedsubsubsec @code{geq} (89)
 @kindex geq
 
+Call @code{>=}.
+
 @table @strong
 @item Implements:
 @code{S[1] <- (>= S[1] TOS; top--)}.
 @item Instruction size:
 1 byte
 @item Generated via:
-binary @code{>=}.
+@code{>=}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -2023,6 +2088,8 @@ PC  Byte  Instruction
 @node diff
 @unnumberedsubsubsec @code{diff} (90)
 @kindex diff
+
+Call binary @code{-}.
 
 @table @strong
 @item Implements:
@@ -2051,6 +2118,8 @@ PC  Byte  Instruction
 @node negate
 @unnumberedsubsubsec @code{negate} (91)
 @kindex negate
+
+Call unary @code{-}.
 
 @table @strong
 @item Implements:
@@ -2081,11 +2150,13 @@ Constants Vector: [a]
 @unnumberedsubsubsec @code{plus} (92)
 @kindex plus
 
+Call unary @code{+}.
+
 @table @strong
 @item Implements:
 @code{S[1] <- (+ S[1] TOS; top--)}.
 @item Generated via:
-binary @code{+}.
+@code{+}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -2108,11 +2179,13 @@ Constants Vector: [n]
 @unnumberedsubsubsec @code{mult} (95)
 @kindex mult
 
+Call @code{*}.
+
 @table @strong
 @item Implements:
 @code{S[1] <- (* S[1] TOS; top--)}.
 @item Generated via:
-binary @code{*}.
+@code{*}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -2137,11 +2210,13 @@ Constants Vector: [n]
 @unnumberedsubsubsec @code{max} (93)
 @kindex max
 
+Call @code{max}.
+
 @table @strong
 @item Implements:
 @code{S[1] <- (max S[1] TOS; top--)}.
 @item Generated via:
-binary @code{max}.
+@code{max}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -2163,6 +2238,8 @@ Constants Vector: [a b]
 @node min
 @unnumberedsubsubsec @code{min} (94)
 @kindex min
+
+Call @code{min}.
 
 @table @strong
 @item Implements:
@@ -2191,11 +2268,13 @@ Constants Vector: [a b]
 @unnumberedsubsubsec @code{quo} (165)
 @kindex quo
 
+Call @code{/}.
+
 @table @strong
 @item Implements:
 @code{S[1] <- (/ S[1] TOS; top--)}.
 @item Generated via:
-binary @verb{|/|}.
+@verb{|/|}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -2218,11 +2297,13 @@ Constants Vector: [a b]
 @unnumberedsubsubsec @code{rem} (166)
 @kindex rem
 
+Call @verb{|%|}.
+
 @table @strong
 @item implements:
 @code{S[1] <- (% S[1] TOS; top--)}.
 @item generated via:
-binary @verb{|%|}
+@verb{|%|}
 @item Instruction size:
 1 byte
 @item Stack effect:
