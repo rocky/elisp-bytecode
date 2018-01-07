@@ -1997,7 +1997,7 @@ Call @code{nconc} with two stack arguments.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (nconc S[1] TOS; top--)}.
+@code{S[1] <- (nconc S[1] TOS); top--}.
 @item Generated via:
 @code{nconc}.
 @item Instruction size:
@@ -2106,7 +2106,7 @@ Call @code{=}.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (= S[1] TOS; top--)}.
+@code{S[1] <- (= S[1] TOS); top--}.
 @item Generated via:
 binary @code{=}.
 @item Instruction size:
@@ -2135,7 +2135,7 @@ Call @code{>}.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (> S[1] TOS; top--)}.
+@code{S[1] <- (> S[1] TOS); top--}.
 @item Generated via:
 @code{>}.
 @item Instruction size:
@@ -2163,7 +2163,7 @@ Call @code{<}.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (< S[1] TOS; top--)}.
+@code{S[1] <- (< S[1] TOS); top--}.
 @item Generated via:
 @code{<}.
 @item Instruction size:
@@ -2192,7 +2192,7 @@ Call @code{<=}.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (<= S[1] TOS; top--)}.
+@code{S[1] <- (<= S[1] TOS); top--}.
 @item Instruction size:
 1 byte
 @item Generated via:
@@ -2223,7 +2223,7 @@ Call @code{>=}.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (>= S[1] TOS; top--)}.
+@code{S[1] <- (>= S[1] TOS); top--}.
 @item Instruction size:
 1 byte
 @item Generated via:
@@ -2253,7 +2253,7 @@ Call binary @code{-}.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (- S[1] TOS; top--)}.
+@code{S[1] <- (- S[1] TOS); top--}.
 @item Generated via:
 binary @code{-}.
 @item Instruction size:
@@ -2314,7 +2314,7 @@ Call unary @code{+}.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (+ S[1] TOS; top--)}.
+@code{S[1] <- (+ S[1] TOS); top--}.
 @item Generated via:
 @code{+}.
 @item Instruction size:
@@ -2343,7 +2343,7 @@ Call @code{*}.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (* S[1] TOS; top--)}.
+@code{S[1] <- (* S[1] TOS); top--}.
 @item Generated via:
 @code{*}.
 @item Instruction size:
@@ -2374,7 +2374,7 @@ Call @code{max}.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (max S[1] TOS; top--)}.
+@code{S[1] <- (max S[1] TOS); top--}.
 @item Generated via:
 @code{max}.
 @item Instruction size:
@@ -2432,7 +2432,7 @@ Call @code{/}.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (/ S[1] TOS; top--)}.
+@code{S[1] <- (/ S[1] TOS); top--}.
 @item Generated via:
 @verb{|/|}.
 @item Instruction size:
@@ -2461,7 +2461,7 @@ Call @verb{|%|}.
 
 @table @strong
 @item implements:
-@code{S[1] <- (% S[1] TOS; top--)}.
+@code{S[1] <- (% S[1] TOS); top--}.
 @item generated via:
 @verb{|%|}
 @item Instruction size:
