@@ -1754,7 +1754,7 @@ Call @code{aset} with three stack arguments.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (aref S[1] TOS); top--}.
+@code{S[2] <- (aref S[2] S[1] TOS); top-=2}.
 @item Generated via:
 @code{aset}.
 @item Instruction size:
@@ -1787,7 +1787,7 @@ Call @code{nthcdr} with two stack arguments.
 @item Implements:
 @code{S[1] <- (nthcdr S[1] TOS); top --}.
 @item Generated via:
-@code{aset}.
+@code{nthcdr}.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -1795,17 +1795,16 @@ Call @code{nthcdr} with two stack arguments.
 @item Added in:
 Emacs 19.34.
 @item Example:
-@code{(defun ntthcdr() (ntchcdr '(1550 1551 1552) 2))} generates:
+@code{(defun nthcdr-eg() (nthcdr '(1550 1551 1552) 2))} generates:
 @c ((lexical . t) (optimize . nil))
 @verbatim
 PC  Byte  Instruction
- 0  192   constant[0] ntchcdr
- 1  193   constant[1] (1550 1551 1552)
- 2  194   constant[2] 2
- 3   34   call[2]
- 4  135   return
+ 0  192   constant[0] (1550 1551 1552)
+ 1  193   constant[1] 2
+ 2  155   nthcdr
+ 3  135   return
 
-Constants Vector: [ntchcdr (1550 1551 1552) 2]
+Constants Vector: [(1550 1551 1552) 2]
 @end verbatim
 
 @end table
@@ -1816,48 +1815,209 @@ Constants Vector: [ntchcdr (1550 1551 1552) 2]
 @kindex elt
 Call @code{elt} with two stack arguments.
 
-Added in Emacs 19.34.
+@table @strong
+@item Implements:
+@code{S[1] <- (elt S[1] TOS); top --}.
+@item Generated via:
+@code{elt}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Added in:
+Emacs 19.34.
+@item Example:
+@code{(defun elt-eg() (elt '(1560 1561 1562) 2))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] (1560 1561 1562)
+ 1  193   constant[1] 2
+ 2  156   elt
+ 3  135   return
+
+Constants Vector: [(1560 1561 1562) 2]
+@end verbatim
+
+@end table
 
 @node nreverse
 @unnumberedsubsubsec @code{nreverse} (159)
 @kindex nreverse
-Call @code{nreverse} with one argument.
+Call @code{nreverse} with one stack argument.
 
-Added in Emacs 19.34.
+@table @strong
+@item Implements:
+@code{TOS <- (elt TOS)}.
+@item Generated via:
+@code{nreverse}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Added in:
+Emacs 19.34.
+@item Example:
+@code{(defun nreverse-eg() (nreverse '(1590 1591)))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] (1590 1591)
+ 1  159   nreverse
+ 2  135   return
+
+Constants Vector: [(1590 1591)]
+@end verbatim
+
+@end table
 
 @node setcar
 @unnumberedsubsubsec @code{setcar} (160)
 @kindex setcar
 Call @code{setcar} with two stack arguments.
 
-Added in Emacs 19.34.
+@table @strong
+@item Implements:
+@code{S[1] <- (setcar S[1] TOS); top--}.
+@item Generated via:
+@code{setcar}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Added in:
+Emacs 19.34.
+@item Example:
+With lexical binding in effect, @code{(defun setcar-eg(l) (setcar l 1600)))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1  192   constant[0] 1600
+ 2  160   setcar
+ 3  135   return
+
+Constants Vector: [1600]
+@end verbatim
+
+@end table
 
 @node setcdr
 @unnumberedsubsubsec @code{setcdr} (161)
 @kindex setcdr
 Call @code{setcdr} with two stack arguments.
 
-Added in Emacs 19.34.
+@table @strong
+@item Implements:
+@code{S[1] <- (setcdr S[1] TOS); top--}.
+@item Generated via:
+@code{setcdr}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Added in:
+Emacs 19.34.
+@item Example:
+With lexical binding in effect, @code{(defun setcdr-eg(l) (setcdr l 1610)))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1  192   constant[0] 1610
+ 2  161   setcdr
+ 3  135   return
+
+Constants Vector: [1610]
+@end verbatim
+
+@end table
 
 @node car-safe
 @unnumberedsubsubsec @code{car-safe} (162)
 @kindex car-safe
+
 Call @code{car-safe} with one argument.
 
-Added in Emacs 19.34.
+@table @strong
+@item Implements:
+@code{TOS <- (car-safe TOS)}.
+@item Generated via:
+@code{car-safe}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Added in:
+Emacs 19.34.
+@item Example:
+With lexical binding in effect, @code{(defun car-safe-eg(l) (car-safe l))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1  162   car-safe
+ 2  135   return
+@end verbatim
+
+@end table
 
 @node cdr-safe
 @unnumberedsubsubsec @code{cdr-safe} (163)
 @kindex cdr-safe
-Call @code{cdr-safe} with one argument.
+Call @code{cdr-safe} with one stack argument.
 
-Added in Emacs 19.34.
+@table @strong
+@item Implements:
+@code{TOS <- (cdr-safe TOS)}.
+@item Generated via:
+@code{cdr-safe}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Added in:
+Emacs 19.34.
+@item Example:
+With lexical binding in effect, @code{(defun cdr-safe-eg(l) (cdr-safe l))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1  163   cdr-safe
+ 2  135   return
+@end verbatim
+
+@end table
+
 @node nconc
 @unnumberedsubsubsec @code{nconc} (164)
 @kindex nconc
 Call @code{nconc} with two stack arguments.
 
-Added in Emacs 19.34.
+@table @strong
+@item Implements:
+@code{S[1] <- (nconc S[1] TOS); top--}.
+@item Generated via:
+@code{nconc}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Added in:
+Emacs 19.34.
+@item Example:
+With lexical binding in effect, @code{(defun nconc-eg(a b) (nconc a b))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0    1   stack-ref[1]
+ 1    1   stack-ref[1]
+ 2  164   nconc
+ 3  135   return
+@end verbatim
+
+@end table
 
 @node Arithmetic Function Instructions
 @subsection Arithmetic Function Instructions
@@ -1946,7 +2106,7 @@ Call @code{=}.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (= S[1] TOS; top--)}.
+@code{S[1] <- (= S[1] TOS); top--}.
 @item Generated via:
 binary @code{=}.
 @item Instruction size:
@@ -1975,7 +2135,7 @@ Call @code{>}.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (> S[1] TOS; top--)}.
+@code{S[1] <- (> S[1] TOS); top--}.
 @item Generated via:
 @code{>}.
 @item Instruction size:
@@ -2003,7 +2163,7 @@ Call @code{<}.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (< S[1] TOS; top--)}.
+@code{S[1] <- (< S[1] TOS); top--}.
 @item Generated via:
 @code{<}.
 @item Instruction size:
@@ -2032,7 +2192,7 @@ Call @code{<=}.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (<= S[1] TOS; top--)}.
+@code{S[1] <- (<= S[1] TOS); top--}.
 @item Instruction size:
 1 byte
 @item Generated via:
@@ -2063,7 +2223,7 @@ Call @code{>=}.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (>= S[1] TOS; top--)}.
+@code{S[1] <- (>= S[1] TOS); top--}.
 @item Instruction size:
 1 byte
 @item Generated via:
@@ -2093,7 +2253,7 @@ Call binary @code{-}.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (- S[1] TOS; top--)}.
+@code{S[1] <- (- S[1] TOS); top--}.
 @item Generated via:
 binary @code{-}.
 @item Instruction size:
@@ -2154,7 +2314,7 @@ Call unary @code{+}.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (+ S[1] TOS; top--)}.
+@code{S[1] <- (+ S[1] TOS); top--}.
 @item Generated via:
 @code{+}.
 @item Instruction size:
@@ -2183,7 +2343,7 @@ Call @code{*}.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (* S[1] TOS; top--)}.
+@code{S[1] <- (* S[1] TOS); top--}.
 @item Generated via:
 @code{*}.
 @item Instruction size:
@@ -2214,7 +2374,7 @@ Call @code{max}.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (max S[1] TOS; top--)}.
+@code{S[1] <- (max S[1] TOS); top--}.
 @item Generated via:
 @code{max}.
 @item Instruction size:
@@ -2272,7 +2432,7 @@ Call @code{/}.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (/ S[1] TOS; top--)}.
+@code{S[1] <- (/ S[1] TOS); top--}.
 @item Generated via:
 @verb{|/|}.
 @item Instruction size:
@@ -2301,7 +2461,7 @@ Call @verb{|%|}.
 
 @table @strong
 @item implements:
-@code{S[1] <- (% S[1] TOS; top--)}.
+@code{S[1] <- (% S[1] TOS); top--}.
 @item generated via:
 @verb{|%|}
 @item Instruction size:
