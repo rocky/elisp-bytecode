@@ -1623,7 +1623,7 @@ Constants Vector: [a b c]
 @node list4
 @unnumberedsubsubsec @code{list4} (70)
 @kindex list4
-Call @code{list} with four items.
+Call @code{list} with four stack items.
 
 @table @strong
 @item Implements:
@@ -1671,7 +1671,7 @@ instructions for the case where there are 1 to 4 items in the list.
 @item Added in:
 Emacs 19.34.
 @item Example:
-@code{(defun list4-eg() (list 'a 'b 'c 'd 'e))} generates:
+@code{(defun listN-eg() (list 'a 'b 'c 'd 'e))} generates:
 @c ((lexical . t) (optimize . nil))
 @verbatim
 PC  Byte  Instruction
@@ -1754,7 +1754,7 @@ Call @code{aset} with three stack arguments.
 
 @table @strong
 @item Implements:
-@code{S[2] <- (aref S[2] S[1] TOS); top-=2}.
+@code{S[2] <- (aset S[2] S[1] TOS); top-=2}.
 @item Generated via:
 @code{aset}.
 @item Instruction size:
@@ -2507,20 +2507,124 @@ function for them.
 @kindex substring
 Call @code{substring} with three stack arguments.
 
+@table @strong
+@item Implements:
+@code{S[2] <- (substring S[2] S[1] TOS); top-=2}.
+@item Generated via:
+@code{substring}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+@code{(defun substring-eg() (substring "abc" 0 2))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] "abc"
+ 1  193   constant[1] 0
+ 2  194   constant[2] 2
+ 3   79   substring
+ 4  135   return
+
+Constants Vector: ["abc" 0 2]
+@end verbatim
+
+@end table
+
+
 @node concat2
 @unnumberedsubsubsec @code{concat2} (80)
 @kindex concat2
 Call @code{concat} with two stack arguments.
+
+@table @strong
+@item Implements:
+@code{S[1] <- (concat S[1] TOS); top--}.
+@item Generated via:
+@code{concat}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Added in:
+Emacs 19.34.
+@item Example:
+@code{(defun concat2-eg() (concat "a" "b"))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] "a"
+ 1  193   constant[1] "b"
+ 2   80   concat2
+ 3  135   return
+
+Constants Vector: ["a" "b"]
+@end verbatim
+
+@end table
 
 @node concat3
 @unnumberedsubsubsec @code{concat3} (81)
 @kindex concat3
 Call @code{concat} with three stack arguments.
 
+@table @strong
+@item Implements:
+@code{S[2] <- (concat S[2] S[1] TOS); top-=2}.
+@item Generated via:
+@code{concat}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Example:
+@code{(defun concat3-eg() (concat "a" "b" "c"))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] "a"
+ 1  193   constant[1] "b"
+ 2  194   constant[2] "c"
+ 3   81   concat3
+ 4  135   return
+
+Constants Vector: ["a" "b" "c"]
+@end verbatim
+
+@end table
+
+
 @node concat4
 @unnumberedsubsubsec @code{concat4} (82)
 @kindex concat4
 Call @code{concat} with four stack stack arguments.
+
+@table @strong
+@item Implements:
+@code{S[3] <- (concat S[3] S[2] S[1] TOS); top -= 2}.
+@item Generated via:
+@code{concat}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-4+1}.
+@item Example:
+@code{(defun concat4-eg() (concat "a" "b" "c" "d"))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] "a"
+ 1  193   constant[1] "b"
+ 2  194   constant[2] "c"
+ 3  195   constant[3] "d"
+ 4   82   concat4
+ 5  135   return
+
+Constants Vector: ["a" "b" "c" "d"]
+@end verbatim
+
+@end table
 
 
 @node concatN
@@ -2531,35 +2635,169 @@ Call @code{concat} on up to 255 stack arguments.  Note there are
 special instructions for the case where there are 2 to 4 items to
 concatenate.
 
-Added in Emacs 19.34.
+@table @strong
+@item Implements:
+@code{S[n-1] <- (concat S[n-1] S[n-2] ... TOS); top -= (n-1)}.
+@item Generated via:
+@code{concat}.
+@item Operand:
+8-bit number of items in concat
+@item Instruction size:
+2 bytes
+@item Stack effect:
+@math{-n+1} where @math{n} is the value of the instruction operand.
+@item Added in:
+Emacs 19.34.
+@item Example:
+@code{(defun concatN-eg() (concat "a" "b" "c" "d" "e"))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] "a"
+ 1  193   constant[1] "b"
+ 2  194   constant[2] "c"
+ 3  195   constant[3] "d"
+ 4  196   constant[4] "e"
+ 5  176   concatN [5]
+           5
+ 7  135   return
+
+Constants Vector: ["a" "b" "c" "d" "e"]
+@end verbatim
+
+@end table
 
 @node upcase
 @unnumberedsubsubsec @code{upcase} (150)
 @kindex upcase
-Call @code{upcase} with one argument.
+Call @code{upcase} with one stack argument.
 
-Added in Emacs 19.34.
+@table @strong
+@item Implements:
+@code{TOS <- (upcase TOS)}.
+@item Generated via:
+@code{upcase}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Added in:
+Emacs 19.34.
+@item Example:
+@code{(defun upcase-eg() (upcase "abc"))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] "abc"
+ 1  150   upcase
+ 2  135   return
+
+Constants Vector: ["abc"]
+@end verbatim
+
+@end table
 
 @node downcase
 @unnumberedsubsubsec @code{downcase} (151)
 @kindex downcase
 Call @code{downcase} with one argument.
 
-Added in Emacs 19.34.
+@table @strong
+@item Implements:
+@code{TOS <- (downcase TOS)}.
+@item Generated via:
+@code{downcase}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Added in:
+Emacs 19.34.
+@item Example:
+@code{(defun downcase-eg(l) (downcase "ABC"))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] "ABC"
+ 1  151   downcase
+ 2  135   return
+
+Constants Vector: ["ABC"]
+@end verbatim
+
+@end table
 
 @node stringeqlsign
 @unnumberedsubsubsec @code{stringeqlsign} (152)
 @kindex stringeqlsign
-Call @code{string=} with two arguments, comparing two strings for equality.
+Call @code{string=} with two stack arguments, comparing two strings for equality.
 
-Added in Emacs 19.34.
+@table @strong
+@item Implements:
+@code{S[1] <- (string= S[1] TOS); top--}.
+@item Generated via:
+@code{string=}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Added in:
+Emacs 19.34.
+@item Example:
+With lexical binding in effect,
+@verbatim
+(defun stringeqlsign-eg(a)
+  (string= a "b"))
+@end verbatim
+generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1  192   constant[0] "b"
+ 2  152   string=
+ 3  135   return
+
+Constants Vector: ["b"]
+@end verbatim
+
+@end table
 
 @node stringlss
 @unnumberedsubsubsec @code{stringlss} (153)
 @kindex stringlss
-Call @code{string<} with two arguments, comparing two strings.
+Call @code{string<} with two stack arguments, comparing two strings.
 
-Added in Emacs 19.34.
+@table @strong
+@item Implements:
+@code{S[1] <- (string< S[1] TOS); top--}.
+@item Generated via:
+@code{string<}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Added in:
+Emacs 19.34.
+@item Example:
+With lexical binding in effect,
+@verbatim
+(defun stringlss-eg(a)
+  (string< a "b"))
+@end verbatim
+generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1  192   constant[0] "b"
+ 2  153   string<
+ 3  135   return
+
+Constants Vector: ["b"]
+@end verbatim
+
+@end table
 
 @node Emacs Function Instructions
 @subsection Emacs Function Instructions
