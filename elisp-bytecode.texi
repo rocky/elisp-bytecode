@@ -5,7 +5,7 @@
 
 @setfilename elisp-bytecode
 
-@dircategory Emacs lisp
+@dircategory Emacs Lisp
 @direntry
 * Lisp Bytecode Instructions::  The Emacs Lisp Bytecode Manual.
 @end direntry
@@ -14,18 +14,18 @@
 
 @ifnottex
 @node Top
-@top Emacs Lisp Bytecode and LAP Manual
+@top Emacs Lisp Byte Code and LAP Manual
 @end ifnottex
 
 @menu
-* Introduction to Elisp Bytecode and LAP::
-* Emacs Lisp Bytecode Environment::
-* ELisp Bytecode Instructions::  Description of all Emacs Lisp Bytecode Instructions
+* Introduction to Emacs Lisp Byte Code and LAP::
+* Emacs Lisp Byte-Code Environment::
+* Emacs Lisp Byte-Code Instructions::  Description of all Emacs Lisp Byte-Code Instructions
 * Opcode Changes Between Emacs Releases::
 * Opcode Table::                 Table of Bytecode Instruction ordered by Opcode Number
 * References::
 * Instruction Index::
-* Bytecode Function Index::
+* Byte-Code Function Index::
 @end menu
 
 @include intro.texi
@@ -39,8 +39,8 @@
 @unnumbered Instruction Index
 @printindex ky
 
-@node Bytecode Function Index
-@unnumbered Bytecode Function Index
+@node Byte-Code Function Index
+@unnumbered Byte-Code Function Index
 @printindex fn
 
 

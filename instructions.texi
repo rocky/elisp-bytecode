@@ -1,5 +1,5 @@
-@node ELisp Bytecode Instructions
-@chapter ELisp Bytecode Instructions
+@node Emacs Lisp Byte-Code Instructions
+@chapter Emacs Lisp Byte-Code Instructions
 
 
 @menu
@@ -101,7 +101,7 @@ The description of fields use for describing each instruction is as follows
 @item Implements:
 A description of what the instruction does.
 @item Generated via:
-These give some ELisp constructs that may generate the instruction. Of
+These give some Emacs Lisp constructs that may generate the instruction. Of
 course there may be many constructs and there may be limiting
 situations within that construct. We'll only give one or a few of the
 constructs, and we'll try to indicate a limiting condition where
@@ -125,7 +125,7 @@ This is optional. When it is given this gives which version of Emacs
 the opcode was added. It may also give when the opcode became obsolete
 or was no longer implemented.
 @item Example:
-Some ELisp code to show how the instruction is used. For example
+Some Emacs Lisp code to show how the instruction is used. For example
 the for the @code{goto} instruction we give:
 
 @verbatim
