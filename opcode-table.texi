@@ -406,9 +406,7 @@ and for a description of how to interpret the stack-effect field.
 
 @end multitable
 
-@page
-@node Opcodes (0100-0177)
-@section Opcodes (0100-0177)
+@SECTION{Opcodes (0100-0177)}
 
 @multitable @columnfractions .09 .09 .31 .08 .43 .18
 @headitem
@@ -806,9 +804,7 @@ and for a description of how to interpret the stack-effect field.
 @tab @math{-1+1}
 @end multitable
 
-@page
-@node Opcodes (0200-0277)
-@section Opcodes (0200-0277)
+@SECTION{Opcodes (0200-0277)}
 @multitable @columnfractions .09 .09 .31 .55 .18
 
 @item @verb{|0200|}

@@ -9,7 +9,7 @@
 @end menu
 
 @node Why is Emacs Lisp Byte Code Important and How is Emacs as a Program Different?
-@section Why is Emacs Lisp Byte Code Important and how is Emacs as a Program Ddifferent?
+@section Why is Emacs Lisp Byte Code Important and How is Emacs as a Program Different?
 
 If you were to look at two comparable complex programs circa 2018,
 Firefox 53.0.3 and Emacs 25.3, you would see that relative sizes of Firefox
@@ -62,8 +62,7 @@ rules of mathematics and physics, so it is remarkable that something
 as complex as Emacs can come out of the relatively simple language
 Lisp.
 
-@node Emacs Lisp Byte Code and LAP
-@section Emacs Lisp Byte Code and LAP
+@SECTION{Emacs Lisp Byte Code and LAP}
 
 However pervasively used, Emacs Lisp is in making up the Emacs
 ecosystem, Emacs Lisp is not and never has been a speedy language compared
@@ -124,8 +123,7 @@ gives code that runs a bit faster than when dynamic binding is
 used.}. The Emacs Lisp manual gets a speed improvement of about 3
 times.
 
-@node Emacs Lisp Virtual Machine
-@section Emacs Lisp Virtual Machine
+@SECTION{Emacs Lisp Virtual Machine}
 
 The Emacs Lisp bytecode interpreter, like many bytecode interpreters
 such as Smalltalk, C Python, Forth, or PostScript, has an evaluation
@@ -174,8 +172,7 @@ operand or a single intermediate value. Some operands are packed into
 the opcode byte.
 
 
-@node The Byte-Code Function Type and Literal
-@section The Byte-Code Function Type and Literal
+@SECTION{The Byte-Code Function Type and Literal}
 
 @emph{This section is largely lifted from Chris Wellons' Emacs
 byte code Internals.  See references at the end of this doc.}

@@ -3,6 +3,20 @@
 
 @c @include docstyle.texi
 
+@macro SECTION{name}
+@page
+@node \name\
+@section \name\
+@end macro
+
+@c How we format individual instructions.
+@macro INSTRUCTION{name, opcode}
+@page
+@node \name\
+@unnumberedsubsec @code{\name\} (\opcode\)
+@kindex \name\
+@end macro
+
 @setfilename elisp-bytecode
 
 @dircategory Emacs Lisp

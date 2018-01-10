@@ -9,12 +9,11 @@
 * Exception-Handling Instructions::
 * Control-Flow Instructions::
 * Function-Call Instructions::
-* Stack Manipulation Instructions::
+* Stack-Manipulation Instructions::
 * Binding Instructions::
 @end menu
 
-@node Instruction-Description Format
-@section Instruction-Description Format
+@SECTION{Instruction-Description Format}
 
 In this chapter we'll document instructions over the course of the
 entire history of Emacs. Or at least we aim to.
@@ -156,9 +155,7 @@ Unless otherwise stated, all code examples were compiled in Emacs 25
 with optimization turned off.
 @end table
 
-@page
-@node Argument-Packing Instructions
-@section Argument-Packing Instructions
+@SECTION{Argument-Packing Instructions}
 
 These instructions from opcode 1 to 47 encode an operand value from 0
 to 7 encoded into the first byte.  If the encoded value is 6, the actual
@@ -175,9 +172,7 @@ opcode, in Little-Endian byte order.
 * unbind::
 @end menu
 
-@node stack-ref
-@unnumberedsubsec @code{stack-ref} (1--7)
-@kindex stack-ref
+@INSTRUCTION{stack-ref, 1--7}
 
 Reference a value from the evaluation stack.
 
@@ -421,8 +416,7 @@ Constants Vector: [c 1]
 @end table
 
 
-@node Constants-Vector Retrieval Instructions
-@section Constants-Vector Retrieval Instructions
+@SECTION{Constants-Vector Retrieval Instructions}
 
 The instructions from opcode 192 to 255 push a value from the
 Constants Vector. @xref{Constants Vector}. Opcode 192 pushes the first
@@ -526,9 +520,7 @@ Constants Vector: [n + 0 1 2 .. 61 62 63 64]
 @end verbatim
 @end table
 
-@page
-@node Exception-Handling Instructions
-@section Exception-Handling Instructions
+@SECTION{Exception-Handling Instructions}
 
 @menu
 * pophandler::
@@ -656,8 +648,7 @@ Constants Vector: [(another-error) (one-error) 5 6 7]
 @end verbatim
 @end table
 
-@node Control-Flow Instructions
-@section Control-Flow Instructions
+@SECTION{Control-Flow Instructions}
 
 @menu
 * goto::
@@ -881,8 +872,7 @@ Constants Vector: [1350]
 
 @end table
 
-@node Function-Call Instructions
-@section Function-Call Instructions
+@SECTION{Function-Call Instructions}
 
 These instructions use up one byte, and are followed by the next
 instruction directly.  They are equivalent to calling an Emacs Lisp
@@ -3057,8 +3047,7 @@ Call @code{match-end} with one argument.
 
 Added in Emacs 19.34.
 
-@node Stack Manipulation Instructions
-@section Stack Manipulation Instructions
+@SECTION{Stack-Manipulation Instructions}
 
 @menu
 * discard::
@@ -3111,8 +3100,7 @@ instruction when there is only one argument.
 
 Added in Emacs 24.1
 
-@node Binding Instructions
-@section Binding Instructions
+@SECTION{Binding Instructions}
 
 These instructions manipulate the special-bindings stack by creating a
 new binding when executed.  They need to be balanced with
