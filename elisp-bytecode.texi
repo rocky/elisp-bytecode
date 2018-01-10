@@ -3,6 +3,13 @@
 
 @c @include docstyle.texi
 
+@c FIXME: figure out how to DRY macros
+
+@macro SECTIONA{name}
+@node \name\
+@section \name\
+@end macro
+
 @macro SECTION{name}
 @page
 @node \name\
@@ -10,17 +17,31 @@
 @end macro
 
 @c How we format individual instructions.
-@macro INSTRUCTIONA{name, opcode}
+
+@macro FirstSubSecInstruction{name, opcode}
+@node \name\
+@unnumberedsubsec @code{\name\} (\opcode\)
+@kindex \name\
+@end macro
+
+@c How we format individual instructions.
+@macro SubSecInstruction{name, opcode}
 @page
 @node \name\
 @unnumberedsubsec @code{\name\} (\opcode\)
 @kindex \name\
 @end macro
 
-@macro INSTRUCTIONB{name, opcode}
+@macro FirstSubSubSecInstruction{name, opcode}
+@node \name\
+@unnumberedsubsubsec @code{\name\} (\opcode\)
+@kindex \name\
+@end macro
+
+@macro SubSubSecInstruction{name, opcode}
 @page
 @node \name\
-@unnumberedsubsubsubsec @code{\name\} (\opcode\)
+@unnumberedsubsubsec @code{\name\} (\opcode\)
 @kindex \name\
 @end macro
 
