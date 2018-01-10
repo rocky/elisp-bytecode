@@ -2954,6 +2954,7 @@ These instructions manipulate the special-bindings stack by creating a
 new binding when executed.  They need to be balanced with
 @code{unbind} instructions.
 
-@FirstSubSecInstruction{save-excursion, 138}
+@unnumberedsubsec @code{save-excursion} (138)
+@kindex save-excursion
 
 Make a binding recording buffer, point, and mark.
