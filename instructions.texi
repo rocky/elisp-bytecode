@@ -172,7 +172,7 @@ opcode, in Little-Endian byte order.
 * unbind::
 @end menu
 
-@INSTRUCTION{stack-ref, 1--7}
+@INSTRUCTIONA{stack-ref, 1--7}
 
 Reference a value from the evaluation stack.
 
@@ -232,8 +232,7 @@ is more likely to catch situations where random sections of memory are
 run such as by setting the PC incorrectly.
 
 
-@node varref
-@unnumberedsubsec @code{varref} (8--15)
+@INSTRUCTIONA{varref, 8--15}
 
 Pushes the value of the symbol in the constants vector onto the
 evaluation stack.
@@ -268,8 +267,7 @@ Constants Vector: [n]
 @end verbatim
 @end table
 
-@node varset
-@unnumberedsubsec @code{varset} (16--23)
+@INSTRUCTIONA{varset, 16--23}
 
 Sets a variable listed in the constants vector to the TOS value
 of the stack.
@@ -304,9 +302,7 @@ Constants Vector: [n 5]
 @end verbatim
 @end table
 
-@node varbind
-@unnumberedsubsec @code{varbind} (24--31)
-@kindex varbind
+@INSTRUCTIONA{varbind, 24--31}
 
 Binds a variable to a symbol in the constants vector, and adds the
 symbol to a special-bindings stack.
@@ -341,9 +337,7 @@ Constants Vector: [c 1]
 @end verbatim
 @end table
 
-@node call
-@unnumberedsubsec @code{call} (32--39)
-@kindex call
+@INSTRUCTIONA{call, 32--39}
 
 Calls a function.  The instruction argument specifies the number of
 arguments to pass to the function from the stack, excluding the
@@ -379,8 +373,7 @@ Constants Vector: [exchange-point-and-mark next-line 2]
 @end verbatim
 @end table
 
-@node unbind
-@unnumberedsubsec @code{unbind} (40--47)
+@INSTRUCTIONA{unbind, 40--47}
 @kindex unbind
 
 Remove the binding of a variable to symbol and from the special
@@ -428,8 +421,7 @@ constants, opcode @code{constant2} (opcode 129) is used instead.
 * constant2::
 @end menu
 
-@node constant
-@unnumberedsubsec @code{constant} (192--255)
+@INSTRUCTIONA{constant, 192--255}
 @kindex constant
 
 Pushes a value from the constants vector on the evaluation stack.
@@ -466,9 +458,7 @@ Constants Vector: [n + 10 11 12]
 @end verbatim
 @end table
 
-@node constant2
-@unnumberedsubsec @code{constant2} (129)
-@kindex constant2
+@INSTRUCTIONA{constant2, 129}
 
 Pushes a value from the constants vector on the evaluation stack.
 Although there are special instructions to push any one of the first
@@ -528,9 +518,7 @@ Constants Vector: [n + 0 1 2 .. 61 62 63 64]
 * pushconditioncase::
 @end menu
 
-@node pophandler
-@unnumberedsubsec @code{pophandler} (48)
-@kindex pophandler
+@INSTRUCTIONA{pophandler, 48}
 
 @table @strong
 @item Implements:
@@ -579,9 +567,7 @@ Constants Vector: [(another-error) (one-error) 5 6 7]
 
 @end table
 
-@node conditioncase
-@unnumberedsubsec @code{conditioncase} (49)
-@kindex conditioncase
+@INSTRUCTIONA{conditioncase, 49}
 
 @table @strong
 @item Implements:
@@ -596,9 +582,7 @@ Emacs 24.4
 ?
 @end table
 
-@node pushconditioncase
-@unnumberedsubsec @code{pushconditioncase} (50)
-@kindex pushconditioncase
+@INSTRUCTIONA{pushconditioncase, 50}
 
 @table @strong
 @item Implements:
@@ -659,9 +643,8 @@ Constants Vector: [(another-error) (one-error) 5 6 7]
 * return::
 @end menu
 
-@node goto
-@unnumberedsubsec @code{goto} (130)
-@kindex goto
+@INSTRUCTIONA{goto, 130}
+
 @table @strong
 @item Implements:
 Jump to label given in the 16-bit operand
@@ -692,9 +675,8 @@ Constants Vector: [n]
 
 @end table
 
-@node goto-if-nil
-@unnumberedsubsec @code{goto-if-nil} (131)
-@kindex goto-if-not-nil
+@INSTRUCTIONA{goto-if-nil, 131}
+
 @table @strong
 @item Implements:
 Jump to label given in the 16-bit operand if TOS is nil. In contrast to
@@ -729,9 +711,8 @@ Constants Vector: [n 1310 1311]
 
 @end table
 
-@node goto-if-not-nil
-@unnumberedsubsec @code{goto-if-not-nil} (132)
-@kindex goto-if-not-nil
+@INSTRUCTIONA{goto-if-not-nil, 132}
+
 @table @strong
 @item Implements:
 Jump to label given in the 16-bit operand if TOS is not nil.  In
@@ -769,9 +750,8 @@ Constants Vector: [n 1320]
 Note the change in opcode when bytecode optimization is not performed.
 @end table
 
-@node goto-if-nil-else-pop
-@unnumberedsubsec @code{goto-if-nil-else-pop} (133)
-@kindex goto-if-nil-else-pop
+@INSTRUCTIONA{goto-if-nil-else-pop, 133}
+
 @table @strong
 @item Implements:
 Jump to label given in the 16-bit operand if TOS is nil; otherwise pop
@@ -802,9 +782,8 @@ Constants Vector: [n 1330]
 
 @end table
 
-@node goto-if-not-nil-else-pop
-@unnumberedsubsec @code{goto-if-not-nil-else-pop} (134)
-@kindex goto-if-not-nil-else-pop
+@INSTRUCTIONA{goto-if-not-nil-else-pop, 134}
+
 @table @strong
 @item Implements:
 Jump to label given in the 16-bit operand if TOS is not nil; otherwise
@@ -847,9 +826,8 @@ Constants Vector: [n 1340]
 Note the change in opcode when bytecode optimization is performed.
 @end table
 
-@node return
-@unnumberedsubsec @code{return} (135)
-@kindex return
+@INSTRUCTIONA{return, 135}
+
 @table @strong
 @item Implements:
 Return from function.  This is the last instruction in a function's
@@ -3057,22 +3035,19 @@ Added in Emacs 19.34.
 * stack-set2::
 @end menu
 
-@node discard
-@unnumberedsubsec @code{discard} (136)
-@kindex discard
+@INSTRUCTIONA{discard, 136}
+
 Discard one value from the stack.
 
-@node discardN
-@unnumberedsubsec @code{discardN} (180)
-@kindex discardN
+@INSTRUCTIONA{discardN, 180}
+
 Discards up to 255 arguments from the stack.  Note there is a special
 instruction when there is only one argument.
 
 Added in Emacs 24.1
 
-@node dup
-@unnumberedsubsec @code{dup} (137)
-@kindex dup
+@INSTRUCTIONA{dup, 137}
+
 Make a copy of the top-of-stack value and push that onto the top of the evaluation stack.
 
 @subsubsection Example
@@ -3084,15 +3059,13 @@ PC  Byte  Instruction
  1  135   return
 @end verbatim
 
-@node stack-set
-@unnumberedsubsec @code{stack-set} (180)
-@kindex stack-set
+@INSTRUCTIONA{stack-set, 180}
+
 Like discard. [What's the difference?]
 
 Added in Emacs 24.1
 
-@node stack-set2
-@unnumberedsubsec @code{stack-setN} (181)
+@INSTRUCTIONA{stack-set2, 181}
 @kindex stack-set2
 Like discardN. [What's the difference?]
 Can handle up to 255 stack arguments.  Note there is a special
