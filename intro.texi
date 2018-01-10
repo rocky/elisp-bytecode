@@ -5,7 +5,7 @@
 * Why is ELisp Bytecode important and how is Emacs as a program different?::
 * ELisp Bytecode and LAP::
 * Emacs Lisp Virtual Machine::
-* The Byte-code Function Type and Literal::
+* The Byte-Code Function Type and Literal::
 @end menu
 
 @node Why is ELisp Bytecode important and how is Emacs as a program different?
@@ -103,7 +103,7 @@ function @code{byte-compile-lapcode}.
 @findex make-byte-code
 @verbatim
 (defalias 'get-foo
-  (make-byte-code
+  (make-byte code
     #x000                  ;; lexical parameter counts
     (byte-compile-lapcode
       '((byte-varref . 0)
@@ -167,19 +167,19 @@ bytecode language were of a general nature such as say LLVM IR.}.
 The interpreter is largely backwards compatible, but not forwards
 compatible@footnote{well, eventually old Elisp bytecode instructions
 @emph{do} die}. So old versions of Emacs can't run new
-byte-code. Each instruction is between 1 and 3 bytes. The first byte
+byte code. Each instruction is between 1 and 3 bytes. The first byte
 is the opcode and the second and third bytes are either a single
 operand or a single intermediate value. Some operands are packed into
 the opcode byte.
 
 
-@node The Byte-code Function Type and Literal
-@section The Byte-code Function Type and Literal
+@node The Byte-Code Function Type and Literal
+@section The Byte-Code Function Type and Literal
 
-@emph{This section is largely lifted from Chris Wellon's Emacs
-Byte-code Internals.  See references at the end of this doc.}
+@emph{This section is largely lifted from Chris Wellons' Emacs
+byte code Internals.  See references at the end of this doc.}
 
-An Emacs Lisp object of a byte-code type is analogous to an Elisp
+An Emacs Lisp object of a byte code type is analogous to an Elisp
 vector. As with a vector, elements are accessed in constant time.
 
 The print syntax of this type is similar to vector syntax, except
@@ -310,7 +310,7 @@ keeping the string literal inside the ASCII character set.
 
 It's unusual to see a byte-code string that doesn't end with 135
 (#o207, return). Perhaps this should have been implicit? I'll talk
-more about the byte-code below.
+more about the byte code below.
 
 @node Constants Vector
 @unnumberedsubsec Constants Vector
@@ -378,7 +378,7 @@ body of the function.
 
 The fourth object in a bytecode-function literal is an integer which gives
 the maximum stack space used by this byte-code. This value can be
-derived from the byte-code itself, but it's pre-computed so that the
+derived from the byte code itself, but it's pre-computed so that the
 byte-code interpreter can quickly check for stack
 overflow. Under-reporting this value is probably another way to crash
 Emacs.
