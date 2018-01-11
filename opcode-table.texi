@@ -744,264 +744,320 @@ and for a description of how to interpret the stack-effect field.
 @tab 1
 @tab
 @tab @math{+1}
-@end multitable
-
-@multitable @columnfractions .09 .09 .31 .55 .18
 @item @verb{|0165|}
 @tab @verb{| 117|}
 @tab @verb{|  forward-char|}
-@tab Call @code{forward-char}
+@tab 1
+@tab @xref{forward-char}
 @tab @math{-1+1}
 @item @verb{|0166|}
 @tab @verb{| 118|}
 @tab @verb{|  forward-word|}
-@tab Call @code{forward-word}
+@tab 1
+@tab @xref{forward-word}
 @tab @math{-1+1}
 @item @verb{|0167|}
 @tab @verb{| 119|}
 @tab @verb{|  skip-chars-forward|}
-@tab Call @code{skip-chars-forward}
+@tab 1
+@tab @xref{skip-chars-forward}
 @tab @math{-2+1}
 @item @verb{|0170|}
 @tab @verb{| 120|}
 @tab @verb{|  skip-chars-backward|}
-@tab Call @code{skip-chars-backward}
+@tab 1
+@tab @xref{skip-chars-backward}
 @tab @math{-2+1}
 @item @verb{|0171|}
 @tab @verb{| 121|}
 @tab @verb{|  forward-line|}
-@tab Call @code{forward-line}
+@tab 1
+@tab @xref{forward-line}
 @tab @math{-1+1}
 @item @verb{|0172|}
 @tab @verb{| 122|}
 @tab @verb{|  char-syntax|}
-@tab Call @code{char-syntax}
+@tab 1
+@tab @xref{char-syntax}
 @tab @math{-1+1}
 @item @verb{|0173|}
 @tab @verb{| 123|}
 @tab @verb{|  buffer-substring|}
-@tab Call @code{buffer-substring}
+@tab 1
+@tab @xref{buffer-substring}
 @tab @math{-2+1}
 @item @verb{|0174|}
 @tab @verb{| 124|}
 @tab @verb{|  delete-region|}
-@tab Call @code{delete-region}
+@tab 1
+@tab @xref{delete-region}
 @tab @math{-2+1}
 @item @verb{|0175|}
 @tab @verb{| 125|}
 @tab @verb{|  narrow-to-region|}
-@tab Call @code{narrow-to-region}
+@tab 1
+@tab @xref{narrow-to-region}
 @tab @math{-2+1}
 @item @verb{|0176|}
 @tab @verb{| 126|}
 @tab @verb{|  widen|}
-@tab Call @code{widen}
+@tab 1
+@tab @xref{widen}
 @tab @math{-0+1}
 @item @verb{|0177|}
 @tab @verb{| 127|}
 @tab @verb{|  end-of-line|}
-@tab Call @code{end-of-line}
+@tab 1
+@tab @xref{end-of-line}
 @tab @math{-1+1}
 @end multitable
 
 @SECTION{Opcodes (0200-0277)}
+
+@multitable @columnfractions .09 .09 .31 .08 .43 .18
+@headitem
+@verb{| |}Oct
+@tab @verb{| |}Dec
+@tab @verb{| |} Instruction
+@tab Size
+@tab Description
+@tab Stack
+
+@item @verb{|0201|}
+@tab @verb{| 129|}
+@tab @verb{|  constant2|}
+@tab 1
+@tab @xref{constant2}
+@tab @math{+1}
+@item @verb{|0202|}
+@tab @verb{| 130|}
+@tab @verb{|  goto|}
+@tab 1
+@tab @xref{goto}
+@tab @math{-1+0}
+@item @verb{|0203|}
+@tab @verb{| 131|}
+@tab @verb{|  goto-if-nil|}
+@tab 1
+@tab @xref{goto-if-nil}
+@tab @math{-1+0}
+@item @verb{|0204|}
+@tab @verb{| 132|}
+@tab @verb{|  goto-if-not-nil|}
+@tab 1
+@tab @xref{goto-if-not-nil}
+@tab @math{-1+0}
+@item @verb{|0205|}
+@tab @verb{| 133|}
+@tab @verb{|  goto-if-nil-
+ else-pop|}
+@tab 1
+@tab @xref{goto-if-nil-else-pop}
+@tab @math{\phi(-1,0)+0}
+@item @verb{|0206|}
+@tab @verb{| 134|}
+@tab @verb{|  goto-if-not-
+ nil-else-pop|}
+@tab 1
+@tab @xref{goto-if-not-nil-else-pop}
+@tab @math{\phi(-1,0)+0}
+@item @verb{|0207|}
+@tab @verb{| 135|}
+@tab @verb{|  return|}
+@tab 1
+@tab @xref{return}
+@tab @math{-1+0}
+@item @verb{|0210|}
+@tab @verb{| 136|}
+@tab @verb{|  discard|}
+@tab 1
+@tab @xref{discard}
+@tab @math{-1+0}
+@item @verb{|0211|}
+@tab @verb{| 137|}
+@tab @verb{|  dup|}
+@tab 1
+@tab @xref{dup}
+@tab @math{-0+1}
+@item @verb{|0212|}
+@tab @verb{| 138|}
+@tab @verb{|  save-excursion|}
+@tab 1
+@tab @xref{save-excursion}
+@tab @math{-0+0}
+
+@item @verb{|0257|}
+@tab @verb{| 175|}
+@tab @verb{|  listN|}
+@tab 2
+@tab @xref{listN}
+@tab @math{-n+1}
+@item @verb{|0260|}
+@tab @verb{| 176|}
+@tab @verb{|  concatN|}
+@tab 2
+@tab @xref{concatN}
+@tab @math{-n+1}
+@item @verb{|0261|}
+@tab @verb{| 177|}
+@tab @verb{|  insertN|}
+@tab 2
+@tab @xref{insertN}
+@tab @math{-n+1}
+@item @verb{|0262|}
+@tab @verb{| 178|}
+@tab @verb{|  stack-set|}
+@tab 1
+@tab @xref{stack-set}
+@item @verb{|0263|}
+@tab @verb{| 179|}
+@tab @verb{|  stack-set2|}
+@tab 1
+@tab @xref{stack-set2}
+
+@item @verb{|0223|}
+@tab @verb{| 147|}
+@tab @verb{|  set-marker|}
+@tab 1
+@tab @xref{set-marker}
+@tab @math{-3+1}
+@item @verb{|0224|}
+@tab @verb{| 148|}
+@tab @verb{|  match-beginning|}
+@tab 1
+@tab @xref{match-beginning}
+@tab @math{-1+1}
+@item @verb{|0225|}
+@tab @verb{| 149|}
+@tab @verb{|  match-end|}
+@tab 1
+@tab @xref{match-end}
+@tab @math{-1+1}
+@item @verb{|0226|}
+@tab @verb{| 150|}
+@tab @verb{|  upcase|}
+@tab 1
+@tab @xref{upcase}
+@tab @math{-1+1}
+@item @verb{|0227|}
+@tab @verb{| 151|}
+@tab @verb{|  downcase|}
+@tab 1
+@tab @xref{downcase}
+@tab @math{-1+1}
+@item @verb{|0230|}
+@tab @verb{| 152|}
+@tab @verb{|  stringeqlsign|}
+@tab 1
+@tab @xref{stringeqlsign}
+@tab @math{-2+1}
+@item @verb{|0231|}
+@tab @verb{| 153|}
+@tab @verb{|  stringlss|}
+@tab 1
+@tab @xref{stringlss}
+@tab @math{-2+1}
+@item @verb{|0232|}
+@tab @verb{| 154|}
+@tab @verb{|  equal|}
+@tab 1
+@tab @xref{equal}
+@tab @math{-2+1}
+@item @verb{|0233|}
+@tab @verb{| 155|}
+@tab @verb{|  nthcdr|}
+@tab 1
+@tab @xref{nthcdr}
+@tab @math{-2+1}
+@item @verb{|0234|}
+@tab @verb{| 156|}
+@tab @verb{|  elt|}
+@tab 1
+@tab @xref{elt}
+@tab @math{-2+1}
+@item @verb{|0235|}
+@tab @verb{| 157|}
+@tab @verb{|  member|}
+@tab 1
+@tab @xref{member}
+@tab @math{-2+1}
+@item @verb{|0236|}
+@tab @verb{| 158|}
+@tab @verb{|  assq|}
+@tab 1
+@tab @xref{assq}
+@tab @math{-2+1}
+@item @verb{|0237|}
+@tab @verb{| 159|}
+@tab @verb{|  nreverse|}
+@tab 1
+@tab @xref{nreverse}
+@tab @math{-1+1}
+@item @verb{|0240|}
+@tab @verb{| 160|}
+@tab @verb{|  setcar|}
+@tab 1
+@tab @xref{setcar}
+@tab @math{-2+1}
+@item @verb{|0241|}
+@tab @verb{| 161|}
+@tab @verb{|  setcdr|}
+@tab 1
+@tab @xref{setcdr}
+@tab @math{-2+1}
+@item @verb{|0242|}
+@tab @verb{| 162|}
+@tab @verb{|  car-safe|}
+@tab 1
+@tab @xref{car-safe}
+@tab @math{-1+1}
+@item @verb{|0243|}
+@tab @verb{| 163|}
+@tab @verb{|  cdr-safe|}
+@tab 1
+@tab @xref{cdr-safe}
+@tab @math{-1+1}
+@item @verb{|0244|}
+@tab @verb{| 164|}
+@tab @verb{|  nconc|}
+@tab 1
+@tab @xref{nconc}
+@tab @math{-2+1}
+@item @verb{|0245|}
+@tab @verb{| 165|}
+@tab @verb{|  quo|}
+@tab 1
+@tab @xref{quo}
+@tab @math{-2+1}
+@item @verb{|0246|}
+@tab @verb{| 166|}
+@tab @verb{|  rem|}
+@tab 1
+@tab @xref{rem}
+@tab @math{-2+1}
+@item @verb{|0247|}
+@tab @verb{| 167|}
+@tab @verb{|  numberp|}
+@tab 1
+@tab @xref{numberp}
+@tab @math{-1+1}
+@item @verb{|0250|}
+@tab @verb{| 168|}
+@tab @verb{|  integerp|}
+@tab 1
+@tab @xref{integerp}
+@tab @math{-1+1}
+@item @verb{|0251|}
+@tab @verb{| 169|}
+@tab
+
+@end multitable
 @multitable @columnfractions .09 .09 .31 .55 .18
 
 @item @verb{|0200|}
 @tab @verb{| 128|}
 @tab
 @tab Unused
-@end multitable
-
-@multitable @columnfractions .09 .09 .32 .54 .18
-@item @verb{|0201|}
-@tab @verb{| 129|}
-@tab @verb{|  constant2|}
-@tab Load a constant 0--65535
-@tab @math{+1}
-@item @verb{|0202|}
-@tab @verb{| 130|}
-@tab @verb{|  goto|}
-@tab Unconditional Jump
-@tab @math{-1+0}
-@item @verb{|0203|}
-@tab @verb{| 131|}
-@tab @verb{|  goto-if-nil|}
-@tab Jump if TOS is nil
-@tab @math{-1+0}
-@item @verb{|0204|}
-@tab @verb{| 132|}
-@tab @verb{|  goto-if-not-nil|}
-@tab Jump if TOS is not nil
-@tab @math{-1+0}
-@item @verb{|0205|}
-@tab @verb{| 133|}
-@tab @verb{|  goto-if-nil-
- else-pop|}
-@tab Jump if TOS is nil, else pop
-@tab @math{\phi(-1,0)+0}
-@item @verb{|0206|}
-@tab @verb{| 134|}
-@tab @verb{|  goto-if-not-
- nil-else-pop|}
-@tab Jump if TOS is not nil, else pop
-@tab @math{\phi(-1,0)+0}
-@item @verb{|0207|}
-@tab @verb{| 135|}
-@tab @verb{|  return|}
-@tab return from a function
-@tab @math{-1+0}
-@item @verb{|0210|}
-@tab @verb{| 136|}
-@tab @verb{|  discard|}
-@tab Discard top stack value
-@tab @math{-1+0}
-@item @verb{|0211|}
-@tab @verb{| 137|}
-@tab @verb{|  dup|}
-@tab Duplicate top stack value
-@tab @math{-0+1}
-@item @verb{|0212|}
-@tab @verb{| 138|}
-@tab @verb{|  save-excursion|}
-@tab Make a binding recording buffer, point, and mark.
-@tab @math{-0+0}
-
-@item @verb{|0257|}
-@tab @verb{| 175|}
-@tab @verb{|  listN|}
-@tab
-@tab @math{-n+1}
-@item @verb{|0260|}
-@tab @verb{| 176|}
-@tab @verb{|  concatN|}
-@tab
-@tab @math{-n+1}
-@item @verb{|0261|}
-@tab @verb{| 177|}
-@tab @verb{|  insertN|}
-@tab
-@tab @math{-n+1}
-@item @verb{|0262|}
-@tab @verb{| 178|}
-@tab @verb{|  stack-set|}
-@item @verb{|0263|}
-@tab @verb{| 179|}
-@tab @verb{|  stack-set2|}
-
-@item @verb{|0223|}
-@tab @verb{| 147|}
-@tab @verb{|  set-marker|}
-@tab Call @code{set-marker}, three arguments.
-@tab @math{-3+1}
-@item @verb{|0224|}
-@tab @verb{| 148|}
-@tab @verb{|  match-beginning|}
-@tab Call @code{match-beginning}, one argument.
-@tab @math{-1+1}
-@item @verb{|0225|}
-@tab @verb{| 149|}
-@tab @verb{|  match-end|}
-@tab Call @code{match-end}, one argument.
-@tab @math{-1+1}
-@item @verb{|0226|}
-@tab @verb{| 150|}
-@tab @verb{|  upcase|}
-@tab Call @code{upcase}, one argument.
-@tab @math{-1+1}
-@item @verb{|0227|}
-@tab @verb{| 151|}
-@tab @verb{|  downcase|}
-@tab Call @code{downcase}, one argument.
-@tab @math{-1+1}
-@item @verb{|0230|}
-@tab @verb{| 152|}
-@tab @verb{|  stringeqlsign|}
-@tab Call @code{string=}, two arguments, comparing two strings for equality.
-@tab @math{-2+1}
-@item @verb{|0231|}
-@tab @verb{| 153|}
-@tab @verb{|  stringlss|}
-@tab Call @code{string<}, two arguments, comparing two strings.
-@tab @math{-2+1}
-@item @verb{|0232|}
-@tab @verb{| 154|}
-@tab @verb{|  equal|}
-@tab Call @code{equal}, two arguments.
-@tab @math{-2+1}
-@item @verb{|0233|}
-@tab @verb{| 155|}
-@tab @verb{|  nthcdr|}
-@tab Call @code{nthcdr}, two arguments.
-@tab @math{-2+1}
-@item @verb{|0234|}
-@tab @verb{| 156|}
-@tab @verb{|  elt|}
-@tab Call @code{elt}, two arguments.
-@tab @math{-2+1}
-@item @verb{|0235|}
-@tab @verb{| 157|}
-@tab @verb{|  member|}
-@tab Call @code{member}, two arguments.
-@tab @math{-2+1}
-@item @verb{|0236|}
-@tab @verb{| 158|}
-@tab @verb{|  assq|}
-@tab Call @code{assq}, two arguments.
-@tab @math{-2+1}
-@item @verb{|0237|}
-@tab @verb{| 159|}
-@tab @verb{|  nreverse|}
-@tab Call @code{nreverse}, one argument.
-@tab @math{-1+1}
-@item @verb{|0240|}
-@tab @verb{| 160|}
-@tab @verb{|  setcar|}
-@tab Call @code{setcar}, two arguments.
-@tab @math{-2+1}
-@item @verb{|0241|}
-@tab @verb{| 161|}
-@tab @verb{|  setcdr|}
-@tab Call @code{setcdr}, two arguments.
-@tab @math{-2+1}
-@item @verb{|0242|}
-@tab @verb{| 162|}
-@tab @verb{|  car-safe|}
-@tab Call @code{car-safe}, one argument.
-@tab @math{-1+1}
-@item @verb{|0243|}
-@tab @verb{| 163|}
-@tab @verb{|  cdr-safe|}
-@tab Call @code{cdr-safe}, one argument.
-@tab @math{-1+1}
-@item @verb{|0244|}
-@tab @verb{| 164|}
-@tab @verb{|  nconc|}
-@tab Call @code{nconc}, two arguments.
-@tab @math{-2+1}
-@item @verb{|0245|}
-@tab @verb{| 165|}
-@tab @verb{|  quo|}
-@tab Call @code{/}, two arguments, dividing the two values at the top of the stack.
-@tab @math{-2+1}
-@item @verb{|0246|}
-@tab @verb{| 166|}
-@tab @verb{|  rem|}
-@tab Call @code{%}, two arguments, calculating the modulus of the two values at the top of the stack.
-@tab @math{-2+1}
-@item @verb{|0247|}
-@tab @verb{| 167|}
-@tab @verb{|  numberp|}
-@tab Call @code{numberp}, one argument.
-@tab @math{-1+1}
-@item @verb{|0250|}
-@tab @verb{| 168|}
-@tab @verb{|  integerp|}
-@tab Call @code{integerp}, one argument.
-@tab @math{-1+1}
-@item @verb{|0251|}
-@tab @verb{| 169|}
-@tab
 
 @item @verb{|0252|}
 @tab @verb{| 170|}
@@ -1102,325 +1158,397 @@ and for a description of how to interpret the stack-effect field.
 @node Opcodes (0300-0377) Constants
 @section Opcodes (0300-3277) Constants
 
-@multitable @columnfractions .09 .09 .31 .55 .18
+@multitable @columnfractions .09 .09 .31 .08 .43 .18
+@headitem
+@verb{| |}Oct
+@tab @verb{| |}Dec
+@tab @verb{| |} Instruction
+@tab Size
+@tab Description
+@tab Stack
+
 @item @verb{|0300|}
 @tab @verb{| 192|}
 @tab @verb{|  constant[0]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0301|}
 @tab @verb{| 193|}
 @tab @verb{|  constant[1]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0302|}
 @tab @verb{| 194|}
 @tab @verb{|  constant[2]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0303|}
 @tab @verb{| 195|}
 @tab @verb{|  constant[3]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0304|}
 @tab @verb{| 196|}
 @tab @verb{|  constant[4]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0305|}
 @tab @verb{| 197|}
 @tab @verb{|  constant[5]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0306|}
 @tab @verb{| 198|}
 @tab @verb{|  constant[6]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0307|}
 @tab @verb{| 199|}
 @tab @verb{|  constant[7]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0310|}
 @tab @verb{| 200|}
 @tab @verb{|  constant[8]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0311|}
 @tab @verb{| 201|}
 @tab @verb{|  constant[9]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0312|}
 @tab @verb{| 202|}
 @tab @verb{|  constant[10]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0313|}
 @tab @verb{| 203|}
 @tab @verb{|  constant[11]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0314|}
 @tab @verb{| 204|}
 @tab @verb{|  constant[12]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0315|}
 @tab @verb{| 205|}
 @tab @verb{|  constant[13]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0316|}
 @tab @verb{| 206|}
 @tab @verb{|  constant[14]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0317|}
 @tab @verb{| 207|}
 @tab @verb{|  constant[15]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0320|}
 @tab @verb{| 208|}
 @tab @verb{|  constant[16]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0321|}
 @tab @verb{| 209|}
 @tab @verb{|  constant[17]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0322|}
 @tab @verb{| 210|}
 @tab @verb{|  constant[18]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0323|}
 @tab @verb{| 211|}
 @tab @verb{|  constant[19]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0324|}
 @tab @verb{| 212|}
 @tab @verb{|  constant[20]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0325|}
 @tab @verb{| 213|}
 @tab @verb{|  constant[21]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0326|}
 @tab @verb{| 214|}
 @tab @verb{|  constant[22]|}
-     @tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0327|}
 @tab @verb{| 215|}
 @tab @verb{|  constant[23]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0330|}
 @tab @verb{| 216|}
 @tab @verb{|  constant[24]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0331|}
 @tab @verb{| 217|}
 @tab @verb{|  constant[25]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0332|}
 @tab @verb{| 218|}
 @tab @verb{|  constant[26]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0333|}
 @tab @verb{| 219|}
 @tab @verb{|  constant[27]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0334|}
 @tab @verb{| 220|}
 @tab @verb{|  constant[28]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0335|}
 @tab @verb{| 221|}
 @tab @verb{|  constant[29]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0336|}
 @tab @verb{| 222|}
 @tab @verb{|  constant[30]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0337|}
 @tab @verb{| 223|}
 @tab @verb{|  constant[31]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0340|}
 @tab @verb{| 224|}
 @tab @verb{|  constant[32]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0341|}
 @tab @verb{| 225|}
 @tab @verb{|  constant[33]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0342|}
 @tab @verb{| 226|}
 @tab @verb{|  constant[34]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0343|}
 @tab @verb{| 227|}
 @tab @verb{|  constant[35]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0344|}
 @tab @verb{| 228|}
 @tab @verb{|  constant[36]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0345|}
 @tab @verb{| 229|}
 @tab @verb{|  constant[37]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0346|}
 @tab @verb{| 230|}
 @tab @verb{|  constant[38]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0347|}
 @tab @verb{| 231|}
 @tab @verb{|  constant[39]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0350|}
 @tab @verb{| 232|}
 @tab @verb{|  constant[40]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0351|}
 @tab @verb{| 233|}
 @tab @verb{|  constant[41]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0352|}
 @tab @verb{| 234|}
 @tab @verb{|  constant[42]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0353|}
 @tab @verb{| 235|}
 @tab @verb{|  constant[43]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0354|}
 @tab @verb{| 236|}
 @tab @verb{|  constant[44]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0355|}
 @tab @verb{| 237|}
 @tab @verb{|  constant[45]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0356|}
 @tab @verb{| 238|}
 @tab @verb{|  constant[46]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0357|}
 @tab @verb{| 239|}
 @tab @verb{|  constant[47]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0360|}
 @tab @verb{| 240|}
 @tab @verb{|  constant[48]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0361|}
 @tab @verb{| 241|}
 @tab @verb{|  constant[49]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0362|}
 @tab @verb{| 242|}
 @tab @verb{|  constant[50]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0363|}
 @tab @verb{| 243|}
 @tab @verb{|  constant[51]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0364|}
 @tab @verb{| 244|}
 @tab @verb{|  constant[52]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0365|}
 @tab @verb{| 245|}
 @tab @verb{|  constant[53]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0366|}
 @tab @verb{| 246|}
 @tab @verb{|  constant[54]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0367|}
 @tab @verb{| 247|}
 @tab @verb{|  constant[55]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0370|}
 @tab @verb{| 248|}
 @tab @verb{|  constant[56]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0371|}
 @tab @verb{| 249|}
 @tab @verb{|  constant[57]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0372|}
 @tab @verb{| 250|}
 @tab @verb{|  constant[58]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0373|}
 @tab @verb{| 251|}
 @tab @verb{|  constant[59]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0374|}
 @tab @verb{| 252|}
 @tab @verb{|  constant[60]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0375|}
 @tab @verb{| 253|}
 @tab @verb{|  constant[61]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0376|}
 @tab @verb{| 254|}
 @tab @verb{|  constant[62]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @item @verb{|0377|}
 @tab @verb{| 255|}
 @tab @verb{|  constant[63]|}
-@tab
+@tab 1
+@tab @xref{constant}
 @tab @math{+1}
 @end multitable
