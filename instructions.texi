@@ -11,6 +11,7 @@
 * Function-Call Instructions::
 * Stack-Manipulation Instructions::
 * Binding Instructions::
+* Unused Instructions::
 @end menu
 
 @SECTIONA{Instruction-Description Format}
@@ -641,6 +642,7 @@ Constants Vector: [(another-error) (one-error) 5 6 7]
 * goto-if-nil-else-pop::
 * goto-if-not-nil-else-pop::
 * return::
+* switch::
 @end menu
 
 @FirstSubSecInstruction{goto, 130}
@@ -848,6 +850,25 @@ PC  Byte  Instruction
 Constants Vector: [1350]
 @end verbatim
 
+@end table
+
+@SubSecInstruction{switch, 135}
+
+Jumps to entry in a jumptable
+
+@table @strong
+@item Implements:
+Jumps to entry in a jumptable
+@item Generated via:
+??
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+0}
+@item Added in:
+Emacs 26.1
+@item Example:
+?
 @end table
 
 @SECTION{Function-Call Instructions}
@@ -2696,7 +2717,7 @@ but simply call the corresponding C function.
 * bobp::
 * current-buffer::
 * set-buffer::
-* save-current-buffer::
+* save-current-buffer-1::
 * forward-char::
 * forward-word::
 * skip-chars-forward::
@@ -2793,16 +2814,16 @@ PC  Byte  Instruction
 Constants Vector: ["*scratch"]
 @end verbatim
 
-@SubSubSecInstruction{save-current-buffer, 114}
+@SubSubSecInstruction{save-current-buffer-1, 114}
 
 Call @code{save-current-buffer}.
 
-Replaces older @code{save-current-buffer-OBSOLETE}.
+Replaces older @code{save-current-buffer}.
 
 Added in Emacs 19.34.
 
 @strong{Example}
-@code{(defun scb() (save-current-buffer (prog 5)))} generates:
+@code{(defun save-curent-buffer-1-eg() (save-current-buffer (prog 5)))} generates:
 @verbatim
 PC  Byte  Instruction
  0  114   save-current-buffer
@@ -2954,7 +2975,63 @@ These instructions manipulate the special-bindings stack by creating a
 new binding when executed.  They need to be balanced with
 @code{unbind} instructions.
 
-@unnumberedsubsec @code{save-excursion} (138)
-@kindex save-excursion
+@menu
+* save-excursion::
+@end menu
+
+@FirstSubSecInstruction{save-excursion, 138}
 
 Make a binding recording buffer, point, and mark.
+
+@SECTION{Unused Instructions}
+
+These instructions are not generated. In some cases, they were
+generated in a older version of Emacs. In some cases the instructions
+were planned on being used but never were. In some cases, the
+instructions are still handled if they appear (such as from older
+bytecode), but in other cases they are no longer accepted by the interperter
+
+@menu
+* Rgoto::
+* Rgotoifnil::
+* Rgotoifnonnil::
+* Rgotoifnilelsepop::
+* Rgotoifnonnilelsepop::
+* save-current-buffer::
+* bmark::
+* scan-buffer::
+* read-char::
+* set-mark::
+* interactive-p::
+@end menu
+
+@FirstSubSecInstruction{Rgoto, 170}
+
+Relative jump version of @pxref{goto}.
+
+@FirstSubSecInstruction{Rgotoifnil, 171}
+
+Relative jump version of @pxref{goto-if-nil}.
+
+@FirstSubSecInstruction{Rgotoifnonnil, 172}
+
+Relative-jump version of @pxref{goto-if-not-nil}.
+
+@FirstSubSecInstruction{Rgotoifnilelsepop, 173}
+
+Relative-jump version of @pxref{goto-if-nil-else-pop}.
+
+@FirstSubSecInstruction{Rgotoifnonnilelsepop, 174}
+
+Relative-jump version of @pxref{goto-if-not-nil-else-pop}.
+
+
+@FirstSubSecInstruction{save-current-buffer, 97}
+@FirstSubSecInstruction{bmark, 97}
+
+Used in V 17
+
+@FirstSubSecInstruction{scan-buffer, 107}
+@FirstSubSecInstruction{read-char, 114}
+@FirstSubSecInstruction{set-mark, 115}
+@FirstSubSecInstruction{interactive-p, 116}
