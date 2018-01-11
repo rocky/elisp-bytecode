@@ -1,5 +1,5 @@
-@node Emacs Lisp Bytecode Environment
-@chapter Emacs Lisp Bytecode Environment
+@node Emacs Lisp Byte-Code Environment
+@chapter Emacs Lisp Byte-Code Environment
 
 In this chapter we will discuss the ways Emacs creates, modifies and
 uses bytecode in order to run code. We describe a little of the two
@@ -7,15 +7,15 @@ kinds of interpreters Emacs has, what goes into a bytecode file, and
 the interoperability of bytecode between versions.
 
 @menu
-* Emacs Lisp Bytecode Objects::
-* Emacs Lisp Bytecode Compiler::
-* Emacs Lisp Bytecode Interpreter::
-* Emacs Lisp Bytecode Instructions::
-* Emacs Lisp Bytecode Files::
+* Byte-Code Objects::
+* Byte-Code Compiler::
+* Byte-Code Interpreter::
+* Byte-Code Instructions::
+* Byte-Code Files::
 @end menu
 
-@node Emacs Lisp Bytecode Objects
-@section Emacs Lisp Bytecode Objects
+@node Byte-Code Objects
+@section Byte-Code Objects
 
 Emacs Lisp bytecode isn't a low-level sequence of octets (bytes) that
 requires a lot of additional special-purpose machinery to run.  There
@@ -29,8 +29,9 @@ Lisp ``cons'' node, or a Lisp symbol). You can check if a value is
 bytecode using the @code{byte-compile-function-p} predicate
 function. Although there aren't methods to extract the components of
 bytecode once it is built, the bytecode object is made up of other
-normal Emacs Lisp objects described in @pxref{The Byte-code Function
-Type and Literal}. Bytecode is created using the @code{byte-compile} function.
+normal Emacs Lisp objects described in @pxref{The Byte-Code Function
+Type and Literal}. Byte code is created using the @code{byte-compile}
+function.
 
 One important component of the bytecode object is the ``constants
 vector.''  It contains important Lisp Objects that are required to
@@ -38,10 +39,10 @@ make sense of the bytecode-instruction operands: functions that share
 the same bytecode-instruction byte string, but differ in their
 constants vectors, can do very different things.
 
-@node Emacs Lisp Bytecode Compiler
-@section Emacs Lisp Bytecode Compiler
+@node Byte-Code Compiler
+@section Byte-Code Compiler
 
-The Emacs Lisp Bytecode compiler is an ahead-of-time compiler that
+The Byte-Code compiler is an ahead-of-time compiler that
 accepts Emacs Lisp input and produces bytecode that can be run by
 Emacs. The compiler itself is written in Emacs Lisp @footnote{usually,
 the compiler itself is compiled into bytecode, which avoids overflow
@@ -55,8 +56,8 @@ compilation, but not kept in memory or used when running bytecode.
 While it is possible to go back to LAP code from bytecode, this is
 done only in order to inline functions.
 
-@node Emacs Lisp Bytecode Interpreter
-@section Emacs Lisp Bytecode Interpreter
+@node Byte-Code Interpreter
+@section Byte-Code Interpreter
 
 When a function is called for which compiled bytecode is available,
 control passes to the bytecode interpreter.  The interpreter is
@@ -90,8 +91,8 @@ instance.
 Bytecode objects contain a number safely estimating the maximum stack
 size the evaluation stack can grow to.
 
-@node Emacs Lisp Bytecode Instructions
-@section Emacs Lisp Bytecode Instructions
+@node Byte-Code Instructions
+@section Byte-Code Instructions
 
 The bytecode interpreter, once it has set up the evaluation stack and
 constants vector, executes the instructions that make up the bytecode
@@ -128,8 +129,8 @@ First @code{a} and @code{b} are dereferenced and their values pushed
 onto the evaluation stack; then @code{plus} is executed, leaving
 only a single value, the sum of @code{a} and @code{b}, on the stack.
 
-@node Emacs Lisp Bytecode Files
-@section Emacs Lisp Bytecode Files
+@node Byte-Code Files
+@section Byte-Code Files
 
 When Emacs is build from source code, there is C code for some
 primitive or built-in functions. These include Lisp functions like
@@ -177,7 +178,7 @@ source code.
 
 In fact, you can take a file with the @code{.elc} extension, rename it
 to have an @code{.el} extension instead and @code{load} that. And that
-will run exactly the same if it had been loaded as a byte-code
+will run exactly the same if it had been loaded as a byte code
 file@footnote{If you go the other direction and rename a Lisp file as
 a bytecode file, Emacs will notice the discrepency because at the top
 of the file is a header that Emacs checks. But if you add a

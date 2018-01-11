@@ -1,5 +1,5 @@
-@node ELisp Bytecode Instructions
-@chapter ELisp Bytecode Instructions
+@node Emacs Lisp Byte-Code Instructions
+@chapter Emacs Lisp Byte-Code Instructions
 
 
 @menu
@@ -9,12 +9,12 @@
 * Exception-Handling Instructions::
 * Control-Flow Instructions::
 * Function-Call Instructions::
-* Stack Manipulation Instructions::
+* Stack-Manipulation Instructions::
 * Binding Instructions::
+* Unused Instructions::
 @end menu
 
-@node Instruction-Description Format
-@section Instruction-Description Format
+@SECTIONA{Instruction-Description Format}
 
 In this chapter we'll document instructions over the course of the
 entire history of Emacs. Or at least we aim to.
@@ -101,7 +101,7 @@ The description of fields use for describing each instruction is as follows
 @item Implements:
 A description of what the instruction does.
 @item Generated via:
-These give some ELisp constructs that may generate the instruction. Of
+These give some Emacs Lisp constructs that may generate the instruction. Of
 course there may be many constructs and there may be limiting
 situations within that construct. We'll only give one or a few of the
 constructs, and we'll try to indicate a limiting condition where
@@ -125,7 +125,7 @@ This is optional. When it is given this gives which version of Emacs
 the opcode was added. It may also give when the opcode became obsolete
 or was no longer implemented.
 @item Example:
-Some ELisp code to show how the instruction is used. For example
+Some Emacs Lisp code to show how the instruction is used. For example
 the for the @code{goto} instruction we give:
 
 @verbatim
@@ -156,9 +156,7 @@ Unless otherwise stated, all code examples were compiled in Emacs 25
 with optimization turned off.
 @end table
 
-@page
-@node Argument-Packing Instructions
-@section Argument-Packing Instructions
+@SECTION{Argument-Packing Instructions}
 
 These instructions from opcode 1 to 47 encode an operand value from 0
 to 7 encoded into the first byte.  If the encoded value is 6, the actual
@@ -175,9 +173,7 @@ opcode, in Little-Endian byte order.
 * unbind::
 @end menu
 
-@node stack-ref
-@unnumberedsubsec @code{stack-ref} (1--7)
-@kindex stack-ref
+@FirstSubSecInstruction{stack-ref, 1--7}
 
 Reference a value from the evaluation stack.
 
@@ -237,8 +233,7 @@ is more likely to catch situations where random sections of memory are
 run such as by setting the PC incorrectly.
 
 
-@node varref
-@unnumberedsubsec @code{varref} (8--15)
+@SubSecInstruction{varref, 8--15}
 
 Pushes the value of the symbol in the constants vector onto the
 evaluation stack.
@@ -273,8 +268,7 @@ Constants Vector: [n]
 @end verbatim
 @end table
 
-@node varset
-@unnumberedsubsec @code{varset} (16--23)
+@SubSecInstruction{varset, 16--23}
 
 Sets a variable listed in the constants vector to the TOS value
 of the stack.
@@ -309,9 +303,7 @@ Constants Vector: [n 5]
 @end verbatim
 @end table
 
-@node varbind
-@unnumberedsubsec @code{varbind} (24--31)
-@kindex varbind
+@SubSecInstruction{varbind, 24--31}
 
 Binds a variable to a symbol in the constants vector, and adds the
 symbol to a special-bindings stack.
@@ -346,9 +338,7 @@ Constants Vector: [c 1]
 @end verbatim
 @end table
 
-@node call
-@unnumberedsubsec @code{call} (32--39)
-@kindex call
+@SubSecInstruction{call, 32--39}
 
 Calls a function.  The instruction argument specifies the number of
 arguments to pass to the function from the stack, excluding the
@@ -384,8 +374,7 @@ Constants Vector: [exchange-point-and-mark next-line 2]
 @end verbatim
 @end table
 
-@node unbind
-@unnumberedsubsec @code{unbind} (40--47)
+@SubSecInstruction{unbind, 40--47}
 @kindex unbind
 
 Remove the binding of a variable to symbol and from the special
@@ -421,8 +410,7 @@ Constants Vector: [c 1]
 @end table
 
 
-@node Constants-Vector Retrieval Instructions
-@section Constants-Vector Retrieval Instructions
+@SECTION{Constants-Vector Retrieval Instructions}
 
 The instructions from opcode 192 to 255 push a value from the
 Constants Vector. @xref{Constants Vector}. Opcode 192 pushes the first
@@ -434,8 +422,7 @@ constants, opcode @code{constant2} (opcode 129) is used instead.
 * constant2::
 @end menu
 
-@node constant
-@unnumberedsubsec @code{constant} (192--255)
+@FirstSubSecInstruction{constant, 192--255}
 @kindex constant
 
 Pushes a value from the constants vector on the evaluation stack.
@@ -472,9 +459,7 @@ Constants Vector: [n + 10 11 12]
 @end verbatim
 @end table
 
-@node constant2
-@unnumberedsubsec @code{constant2} (129)
-@kindex constant2
+@SubSecInstruction{constant2, 129}
 
 Pushes a value from the constants vector on the evaluation stack.
 Although there are special instructions to push any one of the first
@@ -526,9 +511,7 @@ Constants Vector: [n + 0 1 2 .. 61 62 63 64]
 @end verbatim
 @end table
 
-@page
-@node Exception-Handling Instructions
-@section Exception-Handling Instructions
+@SECTION{Exception-Handling Instructions}
 
 @menu
 * pophandler::
@@ -536,9 +519,7 @@ Constants Vector: [n + 0 1 2 .. 61 62 63 64]
 * pushconditioncase::
 @end menu
 
-@node pophandler
-@unnumberedsubsec @code{pophandler} (48)
-@kindex pophandler
+@FirstSubSecInstruction{pophandler, 48}
 
 @table @strong
 @item Implements:
@@ -587,9 +568,7 @@ Constants Vector: [(another-error) (one-error) 5 6 7]
 
 @end table
 
-@node conditioncase
-@unnumberedsubsec @code{conditioncase} (49)
-@kindex conditioncase
+@SubSecInstruction{conditioncase, 49}
 
 @table @strong
 @item Implements:
@@ -604,9 +583,7 @@ Emacs 24.4
 ?
 @end table
 
-@node pushconditioncase
-@unnumberedsubsec @code{pushconditioncase} (50)
-@kindex pushconditioncase
+@SubSecInstruction{pushconditioncase, 50}
 
 @table @strong
 @item Implements:
@@ -656,8 +633,7 @@ Constants Vector: [(another-error) (one-error) 5 6 7]
 @end verbatim
 @end table
 
-@node Control-Flow Instructions
-@section Control-Flow Instructions
+@SECTION{Control-Flow Instructions}
 
 @menu
 * goto::
@@ -666,11 +642,11 @@ Constants Vector: [(another-error) (one-error) 5 6 7]
 * goto-if-nil-else-pop::
 * goto-if-not-nil-else-pop::
 * return::
+* switch::
 @end menu
 
-@node goto
-@unnumberedsubsec @code{goto} (130)
-@kindex goto
+@FirstSubSecInstruction{goto, 130}
+
 @table @strong
 @item Implements:
 Jump to label given in the 16-bit operand
@@ -701,9 +677,8 @@ Constants Vector: [n]
 
 @end table
 
-@node goto-if-nil
-@unnumberedsubsec @code{goto-if-nil} (131)
-@kindex goto-if-not-nil
+@SubSecInstruction{goto-if-nil, 131}
+
 @table @strong
 @item Implements:
 Jump to label given in the 16-bit operand if TOS is nil. In contrast to
@@ -738,9 +713,8 @@ Constants Vector: [n 1310 1311]
 
 @end table
 
-@node goto-if-not-nil
-@unnumberedsubsec @code{goto-if-not-nil} (132)
-@kindex goto-if-not-nil
+@SubSecInstruction{goto-if-not-nil, 132}
+
 @table @strong
 @item Implements:
 Jump to label given in the 16-bit operand if TOS is not nil.  In
@@ -778,9 +752,8 @@ Constants Vector: [n 1320]
 Note the change in opcode when bytecode optimization is not performed.
 @end table
 
-@node goto-if-nil-else-pop
-@unnumberedsubsec @code{goto-if-nil-else-pop} (133)
-@kindex goto-if-nil-else-pop
+@SubSecInstruction{goto-if-nil-else-pop, 133}
+
 @table @strong
 @item Implements:
 Jump to label given in the 16-bit operand if TOS is nil; otherwise pop
@@ -811,9 +784,8 @@ Constants Vector: [n 1330]
 
 @end table
 
-@node goto-if-not-nil-else-pop
-@unnumberedsubsec @code{goto-if-not-nil-else-pop} (134)
-@kindex goto-if-not-nil-else-pop
+@SubSecInstruction{goto-if-not-nil-else-pop, 134}
+
 @table @strong
 @item Implements:
 Jump to label given in the 16-bit operand if TOS is not nil; otherwise
@@ -856,9 +828,8 @@ Constants Vector: [n 1340]
 Note the change in opcode when bytecode optimization is performed.
 @end table
 
-@node return
-@unnumberedsubsec @code{return} (135)
-@kindex return
+@SubSecInstruction{return, 135}
+
 @table @strong
 @item Implements:
 Return from function.  This is the last instruction in a function's
@@ -881,8 +852,26 @@ Constants Vector: [1350]
 
 @end table
 
-@node Function-Call Instructions
-@section Function-Call Instructions
+@SubSecInstruction{switch, 135}
+
+Jumps to entry in a jumptable
+
+@table @strong
+@item Implements:
+Jumps to entry in a jumptable
+@item Generated via:
+??
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+0}
+@item Added in:
+Emacs 26.1
+@item Example:
+?
+@end table
+
+@SECTION{Function-Call Instructions}
 
 These instructions use up one byte, and are followed by the next
 instruction directly.  They are equivalent to calling an Emacs Lisp
@@ -925,9 +914,7 @@ bytecode interpreter.
 * integerp::
 @end menu
 
-@node symbolp
-@unnumberedsubsubsec @code{symbolp} (57)
-@kindex symbolp
+@FirstSubSubSecInstruction{symbolp, 57}
 
 Call @code{symbolp}.
 
@@ -951,9 +938,7 @@ PC  Byte  Instruction
 @end verbatim
 @end table
 
-@node consp
-@unnumberedsubsubsec @code{consp} (58)
-@kindex consp
+@SubSubSecInstruction{consp, 58}
 
 Call @code{consp}.
 
@@ -977,12 +962,10 @@ PC  Byte  Instruction
 @end verbatim
 @end table
 
-@node stringp
-@unnumberedsubsubsec @code{stringp} (59)
+@SubSubSecInstruction{stringp, 59}
 
 Call @code{stringp}.
 
-@kindex stringp
 @table @strong
 @item Implements:
 @code{TOS <- (stringp TOS)}.
@@ -1003,9 +986,7 @@ PC  Byte  Instruction
 @end verbatim
 @end table
 
-@node listp
-@unnumberedsubsubsec @code{listp} (60)
-@kindex listp
+@SubSubSecInstruction{listp, 60}
 
 Call @code{listp}.
 
@@ -1029,12 +1010,10 @@ PC  Byte  Instruction
 @end verbatim
 @end table
 
-@node eq
-@unnumberedsubsubsec @code{eq} (61)
+@SubSubSecInstruction{eq, 61}
 
 Call @code{eq}.
 
-@kindex eq
 @table @strong
 @item Implements:
 @code{S[1] <- (eq S[1] TOS); top--}.
@@ -1056,8 +1035,8 @@ PC  Byte  Instruction
 @end verbatim
 @end table
 
-@node memq
-@unnumberedsubsubsec @code{memq} (62)
+@SubSubSecInstruction{memq, 62}
+
 @kindex memq
 
 Call @code{memq}.
@@ -1083,8 +1062,8 @@ PC  Byte  Instruction
 @end verbatim
 @end table
 
-@node not
-@unnumberedsubsubsec @code{not} (63)
+@SubSubSecInstruction{not, 63}
+
 @kindex not
 
 Call @code{not}.
@@ -1109,9 +1088,7 @@ PC  Byte  Instruction
 @end verbatim
 @end table
 
-@node symbol-value
-@unnumberedsubsubsec @code{symbol-value} (74)
-@kindex symbol-value
+@SubSubSecInstruction{symbol-value, 74}
 
 Call @code{symbol-value}.
 
@@ -1135,9 +1112,7 @@ PC  Byte  Instruction
 @end verbatim
 @end table
 
-@node symbol-function
-@unnumberedsubsubsec @code{symbol-function} (75)
-@kindex symbol-function
+@SubSubSecInstruction{symbol-function, 75}
 
 Call @code{symbol-function}.
 
@@ -1161,12 +1136,10 @@ PC  Byte  Instruction
 @end verbatim
 @end table
 
-@node set
-@unnumberedsubsubsec @code{set} (76)
+@SubSubSecInstruction{set, 76}
 
 Call @code{set}.
 
-@kindex set
 @table @strong
 @item Implements:
 @code{S[1] <- (set S[1] TOS); top--}.
@@ -1188,9 +1161,7 @@ PC  Byte  Instruction
 @end verbatim
 @end table
 
-@node fset
-@unnumberedsubsubsec @code{fset} (77)
-@kindex fset
+@SubSubSecInstruction{fset, 77}
 
 Call @code{fset}.
 
@@ -1215,9 +1186,7 @@ PC  Byte  Instruction
 @end verbatim
 @end table
 
-@node get
-@unnumberedsubsubsec @code{get} (78)
-@kindex get
+@SubSubSecInstruction{get, 78}
 
 Call @code{get}.
 
@@ -1242,9 +1211,7 @@ PC  Byte  Instruction
 @end verbatim
 @end table
 
-@node equal
-@unnumberedsubsubsec @code{equal} (154)
-@kindex equal
+@SubSubSecInstruction{equal, 154}
 
 Call @code{equal}.
 
@@ -1271,12 +1238,10 @@ PC  Byte  Instruction
 @end verbatim
 @end table
 
-@node member
-@unnumberedsubsubsec @code{member} (157)
+@SubSubSecInstruction{member, 157}
 
 Call @code{member}.
 
-@kindex member
 @table @strong
 @item Implements:
 @code{S[1] <- (member S[1] TOS); top--}.
@@ -1298,9 +1263,7 @@ PC  Byte  Instruction
 @end verbatim
 @end table
 
-@node assq
-@unnumberedsubsubsec @code{assq} (158)
-@kindex assq
+@SubSubSecInstruction{assq, 158}
 
 Call @code{assq}.
 
@@ -1325,9 +1288,7 @@ PC  Byte  Instruction
 @end verbatim
 @end table
 
-@node numberp
-@unnumberedsubsubsec @code{numberp} (167)
-@kindex numberp
+@SubSubSecInstruction{numberp, 167}
 
 Call @code{numberp}.
 
@@ -1353,9 +1314,7 @@ PC  Byte  Instruction
 @end verbatim
 @end table
 
-@node integerp
-@unnumberedsubsubsec @code{integerp} (168)
-@kindex integerp
+@SubSubSecInstruction{integerp, 168}
 
 Call @code{integerp}.
 
@@ -1381,6 +1340,7 @@ PC  Byte  Instruction
 @end verbatim
 @end table
 
+@page
 @node List Function Instructions
 @subsection List Function Instructions
 
@@ -1411,9 +1371,7 @@ bytecode interpreter.
 * nconc::
 @end menu
 
-@node nth
-@unnumberedsubsubsec @code{nth} (56)
-@kindex nth
+@FirstSubSubSecInstruction{nth, 56}
 
 Call @code{nth} with two stack arguments.
 
@@ -1441,9 +1399,7 @@ Constants Vector: [560]
 
 @end table
 
-@node car
-@unnumberedsubsubsec @code{car} (64)
-@kindex car
+@SubSubSecInstruction{car, 64}
 
 Call @code{car} with one stack argument.
 
@@ -1469,9 +1425,7 @@ PC  Byte  Instruction
 
 @end table
 
-@node cdr
-@unnumberedsubsubsec @code{cdr} (65)
-@kindex cdr
+@SubSubSecInstruction{cdr, 65}
 
 Call @code{cdr} with one stack argument.
 
@@ -1496,9 +1450,7 @@ PC  Byte  Instruction
 
 @end table
 
-@node cons
-@unnumberedsubsubsec @code{cons} (66)
-@kindex cons
+@SubSubSecInstruction{cons, 66}
 
 Call @code{cons} with two stack arguments.
 
@@ -1527,9 +1479,7 @@ Constants Vector: [a b]
 @end table
 
 
-@node list1
-@unnumberedsubsubsec @code{list1} (67)
-@kindex list1
+@SubSubSecInstruction{list1, 67}
 
 Call @code{list} with one stack item.
 
@@ -1558,10 +1508,7 @@ Constants Vector: [a]
 
 Call @code{list} with one stack item.
 
-@node list2
-@unnumberedsubsubsec @code{list2} (68)
-
-@kindex list2
+@SubSubSecInstruction{list2, 68}
 
 Call @code{list} with two stack items.
 
@@ -1589,9 +1536,7 @@ Constants Vector: [a b]
 
 @end table
 
-@node list3
-@unnumberedsubsubsec @code{list3} (69)
-@kindex list3
+@SubSubSecInstruction{list3, 69}
 
 Call @code{list} with three stack items.
 
@@ -1620,9 +1565,8 @@ Constants Vector: [a b c]
 
 @end table
 
-@node list4
-@unnumberedsubsubsec @code{list4} (70)
-@kindex list4
+@SubSubSecInstruction{list4, 70}
+
 Call @code{list} with four stack items.
 
 @table @strong
@@ -1651,9 +1595,8 @@ Constants Vector: [a b c d]
 
 @end table
 
-@node listN
-@unnumberedsubsubsec @code{listN} (175)
-@kindex listN
+@SubSubSecInstruction{listN, 175}
+
 Call @code{list} on up to 255 items. Note that there are special
 instructions for the case where there are 1 to 4 items in the list.
 
@@ -1690,9 +1633,8 @@ Constants Vector: [a b c d e]
 @end table
 
 
-@node length
-@unnumberedsubsubsec @code{length} (71)
-@kindex length
+@SubSubSecInstruction{length, 71}
+
 Call @code{length} with one stack argument.
 
 @table @strong
@@ -1718,9 +1660,8 @@ Constants Vector: [(a b)]
 
 @end table
 
-@node aref
-@unnumberedsubsubsec @code{aref} (72)
-@kindex aref
+@SubSubSecInstruction{aref, 72}
+
 Call @code{aref} with two stack arguments.
 
 @table @strong
@@ -1747,9 +1688,8 @@ Constants Vector: [[720 721 722] 0]
 
 @end table
 
-@node aset
-@unnumberedsubsubsec @code{aset} (73)
-@kindex aset
+@SubSubSecInstruction{aset, 73}
+
 Call @code{aset} with three stack arguments.
 
 @table @strong
@@ -1778,9 +1718,8 @@ Constants Vector: [array-var 0 730]
 @end table
 
 
-@node nthcdr
-@unnumberedsubsubsec @code{nthcdr} (155)
-@kindex nthcdr
+@SubSubSecInstruction{nthcdr, 155}
+
 Call @code{nthcdr} with two stack arguments.
 
 @table @strong
@@ -1810,9 +1749,8 @@ Constants Vector: [(1550 1551 1552) 2]
 @end table
 
 
-@node elt
-@unnumberedsubsubsec @code{elt} (156)
-@kindex elt
+@SubSubSecInstruction{elt, 156}
+
 Call @code{elt} with two stack arguments.
 
 @table @strong
@@ -1841,9 +1779,8 @@ Constants Vector: [(1560 1561 1562) 2]
 
 @end table
 
-@node nreverse
-@unnumberedsubsubsec @code{nreverse} (159)
-@kindex nreverse
+@SubSubSecInstruction{nreverse, 159}
+
 Call @code{nreverse} with one stack argument.
 
 @table @strong
@@ -1871,9 +1808,8 @@ Constants Vector: [(1590 1591)]
 
 @end table
 
-@node setcar
-@unnumberedsubsubsec @code{setcar} (160)
-@kindex setcar
+@SubSubSecInstruction{setcar, 160}
+
 Call @code{setcar} with two stack arguments.
 
 @table @strong
@@ -1902,9 +1838,8 @@ Constants Vector: [1600]
 
 @end table
 
-@node setcdr
-@unnumberedsubsubsec @code{setcdr} (161)
-@kindex setcdr
+@SubSubSecInstruction{setcdr, 161}
+
 Call @code{setcdr} with two stack arguments.
 
 @table @strong
@@ -1933,9 +1868,7 @@ Constants Vector: [1610]
 
 @end table
 
-@node car-safe
-@unnumberedsubsubsec @code{car-safe} (162)
-@kindex car-safe
+@SubSubSecInstruction{car-safe, 162}
 
 Call @code{car-safe} with one argument.
 
@@ -1962,9 +1895,8 @@ PC  Byte  Instruction
 
 @end table
 
-@node cdr-safe
-@unnumberedsubsubsec @code{cdr-safe} (163)
-@kindex cdr-safe
+@SubSubSecInstruction{cdr-safe, 163}
+
 Call @code{cdr-safe} with one stack argument.
 
 @table @strong
@@ -1990,9 +1922,8 @@ PC  Byte  Instruction
 
 @end table
 
-@node nconc
-@unnumberedsubsubsec @code{nconc} (164)
-@kindex nconc
+@SubSubSecInstruction{nconc, 164}
+
 Call @code{nconc} with two stack arguments.
 
 @table @strong
@@ -2019,6 +1950,7 @@ PC  Byte  Instruction
 
 @end table
 
+@page
 @node Arithmetic Function Instructions
 @subsection Arithmetic Function Instructions
 
@@ -2044,9 +1976,7 @@ bytecode interpreter.
 * rem::
 @end menu
 
-@node sub1
-@unnumberedsubsubsec @code{sub1} (83)
-@kindex sub1
+@FirstSubSubSecInstruction{sub1, 83}
 
 Call @code{1-}.
 
@@ -2071,9 +2001,7 @@ PC  Byte  Instruction
 
 @end table
 
-@node add1
-@unnumberedsubsubsec @code{add1} (84)
-@kindex add1
+@SubSubSecInstruction{add1, 84}
 
 Call @code{1+}.
 
@@ -2098,9 +2026,7 @@ PC  Byte  Instruction
 
 @end table
 
-@node eqlsign
-@unnumberedsubsubsec @code{eqlsign} (85)
-@kindex eqlsign
+@SubSubSecInstruction{eqlsign, 85}
 
 Call @code{=}.
 
@@ -2127,9 +2053,7 @@ Constants Vector: [a b]
 
 @end table
 
-@node gtr
-@unnumberedsubsubsec @code{gtr} (86)
-@kindex gtr
+@SubSubSecInstruction{gtr, 86}
 
 Call @code{>}.
 
@@ -2155,9 +2079,7 @@ PC  Byte  Instruction
 
 @end table
 
-@node lss
-@unnumberedsubsubsec @code{lss} (87)
-@kindex lss
+@SubSubSecInstruction{lss, 87}
 
 Call @code{<}.
 
@@ -2184,9 +2106,7 @@ Constants Vector: [a b]
 
 @end table
 
-@node leq
-@unnumberedsubsubsec @code{leq} (88)
-@kindex leq
+@SubSubSecInstruction{leq, 88}
 
 Call @code{<=}.
 
@@ -2215,9 +2135,7 @@ Constants Vector: [a b]
 
 @end table
 
-@node geq
-@unnumberedsubsubsec @code{geq} (89)
-@kindex geq
+@SubSubSecInstruction{geq, 89}
 
 Call @code{>=}.
 
@@ -2245,9 +2163,7 @@ PC  Byte  Instruction
 
 @end table
 
-@node diff
-@unnumberedsubsubsec @code{diff} (90)
-@kindex diff
+@SubSubSecInstruction{diff, 90}
 
 Call binary @code{-}.
 
@@ -2275,9 +2191,7 @@ PC  Byte  Instruction
 
 @end table
 
-@node negate
-@unnumberedsubsubsec @code{negate} (91)
-@kindex negate
+@SubSubSecInstruction{negate, 91}
 
 Call unary @code{-}.
 
@@ -2306,9 +2220,7 @@ Constants Vector: [a]
 
 @end table
 
-@node plus
-@unnumberedsubsubsec @code{plus} (92)
-@kindex plus
+@SubSubSecInstruction{plus, 92}
 
 Call unary @code{+}.
 
@@ -2335,9 +2247,7 @@ Constants Vector: [n]
 
 @end table
 
-@node mult
-@unnumberedsubsubsec @code{mult} (95)
-@kindex mult
+@SubSubSecInstruction{mult, 95}
 
 Call @code{*}.
 
@@ -2366,9 +2276,7 @@ Constants Vector: [n]
 
 @end table
 
-@node max
-@unnumberedsubsubsec @code{max} (93)
-@kindex max
+@SubSubSecInstruction{max, 93}
 
 Call @code{max}.
 
@@ -2395,9 +2303,7 @@ Constants Vector: [a b]
 
 @end table
 
-@node min
-@unnumberedsubsubsec @code{min} (94)
-@kindex min
+@SubSubSecInstruction{min, 94}
 
 Call @code{min}.
 
@@ -2424,9 +2330,7 @@ Constants Vector: [a b]
 
 @end table
 
-@node quo
-@unnumberedsubsubsec @code{quo} (165)
-@kindex quo
+@SubSubSecInstruction{quo, 165}
 
 Call @code{/}.
 
@@ -2453,9 +2357,7 @@ Constants Vector: [a b]
 
 @end table
 
-@node rem
-@unnumberedsubsubsec @code{rem} (166)
-@kindex rem
+@SubSubSecInstruction{rem, 166}
 
 Call @verb{|%|}.
 
@@ -2483,6 +2385,7 @@ PC  Byte  Instruction
 
 @end table
 
+@page
 @node String Function Instructions
 @subsection String Function Instructions
 
@@ -2502,9 +2405,8 @@ function for them.
 * stringlss::
 @end menu
 
-@node substring
-@unnumberedsubsubsec @code{substring} (79)
-@kindex substring
+@FirstSubSubSecInstruction{substring, 79}
+
 Call @code{substring} with three stack arguments.
 
 @table @strong
@@ -2533,9 +2435,8 @@ Constants Vector: ["abc" 0 2]
 @end table
 
 
-@node concat2
-@unnumberedsubsubsec @code{concat2} (80)
-@kindex concat2
+@SubSubSecInstruction{concat2, 80}
+
 Call @code{concat} with two stack arguments.
 
 @table @strong
@@ -2564,9 +2465,8 @@ Constants Vector: ["a" "b"]
 
 @end table
 
-@node concat3
-@unnumberedsubsubsec @code{concat3} (81)
-@kindex concat3
+@SubSubSecInstruction{concat3, 81}
+
 Call @code{concat} with three stack arguments.
 
 @table @strong
@@ -2595,9 +2495,8 @@ Constants Vector: ["a" "b" "c"]
 @end table
 
 
-@node concat4
-@unnumberedsubsubsec @code{concat4} (82)
-@kindex concat4
+@SubSubSecInstruction{concat4, 82}
+
 Call @code{concat} with four stack stack arguments.
 
 @table @strong
@@ -2627,9 +2526,7 @@ Constants Vector: ["a" "b" "c" "d"]
 @end table
 
 
-@node concatN
-@unnumberedsubsubsec @code{concatN} (174)
-@kindex concatN
+@SubSubSecInstruction{concatN, 174}
 
 Call @code{concat} on up to 255 stack arguments.  Note there are
 special instructions for the case where there are 2 to 4 items to
@@ -2667,9 +2564,8 @@ Constants Vector: ["a" "b" "c" "d" "e"]
 
 @end table
 
-@node upcase
-@unnumberedsubsubsec @code{upcase} (150)
-@kindex upcase
+@SubSubSecInstruction{upcase, 150}
+
 Call @code{upcase} with one stack argument.
 
 @table @strong
@@ -2697,9 +2593,8 @@ Constants Vector: ["abc"]
 
 @end table
 
-@node downcase
-@unnumberedsubsubsec @code{downcase} (151)
-@kindex downcase
+@SubSubSecInstruction{downcase, 151}
+
 Call @code{downcase} with one argument.
 
 @table @strong
@@ -2727,9 +2622,8 @@ Constants Vector: ["ABC"]
 
 @end table
 
-@node stringeqlsign
-@unnumberedsubsubsec @code{stringeqlsign} (152)
-@kindex stringeqlsign
+@SubSubSecInstruction{stringeqlsign, 152}
+
 Call @code{string=} with two stack arguments, comparing two strings for equality.
 
 @table @strong
@@ -2763,9 +2657,8 @@ Constants Vector: ["b"]
 
 @end table
 
-@node stringlss
-@unnumberedsubsubsec @code{stringlss} (153)
-@kindex stringlss
+@SubSubSecInstruction{stringlss, 153}
+
 Call @code{string<} with two stack arguments, comparing two strings.
 
 @table @strong
@@ -2799,6 +2692,7 @@ Constants Vector: ["b"]
 
 @end table
 
+@page
 @node Emacs Function Instructions
 @subsection Emacs Function Instructions
 
@@ -2823,7 +2717,7 @@ but simply call the corresponding C function.
 * bobp::
 * current-buffer::
 * set-buffer::
-* save-current-buffer::
+* save-current-buffer-1::
 * forward-char::
 * forward-word::
 * skip-chars-forward::
@@ -2840,87 +2734,71 @@ but simply call the corresponding C function.
 * match-end::
 @end menu
 
-@node point
-@unnumberedsubsubsec @code{point} (96)
-@kindex point
+@FirstSubSubSecInstruction{point, 96}
+
 Call @code{point}.
 
-@node goto-char
-@unnumberedsubsubsec @code{goto-char} (98)
-@kindex goto-char
+@SubSubSecInstruction{goto-char, 98}
+
 Call @code{goto-char} with one argument.
 
-@node insert
-@unnumberedsubsubsec @code{insert} (99)
-@kindex insert
+@SubSubSecInstruction{insert, 99}
+
 Call @code{insert} with one argument.
 
-@node insertN
-@unnumberedsubsubsec @code{insert} (99)
-@kindex insertN
+@SubSubSecInstruction{insertN, 99}
+
 Call @code{insert} on up to 255 stack arguments.  Note there are special
 instructions when there is only one argument.
 
 Added in Emacs 19.34.
 
-@node point-max
-@unnumberedsubsubsec @code{point-max} (100)
-@kindex point-max
+@SubSubSecInstruction{point-max, 100}
+
 Call @code{point-max}.
 
-@node point-min
-@unnumberedsubsubsec @code{point-min} (101)
-@kindex point-min
+@SubSubSecInstruction{point-min, 101}
+
 Call @code{point-min}.
 
-@node char-after
-@unnumberedsubsubsec @code{char-after} (102)
-@kindex char-after
+@SubSubSecInstruction{char-after, 102}
+
 Call @code{char-after} with one argument.
 
-@node following-char
-@unnumberedsubsubsec @code{following-char} (103)
-@kindex following-char
+@SubSubSecInstruction{following-char, 103}
+
 Call @code{following-char}.
 
-@node preceding-char
-@unnumberedsubsubsec @code{preceding-char} (104)
-@kindex preceding-char
+@SubSubSecInstruction{preceding-char, 104}
+
 Call @code{preceding-char}.
 
-@node current-column
-@unnumberedsubsubsec @code{current-column} (105)
-@kindex current-column
+@SubSubSecInstruction{current-column, 105}
+
 Call @code{current-column}.
 
-@node eolp
-@unnumberedsubsubsec @code{eolp} (108)
-@kindex eolp
+@SubSubSecInstruction{eolp, 108}
+
 Call @code{eolp}.
 
-@node eobp
-@unnumberedsubsubsec @code{eobp} (109)
-@kindex eobp
+@SubSubSecInstruction{eobp, 109}
+
 Call @code{eobp}.
 
-@node bolp
-@unnumberedsubsubsec @code{bolp} (110)
-@kindex bolp
+@SubSubSecInstruction{bolp, 110}
+
 Call @code{bolp}.
 
-@node bobp
-@unnumberedsubsubsec @code{bobp} (111)
-@kindex bobp
+@SubSubSecInstruction{bobp, 111}
+
 Call @code{bobp}.
 
-@node current-buffer
-@unnumberedsubsubsec @code{current-buffer} (112)
-@kindex current-buffer
+@SubSubSecInstruction{current-buffer, 112}
+
 Call @code{current-buffer}.
 
-@node set-buffer
-@unnumberedsubsubsec @code{set-buffer} (113)
-@kindex set-buffer
+@SubSubSecInstruction{set-buffer, 113}
+
 Call @code{set-buffer} with the top of the stack,
 The top of the stack is replaced by the result of
 @code{(set-buffer TOS)}
@@ -2936,17 +2814,16 @@ PC  Byte  Instruction
 Constants Vector: ["*scratch"]
 @end verbatim
 
-@node save-current-buffer
-@unnumberedsubsubsec @code{save-current-buffer} (114)
-@kindex save-current-buffer
+@SubSubSecInstruction{save-current-buffer-1, 114}
+
 Call @code{save-current-buffer}.
 
-Replaces older @code{save-current-buffer-OBSOLETE}.
+Replaces older @code{save-current-buffer}.
 
 Added in Emacs 19.34.
 
 @strong{Example}
-@code{(defun scb() (save-current-buffer (prog 5)))} generates:
+@code{(defun save-curent-buffer-1-eg() (save-current-buffer (prog 5)))} generates:
 @verbatim
 PC  Byte  Instruction
  0  114   save-current-buffer
@@ -2959,106 +2836,92 @@ PC  Byte  Instruction
 Constants Vector: [prog 5]
 @end verbatim
 
-@node forward-char
-@unnumberedsubsubsec @code{forward-char} (117)
-@kindex forward-char
+@SubSubSecInstruction{forward-char, 117}
+
 Call @code{forward-char} with one argument.
 
 Added in Emacs 19.34.
 
-@node forward-word
-@unnumberedsubsubsec @code{forward-word} (118)
-@kindex forward-word
+@SubSubSecInstruction{forward-word, 118}
+
 Call @code{forward-word} with one argument.
 
 Added in Emacs 19.34.
 
-@node skip-chars-forward
-@unnumberedsubsubsec @code{skip-chars-forward} (119)
+@SubSubSecInstruction{skip-chars-forward, 119}
+
 @kindex skip-chars-forward
 Call @code{skip-chars-forward} with two stack arguments.
 
 Added in Emacs 19.34.
 
-@node skip-chars-backward
-@unnumberedsubsubsec @code{skip-chars-backward} (120)
-@kindex skip-chars-backward
+@SubSubSecInstruction{skip-chars-backward, 120}
+
 Call @code{skip-chars-backward} with two stack arguments.
 
 Added in Emacs 19.34.
 
-@node forward-line
-@unnumberedsubsubsec @code{forward-line} (121)
-@kindex forward-line
+@SubSubSecInstruction{forward-line, 121}
+
 Call @code{forward-line} with one argument.
 
 Added in Emacs 19.34.
 
-@node char-syntax
-@unnumberedsubsubsec @code{char-syntax} (122)
-@kindex char-syntax
+@SubSubSecInstruction{char-syntax, 122}
+
 Call @code{char-syntax} with one argument.
 
 Added in Emacs 19.34.
 
-@node buffer-substring
-@unnumberedsubsubsec @code{buffer-substring} (123)
-@kindex buffer-substring
+@SubSubSecInstruction{buffer-substring, 123}
+
 Call @code{buffer-substring} with two stack arguments.
 
 Added in Emacs 19.34.
 
-@node delete-region
-@unnumberedsubsubsec @code{delete-region} (124)
-@kindex delete-region
+@SubSubSecInstruction{delete-region, 124}
+
 Call @code{delete-region} with two stack arguments.
 
 Added in Emacs 19.34.
 
-@node narrow-to-region
-@unnumberedsubsubsec @code{narrow-to-region} (125)
-@kindex narrow-to-region
+@SubSubSecInstruction{narrow-to-region, 125}
+
 Call @code{narrow-to-region} with two stack arguments.
 
 Added in Emacs 19.34.
 
-@node widen
-@unnumberedsubsubsec @code{widen} (126)
-@kindex widen
+@SubSubSecInstruction{widen, 126}
+
 Call @code{widen}.
 
 Added in Emacs 19.34.
 
-@node end-of-line
-@unnumberedsubsubsec @code{end-of-line} (127)
-@kindex end-of-line
+@SubSubSecInstruction{end-of-line, 127}
+
 Call @code{end-of-line} with one argument.
 
 Added in Emacs 19.34.
 
-@node set-marker
-@unnumberedsubsubsec @code{set-marker} (147)
-@kindex set-marker
+@SubSubSecInstruction{set-marker, 147}
+
 Call @code{set-marker} with three stack arguments.
 
 Added in Emacs 19.34.
 
-@node match-beginning
-@unnumberedsubsubsec @code{match-beginning} (148)
-@kindex match-beginning
+@SubSubSecInstruction{match-beginning, 148}
+
 Call @code{match-beginning} with one argument.
 
 Added in Emacs 19.34.
 
-@node match-end
-@unnumberedsubsubsec @code{match-end} (149)
-@kindex match-end
+@SubSubSecInstruction{match-end, 149}
+
 Call @code{match-end} with one argument.
 
 Added in Emacs 19.34.
 
-@node Stack Manipulation Instructions
-@section Stack Manipulation Instructions
+@SECTION{Stack-Manipulation Instructions}
 
 @menu
 * discard::
@@ -3068,22 +2931,19 @@ Added in Emacs 19.34.
 * stack-set2::
 @end menu
 
-@node discard
-@unnumberedsubsec @code{discard} (136)
-@kindex discard
+@FirstSubSecInstruction{discard, 136}
+
 Discard one value from the stack.
 
-@node discardN
-@unnumberedsubsec @code{discardN} (180)
-@kindex discardN
+@SubSecInstruction{discardN, 180}
+
 Discards up to 255 arguments from the stack.  Note there is a special
 instruction when there is only one argument.
 
 Added in Emacs 24.1
 
-@node dup
-@unnumberedsubsec @code{dup} (137)
-@kindex dup
+@SubSecInstruction{dup, 137}
+
 Make a copy of the top-of-stack value and push that onto the top of the evaluation stack.
 
 @subsubsection Example
@@ -3095,29 +2955,83 @@ PC  Byte  Instruction
  1  135   return
 @end verbatim
 
-@node stack-set
-@unnumberedsubsec @code{stack-set} (180)
-@kindex stack-set
+@SubSecInstruction{stack-set, 180}
+
 Like discard. [What's the difference?]
 
 Added in Emacs 24.1
 
-@node stack-set2
-@unnumberedsubsec @code{stack-setN} (181)
-@kindex stack-set2
+@SubSecInstruction{stack-set2, 181}
+
 Like discardN. [What's the difference?]
 Can handle up to 255 stack arguments.  Note there is a special
 instruction when there is only one argument.
 
 Added in Emacs 24.1
 
-@node Binding Instructions
-@section Binding Instructions
+@SECTION{Binding Instructions}
 
 These instructions manipulate the special-bindings stack by creating a
 new binding when executed.  They need to be balanced with
 @code{unbind} instructions.
 
-@unnumberedsubsec @code{save-excursion} (138)
-@kindex save-excursion
+@menu
+* save-excursion::
+@end menu
+
+@FirstSubSecInstruction{save-excursion, 138}
+
 Make a binding recording buffer, point, and mark.
+
+@SECTION{Unused Instructions}
+
+These instructions are not generated. In some cases, they were
+generated in a older version of Emacs. In some cases the instructions
+were planned on being used but never were. In some cases, the
+instructions are still handled if they appear (such as from older
+bytecode), but in other cases they are no longer accepted by the interperter
+
+@menu
+* Rgoto::
+* Rgotoifnil::
+* Rgotoifnonnil::
+* Rgotoifnilelsepop::
+* Rgotoifnonnilelsepop::
+* save-current-buffer::
+* bmark::
+* scan-buffer::
+* read-char::
+* set-mark::
+* interactive-p::
+@end menu
+
+@FirstSubSecInstruction{Rgoto, 170}
+
+Relative jump version of @pxref{goto}.
+
+@FirstSubSecInstruction{Rgotoifnil, 171}
+
+Relative jump version of @pxref{goto-if-nil}.
+
+@FirstSubSecInstruction{Rgotoifnonnil, 172}
+
+Relative-jump version of @pxref{goto-if-not-nil}.
+
+@FirstSubSecInstruction{Rgotoifnilelsepop, 173}
+
+Relative-jump version of @pxref{goto-if-nil-else-pop}.
+
+@FirstSubSecInstruction{Rgotoifnonnilelsepop, 174}
+
+Relative-jump version of @pxref{goto-if-not-nil-else-pop}.
+
+
+@FirstSubSecInstruction{save-current-buffer, 97}
+@FirstSubSecInstruction{bmark, 97}
+
+Used in V 17
+
+@FirstSubSecInstruction{scan-buffer, 107}
+@FirstSubSecInstruction{read-char, 114}
+@FirstSubSecInstruction{set-mark, 115}
+@FirstSubSecInstruction{interactive-p, 116}

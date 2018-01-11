@@ -159,7 +159,7 @@ Bytecode meta-comments look like this:
 @item Emacs 19.33 was released Sept 11, 1996
 @end itemize
 
-The Elisp tarball for 19.2 is Aug, 1992. (The tarball date for
+The Emacs Lisp tarball for 19.2 is Aug, 1992. (The tarball date for
 19.2 is much later; and even after the date on the 20.1 tarball.)
 
 @node After 19.34 and Starting in 20.1
