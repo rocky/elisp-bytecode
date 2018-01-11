@@ -341,19 +341,19 @@ and for a description of how to interpret the stack-effect field.
 
 @item @verb{| 063|}
 @tab @verb{|  51|}
-@tab @tab @tab Unused
+@tab @tab Unused
 @item @verb{| 064|}
 @tab @verb{|  52|}
-@tab @tab @tab Unused
+@tab @tab Unused
 @item @verb{| 065|}
 @tab @verb{|  53|}
-@tab @tab @tab Unused
+@tab @tab Unused
 @item @verb{| 066|}
 @tab @verb{|  54|}
-@tab @tab @tab Unused
+@tab @tab Unused
 @item @verb{| 067|}
 @tab @verb{|  55|}
-@tab @tab @tab Unused
+@tab @tab Unused
 
 @item @verb{| 070|}
 @tab @verb{|  56|}
@@ -619,14 +619,14 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{| !97|}
 @tab @verb{| !save-current-buffer|}
 @tab
-@tab
+@tab @xref{save-current-buffer}
 @tab
 @math{-0+1}
 @item @verb{|0141|}
 @tab @verb{| *97|}
 @tab @verb{| *bmark|}
 @tab 1
-@tab used in v17
+@tab @xref{bmark}
 @tab @math{-0+1}
 @item @verb{|0142|}
 @tab @verb{|  98|}
@@ -680,7 +680,7 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{|*107|}
 @tab @verb{| *scan-buffer|}
 @tab
-@tab
+@tab @xref{scan-buffer}
 @item @verb{|0154|}
 @tab @verb{| 108|}
 @tab @verb{|  eolp|}
@@ -722,7 +722,7 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{|  save-current-
  buffer-1|}
 @tab 1
-@tab @xref{save-current-buffer}
+@tab @xref{save-current-buffer-1}
 @tab
 @math{-0}
 
@@ -730,19 +730,19 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{|*114|}
 @tab @verb{| *read-char|}
 @tab 1
-@tab
+@tab @xref{read-char}
 @tab @math{+1}
 @item @verb{|0163|}
 @tab @verb{|*115|}
 @tab @verb{| *set-mark|}
 @tab 1
-@tab
+@tab @xref{set-mark}
 @tab @math{-0}
 @item @verb{|0164|}
 @tab @verb{|*116|}
 @tab @verb{| *interactive-p|}
 @tab 1
-@tab
+@tab @xref{interactive-p}
 @tab @math{+1}
 @item @verb{|0165|}
 @tab @verb{| 117|}
@@ -1051,30 +1051,30 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{| 169|}
 @tab
 
-@end multitable
-@multitable @columnfractions .09 .09 .31 .55 .18
-
 @item @verb{|0200|}
 @tab @verb{| 128|}
-@tab
-@tab Unused
+@tab @tab Unused
 
 @item @verb{|0252|}
 @tab @verb{| 170|}
 @tab @verb{|  Rgoto|}
-@tab
+@tab 1
+@tab @xref{Rgoto}
 @item @verb{|0253|}
 @tab @verb{| 171|}
 @tab @verb{|  Rgotoifnil|}
-@tab
+@tab 1
+@tab @xref{Rgotoifnil}
 @item @verb{|0254|}
 @tab @verb{| 172|}
 @tab @verb{|  Rgotoifnonnil|}
-@tab
+@tab 1
+@tab @xref{Rgotoifnonnil}
 @item @verb{|0255|}
 @tab @verb{| 173|}
 @tab @verb{|  Rgotoifnilelsepop|}
-@tab
+@tab 1
+@tab @xref{Rgotoifnilelsepop}
 @item @verb{|0256|}
 @tab @verb{| 174|}
 @tab @verb{|  Rgotoifnonnilelsepop|}
@@ -1083,75 +1083,89 @@ and for a description of how to interpret the stack-effect field.
 @item @verb{|0257|}
 @tab @verb{| 175|}
 @tab @verb{|  listN|}
-@tab
+@tab 2
+@tab @xref{listN}
 @item @verb{|0260|}
 @tab @verb{| 176|}
 @tab @verb{|  concatN|}
-@tab
+@tab 2
+@tab @xref{concatN}
 @item @verb{|0261|}
 @tab @verb{| 177|}
 @tab @verb{|  insertN|}
-@tab @tab
+@tab 1
+@tab @xref{insertN}
+@tab
 
 @item @verb{|0262|}
 @tab @verb{| 178|}
 @tab @verb{|  stack-set|}
-@tab @tab
+@tab 1
+@tab @xref{stack-set}
 @item @verb{|0263|}
 @tab @verb{| 179|}
 @tab @verb{|  stack-set2|}
-@tab @tab
+@tab 1
+@tab @xref{stack-set2}
 
 @item @verb{|0264|}
 @tab @verb{| 180|}
-@tab
-@tab Unused
+@tab @tab Unused
 @item @verb{|0265|}
 @tab @verb{| 181|}
-@tab
-@tab Unused
+@tab @tab Unused
 
 @item @verb{|0266|}
 @tab @verb{| 182|}
 @tab @verb{|  discardN|}
-@tab @tab
+@tab 1
+@tab @xref{discardN}
 @item @verb{|0267|}
 @tab @verb{| 183|}
 @tab @verb{|  switch|}
-@tab @tab
+@tab 1
+@tab @xref{switch}
 
 @item @verb{|0270|}
 @tab @verb{| 184|}
 @tab
 @tab Unused
+@tab
 @item @verb{|0271|}
 @tab @verb{| 185|}
 @tab
 @tab Unused
+@tab
 @item @verb{|0272|}
 @tab @verb{| 186|}
 @tab
 @tab Unused
+@tab
 @item @verb{|0273|}
 @tab @verb{| 187|}
 @tab
 @tab Unused
+@tab
 @item @verb{|0274|}
 @tab @verb{| 188|}
 @tab
 @tab Unused
+@tab
 @item @verb{|0275|}
 @tab @verb{| 189|}
 @tab
 @tab Unused
+@tab
 @item @verb{|0276|}
 @tab @verb{| 190|}
 @tab
 @tab Unused
+@tab
 @item @verb{|0277|}
 @tab @verb{| 191|}
 @tab
 @tab Unused
+@tab
 @end multitable
 
 @page
