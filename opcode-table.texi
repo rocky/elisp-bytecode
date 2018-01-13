@@ -885,6 +885,49 @@ and for a description of how to interpret the stack-effect field.
 @tab 1
 @tab @xref{save-excursion}.
 @tab @math{-0+0}
+@item @verb{|0213|}
+@tab @verb{| 139|}
+@tab @verb{|  save-window-excursion|}
+@tab 1
+@tab @xref{save-window-excursion}.
+@tab @math{-0+0}
+
+@item @verb{|0214|}
+@tab @verb{| 140|}
+@tab @tab @tab Unused
+@item @verb{|0215|}
+@tab @verb{| 141|}
+@tab @tab @tab Unused
+@item @verb{|0216|}
+@tab @verb{| 142|}
+@tab @tab @tab Unused
+@item @verb{|0217|}
+@tab @verb{| 143|}
+@tab @tab @tab Unused
+
+@item @verb{|0220|}
+@tab @verb{| 144|}
+@tab @verb{|  temp-output-buffer-setup|}
+@tab 1
+@tab @xref{temp-output-buffer-show}.
+@tab @math{-0+0}
+@item @verb{|0221|}
+@tab @verb{| 145|}
+@tab @verb{|  temp-output-buffer-show|}
+@tab 1
+@tab @xref{temp-output-buffer-show}.
+@tab @math{-0+0}
+
+@item @verb{|0222|}
+@tab @verb{| 146|}
+@tab @tab @tab Unused
+@item @verb{|0223|}
+@tab @verb{| 147|}
+@tab @tab @tab Unused
+
+@item @verb{|0256|}
+@tab @verb{| 174|}
+@tab @tab @tab Unused
 
 @item @verb{|0257|}
 @tab @verb{| 175|}
@@ -914,6 +957,13 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{|  stack-set2|}
 @tab 1
 @tab @xref{stack-set2}.
+
+@item @verb{|0222|}
+@tab @verb{|*146|}
+@tab @verb{| *unbind-all|}
+@tab 1
+@tab @xref{unbind-all}.
+@tab @math{-0+0}
 
 @item @verb{|0223|}
 @tab @verb{| 147|}
@@ -1050,10 +1100,6 @@ and for a description of how to interpret the stack-effect field.
 @item @verb{|0251|}
 @tab @verb{| 169|}
 @tab
-
-@item @verb{|0200|}
-@tab @verb{| 128|}
-@tab @tab @tab Unused
 
 @item @verb{|0252|}
 @tab @verb{| 170|}

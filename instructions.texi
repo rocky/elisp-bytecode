@@ -515,8 +515,8 @@ Constants Vector: [n + 0 1 2 .. 61 62 63 64]
 
 @menu
 * pophandler::
-* conditioncase::
 * pushconditioncase::
+* pushcatch::
 @end menu
 
 @FirstSubSecInstruction{pophandler, 48}
@@ -568,22 +568,7 @@ Constants Vector: [(another-error) (one-error) 5 6 7]
 
 @end table
 
-@SubSecInstruction{conditioncase, 49}
-
-@table @strong
-@item Implements:
-?
-@item Instruction size:
-3 bytes ?
-@item Stack effect:
-@math{-0+0}.
-@item Added in:
-Emacs 24.4
-@item Example:
-?
-@end table
-
-@SubSecInstruction{pushconditioncase, 50}
+@SubSecInstruction{pushconditioncase, 49}
 
 @table @strong
 @item Implements:
@@ -632,6 +617,11 @@ PC  Byte  Instruction
 Constants Vector: [(another-error) (one-error) 5 6 7]
 @end verbatim
 @end table
+
+@SubSecInstruction{pushcatch, 50}
+
+?
+
 
 @SECTION{Control-Flow Instructions}
 
@@ -2729,6 +2719,9 @@ but simply call the corresponding C function.
 * narrow-to-region::
 * widen::
 * end-of-line::
+* save-window-excursion::
+* temp-output-buffer-setup::
+* temp-output-buffer-show::
 * set-marker::
 * match-beginning::
 * match-end::
@@ -3258,6 +3251,18 @@ Call @code{end-of-line} with one argument.
 
 Added in Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
 
+@SubSubSecInstruction{save-window-excursion, 139}
+
+Added in Emacs 24.1
+
+@SubSubSecInstruction{temp-output-buffer-setup, 144}
+
+Added in Emacs 24.1
+
+@SubSubSecInstruction{temp-output-buffer-show, 145}
+
+Added in Emacs 24.1
+
 @SubSubSecInstruction{set-marker, 147}
 
 Call @code{set-marker} with three stack arguments.
@@ -3358,6 +3363,7 @@ bytecode), but in other cases they are no longer accepted by the interperter
 * read-char::
 * set-mark::
 * interactive-p::
+* unbind-all::
 @end menu
 
 @FirstSubSecInstruction{Rgoto, 170}
@@ -3409,3 +3415,7 @@ Obsolete in Emacs 18.31. @xref{After 16 and Starting in 18.31, , Emacs 18.31}.
 Obsolete in Emacs 18.31. @xref{After 16 and Starting in 18.31, , Emacs 18.31}.
 
 @FirstSubSecInstruction{interactive-p, 116}
+
+@FirstSubSecInstruction{unbind-all, 146}
+
+Introduced in Emacs 19.34 for tail-recursion elimination by jwz, but never used. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.

@@ -271,7 +271,7 @@ An error is thrown for unknown bytecodes rather than aborting.
 The following instructions were added:
 @itemize
 @item @code{stack-set}   (178). @xref{stack-set}.
-@item @code{stack_set2}, (179). @xref{stack_set2}.
+@item @code{stack-set2}, (179). @xref{stack-set2}.
 @item @code{discardN}, (180). @xref{discardN}.
 @end itemize
 
