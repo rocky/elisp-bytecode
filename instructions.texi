@@ -1481,7 +1481,7 @@ Constants Vector: [a b]
 
 @SubSubSecInstruction{list1, 67}
 
-Call @code{list} with one stack item.
+Call @code{list} with TOS.
 
 @table @strong
 @item Implements:
@@ -1506,7 +1506,7 @@ Constants Vector: [a]
 
 @end table
 
-Call @code{list} with one stack item.
+Call @code{list} with TOS.
 
 @SubSubSecInstruction{list2, 68}
 
@@ -2738,72 +2738,407 @@ but simply call the corresponding C function.
 
 Call @code{point}.
 
+@table @strong
+@item Implements:
+@code{TOS <- (point)}
+
+@item Generated via:
+@code{point}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-0+1}.
+@item Example:
+@code{(defun point-eg() (point))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0   96   point
+ 1  135   return
+@end verbatim
+
+@end table
+
+
 @SubSubSecInstruction{goto-char, 98}
 
-Call @code{goto-char} with one argument.
+Call @code{goto-char} with one stack argument.
+
+@table @strong
+@item Implements:
+@code{TOS <- (goto-char TOS)}
+
+@item Generated via:
+@code{goto-char}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+With lexical binding in effect, @code{(defun goto-char-eg(n) (goto-char n))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1   98   goto-char
+ 2  135   return
+@end verbatim
+
+@end table
 
 @SubSubSecInstruction{insert, 99}
 
-Call @code{insert} with one argument.
+Call @code{insert} with one stack argument.
+
+@table @strong
+@item Implements:
+@code{TOS <- (insert TOS)}
+
+@item Generated via:
+@code{insert}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+With lexical binding in effect, @code{(defun insert-eg(n) (insert n))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  137   dup
+ 1   99   insert
+ 2  135   return
+@end verbatim
+
+@end table
 
 @SubSubSecInstruction{insertN, 99}
 
-Call @code{insert} on up to 255 stack arguments.  Note there are special
-instructions when there is only one argument.
+Call @code{insert} on up to 255 stack arguments.  Note there is a special
+instruction when there is only one stack argument.
 
-Added in Emacs 19.34.
+@table @strong
+@item Implements:
+@code{S[n-1] <- (insert S[n-1] S[n-2] ... TOS); top -= (n-1)}.
+
+@item Generated via:
+@code{insert}
+@item Operand:
+8-bit number of items in concat
+@item Instruction size:
+2 bytes
+@item Stack effect:
+@math{-n+1} where @math{n} is the value of the instruction operand.
+@item Added in:
+Emacs 19.34.
+@item Example:
+With lexical binding in effect, @code{(defun insertN-eg(a b c) (insert a b c))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0    2   stack-ref[2]
+ 1    2   stack-ref[2]
+ 2    2   stack-ref[2]
+ 3  177   insertN [3]
+           3
+ 5  135   return
+@end verbatim
+
+@end table
 
 @SubSubSecInstruction{point-max, 100}
 
 Call @code{point-max}.
 
+@table @strong
+@item Implements:
+@code{TOS <- (point-max)}
+
+@item Generated via:
+@code{point-max}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-0+1}.
+@item Example:
+@code{(defun point-max-eg() (point-max))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  100   point-max
+ 1  135   return
+@end verbatim
+
+@end table
+
 @SubSubSecInstruction{point-min, 101}
 
 Call @code{point-min}.
 
+@table @strong
+@item Implements:
+@code{TOS <- (point-min)}
+
+@item Generated via:
+@code{point-min}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-0+1}.
+@item Example:
+@code{(defun point-min-eg() (point-min))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  101   point-min
+ 1  135   return
+@end verbatim
+
+@end table
+
 @SubSubSecInstruction{char-after, 102}
 
-Call @code{char-after} with one argument.
+Call @code{char-after} with one stack argument.
+
+@table @strong
+@item Implements:
+@code{TOS <- (char-after TOS)}
+
+@item Generated via:
+@code{char-after}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+@code{(defun char-after-eg() (char-after))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] nil
+ 1  102   char-after
+ 2  135   return
+
+Constants Vector: [nil]
+@end verbatim
+
+@end table
 
 @SubSubSecInstruction{following-char, 103}
 
 Call @code{following-char}.
 
+@table @strong
+@item Implements:
+@code{TOS <- (following-char TOS)}
+
+@item Generated via:
+@code{following-char}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+@code{(defun following-char-eg() (following-char))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  103   following-char
+ 1  135   return
+@end verbatim
+
+@end table
+
 @SubSubSecInstruction{preceding-char, 104}
 
 Call @code{preceding-char}.
+
+@table @strong
+@item Implements:
+@code{TOS <- (preceding-char TOS)}
+
+@item Generated via:
+@code{preceding-char}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+@code{(defun preceding-char-eg() (preceding-char))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  104   preceding-char
+ 1  135   return
+@end verbatim
+
+@end table
 
 @SubSubSecInstruction{current-column, 105}
 
 Call @code{current-column}.
 
+@table @strong
+@item Implements:
+@code{TOS <- (current-column)}
+
+@item Generated via:
+@code{current-column}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-0+1}.
+@item Example:
+@code{(defun current-column-eg() (current-column))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  105   current-column
+ 1  135   return
+@end verbatim
+
+@end table
+
 @SubSubSecInstruction{eolp, 108}
 
 Call @code{eolp}.
+
+@table @strong
+@item Implements:
+@code{TOS <- (eolp)}
+
+@item Generated via:
+@code{eolp}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-0+1}.
+@item Example:
+@code{(defun eolp-eg() (eolp))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  108   eolp
+ 1  135   return
+@end verbatim
+
+@end table
 
 @SubSubSecInstruction{eobp, 109}
 
 Call @code{eobp}.
 
+@table @strong
+@item Implements:
+@code{TOS <- (eobp)}
+
+@item Generated via:
+@code{eobp}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-0+1}.
+@item Example:
+@code{(defun eobp-eg() (eobp))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  109   eobp
+ 1  135   return
+@end verbatim
+
+@end table
+
 @SubSubSecInstruction{bolp, 110}
 
 Call @code{bolp}.
+
+@table @strong
+@item Implements:
+@code{TOS <- (bolp)}
+
+@item Generated via:
+@code{bolp}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-0+1}.
+@item Example:
+@code{(defun bolp-eg() (bolp))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  110   bolp
+ 1  135   return
+@end verbatim
+
+@end table
 
 @SubSubSecInstruction{bobp, 111}
 
 Call @code{bobp}.
 
+@table @strong
+@item Implements:
+@code{TOS <- (bobp)}
+
+@item Generated via:
+@code{bobp}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-0+1}.
+@item Example:
+@code{(defun bobp-eg() (bobp))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  111   bobp
+ 1  135   return
+@end verbatim
+
+@end table
+
 @SubSubSecInstruction{current-buffer, 112}
 
 Call @code{current-buffer}.
 
+@table @strong
+@item Implements:
+@code{TOS <- (current-buffer)}
+
+@item Generated via:
+@code{current-buffer}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-0+1}.
+@item Example:
+@code{(defun current-buffer-eg() (current-buffer))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  112   current-buffer
+ 1  135   return
+@end verbatim
+
+@end table
+
 @SubSubSecInstruction{set-buffer, 113}
 
-Call @code{set-buffer} with the top of the stack,
-The top of the stack is replaced by the result of
-@code{(set-buffer TOS)}
+Call @code{set-buffer} with TOS.
 
-@strong{Example}
+@table @strong
+@item Implements:
+@code{TOS <- (set-buffer TOS)}
+
+@item Generated via:
+@code{set-buffer}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Example:
 @code{(defun set-buffer-eg() (set-buffer "*scratch"))} generates:
 @verbatim
 PC  Byte  Instruction
@@ -2814,15 +3149,27 @@ PC  Byte  Instruction
 Constants Vector: ["*scratch"]
 @end verbatim
 
+@end table
+
 @SubSubSecInstruction{save-current-buffer-1, 114}
 
 Call @code{save-current-buffer}.
 
-Replaces older @code{save-current-buffer}.
+Replaces older @code{save-current-buffer}. @xref{save-current-buffer}.
 
-Added in Emacs 19.34.
+@table @strong
+@item Implements:
+@code{TOS <- (save-current-buffer)}
 
-@strong{Example}
+@item Generated via:
+@code{save-current-buffer}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Added in:
+Emacs 19.34.
+@item Example:
 @code{(defun save-curent-buffer-1-eg() (save-current-buffer (prog 5)))} generates:
 @verbatim
 PC  Byte  Instruction
@@ -2835,6 +3182,8 @@ PC  Byte  Instruction
 
 Constants Vector: [prog 5]
 @end verbatim
+
+@end table
 
 @SubSubSecInstruction{forward-char, 117}
 
@@ -3027,6 +3376,9 @@ Relative-jump version of @pxref{goto-if-not-nil-else-pop}.
 
 
 @FirstSubSecInstruction{save-current-buffer, 97}
+
+Replaced by @code{save-current-buffer-1}. @xref{save-current-buffer-1}.
+
 @FirstSubSecInstruction{bmark, 97}
 
 Used in V 17
