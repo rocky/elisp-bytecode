@@ -3,19 +3,19 @@
 @chapter Opcode Changes Between Emacs Releases
 
 @menu
-* After 16 and Starting in 18.31::
-* After 18.59 and Starting in 19.34::
-* After 19.34 and Starting in 20.1::
-* After 20.1 and Starting in 21.1::
-* After 21.4 and Starting in 22.1::
-* After 22.3 and Starting in 23.1::
-* After 23.4 and Starting in 24.1::
-* After 24.5 and Starting in 25.1::
-* After 25.3 and Starting in 26.1::
-* After 26.1 and Starting in 27.1::
+* Emacs 18:: After 16 and Starting in 18.31
+* Emacs 19:: After 18.59 and Starting in 19.34
+* Emacs 20::  After 19.34 and Starting in 20.1
+* Emacs 21::  After 20.1 and Starting in 21.1
+* Emacs 22::  After 21.4 and Starting in 22.1
+* Emacs 23::  After 22.3 and Starting in 23.1
+* Emacs 24::  After 23.4 and Starting in 24.1
+* Emacs 25::  After 24.5 and Starting in 25.1
+* Emacs 26::  After 25.3 and Starting in 26.1
+* Emacs 27::  After 26.1 and Starting in 27.1
 @end menu
 
-@node After 16 and Starting in 18.31
+@node Emacs 18
 @section After 16 and Starting in 18.31
 
 The following instructions were renamed:
@@ -56,7 +56,7 @@ The following instructions became obsolete:
 @end itemize
 
 @page
-@node After 18.59 and Starting in 19.34
+@node Emacs 19
 @section After 18.59 and Starting 19.34
 
 jwz and Hallvard made major changes and additions to the bytecode
@@ -162,7 +162,7 @@ Bytecode meta-comments look like this:
 The Emacs Lisp tarball for 19.2 is Aug, 1992. (The tarball date for
 19.2 is much later; and even after the date on the 20.1 tarball.)
 
-@node After 19.34 and Starting in 20.1
+@node Emacs 20
 @section After 19.34 and Starting in 20.1
 
 There were no instruction changes. However bytecode interpretation of
@@ -188,7 +188,7 @@ Bytecode meta-comments look like this:
 @end itemize
 
 @page
-@node After 20.1 and Starting in 21.1
+@node Emacs 21
 @section After 20.1 and Starting in 21.1
 
 There were no instruction changes. However there were major
@@ -214,7 +214,7 @@ Bytecode meta-comments look like this:
 @item Emacs 21.4 was released Feb 6, 2005
 @end itemize
 
-@node After 21.4 and Starting in 22.1
+@node Emacs 22
 @section After 21.4 and Starting in 22.1
 
 There were no instruction changes.
@@ -239,7 +239,7 @@ Bytecode meta-comments look like this:
 @item The Emacs 22.3 tarball is dated Sep 05  2008
 @end itemize
 
-@node After 22.3 and Starting in 23.1
+@node Emacs 23
 @section After 22.3 and Starting in 23.1
 
 There were no instruction changes.
@@ -263,7 +263,7 @@ Bytecode meta-comments look like this:
 @item The Emacs 23.4 tarball is dated Jan 28, 2012
 @end itemize
 
-@node After 23.4 and Starting in 24.1
+@node Emacs 24
 @section After 23.4 and Starting in 24.1
 
 An error is thrown for unknown bytecodes rather than aborting.
@@ -328,7 +328,7 @@ Bytecode meta-comments look like this:
 @item Emacs 24.5 was released Apr 10, 2015
 @end itemize
 
-@node After 24.5 and Starting in 25.1
+@node Emacs 25
 @section After 24.5 and Starting in 25.1
 
 Instruction 0 becomes an error rather than aborting emacs.
@@ -365,7 +365,7 @@ Bytecode meta-comments look like this:
 @item Emacs 25.3 was released Sep 11, 2017
 @end itemize
 
-@node After 25.3 and Starting in 26.1
+@node Emacs 26
 @section After 25.3 and Starting in 26.1
 
 The following instruction was added:
@@ -373,7 +373,7 @@ The following instruction was added:
 @item @code{switch} (267)
 @end itemize
 
-@node After 26.1 and Starting in 27.1
+@node Emacs 27
 @section After 26.1 and Starting in 27.1
 
 No changes yet.

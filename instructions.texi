@@ -1215,7 +1215,7 @@ binary @code{equal}.
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 When lexical binding is in effect, @code{(defun equal-eg(a b) (equal a b))} generates:
 @c ((lexical . t))
@@ -1292,7 +1292,7 @@ Call @code{numberp}.
 @item Stack effect:
 @math{-1+1}.
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 When lexical binding is in effect, @code{(defun numberp-eg(a) (numberp a))} generates:
 @c ((lexical . t))
@@ -1318,7 +1318,7 @@ Call @code{integerp}.
 @item Stack effect:
 @math{-1+1}.
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 When lexical binding is in effect, @code{(defun integerp-eg(a) (integerp a))} generates:
 @c ((lexical . t))
@@ -1602,7 +1602,7 @@ instructions for the case where there are 1 to 4 items in the list.
 @item Stack effect:
 @math{-n+1} where @math{n} is the value of the instruction operand.
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 @code{(defun listN-eg() (list 'a 'b 'c 'd 'e))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1722,7 +1722,7 @@ Call @code{nthcdr} with two stack arguments.
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 @code{(defun nthcdr-eg() (nthcdr '(1550 1551 1552) 2))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1753,7 +1753,7 @@ Call @code{elt} with two stack arguments.
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 @code{(defun elt-eg() (elt '(1560 1561 1562) 2))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1783,7 +1783,7 @@ Call @code{nreverse} with one stack argument.
 @item Stack effect:
 @math{-1+1}.
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 @code{(defun nreverse-eg() (nreverse '(1590 1591)))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1812,7 +1812,7 @@ Call @code{setcar} with two stack arguments.
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 With lexical binding in effect, @code{(defun setcar-eg(l) (setcar l 1600)))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1842,7 +1842,7 @@ Call @code{setcdr} with two stack arguments.
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 With lexical binding in effect, @code{(defun setcdr-eg(l) (setcdr l 1610)))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1872,7 +1872,7 @@ Call @code{car-safe} with one argument.
 @item Stack effect:
 @math{-1+1}.
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 With lexical binding in effect, @code{(defun car-safe-eg(l) (car-safe l))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1899,7 +1899,7 @@ Call @code{cdr-safe} with one stack argument.
 @item Stack effect:
 @math{-1+1}.
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 With lexical binding in effect, @code{(defun cdr-safe-eg(l) (cdr-safe l))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1926,7 +1926,7 @@ Call @code{nconc} with two stack arguments.
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 With lexical binding in effect, @code{(defun nconc-eg(a b) (nconc a b))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -2251,7 +2251,7 @@ Call @code{*}.
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 When dynamic binding is in effect, @code{(defun mult-eg(n) (* n n))} generates:
 @verbatim
@@ -2361,7 +2361,7 @@ Call @verb{|%|}.
 @item Stack effect:
 @math{-2+1}
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 When lexical binding is in effect, @code{(defun rem-eg(a b) (% a b))} generates:
 @c ((lexical . t))
@@ -2439,7 +2439,7 @@ Call @code{concat} with two stack arguments.
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 @code{(defun concat2-eg() (concat "a" "b"))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -2534,7 +2534,7 @@ concatenate.
 @item Stack effect:
 @math{-n+1} where @math{n} is the value of the instruction operand.
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 @code{(defun concatN-eg() (concat "a" "b" "c" "d" "e"))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -2568,7 +2568,7 @@ Call @code{upcase} with one stack argument.
 @item Stack effect:
 @math{-1+1}.
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 @code{(defun upcase-eg() (upcase "abc"))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -2597,7 +2597,7 @@ Call @code{downcase} with one argument.
 @item Stack effect:
 @math{-1+1}.
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 @code{(defun downcase-eg(l) (downcase "ABC"))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -2626,7 +2626,7 @@ Call @code{string=} with two stack arguments, comparing two strings for equality
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 With lexical binding in effect,
 @verbatim
@@ -2661,7 +2661,7 @@ Call @code{string<} with two stack arguments, comparing two strings.
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 With lexical binding in effect,
 @verbatim
@@ -2742,7 +2742,7 @@ Call @code{point}.
 @item Stack effect:
 @math{-0+1}.
 @item Added in:
-Emacs 18.31, renamed from @code{dot}. @xref{After 16 and Starting in 18.31, , Emacs 18.31}.
+Emacs 18.31, renamed from @code{dot}. @xref{Emacs 18}.
 @item Example:
 @code{(defun point-eg() (point))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -2825,7 +2825,7 @@ instruction when there is only one stack argument.
 @item Stack effect:
 @math{-n+1} where @math{n} is the value of the instruction operand.
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 With lexical binding in effect, @code{(defun insertN-eg(a b c) (insert a b c))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -2856,7 +2856,7 @@ Call @code{point-max}.
 @item Stack effect:
 @math{-0+1}.
 @item Added in:
-Emacs 18.31, renamed from @code{dot-max}. @xref{After 16 and Starting in 18.31, , Emacs 18.31}.
+Emacs 18.31, renamed from @code{dot-max}. @xref{Emacs 18}.
 @item Example:
 @code{(defun point-max-eg() (point-max))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -2883,7 +2883,7 @@ Call @code{point-min}.
 @item Stack effect:
 @math{-0+1}.
 @item Added in:
-Emacs 18.31, renamed from @code{dot-min}. @xref{After 16 and Starting in 18.31, , Emacs 18.31}.
+Emacs 18.31, renamed from @code{dot-min}. @xref{Emacs 18}.
 @item Example:
 @code{(defun point-min-eg() (point-min))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -3167,7 +3167,7 @@ Replaces older @code{save-current-buffer}. @xref{save-current-buffer}.
 @item Stack effect:
 @math{-1+1}.
 @item Added in:
-Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 @code{(defun save-curent-buffer-1-eg() (save-current-buffer (prog 5)))} generates:
 @verbatim
@@ -3188,68 +3188,68 @@ Constants Vector: [prog 5]
 
 Call @code{forward-char} with one argument.
 
-Added in Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{forward-word, 118}
 
 Call @code{forward-word} with one argument.
 
-Added in Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{skip-chars-forward, 119}
 
 @kindex skip-chars-forward
 Call @code{skip-chars-forward} with two stack arguments.
 
-Added in Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{skip-chars-backward, 120}
 
 Call @code{skip-chars-backward} with two stack arguments.
 
-Added in Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{forward-line, 121}
 
 Call @code{forward-line} with one argument.
 
-Added in Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{char-syntax, 122}
 
 Call @code{char-syntax} with one argument.
 
-Added in Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{buffer-substring, 123}
 
 Call @code{buffer-substring} with two stack arguments.
 
-Added in Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{delete-region, 124}
 
 Call @code{delete-region} with two stack arguments.
 
-Added in Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{narrow-to-region, 125}
 
 Call @code{narrow-to-region} with two stack arguments.
 
-Added in Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{widen, 126}
 
 Call @code{widen}.
 
-Added in Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{end-of-line, 127}
 
 Call @code{end-of-line} with one argument.
 
-Added in Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{save-window-excursion, 139}
 
@@ -3267,19 +3267,19 @@ Added in Emacs 24.1
 
 Call @code{set-marker} with three stack arguments.
 
-Added in Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{match-beginning, 148}
 
 Call @code{match-beginning} with one argument.
 
-Added in Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{match-end, 149}
 
 Call @code{match-end} with one argument.
 
-Added in Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SECTION{Stack-Manipulation Instructions}
 
@@ -3370,31 +3370,31 @@ bytecode), but in other cases they are no longer accepted by the interperter
 
 Relative jump version of @pxref{goto}.
 
-Introduced but unused in Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Introduced but unused in Emacs 19.34. @xref{Emacs 19}.
 
 @FirstSubSecInstruction{Rgotoifnil, 171}
 
 Relative jump version of @pxref{goto-if-nil}.
 
-Introduced but unused in Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Introduced but unused in Emacs 19.34. @xref{Emacs 19}.
 
 @FirstSubSecInstruction{Rgotoifnonnil, 172}
 
 Relative-jump version of @pxref{goto-if-not-nil}.
 
-Introduced but unused in Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Introduced but unused in Emacs 19.34. @xref{Emacs 19}.
 
 @FirstSubSecInstruction{Rgotoifnilelsepop, 173}
 
 Relative-jump version of @pxref{goto-if-nil-else-pop}.
 
-Introduced but unused in Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Introduced but unused in Emacs 19.34. @xref{Emacs 19}.
 
 @FirstSubSecInstruction{Rgotoifnonnilelsepop, 174}
 
 Relative-jump version of @pxref{goto-if-not-nil-else-pop}.
 
-Introduced but unused in Emacs 19.34. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Introduced but unused in Emacs 19.34. @xref{Emacs 19}.
 
 @FirstSubSecInstruction{save-current-buffer, 97}
 
@@ -3402,20 +3402,20 @@ Replaced by @code{save-current-buffer-1}. @xref{save-current-buffer-1}.
 
 @FirstSubSecInstruction{mark, 97}
 
-Used in V 17; obsolete in Emacs 18.31. @xref{After 16 and Starting in 18.31, , Emacs 18.31}.
+Used in V 17; obsolete in Emacs 18.31. @xref{Emacs 18}.
 
 @FirstSubSecInstruction{scan-buffer, 107}
 
-Obsolete in Emacs 18.31. @xref{After 16 and Starting in 18.31, , Emacs 18.31}.
+Obsolete in Emacs 18.31. @xref{Emacs 18}.
 
 @FirstSubSecInstruction{read-char, 114}
 
 @FirstSubSecInstruction{set-mark, 115}
 
-Obsolete in Emacs 18.31. @xref{After 16 and Starting in 18.31, , Emacs 18.31}.
+Obsolete in Emacs 18.31. @xref{Emacs 18}.
 
 @FirstSubSecInstruction{interactive-p, 116}
 
 @FirstSubSecInstruction{unbind-all, 146}
 
-Introduced in Emacs 19.34 for tail-recursion elimination by jwz, but never used. @xref{After 18.59 and Starting in 19.34, , Emacs 19.34}.
+Introduced in Emacs 19.34 for tail-recursion elimination by jwz, but never used. @xref{Emacs 19}.

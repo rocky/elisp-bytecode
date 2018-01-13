@@ -893,6 +893,7 @@ and for a description of how to interpret the stack-effect field.
 @tab @math{-0+0}
 
 @item @verb{|0214|}
+
 @tab @verb{| 140|}
 @tab @tab @tab Unused
 @item @verb{|0215|}
@@ -1097,40 +1098,47 @@ and for a description of how to interpret the stack-effect field.
 @tab 1
 @tab @xref{integerp}.
 @tab @math{-1+1}
+
 @item @verb{|0251|}
 @tab @verb{| 169|}
-@tab
+@tab @tab @tab Unused
 
 @item @verb{|0252|}
-@tab @verb{| 170|}
-@tab @verb{|  Rgoto|}
+@tab @verb{|*170|}
+@tab @verb{| *Rgoto|}
 @tab 1
 @tab @xref{Rgoto}.
+@tab @math{-1+0}
 @item @verb{|0253|}
-@tab @verb{| 171|}
-@tab @verb{|  Rgotoifnil|}
+@tab @verb{|*171|}
+@tab @verb{| *Rgotoifnil|}
 @tab 1
 @tab @xref{Rgotoifnil}.
 @item @verb{|0254|}
-@tab @verb{| 172|}
-@tab @verb{|  Rgotoifnonnil|}
+@tab @verb{|*172|}
+@tab @verb{| *Rgotoifnonnil|}
 @tab 1
 @tab @xref{Rgotoifnonnil}.
+@tab @math{-1+0}
 @item @verb{|0255|}
-@tab @verb{| 173|}
-@tab @verb{|  Rgotoifnilelsepop|}
+@tab @verb{|*173|}
+@tab @verb{| *Rgotoifnilelsepop|}
 @tab 1
 @tab @xref{Rgotoifnilelsepop}.
+@tab @math{\phi(-1,0)+0}
 @item @verb{|0256|}
-@tab @verb{| 174|}
-@tab @verb{|  Rgotoifnonnilelsepop|}
-@tab @tab
+@tab @verb{|*174|}
+@tab @verb{| *Rgotoifnonnilelsepop|}
+@tab 1
+@tab @xref{Rgotoifnonnilelsepop}
+@tab @math{\phi(-1,0)+0}
 
 @item @verb{|0257|}
 @tab @verb{| 175|}
 @tab @verb{|  listN|}
 @tab 2
 @tab @xref{listN}.
+@tab @math{-n+1}
 @item @verb{|0260|}
 @tab @verb{| 176|}
 @tab @verb{|  concatN|}
@@ -1141,18 +1149,20 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{|  insertN|}
 @tab 1
 @tab @xref{insertN}.
-@tab
+@tab @math{-n+1}
 
 @item @verb{|0262|}
 @tab @verb{| 178|}
 @tab @verb{|  stack-set|}
 @tab 1
 @tab @xref{stack-set}.
+@tab @math{-0+0}
 @item @verb{|0263|}
 @tab @verb{| 179|}
 @tab @verb{|  stack-set2|}
-@tab 1
+@tab 2
 @tab @xref{stack-set2}.
+@tab @math{-0+0}
 
 @item @verb{|0264|}
 @tab @verb{| 180|}
@@ -1166,11 +1176,13 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{|  discardN|}
 @tab 1
 @tab @xref{discardN}.
+@tab @math{-n+1}
 @item @verb{|0267|}
 @tab @verb{| 183|}
 @tab @verb{|  switch|}
 @tab 1
 @tab @xref{switch}.
+@tab @math{-2+0}
 
 @item @verb{|0270|}
 @tab @verb{| 184|}
