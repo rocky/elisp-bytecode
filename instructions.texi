@@ -3347,7 +3347,7 @@ bytecode), but in other cases they are no longer accepted by the interperter
 * Rgotoifnilelsepop::
 * Rgotoifnonnilelsepop::
 * save-current-buffer::
-* bmark::
+* mark::
 * scan-buffer::
 * read-char::
 * set-mark::
@@ -3379,7 +3379,7 @@ Relative-jump version of @pxref{goto-if-not-nil-else-pop}.
 
 Replaced by @code{save-current-buffer-1}. @xref{save-current-buffer-1}.
 
-@FirstSubSecInstruction{bmark, 97}
+@FirstSubSecInstruction{mark, 97}
 
 Used in V 17
 
