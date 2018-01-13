@@ -624,9 +624,9 @@ and for a description of how to interpret the stack-effect field.
 @math{-0+1}
 @item @verb{|0141|}
 @tab @verb{| *97|}
-@tab @verb{| *bmark|}
+@tab @verb{| *mark|}
 @tab 1
-@tab @xref{bmark}.
+@tab @xref{mark}
 @tab @math{-0+1}
 @item @verb{|0142|}
 @tab @verb{|  98|}
