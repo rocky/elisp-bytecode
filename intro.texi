@@ -16,6 +16,7 @@ Firefox 53.0.3 and Emacs 25.3, you would see that relative sizes of Firefox
 tarball is 5 times bigger than for Emacs. But how are these made up,
 or what languages are they comprised of?
 
+@noindent
 For Firefox whose core is written in C++ we have:
 
 @verbatim
@@ -34,6 +35,7 @@ HTML                         45311      120520        2209067
 C                             3482      400594        1664666
 @end verbatim
 
+@noindent
 And for Emacs whose core is written in C we have:
 
 @verbatim
