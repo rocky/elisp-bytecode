@@ -903,8 +903,12 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{| 142|}
 @tab @tab @tab Unused
 @item @verb{|0217|}
-@tab @verb{| 143|}
-@tab @tab @tab Unused
+
+@tab @verb{|*143|}
+@tab @verb{| *condition-case|}
+@tab 1
+@tab @xref{condition-case}.
+@tab @math{-1+1}
 
 @item @verb{|0220|}
 @tab @verb{| 144|}

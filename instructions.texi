@@ -531,7 +531,7 @@ Removes last condition pushed by @code{pushconditioncase}
 @item Stack effect:
 @math{-0+0}.
 @item Added in:
-Emacs 24.4
+Emacs 24.4. @xref{Emacs 24}.
 @item Example:
 @verbatim
 (defun pushconditioncase-eg()
@@ -582,7 +582,7 @@ a jump to the operand occurs.
 @item Stack effect:
 @math{-1+0}.
 @item Added in:
-Emacs 24.4
+Emacs 24.4. @xref{Emacs 24}.
 @item Example:
 @verbatim
 (defun pushconditioncase-eg()
@@ -874,11 +874,11 @@ stack.
 * List Function Instructions::
 * Arithmetic Function Instructions::
 * String Function Instructions::
+* Emacs Buffer Instructions::
 * Emacs Function Instructions::
 @end menu
 
-@node Lisp Function Instructions
-@subsection Lisp Function Instructions
+@FirstSubsection{Lisp Function Instructions}
 
 These instructions correspond to general functions which are not
 specific to Emacs; common cases are usually inlined for speed by the
@@ -1330,9 +1330,7 @@ PC  Byte  Instruction
 @end verbatim
 @end table
 
-@page
-@node List Function Instructions
-@subsection List Function Instructions
+@Subsection{List Function Instructions}
 
 These instructions correspond to general functions which are not
 specific to Emacs; common cases are usually inlined for speed by the
@@ -1940,9 +1938,7 @@ PC  Byte  Instruction
 
 @end table
 
-@page
-@node Arithmetic Function Instructions
-@subsection Arithmetic Function Instructions
+@Subsection{Arithmetic Function Instructions}
 
 These instructions correspond to general functions which are not
 specific to Emacs; common cases are usually inlined for speed by the
@@ -2375,9 +2371,7 @@ PC  Byte  Instruction
 
 @end table
 
-@page
-@node String Function Instructions
-@subsection String Function Instructions
+@Subsection{String Function Instructions}
 
 These instructions correspond to general functions which are not
 specific to Emacs; the bytecode interpreter calls the corresponding C
@@ -2682,9 +2676,131 @@ Constants Vector: ["b"]
 
 @end table
 
-@page
-@node Emacs Function Instructions
-@subsection Emacs Function Instructions
+@Subsection{Emacs Buffer Instructions}
+
+@menu
+* current-buffer::
+* set-buffer::
+* save-current-buffer-1::
+* buffer-substring::
+@end menu
+
+@SubSubSecInstruction{current-buffer, 112}
+
+Call @code{current-buffer}.
+
+@table @strong
+@item Implements:
+@code{TOS <- (current-buffer)}
+
+@item Generated via:
+@code{current-buffer}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-0+1}.
+@item Example:
+@code{(defun current-buffer-eg() (current-buffer))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  112   current-buffer
+ 1  135   return
+@end verbatim
+
+@end table
+
+@SubSubSecInstruction{set-buffer, 113}
+
+Call @code{set-buffer} with TOS.
+
+@table @strong
+@item Implements:
+@code{TOS <- (set-buffer TOS)}
+
+@item Generated via:
+@code{set-buffer}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+@code{(defun set-buffer-eg() (set-buffer "*scratch"))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] "*scratch"
+ 1  113   set-buffer
+ 2  135   return
+
+Constants Vector: ["*scratch"]
+@end verbatim
+
+@end table
+
+@SubSubSecInstruction{save-current-buffer-1, 114}
+
+Call @code{save-current-buffer}.
+
+Replaces older @code{save-current-buffer}. @xref{save-current-buffer}.
+
+@table @strong
+@item Implements:
+@code{TOS <- (save-current-buffer)}
+
+@item Generated via:
+@code{save-current-buffer}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Added in:
+Emacs 19.34. @xref{Emacs 19}.
+@item Example:
+@code{(defun save-curent-buffer-1-eg() (save-current-buffer (prog 5)))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  114   save-current-buffer
+ 1  192   constant[0] prog
+ 2  193   constant[1] 5
+ 3   33   call[1]
+ 4   41   unbind[1]
+ 5  135   return
+
+Constants Vector: [prog 5]
+@end verbatim
+
+@end table
+
+@SubSubSecInstruction{buffer-substring, 123}
+
+Call @code{buffer-substring} with two stack arguments.
+
+@table @strong
+@item Implements:
+@code{S[1] <- (buffer-substring S[1] TOS); top--}.
+@item Generated via:
+@code{buffer-substring}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+Emacs 19.34. @xref{Emacs 19}.
+@item Example:
+@code{(defun buffer-substring-eg() (buffer-substring 1230 1231))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] 1230
+ 1  193   constant[1] 1231
+ 2  123   buffer-substring
+ 3  135   return
+
+Constants Vector: [1230 1231]
+@end verbatim
+
+@end table
+
+@Subsection{Emacs Function Instructions}
 
 These instructions correspond to Emacs-specific text manipulation
 functions. They are generally not inlined by the bytecode interpreter,
@@ -2705,23 +2821,17 @@ but simply call the corresponding C function.
 * eobp::
 * bolp::
 * bobp::
-* current-buffer::
-* set-buffer::
-* save-current-buffer-1::
 * forward-char::
 * forward-word::
 * skip-chars-forward::
 * skip-chars-backward::
 * forward-line::
 * char-syntax::
-* buffer-substring::
 * delete-region::
 * narrow-to-region::
 * widen::
 * end-of-line::
 * save-window-excursion::
-* temp-output-buffer-setup::
-* temp-output-buffer-show::
 * set-marker::
 * match-beginning::
 * match-end::
@@ -3098,92 +3208,6 @@ PC  Byte  Instruction
 
 @end table
 
-@SubSubSecInstruction{current-buffer, 112}
-
-Call @code{current-buffer}.
-
-@table @strong
-@item Implements:
-@code{TOS <- (current-buffer)}
-
-@item Generated via:
-@code{current-buffer}
-@item Instruction size:
-1 byte
-@item Stack effect:
-@math{-0+1}.
-@item Example:
-@code{(defun current-buffer-eg() (current-buffer))} generates:
-@c ((lexical . t) (optimize . nil))
-@verbatim
-PC  Byte  Instruction
- 0  112   current-buffer
- 1  135   return
-@end verbatim
-
-@end table
-
-@SubSubSecInstruction{set-buffer, 113}
-
-Call @code{set-buffer} with TOS.
-
-@table @strong
-@item Implements:
-@code{TOS <- (set-buffer TOS)}
-
-@item Generated via:
-@code{set-buffer}
-@item Instruction size:
-1 byte
-@item Stack effect:
-@math{-1+1}.
-@item Example:
-@code{(defun set-buffer-eg() (set-buffer "*scratch"))} generates:
-@verbatim
-PC  Byte  Instruction
- 0  192   constant[0] "*scratch"
- 1  113   set-buffer
- 2  135   return
-
-Constants Vector: ["*scratch"]
-@end verbatim
-
-@end table
-
-@SubSubSecInstruction{save-current-buffer-1, 114}
-
-Call @code{save-current-buffer}.
-
-Replaces older @code{save-current-buffer}. @xref{save-current-buffer}.
-
-@table @strong
-@item Implements:
-@code{TOS <- (save-current-buffer)}
-
-@item Generated via:
-@code{save-current-buffer}
-@item Instruction size:
-1 byte
-@item Stack effect:
-@math{-1+1}.
-@item Added in:
-Emacs 19.34. @xref{Emacs 19}.
-@item Example:
-@code{(defun save-curent-buffer-1-eg() (save-current-buffer (prog 5)))} generates:
-@verbatim
-PC  Byte  Instruction
- 0  114   save-current-buffer
- 1  192   constant[0] prog
- 2  193   constant[1] 5
- 3   33   call[1]
- 4   41   unbind[1]
- 5  135   return
-
-Constants Vector: [prog 5]
-@end verbatim
-
-@end table
-
 @SubSubSecInstruction{forward-char, 117}
 
 Call @code{forward-char} with one argument.
@@ -3221,12 +3245,6 @@ Call @code{char-syntax} with one argument.
 
 Added in Emacs 19.34. @xref{Emacs 19}.
 
-@SubSubSecInstruction{buffer-substring, 123}
-
-Call @code{buffer-substring} with two stack arguments.
-
-Added in Emacs 19.34. @xref{Emacs 19}.
-
 @SubSubSecInstruction{delete-region, 124}
 
 Call @code{delete-region} with two stack arguments.
@@ -3252,14 +3270,6 @@ Call @code{end-of-line} with one argument.
 Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{save-window-excursion, 139}
-
-Added in Emacs 24.1
-
-@SubSubSecInstruction{temp-output-buffer-setup, 144}
-
-Added in Emacs 24.1
-
-@SubSubSecInstruction{temp-output-buffer-show, 145}
 
 Added in Emacs 24.1
 
@@ -3363,6 +3373,9 @@ bytecode), but in other cases they are no longer accepted by the interperter
 * read-char::
 * set-mark::
 * interactive-p::
+* condition-case::
+* temp-output-buffer-setup::
+* temp-output-buffer-show::
 * unbind-all::
 @end menu
 
@@ -3416,6 +3429,72 @@ Obsolete in Emacs 18.31. @xref{Emacs 18}.
 
 @FirstSubSecInstruction{interactive-p, 116}
 
+@FirstSubSecInstruction{condition-case, 143}
+
+Replaced by @code{pushconditioncase}. @xref{pushconditioncase}
+
+@table @strong
+@item Implements:
+?
+@item Generated via:
+?
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Obsolete since:
+Emacs 24.4. @xref{Emacs 24}.
+@item Example:
+@code{(defun condition-case-eg() (?))} generates:
+@c ((lexical . t))
+@verbatim
+@end verbatim
+
+@end table
+
+@FirstSubSecInstruction{temp-output-buffer-setup, 144}
+
+@table @strong
+@item Implements:
+?
+@item Generated via:
+?
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Obsolete since:
+Emacs 24.1. @xref{Emacs 24}.
+@item Example:
+@code{(defun temp-output-buffer-setup-eg() (?))} generates:
+@c ((lexical . t))
+@verbatim
+@end verbatim
+
+@end table
+
+@FirstSubSecInstruction{temp-output-buffer-show, 145}
+
+@table @strong
+@item Implements:
+?
+@item Generated via:
+?
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Obsolete in:
+Emacs 24.1. @xref{Emacs 24}.
+@item Example:
+@code{(defun temp-output-buffer-show-eg() (?))} generates:
+@c ((lexical . t))
+@verbatim
+@end verbatim
+
+@end table
+
 @FirstSubSecInstruction{unbind-all, 146}
 
-Introduced in Emacs 19.34 for tail-recursion elimination by jwz, but never used. @xref{Emacs 19}.
+Introduced in Emacs 19.34 for tail-recursion elimination by jwz, but
+never used. @xref{Emacs 19}.
