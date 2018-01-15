@@ -154,12 +154,13 @@ long: a one-byte opcode followed by a two-byte operand.
 
 The instruction name at PC 0 with opcode 192, @code{constant[0]},
 looks like it is indexing, but it is a just name, where the brackets
-and number are part of the name. We use this kind of name because it is
-suggestive of how it works: it indexes the first element into the
+and number are part of the name. We use this kind of name because it
+is suggestive of how it works: it indexes the first element into the
 constants vector and pushes that value onto the evaluation
-stack. @code{constant[1]} with opcode 193 pushes onto the stack. We
-could have also used instruction names like @code{constant0} and
-@code{constant1} for opcodes 192 and 193 instead.
+stack. @code{constant[1]} with opcode 193 pushes the second element of
+the constants vector onto the stack. We could have also used
+instruction names like @code{constant0} and @code{constant1} for
+opcodes 192 and 193 instead.
 
 Unless otherwise stated, all code examples were compiled in Emacs 25
 with optimization turned off.
