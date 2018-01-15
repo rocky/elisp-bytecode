@@ -11,6 +11,17 @@
 @section \name\
 @end macro
 
+@macro FirstSubsection{name}
+@node \name\
+@subsection \name\
+@end macro
+
+@macro Subsection{name}
+@page
+@node \name\
+@subsection \name\
+@end macro
+
 @c How we format individual instructions.
 
 @macro FirstSubSecInstruction{name, opcode}
