@@ -896,6 +896,7 @@ stack.
 * String Function Instructions::
 * Emacs Buffer Instructions::
 * Emacs Position Instructions::
+* Emacs Text Instructions::
 * Emacs Misc Function Instructions::
 @end menu
 
@@ -2706,7 +2707,7 @@ Constants Vector: ["b"]
 * buffer-substring::
 @end menu
 
-@SubSubSecInstruction{current-buffer, 112}
+@FirstSubSubSecInstruction{current-buffer, 112}
 
 Call @code{current-buffer}.
 
@@ -2994,11 +2995,12 @@ Call @code{widen}.
 
 Added in Emacs 19.34. @xref{Emacs 19}.
 
-@Subsection{Emacs Misc Function Instructions}
+@Subsection{Emacs Text Instructions}
 
 These instructions correspond to Emacs-specific text manipulation
-functions. They are generally not inlined by the bytecode interpreter,
-but simply call the corresponding C function.
+functions found in the "Text" chapter of the Emacs Lisp Reference
+Manual. They are not inlined by the bytecode interpreter, but simply
+call the corresponding C function.
 
 @menu
 * insert::
@@ -3011,16 +3013,11 @@ but simply call the corresponding C function.
 * eobp::
 * bolp::
 * bobp::
-* char-syntax::
 * delete-region::
 * end-of-line::
-* save-window-excursion::
-* set-marker::
-* match-beginning::
-* match-end::
 @end menu
 
-@SubSubSecInstruction{insert, 99}
+@FirstSubSubSecInstruction{insert, 99}
 
 Call @code{insert} with one stack argument.
 
@@ -3283,12 +3280,6 @@ PC  Byte  Instruction
 
 @end table
 
-@SubSubSecInstruction{char-syntax, 122}
-
-Call @code{char-syntax} with one argument.
-
-Added in Emacs 19.34. @xref{Emacs 19}.
-
 @SubSubSecInstruction{delete-region, 124}
 
 Call @code{delete-region} with two stack arguments.
@@ -3298,6 +3289,26 @@ Added in Emacs 19.34. @xref{Emacs 19}.
 @SubSubSecInstruction{end-of-line, 127}
 
 Call @code{end-of-line} with one argument.
+
+Added in Emacs 19.34. @xref{Emacs 19}.
+
+@Subsection{Emacs Misc Function Instructions}
+
+These instructions correspond to miscellaneous Emacs-specific
+functions. They are not inlined by the bytecode interpreter, but
+simply call the corresponding C function.
+
+@menu
+* char-syntax::
+* save-window-excursion::
+* set-marker::
+* match-beginning::
+* match-end::
+@end menu
+
+@FirstSubSubSecInstruction{char-syntax, 122}
+
+Call @code{char-syntax} with one argument.
 
 Added in Emacs 19.34. @xref{Emacs 19}.
 
