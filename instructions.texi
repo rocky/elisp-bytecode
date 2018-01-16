@@ -2954,46 +2954,208 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{forward-char, 117}
 
-Call @code{forward-char} with one argument.
+Call @code{forward-char} with one stack argument.
 
-Added in Emacs 19.34. @xref{Emacs 19}.
+@table @strong
+@item Implements:
+@code{TOS <- (forward-char TOS)}
+
+@item Generated via:
+@code{forward-char}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Added in:
+Emacs 19.34. @xref{Emacs 19}.
+@item Example:
+@code{(defun forward-char-eg() (forward-char 1))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] 1
+ 1  117   forward-char
+ 2  135   return
+
+Constants Vector: [1]
+@end verbatim
+
+@end table
 
 @SubSubSecInstruction{forward-word, 118}
 
-Call @code{forward-word} with one argument.
+Call @code{forward-word} with one stack argument.
 
-Added in Emacs 19.34. @xref{Emacs 19}.
+@table @strong
+@item Implements:
+@code{TOS <- (forward-word TOS)}
+
+@item Generated via:
+@code{forward-word}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Added in:
+Emacs 19.34. @xref{Emacs 19}.
+@item Example:
+@code{(defun forward-word-eg() (forward-word 1))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] 1
+ 1  118   forward-word
+ 2  135   return
+
+Constants Vector: [1]
+@end verbatim
+
+@end table
 
 @SubSubSecInstruction{forward-line, 121}
 
-Call @code{forward-line} with one argument.
+Call @code{forward-line} with one stack argument.
 
-Added in Emacs 19.34. @xref{Emacs 19}.
+@table @strong
+@item Implements:
+@code{TOS <- (forward-line TOS)}
+
+@item Generated via:
+@code{forward-line}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Added in:
+Emacs 19.34. @xref{Emacs 19}.
+@item Example:
+@code{(defun forward-line-eg() (forward-line 1))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] 1
+ 1  121   forward-line
+ 2  135   return
+
+Constants Vector: [1]
+@end verbatim
+
+@end table
 
 @SubSubSecInstruction{skip-chars-forward, 119}
 
 @kindex skip-chars-forward
 Call @code{skip-chars-forward} with two stack arguments.
 
-Added in Emacs 19.34. @xref{Emacs 19}.
+@table @strong
+@item Implements:
+@code{S[1] <- (skip-chars-forward S[1] TOS); top--}.
+@item Generated via:
+@code{skip-chars-forward}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+Emacs 19.34. @xref{Emacs 19}.
+@item Example:
+@code{(defun skip-chars-forward-eg() (skip-chars-forward "aeiou" 3))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] "aeiou"
+ 1  193   constant[1] 3
+ 2  119   skip-chars-forward
+ 3  135   return
+
+Constants Vector: ["aeiou" 3]
+@end verbatim
+
+@end table
 
 @SubSubSecInstruction{skip-chars-backward, 120}
 
 Call @code{skip-chars-backward} with two stack arguments.
 
-Added in Emacs 19.34. @xref{Emacs 19}.
+@table @strong
+@item Implements:
+@code{S[1] <- (skip-chars-backward S[1] TOS); top--}.
+@item Generated via:
+@code{skip-chars-backward}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+Emacs 19.34. @xref{Emacs 19}.
+@item Example:
+@code{(defun skip-chars-backward-eg() (skip-chars-backward "aeiou" 3))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] "aeiou"
+ 1  193   constant[1] 3
+ 2  120   skip-chars-backward
+ 3  135   return
+
+Constants Vector: ["aeiou" 3]
+@end verbatim
+
+@end table
 
 @SubSubSecInstruction{narrow-to-region, 125}
 
 Call @code{narrow-to-region} with two stack arguments.
 
-Added in Emacs 19.34. @xref{Emacs 19}.
+@table @strong
+@item Implements:
+@code{S[1] <- (narrow-to-region S[1] TOS); top--}.
+@item Generated via:
+@code{narrow-to-region}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+Emacs 19.34. @xref{Emacs 19}.
+@item Example:
+@code{(defun narrow-to-region-eg() (narrow-to-region 1250 1251))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] 1250
+ 1  193   constant[1] 1251
+ 2  125   narrow-to-region
+ 3  135   return
+
+Constants Vector: [1250 1251]
+@end verbatim
+
+@end table
 
 @SubSubSecInstruction{widen, 126}
 
 Call @code{widen}.
 
-Added in Emacs 19.34. @xref{Emacs 19}.
+@table @strong
+@item Implements:
+@code{TOS <- (widen)}
+
+@item Generated via:
+@code{widen}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-0+1}.
+@item Added in:
+Emacs 19.34. @xref{Emacs 19}.
+@item Example:
+@code{(defun widen-eg() (widen))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  126   widen
+ 1  135   return
+@end verbatim
+
+@end table
 
 @Subsection{Emacs Text Instructions}
 
