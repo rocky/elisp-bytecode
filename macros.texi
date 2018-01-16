@@ -11,6 +11,17 @@
 @section \name\
 @end macro
 
+@macro FirstSubsection{name}
+@node \name\
+@subsection \name\
+@end macro
+
+@macro Subsection{name}
+@page
+@node \name\
+@subsection \name\
+@end macro
+
 @c How we format individual instructions.
 
 @macro FirstSubSecInstruction{name, opcode}
@@ -22,8 +33,9 @@
 @c How we format individual instructions.
 @macro SubSecInstruction{name, opcode}
 @page
+@majorheading \name\ (\opcode\)
 @node \name\
-@unnumberedsubsec @code{\name\} (\opcode\)
+@unnumberedsubsec \name\ (\opcode\)
 @kindex \name\
 @end macro
 
@@ -35,6 +47,7 @@
 
 @macro SubSubSecInstruction{name, opcode}
 @page
+@majorheading \name\
 @node \name\
 @unnumberedsubsubsec @code{\name\} (\opcode\)
 @kindex \name\

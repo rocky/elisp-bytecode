@@ -3,33 +3,33 @@
 @chapter Opcode Changes Between Emacs Releases
 
 @menu
-* After 16 and Starting in 18.31::
-* After 18.59 and Starting in 19.34::
-* After 19.34 and Starting in 20.1::
-* After 20.1 and Starting in 21.1::
-* After 21.4 and Starting in 22.1::
-* After 22.3 and Starting in 23.1::
-* After 23.4 and Starting in 24.1::
-* After 24.5 and Starting in 25.1::
-* After 25.3 and Starting in 26.1::
-* After 26.1 and Starting in 27.1::
+* Emacs 18:: After 16 and Starting in 18.31
+* Emacs 19:: After 18.59 and Starting in 19.34
+* Emacs 20::  After 19.34 and Starting in 20.1
+* Emacs 21::  After 20.1 and Starting in 21.1
+* Emacs 22::  After 21.4 and Starting in 22.1
+* Emacs 23::  After 22.3 and Starting in 23.1
+* Emacs 24::  After 23.4 and Starting in 24.1
+* Emacs 25::  After 24.5 and Starting in 25.1
+* Emacs 26::  After 25.3 and Starting in 26.1
+* Emacs 27::  After 26.1 and Starting in 27.1
 @end menu
 
-@node After 16 and Starting in 18.31
+@node Emacs 18
 @section After 16 and Starting in 18.31
 
 The following instructions were renamed:
 @itemize
-@item @code{dot} becomes @code{mark} (97)
-@item @code{dot-min} becomes @code{point-min} (100)
-@item @code{dot-max} becomes @code{point-max} (101)
+@item @code{dot} becomes @code{mark} (97). @xref{mark}.
+@item @code{dot-min} becomes @code{point-min} (100). @xref{point-min}.
+@item @code{dot-max} becomes @code{point-max} (101). @xref{point-max}.
 @end itemize
 
 The following instructions became obsolete:
 @itemize
-@item @code{mark} (97)
-@item @code{scan-buffer} (107)
-@item @code{set-mark} (115)
+@item @code{mark} (97). @xref{mark}.
+@item @code{scan-buffer} (107). @xref{scan-buffer}.
+@item @code{set-mark} (115). @xref{set-mark}.
 @end itemize
 
 @unnumberedsubsec Version 18 Release History
@@ -56,7 +56,7 @@ The following instructions became obsolete:
 @end itemize
 
 @page
-@node After 18.59 and Starting in 19.34
+@node Emacs 19
 @section After 18.59 and Starting 19.34
 
 jwz and Hallvard made major changes and additions to the bytecode
@@ -64,49 +64,49 @@ interpreter.
 
 The following instructions were added:
 @itemize
-@item @code{mult} (97)
-@item @code{forward-char} (117)
-@item @code{forward-word} (118)
-@item @code{skip-chars-forward} (119)
-@item @code{skip-chars-backward} (120)
-@item @code{forward-line} (121)
-@item @code{char-syntax} (122)
-@item @code{buffer-substring} (123)
-@item @code{delete-region} (124)
-@item @code{narrow-to-region} (125)
-@item @code{widen} (126)
-@item @code{end-of-line} (127)
-@item @code{unbind-all} (146)
-@item @code{set-marker} (147)
-@item @code{match-beginning} (148)
-@item @code{match-end} (149)
-@item @code{upcase} (150)
-@item @code{downcase} (151)
-@item @code{stringeqlsign} (152)
-@item @code{stringlss} (153)
-@item @code{equal} (154)
-@item @code{nthcdr} (155)
-@item @code{elt} (156)
-@item @code{member} (157)
-@item @code{assq} (158)
-@item @code{nreverse} (159)
-@item @code{setcar} (160)
-@item @code{setcdr} (161)
-@item @code{car-safe} (162)
-@item @code{cdr-safe} (163
-@item @code{nconc} (164)
-@item @code{quo} (165)
-@item @code{rem} (166)
-@item @code{numberp} (167)
-@item @code{integerp} (162)
-@item @code{Rgoto} (170)
-@item @code{Rgotoifnil} (171)
-@item @code{Rgotoifnonnil} (172)
-@item @code{Rgotoifnilelsepop} (173)
-@item @code{Rgotoifnonnilelsepop} (174)
-@item @code{listN} (175)
-@item @code{concatN} (176)
-@item @code{insertN} (177)
+@item @code{mult} (97). @xref{mult}.
+@item @code{forward-char} (117). @xref{forward-char}.
+@item @code{forward-word} (118). @xref{forward-word}.
+@item @code{skip-chars-forward} (119). @xref{skip-chars-forward}.
+@item @code{skip-chars-backward} (120). @xref{skip-chars-backward}.
+@item @code{forward-line} (121). @xref{forward-line}.
+@item @code{char-syntax} (122). @xref{char-syntax}.
+@item @code{buffer-substring} (123). @xref{buffer-substring}.
+@item @code{delete-region} (124). @xref{delete-region}.
+@item @code{narrow-to-region} (125). @xref{narrow-to-region}.
+@item @code{widen} (126). @xref{widen}.
+@item @code{end-of-line} (127). @xref{end-of-line}.
+@item @code{unbind-all} (146). @xref{unbind-all}.
+@item @code{set-marker} (147). @xref{set-marker}.
+@item @code{match-beginning} (148). @xref{match-beginning}.
+@item @code{match-end} (149). @xref{match-end}.
+@item @code{upcase} (150). @xref{upcase}.
+@item @code{downcase} (151). @xref{downcase}.
+@item @code{stringeqlsign} (152). @xref{stringeqlsign}.
+@item @code{stringlss} (153). @xref{stringlss}.
+@item @code{equal} (154). @xref{equal}.
+@item @code{nthcdr} (155). @xref{nthcdr}.
+@item @code{elt} (156). @xref{elt}.
+@item @code{member} (157). @xref{member}.
+@item @code{assq} (158). @xref{assq}.
+@item @code{nreverse} (159). @xref{nreverse}.
+@item @code{setcar} (160). @xref{setcar}.
+@item @code{setcdr} (161). @xref{setcdr}.
+@item @code{car-safe} (162). @xref{car-safe}.
+@item @code{cdr-safe} (163. @xref{cdr-safe}.
+@item @code{nconc} (164). @xref{nconc}.
+@item @code{quo} (165). @xref{quo}.
+@item @code{rem} (166). @xref{rem}.
+@item @code{numberp} (167). @xref{numberp}.
+@item @code{integerp} (162). @xref{integerp}.
+@item @code{Rgoto} (170). @xref{Rgoto}.
+@item @code{Rgotoifnil} (171). @xref{Rgotoifnil}.
+@item @code{Rgotoifnonnil} (172). @xref{Rgotoifnonnil}.
+@item @code{Rgotoifnilelsepop} (173). @xref{Rgotoifnilelsepop}.
+@item @code{Rgotoifnonnilelsepop} (174). @xref{Rgotoifnonnilelsepop}.
+@item @code{listN} (175). @xref{listN}.
+@item @code{concatN} (176). @xref{concatN}.
+@item @code{insertN} (177). @xref{insertN}.
 @end itemize
 
 Instruction @code{unbind-all} was added to support tail-recursion
@@ -162,7 +162,7 @@ Bytecode meta-comments look like this:
 The Emacs Lisp tarball for 19.2 is Aug, 1992. (The tarball date for
 19.2 is much later; and even after the date on the 20.1 tarball.)
 
-@node After 19.34 and Starting in 20.1
+@node Emacs 20
 @section After 19.34 and Starting in 20.1
 
 There were no instruction changes. However bytecode interpretation of
@@ -188,7 +188,7 @@ Bytecode meta-comments look like this:
 @end itemize
 
 @page
-@node After 20.1 and Starting in 21.1
+@node Emacs 21
 @section After 20.1 and Starting in 21.1
 
 There were no instruction changes. However there were major
@@ -214,7 +214,7 @@ Bytecode meta-comments look like this:
 @item Emacs 21.4 was released Feb 6, 2005
 @end itemize
 
-@node After 21.4 and Starting in 22.1
+@node Emacs 22
 @section After 21.4 and Starting in 22.1
 
 There were no instruction changes.
@@ -239,7 +239,7 @@ Bytecode meta-comments look like this:
 @item The Emacs 22.3 tarball is dated Sep 05  2008
 @end itemize
 
-@node After 22.3 and Starting in 23.1
+@node Emacs 23
 @section After 22.3 and Starting in 23.1
 
 There were no instruction changes.
@@ -263,22 +263,22 @@ Bytecode meta-comments look like this:
 @item The Emacs 23.4 tarball is dated Jan 28, 2012
 @end itemize
 
-@node After 23.4 and Starting in 24.1
+@node Emacs 24
 @section After 23.4 and Starting in 24.1
 
 An error is thrown for unknown bytecodes rather than aborting.
 
 The following instructions were added:
 @itemize
-@item @code{stack-set}   (178)
-@item @code{stack_set2}, (179)
-@item @code{discardN}, (180)
+@item @code{stack-set}   (178). @xref{stack-set}.
+@item @code{stack-set2}, (179). @xref{stack-set2}.
+@item @code{discardN}, (180). @xref{discardN}.
 @end itemize
 
 The following instructions became obsolete:
 
 @itemize
-@item @code{save-current-buffer} (97)
+@item @code{save-current-buffer} (97). @xref{save-current-buffer}.
 @end itemize
 
 Is replaced by @code{save-current-buffer-1} (114)
@@ -287,9 +287,9 @@ Unless C prepocessor variable @code{BYTE_CODE_SAFE} (off by default) is
 defined, obsolete instructions below and from earlier versions are not implemented.
 
 @itemize
-@item @code{temp-output-buffer-setup} (144)
-@item @code{temp-output-buffer-show} (145)
-@item @code{save-window-excursion} (139)
+@item @code{temp-output-buffer-setup} (144). @xref{temp-output-buffer-setup}.
+@item @code{temp-output-buffer-show} (145). @xref{temp-output-buffer-show}.
+@item @code{save-window-excursion} (139). @xref{save-window-excursion}.
 @end itemize
 
 Instruction @code{unbind-all}, which never was generated, was marked obsolete
@@ -300,9 +300,9 @@ A message indicating whether utf-8 non-ASCII characters is used is included.
 
 The following instructions were added in 24.4:
 @itemize
-@item @code{pophandler} (48)
-@item @code{pushconditioncase} (49)
-@item @code{pushcatch} (50)
+@item @code{pophandler} (48). @xref{pophandler}.
+@item @code{pushconditioncase} (49). @xref{pushconditioncase}.
+@item @code{pushcatch} (50). @xref{pushcatch}.
 @end itemize
 
 
@@ -328,7 +328,7 @@ Bytecode meta-comments look like this:
 @item Emacs 24.5 was released Apr 10, 2015
 @end itemize
 
-@node After 24.5 and Starting in 25.1
+@node Emacs 25
 @section After 24.5 and Starting in 25.1
 
 Instruction 0 becomes an error rather than aborting emacs.
@@ -365,7 +365,7 @@ Bytecode meta-comments look like this:
 @item Emacs 25.3 was released Sep 11, 2017
 @end itemize
 
-@node After 25.3 and Starting in 26.1
+@node Emacs 26
 @section After 25.3 and Starting in 26.1
 
 The following instruction was added:
@@ -373,7 +373,7 @@ The following instruction was added:
 @item @code{switch} (267)
 @end itemize
 
-@node After 26.1 and Starting in 27.1
+@node Emacs 27
 @section After 26.1 and Starting in 27.1
 
 No changes yet.

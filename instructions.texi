@@ -22,33 +22,42 @@ entire history of Emacs. Or at least we aim to.
 For the opcode names, we will prefer canonicalized names from the
 Emacs C source @code{bytecode.c} (under directory @code{src/}) when
 those differ from the names in @code{bytecomp.el} (under directory
-@code{lisp/emacs-lisp}). Names in @code{bytecode.c} follow C
-conventions and must be adjusted to harmonize with other C names used,
-and this aspect isn't of use here. So we canonicalize those aspects
-away.
+@code{lisp/emacs-lisp}). Most of the time they are the same under the
+transformation described below.
+
+We use names from @code{bytecode.c} because that is a larger set of
+instruction names. Specifically, obsolete instructions names (both
+those that can be interpreted even though they are no longer
+generated, and some that are no longer interpreted) are defined in
+that file, whereas that is not the case in @code{bytecomp.el}.
+
+Names in @code{bytecode.c} must follow C conventions and must be
+adjusted to harmonize with other C names used. But this aspect isn't
+of use here, so we canonicalize those aspects away.
 
 For example, in @code{bytecode.c} there is an opcode whose name is
 @code{Bbuffer_substring}. We will drop the initial @code{B} and
 replace all underscores (@verb{|_|}) with dashes
-(@verb{|-|}). Therefore this name appears below as
-@code{buffer-substring} here.
+(@verb{|-|}). Therefore we use @code{buffer-substring}.
 
 The corresponding name for that opcode in @code{bytecomp.el} is
 @code{byte-buffer-substring}.  For the most part, if you drop the
 initial @code{byte-} prefix in the @code{bytecomp.el} name you will
-often get the canonic name from @code{bytecode.c}. However this isn't
-always true.
+often get the canonic name from @code{bytecode.c}.
 
-In particular, consider opcodes 97 and 114; 97 became obsolete in
-Emacs 24.1 but implemented some kind of @code{save-current-buffer}
-instruction. Opcode 97 was then reused. When the
-@code{save-current-buffer} instruction was reintroduced, it got added
-as opcode 114. In @code{bytecomp.el} only the name
-@code{byte-save-current-buffer} appears, while in the C code the name
-@code{B_save_current_buffer} is used for opcode 97 and
+
+However this isn't always true. In particular, consider opcodes 97 and
+114; 97 became obsolete in Emacs 24.1 but implemented some kind of
+@code{save-current-buffer} instruction. Opcode 97 was then
+reused. When the @code{save-current-buffer} instruction was
+reintroduced, it got added as opcode 114. In @code{bytecomp.el} only
+the name @code{byte-save-current-buffer} appears, while in the C code
+the name @code{B_save_current_buffer} is used for opcode 97 and
 @code{B_save_current_buffer_1} is used for opcode 114.  And that is
 why we go with the @code{bytecode.c} name.  The names we use are
-@code{save-current-buffer} and @code{save-current-buffer-1}.
+@code{save-current-buffer} and @code{save-current-buffer-1}, even
+though the more awkward name, @code{save-current-buffer-1} is what get
+generated nowadays.
 
 To shorten and regularize instruction descriptions, each instruction
 is described a standard format. We will also require a small
@@ -79,14 +88,15 @@ the stack effect for the nil branch. So @math{\phi(0,-1)} which is
 seen in @code{goto-if-not-nil-else-pop} means that if the jump is
 taken, the stack effect is 0, otherwise the effect removes or pops an
 evaluation-stack entry.
-@item opcode subscripting (@code{[]})
+@item instruction-name subscripting (@code{[]})
 In many instructions such as @code{constant}, @code{varref}, you will
-find an index after the opcode. What's going on is that opcode name is
-one of a number of opcodes in a class encodes an index into the
-instruction. We generally call this an ``Argument-encoding''
-instruction. In the display of the opcode in assembly listings and in
-the opcode table chapter where we list each opcode, we will include
-that particular instruction variant in subscripts.
+find an index after the instruction name. What's going on is that
+instruction name is one of a number of opcodes in a class encodes an
+index into the instruction. We generally call this an
+``Argument-encoding'' instruction. In the display of the opcode in
+assembly listings and in the opcode table chapter where we list each
+opcode, we will include that particular instruction variant in
+subscripts.
 
 For example consider @code{constant[0]} versus @code{constant[1]}.
 The former has opcode 192 while the latter has opcode 193. In terms of
@@ -148,9 +158,19 @@ PC  Byte  Instruction
 Constants Vector: [n]
 @end verbatim
 
-From the above we see that the @code{goto} instruction at program
-counter (PC) 5, has decimal opcode 130. The instruction is three bytes
+From the above we see that the @code{goto} instruction at
+program counter (PC) 5, has decimal opcode 130. The instruction is three bytes
 long: a one-byte opcode followed by a two-byte operand.
+
+The instruction name at PC 0 with opcode 192, @code{constant[0]},
+looks like it is indexing, but it is a just name, where the brackets
+and number are part of the name. We use this kind of name because it
+is suggestive of how it works: it indexes the first element into the
+constants vector and pushes that value onto the evaluation
+stack. @code{constant[1]} with opcode 193 pushes the second element of
+the constants vector onto the stack. We could have also used
+instruction names like @code{constant0} and @code{constant1} for
+opcodes 192 and 193 instead.
 
 Unless otherwise stated, all code examples were compiled in Emacs 25
 with optimization turned off.
@@ -515,8 +535,8 @@ Constants Vector: [n + 0 1 2 .. 61 62 63 64]
 
 @menu
 * pophandler::
-* conditioncase::
 * pushconditioncase::
+* pushcatch::
 @end menu
 
 @FirstSubSecInstruction{pophandler, 48}
@@ -531,7 +551,7 @@ Removes last condition pushed by @code{pushconditioncase}
 @item Stack effect:
 @math{-0+0}.
 @item Added in:
-Emacs 24.4
+Emacs 24.4. @xref{Emacs 24}.
 @item Example:
 @verbatim
 (defun pushconditioncase-eg()
@@ -568,22 +588,7 @@ Constants Vector: [(another-error) (one-error) 5 6 7]
 
 @end table
 
-@SubSecInstruction{conditioncase, 49}
-
-@table @strong
-@item Implements:
-?
-@item Instruction size:
-3 bytes ?
-@item Stack effect:
-@math{-0+0}.
-@item Added in:
-Emacs 24.4
-@item Example:
-?
-@end table
-
-@SubSecInstruction{pushconditioncase, 50}
+@SubSecInstruction{pushconditioncase, 49}
 
 @table @strong
 @item Implements:
@@ -597,7 +602,7 @@ a jump to the operand occurs.
 @item Stack effect:
 @math{-1+0}.
 @item Added in:
-Emacs 24.4
+Emacs 24.4. @xref{Emacs 24}.
 @item Example:
 @verbatim
 (defun pushconditioncase-eg()
@@ -632,6 +637,11 @@ PC  Byte  Instruction
 Constants Vector: [(another-error) (one-error) 5 6 7]
 @end verbatim
 @end table
+
+@SubSecInstruction{pushcatch, 50}
+
+?
+
 
 @SECTION{Control-Flow Instructions}
 
@@ -884,11 +894,11 @@ stack.
 * List Function Instructions::
 * Arithmetic Function Instructions::
 * String Function Instructions::
-* Emacs Function Instructions::
+* Emacs Buffer Instructions::
+* Emacs Misc Function Instructions::
 @end menu
 
-@node Lisp Function Instructions
-@subsection Lisp Function Instructions
+@FirstSubsection{Lisp Function Instructions}
 
 These instructions correspond to general functions which are not
 specific to Emacs; common cases are usually inlined for speed by the
@@ -1225,7 +1235,7 @@ binary @code{equal}.
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
-Emacs 19.34
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 When lexical binding is in effect, @code{(defun equal-eg(a b) (equal a b))} generates:
 @c ((lexical . t))
@@ -1302,7 +1312,7 @@ Call @code{numberp}.
 @item Stack effect:
 @math{-1+1}.
 @item Added in:
-Emacs 19.34
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 When lexical binding is in effect, @code{(defun numberp-eg(a) (numberp a))} generates:
 @c ((lexical . t))
@@ -1328,7 +1338,7 @@ Call @code{integerp}.
 @item Stack effect:
 @math{-1+1}.
 @item Added in:
-Emacs 19.34
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 When lexical binding is in effect, @code{(defun integerp-eg(a) (integerp a))} generates:
 @c ((lexical . t))
@@ -1340,9 +1350,7 @@ PC  Byte  Instruction
 @end verbatim
 @end table
 
-@page
-@node List Function Instructions
-@subsection List Function Instructions
+@Subsection{List Function Instructions}
 
 These instructions correspond to general functions which are not
 specific to Emacs; common cases are usually inlined for speed by the
@@ -1612,7 +1620,7 @@ instructions for the case where there are 1 to 4 items in the list.
 @item Stack effect:
 @math{-n+1} where @math{n} is the value of the instruction operand.
 @item Added in:
-Emacs 19.34.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 @code{(defun listN-eg() (list 'a 'b 'c 'd 'e))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1732,7 +1740,7 @@ Call @code{nthcdr} with two stack arguments.
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
-Emacs 19.34.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 @code{(defun nthcdr-eg() (nthcdr '(1550 1551 1552) 2))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1763,7 +1771,7 @@ Call @code{elt} with two stack arguments.
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
-Emacs 19.34.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 @code{(defun elt-eg() (elt '(1560 1561 1562) 2))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1793,7 +1801,7 @@ Call @code{nreverse} with one stack argument.
 @item Stack effect:
 @math{-1+1}.
 @item Added in:
-Emacs 19.34.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 @code{(defun nreverse-eg() (nreverse '(1590 1591)))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1822,7 +1830,7 @@ Call @code{setcar} with two stack arguments.
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
-Emacs 19.34.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 With lexical binding in effect, @code{(defun setcar-eg(l) (setcar l 1600)))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1852,7 +1860,7 @@ Call @code{setcdr} with two stack arguments.
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
-Emacs 19.34.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 With lexical binding in effect, @code{(defun setcdr-eg(l) (setcdr l 1610)))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1882,7 +1890,7 @@ Call @code{car-safe} with one argument.
 @item Stack effect:
 @math{-1+1}.
 @item Added in:
-Emacs 19.34.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 With lexical binding in effect, @code{(defun car-safe-eg(l) (car-safe l))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1909,7 +1917,7 @@ Call @code{cdr-safe} with one stack argument.
 @item Stack effect:
 @math{-1+1}.
 @item Added in:
-Emacs 19.34.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 With lexical binding in effect, @code{(defun cdr-safe-eg(l) (cdr-safe l))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1936,7 +1944,7 @@ Call @code{nconc} with two stack arguments.
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
-Emacs 19.34.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 With lexical binding in effect, @code{(defun nconc-eg(a b) (nconc a b))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1950,9 +1958,7 @@ PC  Byte  Instruction
 
 @end table
 
-@page
-@node Arithmetic Function Instructions
-@subsection Arithmetic Function Instructions
+@Subsection{Arithmetic Function Instructions}
 
 These instructions correspond to general functions which are not
 specific to Emacs; common cases are usually inlined for speed by the
@@ -2261,7 +2267,7 @@ Call @code{*}.
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
-Emacs 19.34
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 When dynamic binding is in effect, @code{(defun mult-eg(n) (* n n))} generates:
 @verbatim
@@ -2371,7 +2377,7 @@ Call @verb{|%|}.
 @item Stack effect:
 @math{-2+1}
 @item Added in:
-Emacs 19.34.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 When lexical binding is in effect, @code{(defun rem-eg(a b) (% a b))} generates:
 @c ((lexical . t))
@@ -2385,9 +2391,7 @@ PC  Byte  Instruction
 
 @end table
 
-@page
-@node String Function Instructions
-@subsection String Function Instructions
+@Subsection{String Function Instructions}
 
 These instructions correspond to general functions which are not
 specific to Emacs; the bytecode interpreter calls the corresponding C
@@ -2449,7 +2453,7 @@ Call @code{concat} with two stack arguments.
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
-Emacs 19.34.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 @code{(defun concat2-eg() (concat "a" "b"))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -2544,7 +2548,7 @@ concatenate.
 @item Stack effect:
 @math{-n+1} where @math{n} is the value of the instruction operand.
 @item Added in:
-Emacs 19.34.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 @code{(defun concatN-eg() (concat "a" "b" "c" "d" "e"))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -2578,7 +2582,7 @@ Call @code{upcase} with one stack argument.
 @item Stack effect:
 @math{-1+1}.
 @item Added in:
-Emacs 19.34.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 @code{(defun upcase-eg() (upcase "abc"))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -2607,7 +2611,7 @@ Call @code{downcase} with one argument.
 @item Stack effect:
 @math{-1+1}.
 @item Added in:
-Emacs 19.34.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 @code{(defun downcase-eg(l) (downcase "ABC"))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -2636,7 +2640,7 @@ Call @code{string=} with two stack arguments, comparing two strings for equality
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
-Emacs 19.34.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 With lexical binding in effect,
 @verbatim
@@ -2671,7 +2675,7 @@ Call @code{string<} with two stack arguments, comparing two strings.
 @item Stack effect:
 @math{-2+1}.
 @item Added in:
-Emacs 19.34.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 With lexical binding in effect,
 @verbatim
@@ -2692,9 +2696,131 @@ Constants Vector: ["b"]
 
 @end table
 
-@page
-@node Emacs Function Instructions
-@subsection Emacs Function Instructions
+@Subsection{Emacs Buffer Instructions}
+
+@menu
+* current-buffer::
+* set-buffer::
+* save-current-buffer-1::
+* buffer-substring::
+@end menu
+
+@SubSubSecInstruction{current-buffer, 112}
+
+Call @code{current-buffer}.
+
+@table @strong
+@item Implements:
+@code{TOS <- (current-buffer)}
+
+@item Generated via:
+@code{current-buffer}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-0+1}.
+@item Example:
+@code{(defun current-buffer-eg() (current-buffer))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  112   current-buffer
+ 1  135   return
+@end verbatim
+
+@end table
+
+@SubSubSecInstruction{set-buffer, 113}
+
+Call @code{set-buffer} with TOS.
+
+@table @strong
+@item Implements:
+@code{TOS <- (set-buffer TOS)}
+
+@item Generated via:
+@code{set-buffer}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+@code{(defun set-buffer-eg() (set-buffer "*scratch"))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] "*scratch"
+ 1  113   set-buffer
+ 2  135   return
+
+Constants Vector: ["*scratch"]
+@end verbatim
+
+@end table
+
+@SubSubSecInstruction{save-current-buffer-1, 114}
+
+Call @code{save-current-buffer}.
+
+Replaces older @code{save-current-buffer}. @xref{save-current-buffer}.
+
+@table @strong
+@item Implements:
+@code{TOS <- (save-current-buffer)}
+
+@item Generated via:
+@code{save-current-buffer}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Added in:
+Emacs 19.34. @xref{Emacs 19}.
+@item Example:
+@code{(defun save-curent-buffer-1-eg() (save-current-buffer (prog 5)))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  114   save-current-buffer
+ 1  192   constant[0] prog
+ 2  193   constant[1] 5
+ 3   33   call[1]
+ 4   41   unbind[1]
+ 5  135   return
+
+Constants Vector: [prog 5]
+@end verbatim
+
+@end table
+
+@SubSubSecInstruction{buffer-substring, 123}
+
+Call @code{buffer-substring} with two stack arguments.
+
+@table @strong
+@item Implements:
+@code{S[1] <- (buffer-substring S[1] TOS); top--}.
+@item Generated via:
+@code{buffer-substring}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+Emacs 19.34. @xref{Emacs 19}.
+@item Example:
+@code{(defun buffer-substring-eg() (buffer-substring 1230 1231))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] 1230
+ 1  193   constant[1] 1231
+ 2  123   buffer-substring
+ 3  135   return
+
+Constants Vector: [1230 1231]
+@end verbatim
+
+@end table
+
+@Subsection{Emacs Misc Function Instructions}
 
 These instructions correspond to Emacs-specific text manipulation
 functions. They are generally not inlined by the bytecode interpreter,
@@ -2715,20 +2841,17 @@ but simply call the corresponding C function.
 * eobp::
 * bolp::
 * bobp::
-* current-buffer::
-* set-buffer::
-* save-current-buffer-1::
 * forward-char::
 * forward-word::
 * skip-chars-forward::
 * skip-chars-backward::
 * forward-line::
 * char-syntax::
-* buffer-substring::
 * delete-region::
 * narrow-to-region::
 * widen::
 * end-of-line::
+* save-window-excursion::
 * set-marker::
 * match-beginning::
 * match-end::
@@ -2748,6 +2871,8 @@ Call @code{point}.
 1 byte
 @item Stack effect:
 @math{-0+1}.
+@item Added in:
+Emacs 18.31, renamed from @code{dot}. @xref{Emacs 18}.
 @item Example:
 @code{(defun point-eg() (point))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -2830,7 +2955,7 @@ instruction when there is only one stack argument.
 @item Stack effect:
 @math{-n+1} where @math{n} is the value of the instruction operand.
 @item Added in:
-Emacs 19.34.
+Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 With lexical binding in effect, @code{(defun insertN-eg(a b c) (insert a b c))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -2860,6 +2985,8 @@ Call @code{point-max}.
 1 byte
 @item Stack effect:
 @math{-0+1}.
+@item Added in:
+Emacs 18.31, renamed from @code{dot-max}. @xref{Emacs 18}.
 @item Example:
 @code{(defun point-max-eg() (point-max))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -2885,6 +3012,8 @@ Call @code{point-min}.
 1 byte
 @item Stack effect:
 @math{-0+1}.
+@item Added in:
+Emacs 18.31, renamed from @code{dot-min}. @xref{Emacs 18}.
 @item Example:
 @code{(defun point-min-eg() (point-min))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -3099,176 +3228,88 @@ PC  Byte  Instruction
 
 @end table
 
-@SubSubSecInstruction{current-buffer, 112}
-
-Call @code{current-buffer}.
-
-@table @strong
-@item Implements:
-@code{TOS <- (current-buffer)}
-
-@item Generated via:
-@code{current-buffer}
-@item Instruction size:
-1 byte
-@item Stack effect:
-@math{-0+1}.
-@item Example:
-@code{(defun current-buffer-eg() (current-buffer))} generates:
-@c ((lexical . t) (optimize . nil))
-@verbatim
-PC  Byte  Instruction
- 0  112   current-buffer
- 1  135   return
-@end verbatim
-
-@end table
-
-@SubSubSecInstruction{set-buffer, 113}
-
-Call @code{set-buffer} with TOS.
-
-@table @strong
-@item Implements:
-@code{TOS <- (set-buffer TOS)}
-
-@item Generated via:
-@code{set-buffer}
-@item Instruction size:
-1 byte
-@item Stack effect:
-@math{-1+1}.
-@item Example:
-@code{(defun set-buffer-eg() (set-buffer "*scratch"))} generates:
-@verbatim
-PC  Byte  Instruction
- 0  192   constant[0] "*scratch"
- 1  113   set-buffer
- 2  135   return
-
-Constants Vector: ["*scratch"]
-@end verbatim
-
-@end table
-
-@SubSubSecInstruction{save-current-buffer-1, 114}
-
-Call @code{save-current-buffer}.
-
-Replaces older @code{save-current-buffer}. @xref{save-current-buffer}.
-
-@table @strong
-@item Implements:
-@code{TOS <- (save-current-buffer)}
-
-@item Generated via:
-@code{save-current-buffer}
-@item Instruction size:
-1 byte
-@item Stack effect:
-@math{-1+1}.
-@item Added in:
-Emacs 19.34.
-@item Example:
-@code{(defun save-curent-buffer-1-eg() (save-current-buffer (prog 5)))} generates:
-@verbatim
-PC  Byte  Instruction
- 0  114   save-current-buffer
- 1  192   constant[0] prog
- 2  193   constant[1] 5
- 3   33   call[1]
- 4   41   unbind[1]
- 5  135   return
-
-Constants Vector: [prog 5]
-@end verbatim
-
-@end table
-
 @SubSubSecInstruction{forward-char, 117}
 
 Call @code{forward-char} with one argument.
 
-Added in Emacs 19.34.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{forward-word, 118}
 
 Call @code{forward-word} with one argument.
 
-Added in Emacs 19.34.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{skip-chars-forward, 119}
 
 @kindex skip-chars-forward
 Call @code{skip-chars-forward} with two stack arguments.
 
-Added in Emacs 19.34.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{skip-chars-backward, 120}
 
 Call @code{skip-chars-backward} with two stack arguments.
 
-Added in Emacs 19.34.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{forward-line, 121}
 
 Call @code{forward-line} with one argument.
 
-Added in Emacs 19.34.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{char-syntax, 122}
 
 Call @code{char-syntax} with one argument.
 
-Added in Emacs 19.34.
-
-@SubSubSecInstruction{buffer-substring, 123}
-
-Call @code{buffer-substring} with two stack arguments.
-
-Added in Emacs 19.34.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{delete-region, 124}
 
 Call @code{delete-region} with two stack arguments.
 
-Added in Emacs 19.34.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{narrow-to-region, 125}
 
 Call @code{narrow-to-region} with two stack arguments.
 
-Added in Emacs 19.34.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{widen, 126}
 
 Call @code{widen}.
 
-Added in Emacs 19.34.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{end-of-line, 127}
 
 Call @code{end-of-line} with one argument.
 
-Added in Emacs 19.34.
+Added in Emacs 19.34. @xref{Emacs 19}.
+
+@SubSubSecInstruction{save-window-excursion, 139}
+
+Added in Emacs 24.1
 
 @SubSubSecInstruction{set-marker, 147}
 
 Call @code{set-marker} with three stack arguments.
 
-Added in Emacs 19.34.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{match-beginning, 148}
 
 Call @code{match-beginning} with one argument.
 
-Added in Emacs 19.34.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SubSubSecInstruction{match-end, 149}
 
 Call @code{match-end} with one argument.
 
-Added in Emacs 19.34.
+Added in Emacs 19.34. @xref{Emacs 19}.
 
 @SECTION{Stack-Manipulation Instructions}
 
@@ -3352,28 +3393,41 @@ bytecode), but in other cases they are no longer accepted by the interperter
 * read-char::
 * set-mark::
 * interactive-p::
+* condition-case::
+* temp-output-buffer-setup::
+* temp-output-buffer-show::
+* unbind-all::
 @end menu
 
 @FirstSubSecInstruction{Rgoto, 170}
 
 Relative jump version of @pxref{goto}.
 
+Introduced but unused in Emacs 19.34. @xref{Emacs 19}.
+
 @FirstSubSecInstruction{Rgotoifnil, 171}
 
 Relative jump version of @pxref{goto-if-nil}.
+
+Introduced but unused in Emacs 19.34. @xref{Emacs 19}.
 
 @FirstSubSecInstruction{Rgotoifnonnil, 172}
 
 Relative-jump version of @pxref{goto-if-not-nil}.
 
+Introduced but unused in Emacs 19.34. @xref{Emacs 19}.
+
 @FirstSubSecInstruction{Rgotoifnilelsepop, 173}
 
 Relative-jump version of @pxref{goto-if-nil-else-pop}.
+
+Introduced but unused in Emacs 19.34. @xref{Emacs 19}.
 
 @FirstSubSecInstruction{Rgotoifnonnilelsepop, 174}
 
 Relative-jump version of @pxref{goto-if-not-nil-else-pop}.
 
+Introduced but unused in Emacs 19.34. @xref{Emacs 19}.
 
 @FirstSubSecInstruction{save-current-buffer, 97}
 
@@ -3381,9 +3435,86 @@ Replaced by @code{save-current-buffer-1}. @xref{save-current-buffer-1}.
 
 @FirstSubSecInstruction{mark, 97}
 
-Used in V 17
+Used in V 17; obsolete in Emacs 18.31. @xref{Emacs 18}.
 
 @FirstSubSecInstruction{scan-buffer, 107}
+
+Obsolete in Emacs 18.31. @xref{Emacs 18}.
+
 @FirstSubSecInstruction{read-char, 114}
+
 @FirstSubSecInstruction{set-mark, 115}
+
+Obsolete in Emacs 18.31. @xref{Emacs 18}.
+
 @FirstSubSecInstruction{interactive-p, 116}
+
+@FirstSubSecInstruction{condition-case, 143}
+
+Replaced by @code{pushconditioncase}. @xref{pushconditioncase}
+
+@table @strong
+@item Implements:
+?
+@item Generated via:
+?
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Obsolete since:
+Emacs 24.4. @xref{Emacs 24}.
+@item Example:
+@code{(defun condition-case-eg() (?))} generates:
+@c ((lexical . t))
+@verbatim
+@end verbatim
+
+@end table
+
+@FirstSubSecInstruction{temp-output-buffer-setup, 144}
+
+@table @strong
+@item Implements:
+?
+@item Generated via:
+?
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Obsolete since:
+Emacs 24.1. @xref{Emacs 24}.
+@item Example:
+@code{(defun temp-output-buffer-setup-eg() (?))} generates:
+@c ((lexical . t))
+@verbatim
+@end verbatim
+
+@end table
+
+@FirstSubSecInstruction{temp-output-buffer-show, 145}
+
+@table @strong
+@item Implements:
+?
+@item Generated via:
+?
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Obsolete in:
+Emacs 24.1. @xref{Emacs 24}.
+@item Example:
+@code{(defun temp-output-buffer-show-eg() (?))} generates:
+@c ((lexical . t))
+@verbatim
+@end verbatim
+
+@end table
+
+@FirstSubSecInstruction{unbind-all, 146}
+
+Introduced in Emacs 19.34 for tail-recursion elimination by jwz, but
+never used. @xref{Emacs 19}.
