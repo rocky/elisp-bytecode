@@ -895,6 +895,7 @@ stack.
 * Arithmetic Function Instructions::
 * String Function Instructions::
 * Emacs Buffer Instructions::
+* Emacs Position Instructions::
 * Emacs Misc Function Instructions::
 @end menu
 
@@ -2820,42 +2821,27 @@ Constants Vector: [1230 1231]
 
 @end table
 
-@Subsection{Emacs Misc Function Instructions}
+@Subsection{Emacs Position Instructions}
 
-These instructions correspond to Emacs-specific text manipulation
-functions. They are generally not inlined by the bytecode interpreter,
-but simply call the corresponding C function.
+These instructions correspond to Emacs-specific position functions
+that are found in the "Positions" chapter of the Emacs Lisp Reference
+Manual. They are not inlined by the bytecode interpreter, but simply
+call the corresponding C function.
 
 @menu
 * point::
 * goto-char::
-* insert::
-* insertN::
 * point-max::
 * point-min::
-* char-after::
-* following-char::
-* preceding-char::
-* current-column::
-* eolp::
-* eobp::
-* bolp::
-* bobp::
 * forward-char::
 * forward-word::
+* forward-line::
 * skip-chars-forward::
 * skip-chars-backward::
-* forward-line::
-* char-syntax::
-* delete-region::
 * narrow-to-region::
 * widen::
-* end-of-line::
-* save-window-excursion::
-* set-marker::
-* match-beginning::
-* match-end::
 @end menu
+
 
 @FirstSubSubSecInstruction{point, 96}
 
@@ -2910,6 +2896,129 @@ PC  Byte  Instruction
 @end verbatim
 
 @end table
+
+@SubSubSecInstruction{point-max, 100}
+
+Call @code{point-max}.
+
+@table @strong
+@item Implements:
+@code{TOS <- (point-max)}
+
+@item Generated via:
+@code{point-max}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-0+1}.
+@item Added in:
+Emacs 18.31, renamed from @code{dot-max}. @xref{Emacs 18}.
+@item Example:
+@code{(defun point-max-eg() (point-max))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  100   point-max
+ 1  135   return
+@end verbatim
+
+@end table
+
+@SubSubSecInstruction{point-min, 101}
+
+Call @code{point-min}.
+
+@table @strong
+@item Implements:
+@code{TOS <- (point-min)}
+
+@item Generated via:
+@code{point-min}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-0+1}.
+@item Added in:
+Emacs 18.31, renamed from @code{dot-min}. @xref{Emacs 18}.
+@item Example:
+@code{(defun point-min-eg() (point-min))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  101   point-min
+ 1  135   return
+@end verbatim
+
+@end table
+
+@SubSubSecInstruction{forward-char, 117}
+
+Call @code{forward-char} with one argument.
+
+Added in Emacs 19.34. @xref{Emacs 19}.
+
+@SubSubSecInstruction{forward-word, 118}
+
+Call @code{forward-word} with one argument.
+
+Added in Emacs 19.34. @xref{Emacs 19}.
+
+@SubSubSecInstruction{forward-line, 121}
+
+Call @code{forward-line} with one argument.
+
+Added in Emacs 19.34. @xref{Emacs 19}.
+
+@SubSubSecInstruction{skip-chars-forward, 119}
+
+@kindex skip-chars-forward
+Call @code{skip-chars-forward} with two stack arguments.
+
+Added in Emacs 19.34. @xref{Emacs 19}.
+
+@SubSubSecInstruction{skip-chars-backward, 120}
+
+Call @code{skip-chars-backward} with two stack arguments.
+
+Added in Emacs 19.34. @xref{Emacs 19}.
+
+@SubSubSecInstruction{narrow-to-region, 125}
+
+Call @code{narrow-to-region} with two stack arguments.
+
+Added in Emacs 19.34. @xref{Emacs 19}.
+
+@SubSubSecInstruction{widen, 126}
+
+Call @code{widen}.
+
+Added in Emacs 19.34. @xref{Emacs 19}.
+
+@Subsection{Emacs Misc Function Instructions}
+
+These instructions correspond to Emacs-specific text manipulation
+functions. They are generally not inlined by the bytecode interpreter,
+but simply call the corresponding C function.
+
+@menu
+* insert::
+* insertN::
+* char-after::
+* following-char::
+* preceding-char::
+* current-column::
+* eolp::
+* eobp::
+* bolp::
+* bobp::
+* char-syntax::
+* delete-region::
+* end-of-line::
+* save-window-excursion::
+* set-marker::
+* match-beginning::
+* match-end::
+@end menu
 
 @SubSubSecInstruction{insert, 99}
 
@@ -2967,60 +3076,6 @@ PC  Byte  Instruction
  3  177   insertN [3]
            3
  5  135   return
-@end verbatim
-
-@end table
-
-@SubSubSecInstruction{point-max, 100}
-
-Call @code{point-max}.
-
-@table @strong
-@item Implements:
-@code{TOS <- (point-max)}
-
-@item Generated via:
-@code{point-max}
-@item Instruction size:
-1 byte
-@item Stack effect:
-@math{-0+1}.
-@item Added in:
-Emacs 18.31, renamed from @code{dot-max}. @xref{Emacs 18}.
-@item Example:
-@code{(defun point-max-eg() (point-max))} generates:
-@c ((lexical . t) (optimize . nil))
-@verbatim
-PC  Byte  Instruction
- 0  100   point-max
- 1  135   return
-@end verbatim
-
-@end table
-
-@SubSubSecInstruction{point-min, 101}
-
-Call @code{point-min}.
-
-@table @strong
-@item Implements:
-@code{TOS <- (point-min)}
-
-@item Generated via:
-@code{point-min}
-@item Instruction size:
-1 byte
-@item Stack effect:
-@math{-0+1}.
-@item Added in:
-Emacs 18.31, renamed from @code{dot-min}. @xref{Emacs 18}.
-@item Example:
-@code{(defun point-min-eg() (point-min))} generates:
-@c ((lexical . t) (optimize . nil))
-@verbatim
-PC  Byte  Instruction
- 0  101   point-min
- 1  135   return
 @end verbatim
 
 @end table
@@ -3228,37 +3283,6 @@ PC  Byte  Instruction
 
 @end table
 
-@SubSubSecInstruction{forward-char, 117}
-
-Call @code{forward-char} with one argument.
-
-Added in Emacs 19.34. @xref{Emacs 19}.
-
-@SubSubSecInstruction{forward-word, 118}
-
-Call @code{forward-word} with one argument.
-
-Added in Emacs 19.34. @xref{Emacs 19}.
-
-@SubSubSecInstruction{skip-chars-forward, 119}
-
-@kindex skip-chars-forward
-Call @code{skip-chars-forward} with two stack arguments.
-
-Added in Emacs 19.34. @xref{Emacs 19}.
-
-@SubSubSecInstruction{skip-chars-backward, 120}
-
-Call @code{skip-chars-backward} with two stack arguments.
-
-Added in Emacs 19.34. @xref{Emacs 19}.
-
-@SubSubSecInstruction{forward-line, 121}
-
-Call @code{forward-line} with one argument.
-
-Added in Emacs 19.34. @xref{Emacs 19}.
-
 @SubSubSecInstruction{char-syntax, 122}
 
 Call @code{char-syntax} with one argument.
@@ -3268,18 +3292,6 @@ Added in Emacs 19.34. @xref{Emacs 19}.
 @SubSubSecInstruction{delete-region, 124}
 
 Call @code{delete-region} with two stack arguments.
-
-Added in Emacs 19.34. @xref{Emacs 19}.
-
-@SubSubSecInstruction{narrow-to-region, 125}
-
-Call @code{narrow-to-region} with two stack arguments.
-
-Added in Emacs 19.34. @xref{Emacs 19}.
-
-@SubSubSecInstruction{widen, 126}
-
-Call @code{widen}.
 
 Added in Emacs 19.34. @xref{Emacs 19}.
 
