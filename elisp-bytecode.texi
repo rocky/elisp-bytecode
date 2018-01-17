@@ -23,7 +23,7 @@
 * Introduction to Emacs Lisp Byte Code and LAP::
 * Emacs Lisp Byte-Code Environment::
 * Emacs Lisp Byte-Code Instructions::  Description of all Emacs Lisp Byte-Code Instructions
-* Opcode Changes Between Emacs Releases::
+* Instruction Changes Between Emacs Releases::
 * Opcode Table::                 Table of Bytecode Instruction ordered by Opcode Number
 * References::
 * Instruction Index::

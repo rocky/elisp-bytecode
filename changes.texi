@@ -1,6 +1,6 @@
-@node Opcode Changes Between Emacs Releases
+@node Instruction Changes Between Emacs Releases
 
-@chapter Opcode Changes Between Emacs Releases
+@chapter Instruction Changes Between Emacs Releases
 
 @menu
 * Emacs 18:: After 16 and Starting in 18.31

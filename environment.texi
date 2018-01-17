@@ -166,7 +166,7 @@ optimization was used. In earlier versions, there was information
 about the program that was used to compile the program was given, like
 its version number. And the source code path used to be in there as
 well. (I think these things should still be in there but that's a
-different story).  @xref{Opcode Changes Between Emacs Releases} where
+different story).  @xref{Instruction Changes Between Emacs Releases} where
 we give examples of the headers to show how that has changed.
 
 The second thing that is typically different between source code files
@@ -223,7 +223,7 @@ intention, the facts seem to suggest that this isn't always the
 case. (Nor could it be in reality for a program that is 30 years old
 or so).
 
-@xref{Opcode Changes Between Emacs Releases} then for when this is
+@xref{Instruction Changes Between Emacs Releases} then for when this is
 likely to work and in what cases it won't. And although running newer
 bytecode in an older version of Emacs isn't explicitly considered,
 again, since bytecode doesn't change that often, in reality this too
