@@ -3499,7 +3499,7 @@ Constants Vector: [97]
 
 @end table
 
-@SubSecInstruction{save-excursion, 138}
+@SubSubSecInstruction{save-excursion, 138}
 
 Make a binding recording buffer, point, and mark.
 
