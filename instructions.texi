@@ -211,7 +211,7 @@ A stack index
 @item Stack effect:
 @math{-0+1}.
 @item Added in:
-Added in Emacs 24.1
+Emacs 24.1. @xref{Emacs 24}.
 @item Example:
 When lexical binding is in effect,
 @verbatim
@@ -3056,6 +3056,7 @@ Call @code{skip-chars-forward} with two stack arguments.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+@item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 @code{(defun skip-chars-forward-eg() (skip-chars-forward "aeiou" 3))} generates:
@@ -3085,6 +3086,7 @@ Call @code{skip-chars-backward} with two stack arguments.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+@item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 @code{(defun skip-chars-backward-eg() (skip-chars-backward "aeiou" 3))} generates:
@@ -3114,6 +3116,7 @@ Call @code{narrow-to-region} with two stack arguments.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+@item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
 @code{(defun narrow-to-region-eg() (narrow-to-region 1250 1251))} generates:
@@ -3462,7 +3465,6 @@ simply call the corresponding C function.
 
 @menu
 * char-syntax::
-* save-window-excursion::
 * set-marker::
 * match-beginning::
 * match-end::
@@ -3470,31 +3472,127 @@ simply call the corresponding C function.
 
 @FirstSubSubSecInstruction{char-syntax, 122}
 
-Call @code{char-syntax} with one argument.
+Call @code{char-syntax} with one stack argument.
+@table @strong
+@item Implements:
+@code{TOS <- (char-syntax TOS)}
 
-Added in Emacs 19.34. @xref{Emacs 19}.
+@item Generated via:
+@code{char-syntax}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Added in:
+Emacs 19.34. @xref{Emacs 19}.
+@item Example:
+@code{(defun char-syntax-eg() (char-syntax ?a))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] 97
+ 1  122   char-syntax
+ 2  135   return
 
-@SubSubSecInstruction{save-window-excursion, 139}
+Constants Vector: [97]
+@end verbatim
 
-Added in Emacs 24.1
+@end table
 
 @SubSubSecInstruction{set-marker, 147}
 
 Call @code{set-marker} with three stack arguments.
 
-Added in Emacs 19.34. @xref{Emacs 19}.
+Call @code{set-marker}.
+
+@table @strong
+@item Implements:
+@code{S[2] <- (set-marker S[2] S[1] TOS); top -= 2}.
+
+@item Generated via:
+@code{set-marker}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-3+1}.
+@item Added in:
+Emacs 19.34. @xref{Emacs 19}.
+@item Example:
+When lexical binding is in effect,
+@code{(defun set-marker-eg(marker position) (set-marker marker position))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0    1   stack-ref[1]
+ 1    1   stack-ref[1]
+ 2  192   constant[0] nil
+ 3  147   set-marker
+ 4  135   return
+
+Constants Vector: [nil]
+@end verbatim
+
+@end table
 
 @SubSubSecInstruction{match-beginning, 148}
 
-Call @code{match-beginning} with one argument.
+Call @code{match-beginning} with one stack argument.
 
-Added in Emacs 19.34. @xref{Emacs 19}.
+@table @strong
+@item Implements:
+@code{TOS <- (match-beginning TOS)}
+
+@item Generated via:
+@code{match-beginning}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Added in:
+Emacs 19.34. @xref{Emacs 19}.
+@item Example:
+@code{(defun match-beginning-eg() (match-beginning 1))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] 1
+ 1  148   match-beginning
+ 2  135   return
+
+Constants Vector: [1]
+@end verbatim
+
+@end table
 
 @SubSubSecInstruction{match-end, 149}
 
 Call @code{match-end} with one argument.
 
-Added in Emacs 19.34. @xref{Emacs 19}.
+@table @strong
+@item Implements:
+@code{TOS <- (match-end TOS)}
+
+@item Generated via:
+@code{match-end}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Added in:
+Emacs 19.34. @xref{Emacs 19}.
+@item Example:
+@code{(defun match-end-eg() (match-end 1))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] 1
+ 1  148   match-end
+ 2  135   return
+
+Constants Vector: [1]
+@end verbatim
+
+@end table
 
 @SECTION{Stack-Manipulation Instructions}
 
@@ -3578,6 +3676,7 @@ bytecode), but in other cases they are no longer accepted by the interperter
 * read-char::
 * set-mark::
 * interactive-p::
+* save-window-excursion::
 * condition-case::
 * temp-output-buffer-setup::
 * temp-output-buffer-show::
@@ -3633,6 +3732,31 @@ Obsolete in Emacs 18.31. @xref{Emacs 18}.
 Obsolete in Emacs 18.31. @xref{Emacs 18}.
 
 @FirstSubSecInstruction{interactive-p, 116}
+
+@FirstSubSecInstruction{save-window-excursion, 139}
+
+Call @code{save-window-excursion}.
+
+@table @strong
+@item Implements:
+@code{TOS <- (save-window-excursion)}
+
+@item Generated via:
+@code{save-window-excursion}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-0+0}.
+@item Obsolete since:
+Emacs 24.1. @xref{Emacs 24}. Now generates a sequence of bytecode that includes
+calls to @code{current-window-configuration} and @code{set-window-configuration}
+
+@item Example:
+@code{(defun save-window-excursion-eg() (save-window-excursion 1390))} generates:
+@verbatim
+@end verbatim
+
+@end table
 
 @FirstSubSecInstruction{condition-case, 143}
 
