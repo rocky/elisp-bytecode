@@ -3448,13 +3448,61 @@ PC  Byte  Instruction
 
 Call @code{delete-region} with two stack arguments.
 
-Added in Emacs 19.34. @xref{Emacs 19}.
+Call @code{delete-region} with two stack arguments.
+
+@table @strong
+@item Implements:
+@code{S[1] <- (delete-region S[1] TOS); top--}.
+@item Generated via:
+@code{delete-region}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Added in:
+Emacs 19.34. @xref{Emacs 19}.
+@item Example:
+@code{(defun delete-region-eg() (delete-region 1240 1241))} generates:
+@c ((lexical . t))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] 1240
+ 1  193   constant[1] 1241
+ 2  124   delete-region
+ 3  135   return
+
+Constants Vector: [1240 1241]
+@end verbatim
+
+@end table
 
 @SubSubSecInstruction{end-of-line, 127}
 
-Call @code{end-of-line} with one argument.
+Call @code{end-of-line} with one stack argument.
 
-Added in Emacs 19.34. @xref{Emacs 19}.
+@table @strong
+@item Implements:
+@code{(end-of-line TOS; top--}
+@item Generated via:
+@code{delete-region}.
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+0-}.
+@item Added in:
+Emacs 19.34. @xref{Emacs 19}.
+@item Example:
+@code{(defun end-of-line-eg() (end-of-line))} generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] nil
+ 1  127   end-of-line
+ 2  135   return
+
+Constants Vector: [nil]
+@end verbatim
+
+@end table
 
 @Subsection{Emacs Misc Function Instructions}
 
