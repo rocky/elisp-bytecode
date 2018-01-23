@@ -886,8 +886,8 @@ and for a description of how to interpret the stack-effect field.
 @tab @xref{save-excursion}.
 @tab @math{-0+0}
 @item @verb{|0213|}
-@tab @verb{| 139|}
-@tab @verb{|  save-window-excursion|}
+@tab @verb{|*139|}
+@tab @verb{| *save-window-excursion|}
 @tab 1
 @tab @xref{save-window-excursion}.
 @tab @math{-0+0}
@@ -957,18 +957,20 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{|  stack-set|}
 @tab 1
 @tab @xref{stack-set}.
+@tab @math{-1}
 @item @verb{|0263|}
 @tab @verb{| 179|}
 @tab @verb{|  stack-set2|}
 @tab 1
 @tab @xref{stack-set2}.
+@tab @math{-1}
 
 @item @verb{|0222|}
 @tab @verb{|*146|}
 @tab @verb{| *unbind-all|}
 @tab 1
 @tab @xref{unbind-all}.
-@tab @math{-0+0}
+@tab @math{-0}
 
 @item @verb{|0223|}
 @tab @verb{| 147|}
@@ -1180,7 +1182,7 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{|  discardN|}
 @tab 1
 @tab @xref{discardN}.
-@tab @math{-n+1}
+@tab @math{-n+0}
 @item @verb{|0267|}
 @tab @verb{| 183|}
 @tab @verb{|  switch|}
