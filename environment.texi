@@ -26,12 +26,17 @@ primitive function like ``car'' or ``point''.
 
 Emacs Lisp bytecode is a built-in Emacs Lisp type (same as a say a
 Lisp ``cons'' node, or a Lisp symbol). You can check if a value is
-bytecode using the @code{byte-compile-function-p} predicate
-function. Although there aren't methods to extract the components of
-bytecode once it is built, the bytecode object is made up of other
-normal Emacs Lisp objects described in @pxref{The Byte-Code Function
-Type and Literal}. Byte code is created using the @code{byte-compile}
-function.
+bytecode using the
+@findex byte-compile-function-p
+@code{byte-compile-function-p} predicate
+@findex mapcar
+@findex aref
+function. Functions @code{aref} and @code{mapcar} can be used extract
+the components of bytecode once it is built, the bytecode object is
+made up of other normal Emacs Lisp objects described in @pxref{The
+Byte-Code Function Type and Literal}. Byte code is created using the
+@findex make-byte-code
+@code{make-byte-code} function.
 
 One important component of the bytecode object is the ``constants
 vector.''  It contains important Lisp Objects that are required to
@@ -53,15 +58,16 @@ Internally, the compiler first produces an intermediate Lisp structure
 in LAP code, then performs various optimizations on that, and finally
 translates the LAP code into bytecode. LAP code is used during
 compilation, but not kept in memory or used when running bytecode.
-While it is possible to go back to LAP code from bytecode, this is
-done only in order to inline functions.
+
+It is possible to go back to LAP code from bytecode; this is done in
+order to inline functions and when bytecode disassembly is requested.
 
 @node Byte-Code Interpreter
 @section Byte-Code Interpreter
 
-When a function is called for which compiled bytecode is available,
+When a function is called and the function is represented as bytecode,
 control passes to the bytecode interpreter.  The interpreter is
-written in C and heavily optimized for speed rather than readability.
+written in C and is written more for speed than readability.
 
 The bytecode interpreter operates on a single function at a time; for
 a function call, the bytecode interpreter calls other parts of Emacs,
@@ -139,7 +145,7 @@ equally important functions are implemented in Emacs Lisp.  These are
 byte compiled and then loaded into Emacs. On many systems there is the
 ability to dump Emacs in some kind of image format after these basic
 functions have been loaded. But even if that doesn't happen, a file
-called @code{loaddefs.elc} is created that contains many of the
+called @code{loaddefs.el} is created that contains many of the
 important basic primitive functions as bytecode.
 
 When you invoke Emacs then, it has a number of functions already

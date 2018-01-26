@@ -44,19 +44,12 @@ The corresponding name for that opcode in @code{bytecomp.el} is
 initial @code{byte-} prefix in the @code{bytecomp.el} name you will
 often get the canonic name from @code{bytecode.c}.
 
-
-However this isn't always true. In particular, consider opcodes 97 and
-114; 97 became obsolete in Emacs 24.1 but implemented some kind of
-@code{save-current-buffer} instruction. Opcode 97 was then
-reused. When the @code{save-current-buffer} instruction was
-reintroduced, it got added as opcode 114. In @code{bytecomp.el} only
-the name @code{byte-save-current-buffer} appears, while in the C code
-the name @code{B_save_current_buffer} is used for opcode 97 and
-@code{B_save_current_buffer_1} is used for opcode 114.  And that is
-why we go with the @code{bytecode.c} name.  The names we use are
-@code{save-current-buffer} and @code{save-current-buffer-1}, even
-though the more awkward name, @code{save-current-buffer-1} is what get
-generated nowadays.
+However this isn't always true. The instruction that the Emacs Lisp
+@code{save-current-buffer} function generates nowadays has opcode
+value 114.  In the C code, this value is listed as
+@code{B_save_current_buffer_1}; @code{bytecomp.el} uses the name
+@code{byte-save-current-buffer}.  We report the instruction name for
+opcode 114 as @code{save-current-buffer-1}.
 
 To shorten and regularize instruction descriptions, each instruction
 is described a standard format. We will also require a small
@@ -329,8 +322,8 @@ symbol to a special-bindings stack.
 @code{(set_internal(constants_vector[i])} where @code{i} is the value of the
 instruction operand.
 @item Instruction size:
-1 byte for @code{varset[0]} .. @code{varset[4]}; 2 bytes for @code{varset[5]},
-8-bit operand; 3 bytes for @code{varset[6]}, 16-bit operand.
+1 byte for @code{varbind[0]} .. @code{varbind[4]}; 2 bytes for @code{varbind[5]},
+8-bit operand; 3 bytes for @code{varbind[6]}, 16-bit operand.
 @item Stack effect:
 @math{-0+1}.
 @item Example:
@@ -365,8 +358,8 @@ function itself.
 @code{(set_internal(constants_vector[i])} where @code{i} is the value of the
 instruction operand.
 @item Instruction size:
-1 byte for @code{varset[0]} .. @code{varset[4]}; 2 bytes for @code{varset[5]},
-8-bit operand; 3 bytes for @code{varset[6]}, 16-bit operand.
+1 byte for @code{call[0]} .. @code{call[4]}; 2 bytes for @code{call[5]},
+8-bit operand; 3 bytes for @code{call[6]}, 16-bit operand.
 @item Stack effect:
 @math{-0+1}.
 @item Example:
@@ -398,12 +391,12 @@ stack. This is done when the variable is no longer needed.
 
 @table @strong
 @item Implements:
-@code{(set_internal(constants_vector[i])}
+undo's a @code{let}, @code{unwind-protects}, and @code{save-excursions}
 @item Generated via:
 @code{let} in dynamic binding. Balancing the end of @code{save-excursion}.
 @item Instruction size:
-1 byte for @code{varset[0]} .. @code{varset[4]}; 2 bytes for @code{varset[5]},
-8-bit operand; 3 bytes for @code{varset[6]}, 16-bit operand.
+1 byte for @code{unbind[0]} .. @code{unbind[4]}; 2 bytes for @code{unbind[5]},
+8-bit operand; 3 bytes for @code{unbind[6]}, 16-bit operand.
 @item Stack effect:
 @math{-0+0}.
 @item Example:
@@ -455,8 +448,6 @@ instruction operand.
 1 byte
 @item Stack effect:
 @math{-0+1}.
-@item Added in:
-Emacs 25.1
 @item Example:
 @verbatim
 defun n3(n)
