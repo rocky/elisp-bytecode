@@ -165,8 +165,14 @@ The Emacs Lisp tarball for 19.2 is Aug, 1992. (The tarball date for
 @node Emacs 20
 @section After 19.34 and Starting in 20.1
 
-There were no instruction changes. However bytecode interpretation of
-@code{read-char}, which became obsolete in v19 was dropped.
+The following instruction was added:
+
+@itemize
+@item @code{save-current-buffer-1} (114) as an alias for @code{save-current-buffer}. @xref{save-current-buffer-1}.
+@end itemize
+
+Bytecode interpretation of @code{read-char}, which became obsolete in
+v19 was dropped.
 
 Bytecode meta-comments look like this:
 @verbatim

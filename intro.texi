@@ -129,13 +129,13 @@ times.
 
 The Emacs Lisp bytecode interpreter, like many bytecode interpreters
 such as Smalltalk, C Python, Forth, or PostScript, has an evaluation
-stack and a code stack.  Emacs Lisp Bytecode uses Reverse Polish
-Notation which is how many other bytecode interpreters work. It is the
-opposite of the way Lisp works. In Lisp, the operator or function
-comes first and the operands for the function come last. Thus, to add
-the values of two variables we might write @code{(+ a b)}. However in
-bytecode it is the other way around: the operator or function comes
-last. So the corresponding bytecode is:
+stack and a code stack.  Emacs Lisp Bytecode instructions come in the
+order used in Reverse Polish Notation: operands appear prior to the
+operator.  This is how many other bytecode interpreters work. It is
+the opposite of the way Lisp works. Thus, to add the values of two
+variables we might write @code{(+ a b)}. However in bytecode it is the
+other way around: the operator or function comes last. So the
+corresponding bytecode is:
 
 @verbatim
 0	varref	  a
@@ -170,7 +170,7 @@ compatible@footnote{well, eventually old Emacs Lisp bytecode instructions
 @emph{do} die}. So old versions of Emacs can't run new
 byte code. Each instruction is between 1 and 3 bytes. The first byte
 is the opcode and the second and third bytes are either a single
-operand or a single intermediate value. Some operands are packed into
+operand or a single immediate value. Some operands are packed into
 the opcode byte.
 
 
@@ -240,10 +240,14 @@ appears in Lisp code.
 @subsubsection Example showing how a parameter list is transformed:
 @findex byte-compile
 @verbatim
+(setq lexical-binding nil) ; force lexical binding
 (byte-compile
-  (lambda (a b &optional c)))
-;; => #[(a b &optional c) "\300\207" [nil] 1]
+  (lambda (a b &optional c) 5))
+;; => #[(a b &optional c) "\300\207" [5] 1]
 @end verbatim
+
+Above we show raw bytecode data. in Emacs after versions after 25
+efforts have been made to hide the data.
 
 There's really no shorter way to represent the parameter list because
 preserving the argument names is critical. Remember that, in dynamic
@@ -285,7 +289,7 @@ because each portion almost always fits inside its own ``digit.''
 
 The names of the arguments don't matter in lexical scope: they're
 purely positional. This tighter argument specification is one of the
-reasons lexical scope is faster: the byte-code interpreter doesn't
+reasons lexical scope is sometimes faster: the byte-code interpreter doesn't
 need to parse the entire lambda list and assign all of the variables
 on each function invocation; furthermore, variable access is via a
 compact index located usually in the operand value rather than an
@@ -393,20 +397,22 @@ call.
 @node Docstring
 @unnumberedsubsec Docstring
 
-The fifth object in a bytecode-function literal is simple and completely
-optional: it's either the docstring itself, or if the docstring is
-especially large it's a cons cell indicating a compiled `.elc` and a
-position for lazy access. Only one position, the start, is needed
-because the lisp reader is used to load it and it knows how to
-recognize the end.
+The fifth object in a bytecode-function literal is simple and
+completely optional. Depending on how the function was created the
+docstring is either the docstring, or a cons cell indicating a
+compiled `.elc` and a position for lazy access. Only one position, the
+start, is needed because the lisp reader is used to load it and it
+knows how to recognize the end.
 
 @node Interactive Specification
 @unnumberedsubsec ``Interactive'' Specification
 
-The last object in a bytecode-function literal is, like the docstring,
-optional. If it is present and non-nil then the function is an
-``interactive'' function. It holds the exactly contents of the
+When there is a sixth field in the bytecode-function the function is a
+command, i.e an ``interative'' function.  Otherwise the function is
+not a command.  That parameter holds the exactly contents of the
 argument to @code{interactive} in the uncompiled function definition.
+Note that @code{(interactive)} causes the sixth field to be nil,
+which is distinct from there not being a sixth feild.
 
 @subsubsection Examples showing the interactive specification:
 @verbatim
@@ -421,7 +427,6 @@ ELISP> (byte-compile
 ;; => #[(n) "\010\207" [n] 1 nil (list (read))]
 @end verbatim
 
-The interactive expression is always interpreted, and never
-byte-compiled. This is usually fine because, by definition, this code
-is going to be waiting on user input. However, it slows down keyboard
-macro playback.
+The interactive expression usually interpreted, which is fine because,
+by definition, this code is going to be waiting on user
+input. However, it slows down keyboard macro playback.

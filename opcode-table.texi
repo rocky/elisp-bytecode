@@ -616,13 +616,6 @@ and for a description of how to interpret the stack-effect field.
 @tab 1
 @tab @xref{point}.
 @item @verb{|0141|}
-@tab @verb{| !97|}
-@tab @verb{| !save-current-buffer|}
-@tab
-@tab @xref{save-current-buffer}.
-@tab
-@math{-0+1}
-@item @verb{|0141|}
 @tab @verb{| *97|}
 @tab @verb{| *mark|}
 @tab 1
