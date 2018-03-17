@@ -2766,9 +2766,13 @@ Replaces older @code{save-current-buffer}. @xref{save-current-buffer}.
 @item Stack effect:
 @math{-1+1}.
 @item Added in:
-Emacs 19.34. @xref{Emacs 19}.
+Emacs 22. @xref{Emacs 22}.
 @item Example:
-@code{(defun save-curent-buffer-1-eg() (save-current-buffer (prog 5)))} generates:
+@verbatim
+(defun save-current-buffer-1-eg()
+   (save-current-buffer (prog 5)))}
+@end verbatim
+generates:
 @verbatim
 PC  Byte  Instruction
  0  114   save-current-buffer
@@ -3944,14 +3948,23 @@ Call @code{save-window-excursion}.
 @item Stack effect:
 @math{-0+0}.
 @item Obsolete since:
-Emacs 24.1. @xref{Emacs 24}. Now generates a sequence of bytecode that includes
-calls to @code{current-window-configuration} and @code{set-window-configuration}
-
+Emacs 24.1. @xref{Emacs 24}. Now generates a sequence of bytecode that
+includes calls to @code{current-window-configuration} and
+@code{set-window-configuration}
 @item Example:
-@code{(defun save-window-excursion-eg() (save-window-excursion 1390))} generates:
 @verbatim
+(defun save-window-excursion()
+   (save-window-excursion 1390))
 @end verbatim
+generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] (1390)
+ 1  139   save-window-excursion
+ 2  135   return
 
+Constants Vector: [(1390)]
+@end verbatim
 @end table
 
 @FirstSubSecInstruction{condition-case, 143}
@@ -3981,19 +3994,26 @@ Emacs 24.4. @xref{Emacs 24}.
 
 @table @strong
 @item Implements:
-?
+Setup for @code{with-output-to-temp-buffer}.
 @item Generated via:
-?
+@code{with-output-to-temp-buffer}
 @item Instruction size:
 1 byte
 @item Stack effect:
-@math{-2+1}.
+@math{-1+0}.
 @item Obsolete since:
 Emacs 24.1. @xref{Emacs 24}.
 @item Example:
-@code{(defun temp-output-buffer-setup-eg() (?))} generates:
-@c ((lexical . t))
+@code{(defun wottb-eg () (with-output-to-temp-buffer "wottb" 5))} generates:
 @verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] "wottb"
+ 1  144   temp-output-buffer-setup
+ 2  193   constant[1] 5
+ 3  145   temp-output-buffer-show
+ 4  135   return
+
+Constants Vector: ["wottb" 5]
 @end verbatim
 
 @end table
@@ -4002,21 +4022,27 @@ Emacs 24.1. @xref{Emacs 24}.
 
 @table @strong
 @item Implements:
-?
+Finishing code of @code{with-output-to-temp-buffer}.
 @item Generated via:
-?
+@code{with-output-to-temp-buffer}
 @item Instruction size:
 1 byte
 @item Stack effect:
-@math{-2+1}.
+@math{-0+0}.
 @item Obsolete in:
 Emacs 24.1. @xref{Emacs 24}.
 @item Example:
-@code{(defun temp-output-buffer-show-eg() (?))} generates:
-@c ((lexical . t))
+@code{(defun wottb-eg () (with-output-to-temp-buffer "wottb" 5))} generates:
 @verbatim
-@end verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] "wottb"
+ 1  144   temp-output-buffer-setup
+ 2  193   constant[1] 5
+ 3  145   temp-output-buffer-show
+ 4  135   return
 
+Constants Vector: ["wottb" 5]
+@end verbatim
 @end table
 
 @FirstSubSecInstruction{unbind-all, 146}

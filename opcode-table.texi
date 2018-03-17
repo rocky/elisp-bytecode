@@ -907,8 +907,8 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{| 144|}
 @tab @verb{|  temp-output-buffer-setup|}
 @tab 1
-@tab @xref{temp-output-buffer-show}.
-@tab @math{-0+0}
+@tab @xref{temp-output-buffer-setup}.
+@tab @math{-1+0}
 @item @verb{|0221|}
 @tab @verb{| 145|}
 @tab @verb{|  temp-output-buffer-show|}

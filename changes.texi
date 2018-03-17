@@ -117,6 +117,16 @@ Starting in this version, unless C prepocessor variable
 @code{BYTE_CODE_SAFE} (off by default) is defined, the obsolete
 instructions listed in 18.59 are not implemented.
 
+
+The following obsolete instructions throw an error when
+@code{BYTE_CODE_SAFE} is defined:
+@itemize
+@item @code{mark} (97)
+@item @code{scan-buffer} (107)
+@item @code{set-mark} (115)
+@end itemize
+
+
 Bytecode meta-comments look like this:
 @verbatim
 ;;; compiled by rms@psilocin.gnu.ai.mit.edu on Mon Jun 10 17:37:37 1996
@@ -245,6 +255,14 @@ Bytecode meta-comments look like this:
 @item The Emacs 22.3 tarball is dated Sep 05  2008
 @end itemize
 
+@code{save-current-buffer} (97). @xref{save-current-buffer} and
+@code{save-current-buffer-1} (114) do the same thing, but the former
+is deprecated. The latter opcode replaces @code{read-char} which was
+not generated since v19.
+
+I am not sure why the change; changing this
+opcode number however put it next to other buffer-related opcodes.
+
 @node Emacs 23
 @section After 22.3 and Starting in 23.1
 
@@ -281,15 +299,7 @@ The following instructions were added:
 @item @code{discardN}, (180). @xref{discardN}.
 @end itemize
 
-The following instructions became obsolete:
-
-@itemize
-@item @code{save-current-buffer} (97). @xref{save-current-buffer}.
-@end itemize
-
-Is replaced by @code{save-current-buffer-1} (114)
-
-Unless C prepocessor variable @code{BYTE_CODE_SAFE} (off by default) is
+Unless C preprocessor variable @code{BYTE_CODE_SAFE} (off by default) is
 defined, obsolete instructions below and from earlier versions are not implemented.
 
 @itemize
@@ -341,15 +351,7 @@ Instruction 0 becomes an error rather than aborting emacs.
 
 A number of changes were made to @code{bytecode.c}.
 
-The following instructions, obsolete since version 18, can no longer be interpreted:
-@itemize
-@item @code{scan-buffer} (107)
-@item @code{set-mark} (115)
-@end itemize
-
-You will get an error if @code{BYTE_CODE_SAFE} is defined.
-
-The bytecode meta-comment no longer include the source-code path.
+The bytecode meta-comment no longer includes the source-code path.
 
 Bytecode meta-comments look like this:
 @verbatim

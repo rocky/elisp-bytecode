@@ -98,7 +98,7 @@ The elements of a bytecode function literal are:
 @end menu
 
 @node Function parameter (lambda) list
-@subsubsection Function Parameter List
+@subsubsection Function Parameter (lambda) List
 
 The first element of a bytecode-function literal is the parameter list
 for the @code{lambda}. The object takes on two different forms
