@@ -175,14 +175,13 @@ The Emacs Lisp tarball for 19.2 is Aug, 1992. (The tarball date for
 @node Emacs 20
 @section After 19.34 and Starting in 20.1
 
-The following instruction was added:
+@code{save-current-buffer} (97). @xref{save-current-buffer} and
+@code{save-current-buffer-1} (114) do the same thing, but the former
+is deprecated. The latter opcode replaces @code{read-char} which was
+not generated since v19.
 
-@itemize
-@item @code{save-current-buffer-1} (114) as an alias for @code{save-current-buffer}. @xref{save-current-buffer-1}.
-@end itemize
-
-Bytecode interpretation of @code{read-char}, which became obsolete in
-v19 was dropped.
+I am not sure why the change; changing this
+opcode number however put it next to other buffer-related opcodes.
 
 Bytecode meta-comments look like this:
 @verbatim
@@ -254,14 +253,6 @@ Bytecode meta-comments look like this:
 @item The Emacs 22.2 tarball is dated Mar 26  2008
 @item The Emacs 22.3 tarball is dated Sep 05  2008
 @end itemize
-
-@code{save-current-buffer} (97). @xref{save-current-buffer} and
-@code{save-current-buffer-1} (114) do the same thing, but the former
-is deprecated. The latter opcode replaces @code{read-char} which was
-not generated since v19.
-
-I am not sure why the change; changing this
-opcode number however put it next to other buffer-related opcodes.
 
 @node Emacs 23
 @section After 22.3 and Starting in 23.1
