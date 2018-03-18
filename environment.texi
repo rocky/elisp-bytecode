@@ -80,16 +80,16 @@ Examples of calling @code{make-byte-code}:
 The elements of a bytecode function literal are:
 @iftex
 @enumerate
-@item Function parameter (lambda) list
+@item Function Parameter (lambda) List
 @item Byte-code Unibyte String
 @item Constants Vector
 @item Maximum Stack Usage
 @item Docstring
-@item Interactive Specification
+@item ``Interactive'' Specification
 @end enumerate
 @end iftex
 @menu
-* Function parameter (lambda) list::
+* Function Parameter (lambda) List::
 * Byte-code Unibyte String::
 * Constants Vector::
 * Maximum Stack Usage::
@@ -97,8 +97,8 @@ The elements of a bytecode function literal are:
 * Interactive Specification::
 @end menu
 
-@node Function parameter (lambda) list
 @subsubsection Function Parameter (lambda) List
+@node Function Parameter (lambda) List
 
 The first element of a bytecode-function literal is the parameter list
 for the @code{lambda}. The object takes on two different forms

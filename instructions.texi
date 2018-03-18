@@ -10,7 +10,7 @@
 * Control-Flow Instructions::
 * Function-Call Instructions::
 * Stack-Manipulation Instructions::
-* Unused Instructions::
+* Obsolete or Unused Instructions::
 @end menu
 
 @SECTIONA{Instruction-Description Format}
@@ -3856,7 +3856,7 @@ Emacs 24.1. @xref{Emacs 24}.
 ??
 @end table
 
-@SECTION{Unused Instructions}
+@SECTION{Obsolete or Unused Instructions}
 
 These instructions are not generated. In some cases, they were
 generated in a older version of Emacs. In some cases the instructions
@@ -3939,14 +3939,14 @@ Call @code{save-window-excursion}.
 
 @table @strong
 @item Implements:
-@code{TOS <- (save-window-excursion)}
+@code{(save-window-excursion BLOCK)}
 
 @item Generated via:
 @code{save-window-excursion}
 @item Instruction size:
 1 byte
 @item Stack effect:
-@math{-0+0}.
+@math{-1+0}.
 @item Obsolete since:
 Emacs 24.1. @xref{Emacs 24}. Now generates a sequence of bytecode that
 includes calls to @code{current-window-configuration} and
