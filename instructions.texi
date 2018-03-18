@@ -3865,11 +3865,6 @@ instructions are still handled if they appear (such as from older
 bytecode), but in other cases they are no longer accepted by the interperter
 
 @menu
-* Rgoto::
-* Rgotoifnil::
-* Rgotoifnonnil::
-* Rgotoifnilelsepop::
-* Rgotoifnonnilelsepop::
 * save-current-buffer::
 * mark::
 * scan-buffer::
@@ -3881,37 +3876,8 @@ bytecode), but in other cases they are no longer accepted by the interperter
 * temp-output-buffer-setup::
 * temp-output-buffer-show::
 * unbind-all::
+* Relative Goto Instructions::
 @end menu
-
-@FirstSubSecInstruction{Rgoto, 170}
-
-Relative jump version of @pxref{goto}.
-
-Introduced but unused in Emacs 19.34. @xref{Emacs 19}.
-
-@FirstSubSecInstruction{Rgotoifnil, 171}
-
-Relative jump version of @pxref{goto-if-nil}.
-
-Introduced but unused in Emacs 19.34. @xref{Emacs 19}.
-
-@FirstSubSecInstruction{Rgotoifnonnil, 172}
-
-Relative-jump version of @pxref{goto-if-not-nil}.
-
-Introduced but unused in Emacs 19.34. @xref{Emacs 19}.
-
-@FirstSubSecInstruction{Rgotoifnilelsepop, 173}
-
-Relative-jump version of @pxref{goto-if-nil-else-pop}.
-
-Introduced but unused in Emacs 19.34. @xref{Emacs 19}.
-
-@FirstSubSecInstruction{Rgotoifnonnilelsepop, 174}
-
-Relative-jump version of @pxref{goto-if-not-nil-else-pop}.
-
-Introduced but unused in Emacs 19.34. @xref{Emacs 19}.
 
 @FirstSubSecInstruction{save-current-buffer, 97}
 
@@ -4049,3 +4015,46 @@ Constants Vector: ["wottb" 5]
 
 Introduced in Emacs 19.34 for tail-recursion elimination by jwz, but
 never used. @xref{Emacs 19}.
+
+@Subsection{Relative Goto Instructions}
+
+In Emacs 19.34, Hallvard Furuseth introduced relative goto instrucitons.
+However, have never been generated in bytecode.
+
+@menu
+* Rgoto::
+* Rgotoifnil::
+* Rgotoifnonnil::
+* Rgotoifnilelsepop::
+* Rgotoifnonnilelsepop::
+@end menu
+
+@FirstSubSubSecInstruction{Rgoto, 170}
+
+Relative jump version of @pxref{goto}.
+
+Introduced but unused in Emacs 19.34. @xref{Emacs 19}.
+
+@FirstSubSubSecInstruction{Rgotoifnil, 171}
+
+Relative jump version of @pxref{goto-if-nil}.
+
+Introduced but unused in Emacs 19.34. @xref{Emacs 19}.
+
+@FirstSubSubSecInstruction{Rgotoifnonnil, 172}
+
+Relative-jump version of @pxref{goto-if-not-nil}.
+
+Introduced but unused in Emacs 19.34. @xref{Emacs 19}.
+
+@FirstSubSubSecInstruction{Rgotoifnilelsepop, 173}
+
+Relative-jump version of @pxref{goto-if-nil-else-pop}.
+
+Introduced but unused in Emacs 19.34. @xref{Emacs 19}.
+
+@FirstSubSubSecInstruction{Rgotoifnonnilelsepop, 174}
+
+Relative-jump version of @pxref{goto-if-not-nil-else-pop}.
+
+Introduced but unused in Emacs 19.34. @xref{Emacs 19}.
