@@ -35,7 +35,7 @@
 @page
 @majorheading \name\ (\opcode\)
 @node \name\
-@unnumberedsubsec \name\ (\opcode\)
+@unnumberedsubsec @code{\name\} (\opcode\)
 @kindex \name\
 @end macro
 
