@@ -7,5 +7,7 @@
 /*.log
 /*.pdf
 /*.toc
+/elisp-bytecode.cp
+/elisp-bytecode.cps
 /elisp-bytecode.info
 /tmp

@@ -28,6 +28,7 @@
 * References::
 * Instruction Index::
 * Byte-Code Function Index::
+* Concept Index::
 @end menu
 
 @include intro.texi
@@ -45,5 +46,8 @@
 @unnumbered Byte-Code Function Index
 @printindex fn
 
+@node Concept Index
+@unnumbered Concept Index
+@printindex cp
 
 @bye

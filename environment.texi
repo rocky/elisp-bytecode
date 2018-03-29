@@ -17,8 +17,9 @@ the interoperability of bytecode between versions.
 
 @SECTION Byte-Code Objects
 
-@emph{This section is largely lifted from Chris Wellons' Emacs
-byte code Internals.  Also sections are modified from the the Emacs Lisp Reference manual. See references at the end of this doc.}
+@emph{This section is largely lifted from Chris Wellons' Emacs byte
+code Internals and the Emacs Lisp Reference manual. See references at
+the end of this doc.}
 
 Emacs Lisp bytecode isn't a low-level sequence of octets (bytes) that
 requires a lot of additional special-purpose machinery to run.  There
