@@ -12,9 +12,13 @@ the interoperability of bytecode between versions.
 * Byte-Code Interpreter::
 * Byte-Code Instructions::
 * Byte-Code Files::
+* Functions and Commands for working with Byte Code::
 @end menu
 
 @SECTION Byte-Code Objects
+
+@emph{This section is largely lifted from Chris Wellons' Emacs
+byte code Internals.  Also sections are modified from the the Emacs Lisp Reference manual. See references at the end of this doc.}
 
 Emacs Lisp bytecode isn't a low-level sequence of octets (bytes) that
 requires a lot of additional special-purpose machinery to run.  There
@@ -38,11 +42,6 @@ vector.''  It contains important Lisp Objects that are required to
 make sense of the bytecode-instruction operands: functions that share
 the same bytecode-instruction byte string, but differ in their
 constants vectors, can do very different things.
-
-@subsection The Byte-Code Function Type and Literal
-
-@emph{This section is largely lifted from Chris Wellons' Emacs
-byte code Internals.  Also sections are modified from the the Emacs Lisp Reference manual. See references at the end of this doc.}
 
 An Emacs Lisp object of a byte code type is analogous to an Emacs Lisp
 vector. As with a vector, elements are accessed in constant time.
@@ -93,8 +92,8 @@ The elements of a bytecode function literal are:
 * Interactive Specification::
 @end menu
 
-@subsubsection Function Parameter (lambda) List
 @node Function Parameter (lambda) List
+@subsection Function Parameter (lambda) List
 
 The first element of a bytecode-function literal is the parameter list
 for the @code{lambda}. The object takes on two different forms
@@ -165,7 +164,7 @@ compact index located usually in the operand value rather than an
 index into the constants vector followed by a lookup of the variable.
 
 @node Byte-code Unibyte String
-@subsubsection Byte-code Unibyte String
+@subsection Byte-code Unibyte String
 
 The second element of a bytecode-function literal is a unibyte string
 --- it strictly holds octets and is not to be interpreted as any sort
@@ -186,7 +185,7 @@ It's unusual to see a byte-code string that doesn't end with 135
 more about the byte code below.
 
 @node Constants Vector
-@subsubsection Constants Vector
+@subsection Constants Vector
 
 The third object in a bytecode-function literal is a constants
 vector. It's a normal Emacs Lisp vector and can be created with
@@ -246,7 +245,7 @@ it doesn't appear in the constants vector, since it is not used in the
 body of the function.
 
 @node Maximum Stack Usage
-@subsubsection Maximum Stack Usage
+@subsection Maximum Stack Usage
 
 The fourth object in a bytecode-function literal is an integer which gives
 the maximum stack space used by this byte-code. This value can be
@@ -263,7 +262,7 @@ before a @code{call} instruction runs to perform the @code{myfunc}
 call.
 
 @node Docstring
-@subsubsection Docstring
+@subsection Docstring
 
 The fifth object in a bytecode-function literal is simple and
 completely optional. Depending on how the function was created the
@@ -273,7 +272,7 @@ start, is needed because the lisp reader is used to load it and it
 knows how to recognize the end.
 
 @node Interactive Specification
-@subsubsection ``Interactive'' Specification
+@subsection ``Interactive'' Specification
 
 When there is a sixth field in the bytecode-function the function is a
 command, i.e an ``interative'' function.  Otherwise the function is
@@ -494,4 +493,226 @@ value of running interpreter or Python will refuse to run.
 Personally, I think it would be nice to have a Emacs Lisp bytecode
 checker, perhaps a @code{safer-load} function that does look at the
 bytecode and its meta-comments gleans when there is something that is
-known to cause problems. Any voluneers?
+known to cause problems. Any volunteers?
+
+@SECTION Functions and Commands for working with Byte Code
+
+@menu
+* batch-byte-compile::
+* batch-byte-recompile-directory::
+* byte-compile::
+* byte-compile-file::
+* byte-recompile-directory::
+* byte-recompile-file::
+* compile-defun::
+* disassemble::
+* display-call-tree::
+* make-byte-code::
+@end menu
+
+@node batch-byte-compile
+@subsection @code{batch-byte-compile}
+
+@defun batch-byte-compile &optional noforce
+This function runs @code{byte-compile-file} on files specified on the
+command line.  This function must be used only in a batch execution of
+Emacs, as it kills Emacs on completion.  An error in one file does not
+prevent processing of subsequent files, but no output file will be
+generated for it, and the Emacs process will terminate with a nonzero
+status code.
+
+If @var{noforce} is non-@code{nil}, this function does not recompile
+files that have an up-to-date @samp{.elc} file.
+
+@example
+$ emacs -batch -f batch-byte-compile *.el
+@end example
+@end defun
+
+@node batch-byte-recompile-directory
+@subsection @code{batch-byte-recompile-directory}
+
+@defun batch-byte-recompile-directory directory &optional arg
+Run @code{byte-recompile-directory} on the dirs remaining on the command line.
+Must be used only with @code{-batch}, and kills Emacs on completion.
+For example, invoke @code{emacs -batch -f batch-byte-recompile-directory .}.
+
+Optional argument @var{arg} is passed as second argument @var{arg} to
+@code{byte-recompile-directory}; see there for its possible values
+and corresponding effects.
+@end defun
+
+@node byte-compile
+@subsection @code{byte-compile}
+
+@deffn Command byte-compile form
+If @var{form} is a symbol, byte-compile its function definition.
+If @var{form} is a lambda or a macro, byte-compile it as a function.
+@end deffn
+
+@node byte-compile-file
+@subsection @code{byte-compile-file}
+
+@deffn Command byte-compile-file filename &optional load
+This function compiles a file of Lisp code named @var{filename} into a
+file of byte-code.  The output file's name is made by changing the
+@samp{.el} suffix into @samp{.elc}; if @var{filename} does not end in
+@samp{.el}, it adds @samp{.elc} to the end of @var{filename}.
+
+Compilation works by reading the input file one form at a time.  If it
+is a definition of a function or macro, the compiled function or macro
+definition is written out.  Other forms are batched together, then each
+batch is compiled, and written so that its compiled code will be
+executed when the file is read.  All comments are discarded when the
+input file is read.
+
+This command returns @code{t} if there were no errors and @code{nil}
+otherwise.  When called interactively, it prompts for the file name.
+
+If @var{load} is non-@code{nil}, this command loads the compiled file
+after compiling it.  Interactively, @var{load} is the prefix argument.
+
+@example
+@group
+$ ls -l push*
+-rw-r--r-- 1 lewis lewis 791 Oct  5 20:31 push.el
+@end group
+
+@group
+(byte-compile-file "~/emacs/push.el")
+     @result{} t
+@end group
+
+@group
+$ ls -l push*
+-rw-r--r-- 1 lewis lewis 791 Oct  5 20:31 push.el
+-rw-rw-rw- 1 lewis lewis 638 Oct  8 20:25 push.elc
+@end group
+@end example
+@end deffn
+
+@node byte-recompile-directory
+@subsection @code{byte-recompile-directory}
+
+@deffn Command byte-recompile-directory directory &optional flag force
+@cindex library compilation
+This command recompiles every @samp{.el} file in @var{directory} (or
+its subdirectories) that needs recompilation.  A file needs
+recompilation if a @samp{.elc} file exists but is older than the
+@samp{.el} file.
+
+When a @samp{.el} file has no corresponding @samp{.elc} file,
+@var{flag} says what to do.  If it is @code{nil}, this command ignores
+these files.  If @var{flag} is 0, it compiles them.  If it is neither
+@code{nil} nor 0, it asks the user whether to compile each such file,
+and asks about each subdirectory as well.
+
+Interactively, @code{byte-recompile-directory} prompts for
+@var{directory} and @var{flag} is the prefix argument.
+
+If @var{force} is non-@code{nil}, this command recompiles every
+@samp{.el} file that has a @samp{.elc} file.
+
+The returned value is unpredictable.
+@end deffn
+
+@node byte-recompile-file
+@subsection @code{byte-recompile-file}
+
+@deffn Command byte-recompile-file filename &optional force arg load
+@cindex library compilation
+
+Recompile @var{filename} file if it needs recompilation.
+This happens when its @samp{.elc} file is older than itself.
+
+If the @samp{.elc} file exists and is up-to-date, normally this function
+@emph{does not} compile @var{filename}.  If the prefix argument @var{force} is non-nil,
+however, it compiles @var{filename} even if the destination already
+exists and is up-to-date.
+
+If the @samp{.elc} file does not exist, normally this function *does not*
+compile @var{filename}.  If optional argument ARG is 0, it compiles
+the input file even if the @samp{.elc} file does not exist.
+Any other non-nil value of @var{arg} means to ask the user.
+
+If optional argument @var{load} is non-nil, loads the file after compiling.
+
+If compilation is needed, this functions returns the result of
+@code{byte-compile-file}; otherwise it returns @var{no-byte-compile}.
+@end deffn
+
+@node compile-defun
+@subsection @code{compile-defun}
+@deffn Command compile-defun &optional arg
+This command reads the defun containing point, compiles it, and
+evaluates the result.  If you use this on a defun that is actually a
+function definition, the effect is to install a compiled version of that
+function.
+
+@code{compile-defun} normally displays the result of evaluation in the
+echo area, but if @var{arg} is non-@code{nil}, it inserts the result
+in the current buffer after the form it compiled.
+@end deffn
+
+@node disassemble
+@subsection @code{disassemble}
+@cindex disassembled byte-code
+
+@deffn Command disassemble object &optional buffer-or-name
+This command displays the disassembled code for @var{object}.  In
+interactive use, or if @var{buffer-or-name} is @code{nil} or omitted,
+the output goes in a buffer named @file{*Disassemble*}.  If
+@var{buffer-or-name} is non-@code{nil}, it must be a buffer or the
+name of an existing buffer.  Then the output goes there, at point, and
+point is left before the output.
+
+The argument @var{object} can be a function name, a lambda expression,
+or a byte-code object (@pxref{Byte-Code Objects}).  If it is a lambda
+expression, @code{disassemble} compiles it and disassembles the
+resulting compiled code.
+@end deffn
+
+@node display-call-tree
+@subsection @code{display-call-tree}
+
+@deffn Command display-call-tree &optional filename
+Display a call graph of a specified file.
+This lists which functions have been called, what functions called
+them, and what functions they call.  The list includes all functions
+whose definitions have been compiled in this Emacs session, as well as
+all functions called by those functions.
+
+The call graph does not include macros, inline functions, or
+primitives that the byte-code interpreter knows about directly,
+e.g. @code{eq}, @code{cons}.
+
+The call tree also lists those functions which are not known to be called
+(that is, to which no calls have been compiled), and which cannot be
+invoked interactively.
+@end deffn
+
+@node make-byte-code
+@subsection @code{make-byte-code}
+
+@defun make-byte-code arglist byte-code constants depth &optional docstring interactive-spec &rest elements
+Create a byte-code object with specified arguments as elements.
+The arguments should be the @var{arglist}, bytecode-string @var{byte-code}, constant
+vector @var{constants}, maximum stack size @var{depth}, (optional) @var{docstring},
+and (optional) @var{interactive-spec}.
+
+The first four arguments are required; at most six have any
+significance.  The @var{arglist} can be either like the one of
+‘lambda’, in which case the arguments will be dynamically bound before
+executing the byte code, or it can be an integer of the form
+@emph{NNNNNNNRMMMMMMM} where the 7bit @emph{MMMMMMM} specifies the
+minimum number of arguments, the 7-bit @emph{NNNNNNN} specifies the
+maximum number of arguments (ignoring &rest) and the R bit specifies
+whether there is a &rest argument to catch the left-over arguments.
+If such an integer is used, the arguments will not be dynamically
+bound but will be instead pushed on the stack before executing the
+byte-code.
+
+There very little checking of the validity of the elements either at
+creation time or at run time. If a parameter is are invalid or
+inconsistent, Emacs may crash when you call the function.
+@end defun

@@ -9,7 +9,8 @@
 @item @uref{https://www.emacswiki.org/emacs/ByteCodeEngineering, Emacs Wiki ByteCodeEngineering}
 @item @uref{https://groups.google.com/forum/#!topic/gnu.emacs.sources/oMfZT_4Oxrc easm.el, Assembler for Emacs' bytecode interpreter}
 @item @uref{https://github.com/rocky/elisp-decompile, Emacs Lisp Decompiler}
-@item @uref{https://ftp.gnu.org/pub/gnu/emacs, Emacs source code since Emacs 21.4a}
-@item @uref{https://ftp.gnu.org/pub/gnu/emacs, Emacs source code since Emacs 21.4a}
-@item @uref{https://ftp.gnu.org/pub/old-gnu/emacs, Emacs source code before Emacs 21.4a}
+@item @uref{https://ftp.gnu.org/pub/gnu/emacs, GNU Emacs Lisp Reference Manual}
+@item @uref{https://ftp.gnu.org/pub/gnu/emacs, GNU Emacs source code since Emacs 21.4a}
+@item @uref{https://ftp.gnu.org/pub/gnu/emacs, GNU Emacs source code since Emacs 21.4a}
+@item @uref{https://ftp.gnu.org/pub/old-gnu/emacs, GNU Emacs source code before Emacs 21.4a}
 @end itemize
