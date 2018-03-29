@@ -369,7 +369,7 @@ Bytecode meta-comments look like this:
 
 The following instruction was added:
 @itemize
-@item @code{switch} (267)
+@item @code{switch} (183) See commit 88549ec38e9bb30e338a9985d0de4e6263b40fb7.
 @end itemize
 
 @node Emacs 27

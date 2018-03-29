@@ -851,15 +851,16 @@ Constants Vector: [1350]
 
 @end table
 
-@SubSecInstruction{switch, 135}
+@SubSecInstruction{switch, 183}
 
-Jumps to entry in a jumptable
+Jumps to entry in a jumptable.
 
 @table @strong
 @item Implements:
-Jumps to entry in a jumptable
+switch-like jumptable. Top of stack is a variable reference. Below that
+is a hash table mapping compared values to instructions offsets.
 @item Generated via:
-??
+@code{cond} with several clauses that use the same test function and variable.
 @item Instruction size:
 1 byte
 @item Stack effect:
@@ -867,7 +868,34 @@ Jumps to entry in a jumptable
 @item Added in:
 Emacs 26.1
 @item Example:
-?
+@verbatim
+(defun switch-eg(n)
+   (cond ((equal n 1) 1)
+          ((equal n 2) 2)
+          ((equal n 3) 3)))
+
+@end verbatim
+generates:
+@verbatim
+PC  Byte  Instruction
+ 0    8   varref[0] n
+ 1  193   constant[1] #s(hash-table size 3 test equal rehash-size 1.5 rehash-threshold 0.8125 purecopy t data (1 6 2 8 3 10))
+ 2  183   switch
+ 3  130   goto [12]
+          12
+           0
+ 6  194   constant[2] 1
+ 7  135   return
+ 8  195   constant[3] 2
+ 9  135   return
+10  196   constant[4] 3
+11  135   return
+12  197   constant[5] nil
+13  135   return
+
+Constants Vector: [n #s(hash-table size 2 test equal rehash-size 1.5 rehash-threshold 0.8125 purecopy t data (1 6 2 8)) 1 3 nil]
+@end verbatim
+
 @end table
 
 @SECTION{Function-Call Instructions}
