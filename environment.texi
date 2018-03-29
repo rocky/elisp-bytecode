@@ -13,6 +13,7 @@ the interoperability of bytecode between versions.
 * Byte-Code Instructions::
 * Byte-Code Files::
 * Functions and Commands for working with Byte Code::
+* Byte-Code Optimization::
 @end menu
 
 @SECTION Byte-Code Objects
@@ -57,21 +58,8 @@ evaluated as a function.  Valid byte-code objects have 4 to 6 elements
 and each element has a particular structure elaborated on below.
 
 There are two ways to create a byte-code object: using a byte-code
-object literal or with @code{make-byte-code}. Like vector literals,
+object literal or with @code{make-byte-code} (@pxref{make-byte-code}). Like vector literals,
 byte-code functions don't need to be quoted.
-
-Examples of calling @code{make-byte-code}:
-@findex make-byte-code
-@verbatim
-(make-byte-code 0 "" [] 0)
-;; => #[0 "" [] 0]
-
-#[1 2 3 4]
-;; => #[1 2 3 4]
-
-(#[0 "" [] 0])
-;; error: Invalid byte opcode
-@end verbatim
 
 The elements of a bytecode function literal are:
 @iftex
@@ -135,8 +123,8 @@ The following shows how parameter counts and flags are encoded:
 The least significant 7 bits indicate the number of required
 arguments. Notice that this limits compiled, lexically-scoped
 functions to 127 required arguments. The 8th bit is the number of
-&rest arguments (up to 1). The remaining bits indicate the total
-number of optional and required arguments (not counting &rest). It's
+@b{&rest} arguments (up to 1). The remaining bits indicate the total
+number of optional and required arguments (not counting @b{&rest}). It's
 really easy to parse these in your head when viewed as hexadecimal
 because each portion almost always fits inside its own ``digit.''
 
@@ -498,6 +486,41 @@ known to cause problems. Any volunteers?
 
 @SECTION Functions and Commands for working with Byte Code
 
+  You can byte-compile an individual function or macro definition with
+the @code{byte-compile} function.  You can compile a whole file with
+@code{byte-compile-file}, or several files with
+@code{byte-recompile-directory} or @code{batch-byte-compile}.
+
+@vindex byte-compile-debug
+  Sometimes, the byte compiler produces warning and/or error messages
+(@pxref{Compiler Errors,,,elisp, GNU Emacs Lisp Reference Manual}, for
+details).  These messages are normally recorded in a buffer called
+@file{*Compile-Log*}, which uses Compilation mode.  @xref{Compilation
+Mode,,,emacs, The GNU Emacs Manual}.  However, if the variable
+@code{byte-compile-debug} is non-nil, error message will be signaled
+as Lisp errors instead (@pxref{Errors,,,elisp, GNU Emacs Lisp
+Reference Manual}).
+
+@cindex macro compilation
+Be careful when writing macro calls in files that you intend to
+byte-compile.  Since macro calls are expanded when they are compiled,
+the macros need to be loaded into Emacs or the byte compiler will not
+do the right thing.  The usual way to handle this is with
+@code{require} forms which specify the files containing the needed
+macro definitions (@pxref{Named Features,,,elisp, GNU Emacs Lisp
+Reference Manual}).  Normally, the byte compiler does not evaluate the
+code that it is compiling, but it handles @code{require} forms
+specially, by loading the specified libraries.  To avoid loading the
+macro definition files when someone @emph{runs} the compiled program,
+write @code{eval-when-compile} around the @code{require} calls
+(@pxref{Eval During Compile,,,elisp, GNU Emacs Lisp Reference
+Manual}).  For more details, @xref{Compiling Macros,,,elisp, GNU Emacs
+Lisp Reference Manual}.
+
+Inline (@code{defsubst}) functions are less troublesome; if you
+compile a call to such a function before its definition is known, the
+call will still work right, it will just run slower.
+
 @menu
 * batch-byte-compile::
 * batch-byte-recompile-directory::
@@ -548,8 +571,45 @@ and corresponding effects.
 
 @deffn Command byte-compile form
 If @var{form} is a symbol, byte-compile its function definition.
+
+@example
+@group
+(defun factorial (integer)
+  "Compute factorial of INTEGER."
+  (if (= 1 integer) 1
+    (* integer (factorial (1- integer)))))
+@result{} factorial
+@end group
+
+@group
+(byte-compile 'factorial)
+@result{}
+#[(integer)
+  "^H\301U\203^H^@@\301\207\302^H\303^HS!\"\207"
+  [integer 1 * factorial]
+  4 "Compute factorial of INTEGER."]
+@end group
+@end example
+
 If @var{form} is a lambda or a macro, byte-compile it as a function.
+
+@example
+@group
+(byte-compile
+  (lambda (a) (* a a)))
+@result{}
+  #[(a) "^H\211\207" [a] 2]
+@end group
+@end example
+
+If @var{symbol}'s definition is a byte-code function object,
+@code{byte-compile} does nothing and returns @code{nil}.  It does not
+compile the symbol's definition again, since the original
+(non-compiled) code has already been replaced in the symbol's function
+cell by the byte-compiled code.
+
 @end deffn
+
 
 @node byte-compile-file
 @subsection @code{byte-compile-file}
@@ -671,10 +731,32 @@ The argument @var{object} can be a function name, a lambda expression,
 or a byte-code object (@pxref{Byte-Code Objects}).  If it is a lambda
 expression, @code{disassemble} compiles it and disassembles the
 resulting compiled code.
+
+There are a couple of variables that control how disassembly is displayed:
+
+@multitable  @columnfractions .40 .20
+@headitem
+Variable Name
+@tab
+Default Value
+
+@item @code{disassemble-column-1-indent}
+@tab  @verb{| 8|}
+@item @code{disassemble-column-2-indent}
+@tab  @verb{|10|}
+@item @code{disassemble-recursive-indent}
+@tab  @verb{| 3|}
+@end multitable
+
 @end deffn
 
 @node display-call-tree
 @subsection @code{display-call-tree}
+
+Even though this is a command, it only has an effect when
+@var{byte-compile-generate-call-tree} is set to non-nil; it is
+@code{nil} by default. In this case, it is called when a file is byte
+compiled, such as from @code{byte-compile-file}.
 
 @deffn Command display-call-tree &optional filename
 Display a call graph of a specified file.
@@ -701,19 +783,107 @@ The arguments should be the @var{arglist}, bytecode-string @var{byte-code}, cons
 vector @var{constants}, maximum stack size @var{depth}, (optional) @var{docstring},
 and (optional) @var{interactive-spec}.
 
+We briefly describe parameters below. For a more detailed discussion of the parameters, @pxref{Byte-Code Objects}.
+
 The first four arguments are required; at most six have any
 significance.  The @var{arglist} can be either like the one of
 ‘lambda’, in which case the arguments will be dynamically bound before
 executing the byte code, or it can be an integer of the form
 @emph{NNNNNNNRMMMMMMM} where the 7bit @emph{MMMMMMM} specifies the
 minimum number of arguments, the 7-bit @emph{NNNNNNN} specifies the
-maximum number of arguments (ignoring &rest) and the R bit specifies
-whether there is a &rest argument to catch the left-over arguments.
-If such an integer is used, the arguments will not be dynamically
-bound but will be instead pushed on the stack before executing the
-byte-code.
+maximum number of arguments (ignoring @b{&rest}) and the @emph{R} bit
+specifies whether there is a @b{&rest} argument to catch the left-over
+arguments.  If such an integer is used, the arguments will not be
+dynamically bound but will be instead pushed on the stack before
+executing the byte-code.
 
 There very little checking of the validity of the elements either at
 creation time or at run time. If a parameter is are invalid or
 inconsistent, Emacs may crash when you call the function.
 @end defun
+
+@b{Examples of calling @code{make-byte-code}}:
+@findex make-byte-code
+
+@example
+@group
+
+;; Null bytecode: no args, no bytecode, no stack needed
+(make-byte-code nil "" [] 0)
+=>
+#[nil ""
+    []
+    0]
+
+;; This byte-code for: '(lambda(a) (* a a ))
+(make-byte-code '(a) "^H211_\207" [a] 2)
+=>
+#[(a)
+  "^H211_\207"
+  [a]
+  2]
+
+(make-byte-code 1 2 3 4)
+=> #[1 2 3 4]
+;; Doesn't even do type checking!
+
+@end group
+@end example
+
+@SECTION Byte-Code Optimization
+
+@emph{This is taken more or less from @code{bytecomp.el} comments}.
+
+@itemize
+@item
+optimization of compiled code:
+
+@itemize
+@item
+removal of unreachable code;
+@item
+removal of calls to side-effectless functions whose return-value is unused;
+@item
+compile-time evaluation of safe constant forms, such as
+(@code{consp},  @code{nil}, and @code{(ash 1 6)}
+@item
+open-coding of literal lambdas;
+@item
+peephole optimization of emitted code;
+@item
+trivial functions are left uncompiled for speed.
+@end itemize
+
+@item
+support for inline functions;
+@item
+compile-time evaluation of arbitrary expressions;
+@item
+compile-time warning messages for:
+
+@itemize
+@item
+functions being redefined with incompatible arglists;
+@item
+functions being redefined as macros, or vice-versa;
+@item
+functions or macros defined multiple times in the same file;
+@item
+functions being called with the incorrect number of arguments;
+@item
+functions being called which are not defined globally, in the
+file, or as autoloads;
+@item
+assignment and reference of undeclared free variables;
+@item
+various syntax errors;
+@end itemize
+
+@item
+correct compilation of nested @code{defuns}, @code{defmacros},
+@code{defvars} and @code{defsubsts};
+@item
+correct compilation of top-level uses of macros;
+@item
+the ability to generate a histogram of functions called.
+@end itemize
