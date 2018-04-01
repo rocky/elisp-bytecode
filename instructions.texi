@@ -4047,7 +4047,7 @@ never used. @xref{Emacs 19}.
 @Subsection{Relative Goto Instructions}
 
 In Emacs 19.34, Hallvard Furuseth introduced relative goto instrucitons.
-However, have never been generated in bytecode.
+However, they have never been generated in bytecode.
 
 @menu
 * Rgoto::
