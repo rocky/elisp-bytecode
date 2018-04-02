@@ -19,8 +19,8 @@ the interoperability of bytecode between versions.
 @SECTION Byte-Code Objects
 @cindex bytecode
 
-@emph{This section is largely lifted from Chris Wellons' Emacs byte
-code Internals and the Emacs Lisp Reference manual. See references at
+@emph{This section is expanded and editied from Chris Wellons' blog on ``Emacs byte
+code Internals'' and from the Emacs Lisp Reference manual. See references at
 the end of this doc.}
 
 Emacs Lisp bytecode is an encoded form of a low-level assembly format
@@ -99,10 +99,11 @@ arguments will be dynamically bound befor executing the byte code.
 
 @findex byte-compile
 @verbatim
-(setq lexical-binding nil) ; force lexical binding
-(byte-compile
+ELISP> (setq lexical-binding nil) ; force lexical binding
+ELISP> (byte-compile
   (lambda (a b &optional c) 5))
-;; => #[(a b &optional c) "\300\207" [5] 1]
+
+#[(a b &optional c) "\300\207" [5] 1]
 @end verbatim
 
 Above we show raw bytecode data. in Emacs after versions after 25
@@ -161,8 +162,16 @@ index into the constants vector followed by a lookup of the variable.
 @node Byte-code Unibyte String
 @subsection Byte-code Unibyte String
 
-The second element of a bytecode-function literal is either a unibyte string
-or a pointer to a unibyte string in a bytecode file.
+The second element of a bytecode-function literal is either
+
+@itemize
+@item
+a unibyte string, or
+@item
+a pointer to a unibyte string,
+@item
+An autoload function
+@end itemize
 
 A unibyte string is a sequence of bytes or octets; despite the type
 name, it is not to be interpreted with any sort of Unicode
@@ -189,7 +198,8 @@ Constants Vector: [n]
 To encode the byte sequence then for this we could use:
 @verbatim
 ELISP> (unibyte-string 8 127 92 135)
-;; => "^H^?\\\207"
+
+"^H^?\\\207"
 @end verbatim
 
 It's unusual to see a byte-code string that doesn't end with 135
@@ -207,7 +217,16 @@ filename and the @code{cdr} is the bytecode offset from the beginning of the fil
 ELISP> (aref
         (symbol-function 'cl-gcd)
         1)
-;; => "("/tmp/emacs/lisp/emacs-lisp/cl-extra.elc" . 7352)
+
+"("/tmp/emacs/lisp/emacs-lisp/cl-extra.elc" . 7352)
+@end verbatim
+
+@verbatim
+ELISP> (aref
+        (symbol-function 'ediff-buffers)
+        1)
+
+(autoload "ediff" 975154 t nil)
 @end verbatim
 
 
@@ -243,9 +262,9 @@ ELISP> (aref
            (my-func '("hi" "there") a nil 5)))
 	 2)
 
-;; => [a my-func
-   ("hi" "there")
-   nil 5]
+[a my-func
+ ("hi" "there")
+  nil 5]
 @end verbatim
 
 The above assumes that dynamic binding is in effect.
@@ -306,12 +325,13 @@ ELISP> (aref
 	  (+ a a)))
 	4)
 
-;; => "double parameter A"
+"double parameter A"
 
 
 ELISP> (aref
 	(symbol-function 'cl-gcd)
 	 4)
+
 ("/tmp/emacs/lisp/emacs-lisp/cl-extra.elc" . 7251)
 @end verbatim
 
@@ -335,15 +355,17 @@ ELISP> (aref
             (interactive "nNumber: ") n)
             )
          5)
-;; => "nNumber: "
+
+"nNumber: "
 
 ELISP> (aref
          (byte-compile
           (lambda (n)
            (interactive (list (read))) n))
          5)
-;; => (list
-       (read))
+
+(list
+  (read))
 
 @end verbatim
 
@@ -906,22 +928,23 @@ inconsistent, Emacs may crash when you call the function.
 @group
 
 ;; Null bytecode: no args, no bytecode, no stack needed
-(make-byte-code nil "" [] 0)
-=>
+ELISP> (make-byte-code nil "" [] 0)
+
 #[nil ""
     []
     0]
 
 ;; This byte-code for: '(lambda(a) (* a a ))
-(make-byte-code '(a) "^H211_\207" [a] 2)
-=>
+ELISP> (make-byte-code '(a) "^H211_\207" [a] 2)
+
 #[(a)
   "^H211_\207"
   [a]
   2]
 
-(make-byte-code 1 2 3 4)
-=> #[1 2 3 4]
+ELISP> (make-byte-code 1 2 3 4)
+
+#[1 2 3 4]
 ;; Doesn't even do type checking!
 
 @end group
@@ -935,8 +958,42 @@ inconsistent, Emacs may crash when you call the function.
 Return @var{symbol}’s function definition, or nil if that is void.
 
 The value returned from @code{symbol-function} for a function will
-either be its Lisp source, its bytecode, or a pointer position in a file
-containing either of these.
+either be its Lisp source, its bytecode, or an autoload function
+call.
+
+For example if we take a function that is autoloaded when Emacs starts up:
+@verbatim
+ELISP> (symbol-function 'insert-file)
+
+#[257 "\300^A301\"\207"
+      [insert-file-1 insert-file-contents]
+      4 2029839 "*fInsert file: "]
+@end verbatim
+
+However if you load a file redefining the function, by loading in
+emacs source, you get the last definition:
+
+@verbatim
+ELISP> (load-file "/usr/share/emacs/25.2/lisp/files.el.gz")
+
+t
+ELISP> (symbol-function 'insert-file)
+
+(closure
+  (backup-extract-version-start t)
+  (filename)
+  "Insert contents of file FILENAME into buffer after point.\nSet mark after the inserted text.\n\nThis function is meant for the user to run interactively.\nDon't call it from programs!  Use `insert-file-contents' instead.\n(Its calling sequence is different; see its documentation)."
+  (interactive "*fInsert file: ")
+  (insert-file-1 filename #'insert-file-contents))
+@end verbatim
+
+Consider a function that hasn't been is set to be autoloaded:
+
+@verbatim
+    ELISP> (symbol-function 'ediff-buffers)
+
+(autoload "ediff" 975154 t nil)
+@end verbatim
 
 @end defun
 

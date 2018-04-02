@@ -10,7 +10,15 @@
 @item @uref{https://groups.google.com/forum/#!topic/gnu.emacs.sources/oMfZT_4Oxrc easm.el, Assembler for Emacs' bytecode interpreter}
 @item @uref{https://github.com/rocky/elisp-decompile, Emacs Lisp Decompiler}
 @item @uref{https://ftp.gnu.org/pub/gnu/emacs, GNU Emacs Lisp Reference Manual}
-@item @uref{https://ftp.gnu.org/pub/gnu/emacs, GNU Emacs source code since Emacs 21.4a}
-@item @uref{https://ftp.gnu.org/pub/gnu/emacs, GNU Emacs source code since Emacs 21.4a}
-@item @uref{https://ftp.gnu.org/pub/old-gnu/emacs, GNU Emacs source code before Emacs 21.4a}
+@item @uref{https://ftp.gnu.org/pub/old-gnu/emacs/emacs-18.59.tar.gz, GNU Emacs source, version 18.59}
+@item @uref{https://ftp.gnu.org/pub/old-gnu/emacs/emacs-19.34b.tar.gz, GNU Emacs source, version 19.34}
+@item @uref{https://ftp.gnu.org/pub/old-gnu/emacs/emacs-20.1.tar.gz, GNU Emacs source, version 20.1}
+@item @uref{https://ftp.gnu.org/pub/gnu/emacs/emacs-21.4a.tar.gz, GNU Emacs source code version 21.4}
+@item @uref{https://ftp.gnu.org/pub/gnu/emacs/emacs-22.1.tar.gz, GNU Emacs source code, version 22.1}
+@item @uref{https://ftp.gnu.org/pub/gnu/emacs/emacs-23.1.tar.gz, GNU Emacs source code, version 22.1}
+@item @uref{https://ftp.gnu.org/pub/gnu/emacs/emacs-23.2.tar.gz, GNU Emacs source code, version 23.1}
+@item @uref{https://ftp.gnu.org/pub/gnu/emacs/emacs-24.1.tar.gz, GNU Emacs source code, version 24.1}
+@item @uref{https://ftp.gnu.org/pub/gnu/emacs/emacs-24.1.tar.gz, GNU Emacs source code, version 24.1}
+@item @uref{https://ftp.gnu.org/pub/gnu/emacs/emacs-25.3.tar.gz, GNU Emacs source code, version 25.3}
+@item @uref{https://ftp.gnu.org/pub/gnu/emacs/emacs-25.3.tar.gz, GNU Emacs source code, version 25.3}
 @end itemize

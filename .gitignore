@@ -1,5 +1,7 @@
 *~
 /*.aux
+/*.cp
+/*.cps
 /*.fn
 /*.fns
 /*.ky
@@ -7,7 +9,7 @@
 /*.log
 /*.pdf
 /*.toc
-/elisp-bytecode.cp
-/elisp-bytecode.cps
+/*.vr
+/*.vrs
 /elisp-bytecode.info
 /tmp
