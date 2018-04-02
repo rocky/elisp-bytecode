@@ -12,15 +12,19 @@ the interoperability of bytecode between versions.
 * Byte-Code Interpreter::
 * Byte-Code Instructions::
 * Byte-Code Files::
-* Functions and Commands for working with Byte Code::
+* Functions and Commands for working with LAP and Byte Code::
 * Byte-Code Optimization::
 @end menu
 
 @SECTION Byte-Code Objects
+@cindex bytecode
 
 @emph{This section is largely lifted from Chris Wellons' Emacs byte
 code Internals and the Emacs Lisp Reference manual. See references at
 the end of this doc.}
+
+Emacs Lisp bytecode is an encoded form of a low-level assembly format
+that is suited to running Emacs Lisp primatives and functions.
 
 Emacs Lisp bytecode isn't a low-level sequence of octets (bytes) that
 requires a lot of additional special-purpose machinery to run.  There
@@ -92,6 +96,7 @@ list and is exactly what appears in Lisp code. In this case, the
 arguments will be dynamically bound befor executing the byte code.
 
 @b{Example showing how a parameter list is transformed:}
+
 @findex byte-compile
 @verbatim
 (setq lexical-binding nil) ; force lexical binding
@@ -128,7 +133,8 @@ number of optional and required arguments (not counting @b{&rest}). It's
 really easy to parse these in your head when viewed as hexadecimal
 because each portion almost always fits inside its own ``digit.''
 
-@b{Example showing how lexical parameters are encoded:}
+@b{Examples showing how lexical parameters are encoded:}
+
 @findex byte-compile-make-args-desc
 @verbatim
 (byte-compile-make-args-desc '())
@@ -155,27 +161,60 @@ index into the constants vector followed by a lookup of the variable.
 @node Byte-code Unibyte String
 @subsection Byte-code Unibyte String
 
-The second element of a bytecode-function literal is a unibyte string
---- it strictly holds octets and is not to be interpreted as any sort
-of Unicode encoding. These strings should be created with
-unibyte-string because string may return a multibyte string. To
-disambiguate the string type to the lisp reader when higher values are
-present (> 127), the strings are printed in an escaped octal notation,
-keeping the string literal inside the ASCII character set.
+The second element of a bytecode-function literal is either a unibyte string
+or a pointer to a unibyte string in a bytecode file.
 
-@b{Example of a unibyte string:}
+A unibyte string is a sequence of bytes or octets; despite the type
+name, it is not to be interpreted with any sort of Unicode
+encoding. These sequences should be created with
+@code{unibyte-string()} because strings can get transformed longer
+sequences of bytes when encoded. To disambiguate the string type to
+the Lisp reader when higher values are present (> 127), the strings
+are printed in an escaped octal notation, keeping the string literal
+inside the ASCII character set.
+
+@b{Examples unibyte strings:}
+
+Bytecode for @code{(defun double-eg(n) (+ n n))} is:
 @verbatim
-(unibyte-string 100 200 250)
-;; => "d\310\372"
+PC  Byte  Instruction
+ 0    8   varref[0] n
+ 1  137   dup
+ 2   92   plus
+ 3  135   return
+
+Constants Vector: [n]
+@end verbatim
+
+To encode the byte sequence then for this we could use:
+@verbatim
+ELISP> (unibyte-string 8 127 92 135)
+;; => "^H^?\\\207"
 @end verbatim
 
 It's unusual to see a byte-code string that doesn't end with 135
-(#o207, return). Perhaps this should have been implicit? I'll talk
-more about the byte code below.
+(#o207, return).
+
+We decribe how to decode the byte-code string in @xref{Emacs Lisp
+Byte-Code Instructions}.
+
+However when a function has been defined as a result of reading a
+bytecode file, the unibyte string is a pointer into that file. This
+pointer is represented by a @code{cons} node where the @code{car} is the
+filename and the @code{cdr} is the bytecode offset from the beginning of the file
+
+@verbatim
+ELISP> (aref
+        (symbol-function 'cl-gcd)
+        1)
+;; => "("/tmp/emacs/lisp/emacs-lisp/cl-extra.elc" . 7352)
+@end verbatim
+
 
 @node Constants Vector
 @subsection Constants Vector
 
+@cindex constants vector
 The third object in a bytecode-function literal is a constants
 vector. It's a normal Emacs Lisp vector and can be created with
 @code{(vector ...)} or a vector literal.
@@ -196,17 +235,17 @@ operands reference either the constants vector or they index into the
 evaluation stack itself.
 
 
-@b{Example showing a constants vector}:
+@b{Example Showing a Constants Vector:}
 @verbatim
-ELISP> (byte-compile
-        (lambda (a b)
-         (my-func '("hi" "there") a nil 5)))
-#[(a b)
-  "\301\302\303\304$\207"
-  [a my-func
-     ("hi" "there")
-     nil 5]
-  5]
+ELISP> (aref
+        (byte-compile
+          (lambda (a b)
+           (my-func '("hi" "there") a nil 5)))
+	 2)
+
+;; => [a my-func
+   ("hi" "there")
+   nil 5]
 @end verbatim
 
 The above assumes that dynamic binding is in effect.
@@ -253,12 +292,29 @@ call.
 @node Docstring
 @subsection Docstring
 
-The fifth object in a bytecode-function literal is simple and
-completely optional. Depending on how the function was created the
-docstring is either the docstring, or a cons cell indicating a
-compiled `.elc` and a position for lazy access. Only one position, the
-start, is needed because the lisp reader is used to load it and it
-knows how to recognize the end.
+The fifth object in a bytecode-function literal. It is optional.  As
+with the byte-code Unibyte string, this value is either a string
+literal or a pointer to a string in a bytecode file.
+
+@b{Examples showing DocStrings:}
+
+@verbatim
+ELISP> (aref
+	(byte-compile
+	 (defun double(a)
+	  "double parameter A"
+	  (+ a a)))
+	4)
+
+;; => "double parameter A"
+
+
+ELISP> (aref
+	(symbol-function 'cl-gcd)
+	 4)
+("/tmp/emacs/lisp/emacs-lisp/cl-extra.elc" . 7251)
+@end verbatim
+
 
 @node Interactive Specification
 @subsection ``Interactive'' Specification
@@ -270,17 +326,25 @@ argument to @code{interactive} in the uncompiled function definition.
 Note that @code{(interactive)} causes the sixth field to be nil,
 which is distinct from there not being a sixth feild.
 
-@b{Examples showing the interactive specification:}
-@verbatim
-ELISP> (byte-compile
-         (lambda (n)
-           (interactive "nNumber: ") n))
-;; => #[(n) "\010\207" [n] 1 nil "nNumber: "]
+@unnumberedsubsec Examples showing the interactive specification
 
-ELISP> (byte-compile
-         (lambda (n)
-          (interactive (list (read))) n))
-;; => #[(n) "\010\207" [n] 1 nil (list (read))]
+@verbatim
+ELISP> (aref
+         (byte-compile
+           (lambda (n)
+            (interactive "nNumber: ") n)
+            )
+         5)
+;; => "nNumber: "
+
+ELISP> (aref
+         (byte-compile
+          (lambda (n)
+           (interactive (list (read))) n))
+         5)
+;; => (list
+       (read))
+
 @end verbatim
 
 The interactive expression usually interpreted, which is fine because,
@@ -484,12 +548,20 @@ checker, perhaps a @code{safer-load} function that does look at the
 bytecode and its meta-comments gleans when there is something that is
 known to cause problems. Any volunteers?
 
-@SECTION Functions and Commands for working with Byte Code
+@SECTION Functions and Commands for working with LAP and Byte Code
 
-  You can byte-compile an individual function or macro definition with
-the @code{byte-compile} function.  You can compile a whole file with
-@code{byte-compile-file}, or several files with
-@code{byte-recompile-directory} or @code{batch-byte-compile}.
+You can byte-compile an individual function or macro definition with
+the @code{byte-compile} function. To extract individual components of
+that array use @code{aref}. To recover human-readable LAP code from
+a byte-compiled file use @code{dissasemble}. Perhaps in the future there
+will be a decompiler which reconstructs higher-level Lisp from LAP.
+
+You can see if a symbol has is a function with @code{functionp}.  To
+retrieve the definition of the function use @code{symbol-function}.
+
+You can compile a whole file with @code{byte-compile-file}, or several
+files with @code{byte-recompile-directory} or
+@code{batch-byte-compile}.
 
 @vindex byte-compile-debug
   Sometimes, the byte compiler produces warning and/or error messages
@@ -522,6 +594,7 @@ compile a call to such a function before its definition is known, the
 call will still work right, it will just run slower.
 
 @menu
+* aref-fn::  aref
 * batch-byte-compile::
 * batch-byte-recompile-directory::
 * byte-compile::
@@ -531,8 +604,21 @@ call will still work right, it will just run slower.
 * compile-defun::
 * disassemble::
 * display-call-tree::
+* functionp::
 * make-byte-code::
+* symbol-function-fn:: symbol-function
 @end menu
+
+@node aref-fn
+@subsection @code{aref}
+
+@defun aref arry idx
+Return the element of @var{array} at index @var{idx}.
+
+Use this to extract the individual components of a byte-code object.
+@xref{Byte-Code Objects} contains numerous examples using @code{aref}.
+@end defun
+
 
 @node batch-byte-compile
 @subsection @code{batch-byte-compile}
@@ -774,6 +860,17 @@ The call tree also lists those functions which are not known to be called
 invoked interactively.
 @end deffn
 
+@node functionp
+@subsection @code{functionp}
+
+@defun functionp object
+Non-nil if @var{object} is a function.
+
+Use this to see if a symbol is a function. @code{symbol-function} can then
+be used to extract the function definition.
+@end defun
+
+
 @node make-byte-code
 @subsection @code{make-byte-code}
 
@@ -829,6 +926,20 @@ inconsistent, Emacs may crash when you call the function.
 
 @end group
 @end example
+
+@node symbol-function-fn
+@subsection @code{symbol-function}
+
+@defun symbol-function symbol
+
+Return @var{symbol}’s function definition, or nil if that is void.
+
+The value returned from @code{symbol-function} for a function will
+either be its Lisp source, its bytecode, or a pointer position in a file
+containing either of these.
+
+@end defun
+
 
 @SECTION Byte-Code Optimization
 

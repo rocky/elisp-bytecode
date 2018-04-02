@@ -85,9 +85,11 @@ that unpacks the fields of the instruction. With this and the
 constants vector, bytecode can be printed in an assembly-language-like
 format.
 
+@cindex bytecode
 I'll often use Emacs Lisp bytecode instruction refer to an assembly
 representation of an Emacs Lisp bytecode instruction.
 
+@cindex LAP
 LAP stands for Lisp Assembly Program. It is an internal representation
 of the bytecode instructions in a more symbolic form. It is used
 behind the scenes to that make bytecode more amenable to optimization,
@@ -126,6 +128,7 @@ times.
 
 @SECTION{Emacs Lisp Virtual Machine}
 
+@cindex Reverse Polish Notation
 The Emacs Lisp bytecode interpreter, like many bytecode interpreters
 such as Smalltalk, C Python, Forth, or PostScript, has an evaluation
 stack and a code stack.  Emacs Lisp Bytecode instructions come in the
