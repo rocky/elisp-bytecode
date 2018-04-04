@@ -10,10 +10,10 @@
 @node Why is Emacs Lisp Byte Code Important and How is Emacs as a Program Different?
 @section Why is Emacs Lisp Byte Code Important and How is Emacs as a Program Different?
 
-If you were to look at two comparable complex programs circa 2018,
-Firefox 53.0.3 and Emacs 25.3, you would see that relative sizes of Firefox
-tarball is 5 times bigger than for Emacs. But how are these made up,
-or what languages are they comprised of?
+If we were to compare two similar complex programs in around 2018,
+Firefox 53.0.3 and Emacs 25.3, we would see that the Firefox
+tarball is 5 times bigger than the Emacs tarball. How are these made up,
+and what languages are they comprised of?
 
 @noindent
 For Firefox whose core is written in C++ we have:
@@ -52,22 +52,23 @@ C                               255       66169         256314
 C/C++ Header                    176       11505          34891
 @end verbatim
 
-If you look at the relative ratio of C++ versus Javascript code in
-Firefox, and the ratio of C versus Lisp code in Emacs, you'll see that
-there is much more of Emacs written in Lisp than say of Firefox
-written in Javascript. (And if you look at the C code for Emacs, a lot
-of it looks like Lisp written using C syntax). My take is that Emacs a
+If we look at the relative ratio of C++ to Javascript code in
+Firefox, and the ratio of C versus Lisp code in Emacs, we see that
+ much more of Emacs written in Lisp than Firefox is written
+in Javascript. (And a lot of C code for Emacs looks like Lisp written using C syntax). 
+
+My take is that Emacs a
 lot more orthogonal in its basic concepts and construction. Just as
 Leibniz was amazed that such diversity could come out of such simple
 rules of mathematics and physics, so it is remarkable that something
-as complex as Emacs can come out of the relatively simple language
+as complex as Emacs can come out of the relatively simple language,
 Lisp.
 
 @SECTION{Emacs Lisp Byte Code and LAP}
 
-However pervasively used, Emacs Lisp is in making up the Emacs
+However pervasive Emacs Lisp is in the Emacs
 ecosystem, Emacs Lisp is not and never has been a speedy language compared
-to say, C, C++, Go, Rust, or Java. And that's where LAP and bytecode
+to say, C, C++, Go, Rust or Java. And that's where LAP and bytecode
 come in.
 
 As stated in a commment in @code{byte-opt.el} added circa 1996:
@@ -78,26 +79,26 @@ You can, however, make a faster pig.
 @author Eric Naggum
 @end quotation
 
-Emacs Lisp bytecode is the custom lower-level language used by Emacs'
-bytecode interpreter. As with all bytecode, bytecode instructions are
+Emacs Lisp bytecode is the custom lower-level language used by the Emacs
+bytecode interpreter. As with all bytecode, its instructions are
 compact. For display purposes, there is a @code{disassemble} command
 that unpacks the fields of the instruction. With this and the
-constants vector, bytecode can be printed in an assembly-language-like
+constants vector, bytecode can be printed in an assembly language-like
 format.
 
 @cindex bytecode
-I'll often use Emacs Lisp bytecode instruction refer to an assembly
-representation of an Emacs Lisp bytecode instruction.
+I'll often use an Emacs Lisp bytecode instruction to refer to an assembly
+representation of the instruction.
 
 @cindex LAP
 LAP stands for Lisp Assembly Program. It is an internal representation
 of the bytecode instructions in a more symbolic form. It is used
-behind the scenes to that make bytecode more amenable to optimization,
+behind the scenes to make bytecode more amenable to optimization,
 since the instructions are in a structure which is easier to operate
 on.
 
-If you want to write the instruction sequence in this symbolic form
-rather than give a byte-encoded form, you can do that using the
+If we want to write the instruction sequence in this symbolic form
+rather than give a byte-encoded form, we can do that using the
 function @code{byte-compile-lapcode}.
 
 @unnumberedsubsec Example showing use of @code{byte-compile-lapcode}
@@ -117,11 +118,11 @@ function @code{byte-compile-lapcode}.
 
 @uref{https://www.gnu.org/software/emacs/manual/html_node/elisp/Speed-of-Byte_002dCode.html,
 Silly Loop Example} in the Emacs Lisp Manual gives a program to time
-running in some code Bytecode interpreter versus running the code in
+running in some code in the bytecode interpreter versus running the code in
 the Lisp interpreter. When I ran this program, bytecode ran 2.5 times
 faster@footnote{Code was compiled to use dynamic binding for variable
-access, same as was probably used in the Emacs Lisp manual. We should
-note that, byte-compiling with lexical binding for variable access
+access,  as was probably the case in the Emacs Lisp manual. We should
+note that byte-compiling with lexical binding for variable access
 gives code that runs a bit faster than when dynamic binding is
 used.}. The Emacs Lisp manual gets a speed improvement of about 3
 times.
@@ -130,11 +131,10 @@ times.
 
 @cindex Reverse Polish Notation
 The Emacs Lisp bytecode interpreter, like many bytecode interpreters
-such as Smalltalk, C Python, Forth, or PostScript, has an evaluation
-stack and a code stack.  Emacs Lisp Bytecode instructions come in the
-order used in Reverse Polish Notation: operands appear prior to the
+such as Smalltalk, CPython, Forth, or PostScript, has an evaluation
+stack and a code stack.  Emacs Lisp bytecode instructions use reverse Polish notation: operands appear prior to the
 operator.  This is how many other bytecode interpreters work. It is
-the opposite of the way Lisp works. Thus, to add the values of two
+the opposite of the way Lisp works. To add the values of two
 variables we might write @code{(+ a b)}. However in bytecode it is the
 other way around: the operator or function comes last. So the
 corresponding bytecode is:
@@ -146,31 +146,30 @@ corresponding bytecode is:
 @end verbatim
 
 As in most language-specific virtual machines, but in contrast to a
-typical a number of general-purpose virtual machines, the things that
-are on the evaluation stack are the same objects as found in the
+typical general-purpose virtual machine, the things that
+are on the evaluation stack are the same objects that are found in the
 system that they model. Here, these objects can include Emacs buffers,
 or font faces, Lisp objects like hashes or vectors, or simply (30-bit)
-Lisp integers. Compare this with say LLVM IR, or JVM instructions
+Lisp integers. Compare this with, say, LLVM IR, or JVM instructions
 where the underlying objects on the stack are registers which can act
-as pointers and the internal memory layout of objects is exposed.
+as pointers, and the internal memory layout of objects is exposed.
 
 Control flow in Lisp bytecode is similar to a conventional assembly
 language: there are unconditional and conditional jumps. More complex
-control structures are simply built out of this.
+control structures are simply built out of these.
 
-Although it may be obvious, one last thing I'd like to point out is
+Although it may be obvious, one last thing to point out is
 that the Emacs Lisp bytecode instruction set is custom to Emacs.  In
-addition to primitives that you'd expect for Lisp like ``car'' and
-``cdr'', there are primitive bytecodes for more complex Emacs
-editor-specific concepts like ``save-excursion''@footnote{The fact that
-the semantic level difference between Emacs Lisp and its bytecode is
-not great makes writing a decompiler for it more feasible than if the
-bytecode language were of a general nature such as say LLVM IR.}.
+addition to primitives that we would expect for Lisp such ``car'' and
+``cdr'', there are primitive bytecodes for more-complex Emacs
+editor-specific concepts such as ``save-excursion''@footnote{The semantic level difference between Emacs Lisp and its bytecode is
+not great, so writing a decompiler for it more feasible than if the
+bytecode language were of a general nature such as, say, LLVM IR.}.
 
-The interpreter is largely backwards compatible, but not forwards
-compatible@footnote{well, eventually old Emacs Lisp bytecode instructions
-@emph{do} die}. So old versions of Emacs can't run new
-byte code. Each instruction is between 1 and 3 bytes. The first byte
+The interpreter is largely backward compatible, but not forward
+compatible (although eventually old Emacs Lisp bytecode instructions
+do die). So old versions of Emacs cannot necessarily run new
+bytecode. Each instruction is between 1 and 3 bytes. The first byte
 is the opcode and the second and third bytes are either a single
-operand, a single immediate value. Some operands are packed into
+operand or a single immediate value. Some operands are packed into
 the opcode byte.

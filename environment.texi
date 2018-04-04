@@ -1,75 +1,75 @@
-@node Emacs Lisp Byte-Code Environment
-@chapter Emacs Lisp Byte-Code Environment
+@node Emacs Lisp Bytecode Environment
+@chapter Emacs Lisp Bytecode Environment
 
-In this chapter we will discuss the ways Emacs creates, modifies and
+In this chapter we discuss the ways Emacs creates, modifies and
 uses bytecode in order to run code. We describe a little of the two
 kinds of interpreters Emacs has, what goes into a bytecode file, and
 the interoperability of bytecode between versions.
 
 @menu
-* Byte-Code Objects::
-* Byte-Code Compiler::
-* Byte-Code Interpreter::
-* Byte-Code Instructions::
-* Byte-Code Files::
-* Functions and Commands for working with LAP and Byte Code::
-* Byte-Code Optimization::
+* Bytecode Objects::
+* Bytecode Compiler::
+* Bytecode Interpreter::
+* Bytecode Instructions::
+* Bytecode Files::
+* Functions and Commands for working with LAP and Bytecode::
+* Bytecode Optimization::
 @end menu
 
-@SECTION Byte-Code Objects
+@SECTION Bytecode Objects
 @cindex bytecode
 
-@emph{This section is expanded and editied from Chris Wellons' blog on ``Emacs byte
+@emph{This section is expanded and edited from Chris Wellons' blog on ``Emacs byte
 code Internals'' and from the Emacs Lisp Reference manual. See references at
 the end of this doc.}
 
 Emacs Lisp bytecode is an encoded form of a low-level assembly format
-that is suited to running Emacs Lisp primatives and functions.
+that is suited to running Emacs Lisp primitives and functions.
 
-Emacs Lisp bytecode isn't a low-level sequence of octets (bytes) that
+Emacs Lisp bytecode is not a low-level sequence of octets (bytes) that
 requires a lot of additional special-purpose machinery to run.  There
-is however custom C code interpreter to handle each of the instruction
+is a custom C code interpreter to handle each of the instruction
 primitives, and that is basically it. And even here, many of the
 instructions are simply a bytecode form of some existing Emacs
 primitive function like ``car'' or ``point''.
 
-Emacs Lisp bytecode is a built-in Emacs Lisp type (same as a say a
+Emacs Lisp bytecode is a built-in Emacs Lisp type (the same as a
 Lisp ``cons'' node, or a Lisp symbol).
 
-Functions @code{aref} and @code{mapcar} can be used extract the
-components of bytecode once it is built, the bytecode object is made
-up of other normal Emacs Lisp objects described next. Byte code is
+Functions @code{aref} and @code{mapcar} can be used to extract the
+components of bytecode once it is built, The bytecode object is made
+up of other normal Emacs Lisp objects described next. Bytecode is
 created using the
 @findex make-byte-code
-@code{make-byte-code} function.
+@code{make-bytecode} function.
 
 One important component of the bytecode object is the ``constants
-vector.''  It contains important Lisp Objects that are required to
-make sense of the bytecode-instruction operands: functions that share
+vector.''  It contains important Lisp objects that are required to
+make sense of the bytecode-instruction operands, because functions that share
 the same bytecode-instruction byte string, but differ in their
 constants vectors, can do very different things.
 
-An Emacs Lisp object of a byte code type is analogous to an Emacs Lisp
+An Emacs Lisp object of a bytecode type is analogous to an Emacs Lisp
 vector. As with a vector, elements are accessed in constant time.
 
 The print syntax of this type is similar to vector syntax, except
 @verb{|#[...]|} is displayed to display a bytecode literal instead of
-(@verb{|[...]|} as is used in a vector.
+(@verb{|[...]|} as in a vector.
 
-In contrast to vector object, there are no functions to index or extract
-parts of a code object once it is build, and a byte-code object can be
-evaluated as a function.  Valid byte-code objects have 4 to 6 elements
+In contrast to a vector object, there are no functions to index or extract
+parts of a code object once it is build, and a bytecode object can be
+evaluated as a function.  Valid bytecode objects have 4 to 6 elements
 and each element has a particular structure elaborated on below.
 
-There are two ways to create a byte-code object: using a byte-code
+There are two ways to create a bytecode object: using a bytecode
 object literal or with @code{make-byte-code} (@pxref{make-byte-code}). Like vector literals,
-byte-code functions don't need to be quoted.
+bytecode functions don't need to be quoted.
 
 The elements of a bytecode function literal are:
 @iftex
 @enumerate
 @item Function Parameter (lambda) List
-@item Byte-code Unibyte String
+@item bytecode Unibyte String
 @item Constants Vector
 @item Maximum Stack Usage
 @item Docstring
@@ -78,7 +78,7 @@ The elements of a bytecode function literal are:
 @end iftex
 @menu
 * Function Parameter (lambda) List::
-* Byte-code Unibyte String::
+* Bytecode Unibyte String::
 * Constants Vector::
 * Maximum Stack Usage::
 * Docstring::
@@ -93,7 +93,7 @@ for the @code{lambda}. The object takes on two different forms
 depending on whether the function is lexically or dynamically
 scoped. If the function is dynamically scoped, the argument list is a
 list and is exactly what appears in Lisp code. In this case, the
-arguments will be dynamically bound befor executing the byte code.
+arguments will be dynamically bound before executing the bytecode.
 
 @b{Example showing how a parameter list is transformed:}
 
@@ -106,11 +106,11 @@ ELISP> (byte-compile
 #[(a b &optional c) "\300\207" [5] 1]
 @end verbatim
 
-Above we show raw bytecode data. in Emacs after versions after 25
-efforts have been made to hide the data.
+Above we show raw bytecode data. Emacs after version 25
+makes an effort to hide the data.
 
-There's really no shorter way to represent the parameter list because
-preserving the argument names is critical. Remember that, in dynamic
+There is really no shorter way to represent the parameter list because
+preserving the argument names is critical. In dynamic
 scope, while the function body is being evaluated these variables are
 globally bound (eww!) to the function's arguments.
 
@@ -118,8 +118,8 @@ On the other hand, when the function is lexically scoped, the
 parameter list is packed into an Emacs Lisp integer, indicating the
 counts of the different kinds of parameters: required,
 @verb{|&optional|}, and @verb{|&rest|}. No variable names are
-needed. Here in contrast to dynamically bound variables, the arguments
-are onth the stack of the byte-code interperter before executing the
+needed. In contrast to dynamically bound variables, here the arguments
+are on the stack of the byte-code interpreter before executing the
 code
 
 The following shows how parameter counts and flags are encoded:
@@ -127,7 +127,7 @@ The following shows how parameter counts and flags are encoded:
 @image{elisp-params-small,,,,.png}
 
 The least significant 7 bits indicate the number of required
-arguments. Notice that this limits compiled, lexically-scoped
+arguments. This limits compiled, lexically-scoped
 functions to 127 required arguments. The 8th bit is the number of
 @b{&rest} arguments (up to 1). The remaining bits indicate the total
 number of optional and required arguments (not counting @b{&rest}). It's
@@ -138,7 +138,7 @@ because each portion almost always fits inside its own ``digit.''
 
 @findex byte-compile-make-args-desc
 @verbatim
-(byte-compile-make-args-desc '())
+;byte-compile-make-args-desc '())
 ;; => #x000  (0 args, 0 rest, 0 required)
 
 (byte-compile-make-args-desc '(a b))
@@ -151,7 +151,7 @@ because each portion almost always fits inside its own ``digit.''
 ;; => #x382  (3 args, 1 rest, 2 required)
 @end verbatim
 
-The names of the arguments don't matter in lexical scope: they're
+The names of the arguments do not matter in lexical scope; they're
 purely positional. This tighter argument specification is one of the
 reasons lexical scope is sometimes faster: the byte-code interpreter doesn't
 need to parse the entire lambda list and assign all of the variables
@@ -159,8 +159,8 @@ on each function invocation; furthermore, variable access is via a
 compact index located usually in the operand value rather than an
 index into the constants vector followed by a lookup of the variable.
 
-@node Byte-code Unibyte String
-@subsection Byte-code Unibyte String
+@node Bytecode Unibyte String
+@subsection Bytecode Unibyte String
 
 The second element of a bytecode-function literal is either
 
@@ -173,10 +173,10 @@ a pointer to a unibyte string,
 An autoload function
 @end itemize
 
-A unibyte string is a sequence of bytes or octets; despite the type
-name, it is not to be interpreted with any sort of Unicode
+A unibyte string is a sequence of bytes or octets. Despite the type
+name, it is not interpreted with any sort of Unicode
 encoding. These sequences should be created with
-@code{unibyte-string()} because strings can get transformed longer
+@code{unibyte-string()} because strings can get transformed into longer
 sequences of bytes when encoded. To disambiguate the string type to
 the Lisp reader when higher values are present (> 127), the strings
 are printed in an escaped octal notation, keeping the string literal
@@ -202,10 +202,10 @@ ELISP> (unibyte-string 8 127 92 135)
 "^H^?\\\207"
 @end verbatim
 
-It's unusual to see a byte-code string that doesn't end with 135
+It is unusual to see a bytecode string that doesn't end with 135
 (#o207, return).
 
-We decribe how to decode the byte-code string in @xref{Emacs Lisp
+We describe how to decode the bytecode string in @xref{Emacs Lisp
 Byte-Code Instructions}.
 
 However when a function has been defined as a result of reading a
@@ -235,20 +235,19 @@ ELISP> (aref
 
 @cindex constants vector
 The third object in a bytecode-function literal is a constants
-vector. It's a normal Emacs Lisp vector and can be created with
+vector. It is a normal Emacs Lisp vector and can be created with
 @code{(vector ...)} or a vector literal.
 
-In addition to the normal kinds of things one thinks of as constants
---- numbers, strings, and compositions of these --- the constants
-vector importantly contains symbol constants of those dynamic
-variables and function names which are referred to by the instructions
-of the byte-code unibyte string.
+In addition to the normal kinds of things we think of as constants---numbers, strings, and compositions of these---the constants
+vector also contains symbol constants of the dynamic
+variables and function names that the instructions
+of the bytecode unibyte string refers to.
 
-The amount of space used by an Emacs byte-code instruction, and the
-number of ways an operand in an instruction can refer to an Lisp
-object is rather limited. Most operands are only a few bits in length,
+The amount of space used by an Emacs bytecode instruction, and the
+number of ways an operand in an instruction can refer to a Lisp
+object, is rather limited. Most operands are only a few bits long,
 some fill an entire byte, and occasionally an operand can be two bytes
-in length. Given this, you can't have an arbitrary string or
+long. So, we cannot have an arbitrary string or
 structured Lisp object listed directly inside an operand. Instead,
 operands reference either the constants vector or they index into the
 evaluation stack itself.
@@ -271,39 +270,39 @@ The above assumes that dynamic binding is in effect.
 
 The constants vector in the above example contains 5 elements:
 @itemize
-@item @code{a} --- the symbol @code{a} which refers to a variable
-@item @code{myfunc} the symbol @code{myfunc} which likely refers to an external function
-@item @code{("hi" "there")} a list constant containing two strings
-@item @code{nil} the nil constant
-@item @code{5} the integer constant 5
+@item @code{a} \ \  the symbol @code{a} which refers to a variable
+@item @code{myfunc}\ \ the symbol @code{myfunc} which likely refers to an external function
+@item @code{("hi" "there")}\ \  a list constant containing two strings
+@item @code{nil}\ \ the nil constant
+@item @code{5}\ \ the integer constant 5
 @end itemize
 
 The properties of symbol @code{a} and symbol @code{myfunc} are
-consulted at run time, so as such there is no knowledge in the
-bytecode representing the fact that @code{a} is a dynamically-bound
+consulted at run time, so there is no knowledge in the
+bytecode representing the fact that @code{a} is a dynamically bound
 parmeter while @code{my-func} is probably an external function.
 
-If the lambda were a lexically-scoped, the constants vector would not
+If the lambda were lexically scoped, the constants vector would not
 have the variable symbol @code{a} listed, but instead there would be a
 stack entry.
 
 Note that although the symbol @code{b} is a parameter of the lambda,
-it doesn't appear in the constants vector, since it is not used in the
+it does not appear in the constants vector, since it is not used in the
 body of the function.
 
 @node Maximum Stack Usage
 @subsection Maximum Stack Usage
 
 The fourth object in a bytecode-function literal is an integer which gives
-the maximum stack space used by this byte-code. This value can be
-derived from the byte code itself, but it's pre-computed so that the
+the maximum stack space used by this bytecode. This value can be
+derived from the bytecode itself, but it is pre-computed so that the
 byte-code interpreter can quickly check for stack
 overflow. Under-reporting this value is probably another way to crash
 Emacs.
 
-In our example above, maximum-stack value is five since function
+In our example above, the maximum-stack value is five since function
 @code{myfunc} is called with four parameters which are pushed onto the
-stack, and there is an additional stack entry pushed the @code{myfunc}
+stack, and there is an additional stack entry pushed, the @code{myfunc}
 symbol itself. All of this needs to be in place on the stack just
 before a @code{call} instruction runs to perform the @code{myfunc}
 call.
@@ -312,7 +311,7 @@ call.
 @subsection Docstring
 
 The fifth object in a bytecode-function literal. It is optional.  As
-with the byte-code Unibyte string, this value is either a string
+with the bytecode unibyte string, this value is either a string
 literal or a pointer to a string in a bytecode file.
 
 @b{Examples showing DocStrings:}
@@ -339,14 +338,14 @@ ELISP> (aref
 @node Interactive Specification
 @subsection ``Interactive'' Specification
 
-When there is a sixth field in the bytecode-function the function is a
-command, i.e an ``interative'' function.  Otherwise the function is
-not a command.  That parameter holds the exactly contents of the
+When there is a sixth field in the bytecode function, the function is a
+command, i.e., an ``interactive'' function.  Otherwise the function is
+not a command.  This parameter holds the exact contents of the
 argument to @code{interactive} in the uncompiled function definition.
 Note that @code{(interactive)} causes the sixth field to be nil,
-which is distinct from there not being a sixth feild.
+which is distinct from there not being a sixth field.
 
-@unnumberedsubsec Examples showing the interactive specification
+@unnumberedsubsec Examples showing the ``interactive'' specification
 
 @verbatim
 ELISP> (aref
@@ -369,16 +368,16 @@ ELISP> (aref
 
 @end verbatim
 
-The interactive expression usually interpreted, which is fine because,
+The interactive expression is usually interpreted, which is fine because,
 by definition, this code is going to be waiting on user
-input. However, it slows down keyboard macro playback.
+input, but it slows down keyboard macro playback.
 
 
-@SECTION Byte-Code Compiler
+@SECTION Bytecode Compiler
 
-The Byte-Code compiler is an ahead-of-time compiler that
+The bytecode compiler is an ahead-of-time compiler that
 accepts Emacs Lisp input and produces bytecode that can be run by
-Emacs. The compiler itself is written in Emacs Lisp @footnote{usually,
+Emacs. The compiler itself is written in Emacs Lisp @footnote{Usually
 the compiler itself is compiled into bytecode, which avoids overflow
 problems}, and is a comparatively compact program contained in the
 files @code{bytecomp.el} and @code{byte-opt.el}.
@@ -388,16 +387,16 @@ in LAP code, then performs various optimizations on that, and finally
 translates the LAP code into bytecode. LAP code is used during
 compilation, but not kept in memory or used when running bytecode.
 
-It is possible to go back to LAP code from bytecode; this is done in
+It is possible to go back to LAP code from bytecode. This is done in
 order to inline functions and when bytecode disassembly is requested.
 
-@SECTION Byte-Code Interpreter
+@SECTION Bytecode Interpreter
 
 When a function is called and the function is represented as bytecode,
 control passes to the bytecode interpreter.  The interpreter is
 written in C and is written more for speed than readability.
 
-The bytecode interpreter operates on a single function at a time; for
+The bytecode interpreter operates on a single function at a time. For
 a function call, the bytecode interpreter calls other parts of Emacs,
 which might call the bytecode interpreter again, recursively. Thus, in
 contrast to languages like FORTH, there is no code stack per se, just
@@ -415,10 +414,10 @@ limited to 62 bits on 64-bit machines), symbol index, or a tagged
 pointer to one of various Emacs structures such as markers, buffers,
 floating-point numbers, vectors, or cons cells.
 
-Values on the evaluation stack are created at run time; values in the
+Values on the evaluation stack are created at run time. Values in the
 constants vector are created when the byte-compiled file is read and
 converted into bytecode objects. The underlying bit representation of
-values in the constants vector can vary between Emacs instances: they
+values in the constants vector can vary between Emacs instance; they
 are constants in the sense that they do not vary within a single Emacs
 instance.
 
@@ -429,8 +428,7 @@ size the evaluation stack can grow to.
 
 The bytecode interpreter, once it has set up the evaluation stack and
 constants vector, executes the instructions that make up the bytecode
-byte string: each instruction is between one and three bytes in
-length, containing an opcode in the first byte and sometimes an eight-
+byte string. Each instruction is between one and three bytes long, containing an opcode in the first byte and sometimes an eight-
 or 16-bit integer in the following bytes. Those integers are usually
 unsigned, and 16-bit integers are stored in little-endian byte order,
 regardless of whether that is the natural byte order for the machine
@@ -439,14 +437,14 @@ Emacs runs on.
 Some opcodes, allocated in blocks, encode an integer as part of the
 opcode byte.
 
-Bytecode instructions operate on the evaluation stack: for example,
+Bytecode instructions operate on the evaluation stack. For example,
 @code{plus}, the addition function, removes two values from the
 top of the stack and pushes a single value, the sum of the first two
-values, back on the stack.
+values, back onto the stack.
 
 Since the arguments for a function call need to be on the stack before
-the function can operate on them, bytecode instructions use Reverse
-Polish Notation: first the arguments are pushed on the stack, then the
+the function can operate on them, bytecode instructions use reverse
+Polish notation: first the arguments are pushed onto the stack, then the
 function or operation is called.  For example, the Lisp expression
 @code{(+ a b)} turns into this bytecode:
 
@@ -470,61 +468,59 @@ primitive or built-in functions. These include Lisp functions like
 equally important functions are implemented in Emacs Lisp.  These are
 byte compiled and then loaded into Emacs. On many systems there is the
 ability to dump Emacs in some kind of image format after these basic
-functions have been loaded. But even if that doesn't happen, a file
-called @code{loaddefs.el} is created that contains many of the
+functions have been loaded, but even if that does not happen, a file
+called @code{loaddefs.el} is created which contains many of the
 important basic primitive functions as bytecode.
 
-When you invoke Emacs then, it has a number of functions already
+When we invoke Emacs then, it has a number of functions already
 loaded and these are either coded in C or have been byte compiled and
 loaded. Before running a function, Emacs queries the type of code that
 is associated with the function symbol and calls either its lambda
 S-expression interpreter or its bytecode interpreter.
 
-When you run @code{load}, which reads and evaluates Lisp code from a
-file, at the top-level it doesn't matter whether the file contains
+When we run @code{load}, which reads and evaluates Lisp code from a
+file, at the top-level it does not matter whether the file contains
 bytecode or Emacs Lisp source code. Either way the only thing done is
-to open the file, and read the contents of the file using the normal
-Lisp reader. The difference between the two kinds of files is more
-about convention than it is strictly about the contents of the file.
+to open the file and read its contents using the normal
+Lisp reader. 
 
-The difference between a Emacs Lisp bytecode file and a Emacs Lisp
-source file, then is two things. First the bytecode file will have a
+
+The difference between the two kinds of files is more
+about convention than about their contents, and specifically two things: First the bytecode file will have a
 comment header in it that starts @verb{|;ELC^W^@^@^@|} while the
-source code probably doesn't. (However there's nothing to stop you
-from adding in that line if you feel like it). In addition to this
+source code probably does not (although nothing to stop us
+from adding in that line if we feel like it). And, in addition to this
 comment header, a bytecode file will have other meta-comments such as
 which version of Emacs was used to compile the file and whether
 optimization was used. In earlier versions, there was information
-about the program that was used to compile the program was given, like
-its version number. And the source code path used to be in there as
+about the program that was used to compile the program, such
+its version number, and the source code path used to be in there as
 well. (I think these things should still be in there but that's a
-different story).  @xref{Instruction Changes Between Emacs Releases} where
-we give examples of the headers to show how that has changed.
+different story.)  See @xref{Instruction Changes Between Emacs Releases} where
+we give examples of the headers to show how they have changed.
 
 The second thing that is typically different between source code files
-and bytecode files is the prevalence of the @code{byte-code} calls
-used in the file and with the inclusion of those comes a lack of any
-@code{defun}, @code{defmacro}, or @code{lambda} calls. But again I
-suppose there's nothing stopping you from using doing likewise in your
+and bytecode files is that bytecode files contain the @code{bytecode} calls
+used in the file and lack of any
+@code{defun}, @code{defmacro}, or @code{lambda} calls. But again there is presumably nothing stopping anyone from using these in their
 source code.
 
-In fact, you can take a file with the @code{.elc} extension, rename it
-to have an @code{.el} extension instead and @code{load} that. And that
-will run exactly the same if it had been loaded as a byte code
-file@footnote{If you go the other direction and rename a Lisp file as
+In fact, we can take a file with the @code{.elc} extension, rename it
+with an @code{.el} extension and @code{load} that, and it
+will run exactly the same if it had been loaded as a bytecode
+file@footnote{If we go the other way and rename a Lisp file as
 a bytecode file, Emacs will notice the discrepency because at the top
-of the file is a header that Emacs checks. But if you add a
-reasonable-looking header you can go that direction as well.}.
+of the file is a header that Emacs checks. But if we add a
+reasonable-looking header we can go that direction as well.}.
 
-Similarly, just as you can concatenate any number of independent Emacs
-Lisp source code files into one file@footnote{and this is sometimes
-done as a poor-man's way to create a package}, you can do the same
-with Emacs Lisp bytecode files.
+Similarly, just as we can concatenate any number of independent Emacs
+Lisp source code files into one file, and this is sometimes
+done as a poor-man's way to create a package, we can also concantenate any numbers of Emacs Lisp bytecode files.
 
-Of course, there will probably certain programs that are fooled when
+Of course, there are probably certain programs that are fooled when
 the extension is changed. In particular, the
-@code{byte-recompile-directory} function it will think that the
-bytecode file doesn't exist because it has the wrong extension. So
+@code{byte-recompile-directory} function will think that the
+bytecode file does not exist because it has the wrong extension. So
 even though Emacs is permissive about such matters, it is best to
 stick with the normal Emacs conventions.
 
@@ -534,43 +530,37 @@ files is interoperability between Emacs versions.
 Even though a bytecode header has a meta comment indicating the
 version of Emacs that was used to compile it, that information is not
 used in determining whether the bytecode file can be run or not.
-
 This has the benefit of being able to run bytecode compiled in
-different Emacs version than the version you are currently
-running. Since Emacs bytecode instructions do not change that often,
-this largely works. The scary part though is that opcode meanings have
-changed over the 30 years, and the interpreter is and has been
-sometimes lacking in checks. (In the past the interpreter has aborted
-when running an invalid bytecode). So Emacs doesn't even know that you
-are running bytecode from a different interpreter. There is no check
-that you aren't going off a cliff running older or newer bytecode.
+a different Emacs version than the version currently
+running. Since Emacs bytecode instructions do not change often,
+this largely works. The scary part, though, is that opcode meanings have
+changed over the 30 years, and the interpreter sometimes lacks checks. (In the past the interpreter aborted
+when running an invalid bytecode.) So Emacs does not even know when
+we are running bytecode from a different interpreter, and we might run off a cliff running older or newer bytecode without a check.
 
-However, Emacs developer(s) maintain that in practice problems haven't
-occurred with such frequency that it has been reported happened enough
-to be a problem.  Also, they try to keep backward compatability
-between versions. In other words, bytecode that was generated in an
-older version of Emacs but is no longer generated will often still be
-interpreted in the new version of Emacs. While this is a nice
-intention, the facts seem to suggest that this isn't always the
-case. (Nor could it be in reality for a program that is 30 years old
-or so).
+Emacs developers maintain that, in practice, problems have not
+been reported very much.  Also, they try to keep backward compatability
+between versions so that bytecode generated in an
+older version of Emacs will often still be
+interpreted in a newer version. While this is a worthwhile
+intention, my experience is that this does not always work, especially going back more than one version, and it is unrealistic to expect for a program that is 30 years old.
 
-@xref{Instruction Changes Between Emacs Releases} then for when this is
-likely to work and in what cases it won't. And although running newer
-bytecode in an older version of Emacs isn't explicitly considered,
-again, since bytecode doesn't change that often, in reality this too
-can sometimes work out.
+Because there is no up-front checking, bytecode generated from a newer version of emacs will run  silently on an older version until there is opcode that the older version cannot handle. In some cases it will complete. 
+See  @ref{Instruction Changes Between Emacs Releases} for when this is
+likely to work and when it won't. Although running newer
+bytecode in an older version of Emacs is not explicitly considered,
+since bytecode does not change very often, this can sometimes work out.
 
-Note that this is in sharp contrast other bytecode interpreters like
-Python where the magic used in compiling has to be the same as the
-value of running interpreter or Python will refuse to run.
+Note the sharp contrast with other bytecode interpreters, such as
+Python, where the magic used in compiling has to be the same as the
+value of the running interpreter or it will refuse to run.
 
-Personally, I think it would be nice to have a Emacs Lisp bytecode
-checker, perhaps a @code{safer-load} function that does look at the
-bytecode and its meta-comments gleans when there is something that is
+It would be nice to have am Emacs Lisp bytecode
+checker, perhaps a @code{safer-load} function that looks at the
+bytecode. Its meta-comments would glean when there is something that is
 known to cause problems. Any volunteers?
 
-@SECTION Functions and Commands for working with LAP and Byte Code
+@SECTION Functions and Commands for working with LAP and Bytecode
 
 You can byte-compile an individual function or macro definition with
 the @code{byte-compile} function. To extract individual components of
@@ -578,7 +568,7 @@ that array use @code{aref}. To recover human-readable LAP code from
 a byte-compiled file use @code{dissasemble}. Perhaps in the future there
 will be a decompiler which reconstructs higher-level Lisp from LAP.
 
-You can see if a symbol has is a function with @code{functionp}.  To
+You can see if a symbol's value holds one of the function types or an alias to a function with @code{functionp}.  To
 retrieve the definition of the function use @code{symbol-function}.
 
 You can compile a whole file with @code{byte-compile-file}, or several
@@ -586,10 +576,10 @@ files with @code{byte-recompile-directory} or
 @code{batch-byte-compile}.
 
 @vindex byte-compile-debug
-  Sometimes, the byte compiler produces warning and/or error messages
+ Sometimes, the byte compiler produces warning and/or error messages
 (@pxref{Compiler Errors,,,elisp, GNU Emacs Lisp Reference Manual}, for
 details).  These messages are normally recorded in a buffer called
-@file{*Compile-Log*}, which uses Compilation mode.  @xref{Compilation
+@file{*Compile-Log*}, which uses compilation mode.  @xref{Compilation
 Mode,,,emacs, The GNU Emacs Manual}.  However, if the variable
 @code{byte-compile-debug} is non-nil, error message will be signaled
 as Lisp errors instead (@pxref{Errors,,,elisp, GNU Emacs Lisp
@@ -605,15 +595,15 @@ macro definitions (@pxref{Named Features,,,elisp, GNU Emacs Lisp
 Reference Manual}).  Normally, the byte compiler does not evaluate the
 code that it is compiling, but it handles @code{require} forms
 specially, by loading the specified libraries.  To avoid loading the
-macro definition files when someone @emph{runs} the compiled program,
+macro definition files when someone runs the compiled program,
 write @code{eval-when-compile} around the @code{require} calls
 (@pxref{Eval During Compile,,,elisp, GNU Emacs Lisp Reference
-Manual}).  For more details, @xref{Compiling Macros,,,elisp, GNU Emacs
-Lisp Reference Manual}.
+Manual}). @xref{Compiling Macros,,,elisp, GNU Emacs
+Lisp Reference Manual} for more details.
 
-Inline (@code{defsubst}) functions are less troublesome; if you
+Inline (@code{defsubst}) functions are less troublesome. If you
 compile a call to such a function before its definition is known, the
-call will still work right, it will just run slower.
+call will still work right; it will just run slower.
 
 @menu
 * aref-fn::  aref
@@ -638,7 +628,7 @@ call will still work right, it will just run slower.
 Return the element of @var{array} at index @var{idx}.
 
 Use this to extract the individual components of a byte-code object.
-@xref{Byte-Code Objects} contains numerous examples using @code{aref}.
+@xref{Byte-Code Objects} for numerous examples using @code{aref}.
 @end defun
 
 
@@ -710,7 +700,7 @@ If @var{form} is a lambda or a macro, byte-compile it as a function.
 @end group
 @end example
 
-If @var{symbol}'s definition is a byte-code function object,
+If @var{symbol}'s definition is a bytecode function object,
 @code{byte-compile} does nothing and returns @code{nil}.  It does not
 compile the symbol's definition again, since the original
 (non-compiled) code has already been replaced in the symbol's function
@@ -724,18 +714,18 @@ cell by the byte-compiled code.
 
 @deffn Command byte-compile-file filename &optional load
 This function compiles a file of Lisp code named @var{filename} into a
-file of byte-code.  The output file's name is made by changing the
-@samp{.el} suffix into @samp{.elc}; if @var{filename} does not end in
+file of bytecode.  The output file's name is made by changing the
+@samp{.el} suffix into @samp{.elc}. If @var{filename} does not end in
 @samp{.el}, it adds @samp{.elc} to the end of @var{filename}.
 
 Compilation works by reading the input file one form at a time.  If it
 is a definition of a function or macro, the compiled function or macro
-definition is written out.  Other forms are batched together, then each
+definition is written out.  Other forms are batched, then each
 batch is compiled, and written so that its compiled code will be
 executed when the file is read.  All comments are discarded when the
 input file is read.
 
-This command returns @code{t} if there were no errors and @code{nil}
+This command returns @code{t} if there are no errors and @code{nil}
 otherwise.  When called interactively, it prompts for the file name.
 
 If @var{load} is non-@code{nil}, this command loads the compiled file
@@ -767,13 +757,13 @@ $ ls -l push*
 @cindex library compilation
 This command recompiles every @samp{.el} file in @var{directory} (or
 its subdirectories) that needs recompilation.  A file needs
-recompilation if a @samp{.elc} file exists but is older than the
+recompilation if an @samp{.elc} file exists but is older than the
 @samp{.el} file.
 
 When a @samp{.el} file has no corresponding @samp{.elc} file,
 @var{flag} says what to do.  If it is @code{nil}, this command ignores
 these files.  If @var{flag} is 0, it compiles them.  If it is neither
-@code{nil} nor 0, it asks the user whether to compile each such file,
+@code{nil} nor 0, it asks the user whether to compile each file,
 and asks about each subdirectory as well.
 
 Interactively, @code{byte-recompile-directory} prompts for
@@ -795,7 +785,7 @@ Recompile @var{filename} file if it needs recompilation.
 This happens when its @samp{.elc} file is older than itself.
 
 If the @samp{.elc} file exists and is up-to-date, normally this function
-@emph{does not} compile @var{filename}.  If the prefix argument @var{force} is non-nil,
+does not compile @var{filename}.  If the prefix argument @var{force} is non-nil,
 however, it compiles @var{filename} even if the destination already
 exists and is up-to-date.
 
@@ -907,7 +897,7 @@ We briefly describe parameters below. For a more detailed discussion of the para
 The first four arguments are required; at most six have any
 significance.  The @var{arglist} can be either like the one of
 ‘lambda’, in which case the arguments will be dynamically bound before
-executing the byte code, or it can be an integer of the form
+executing the bytecode, or it can be an integer of the form
 @emph{NNNNNNNRMMMMMMM} where the 7bit @emph{MMMMMMM} specifies the
 minimum number of arguments, the 7-bit @emph{NNNNNNN} specifies the
 maximum number of arguments (ignoring @b{&rest}) and the @emph{R} bit
