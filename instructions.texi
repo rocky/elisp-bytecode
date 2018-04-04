@@ -1,5 +1,5 @@
-@node Emacs Lisp Byte-Code Instructions
-@chapter Emacs Lisp Byte-Code Instructions
+@node Emacs Lisp Bytecode Instructions
+@chapter Emacs Lisp Bytecode Instructions
 
 
 @menu

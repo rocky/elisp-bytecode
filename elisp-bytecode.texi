@@ -9,7 +9,7 @@
 
 @dircategory Emacs Lisp
 @direntry
-* Lisp Bytecode Instructions::  The Emacs Lisp Bytecode Manual.
+* Lisp Bytecode::  The Emacs Lisp Bytecode Manual.
 @end direntry
 
 @contents
@@ -21,13 +21,13 @@
 
 @menu
 * Introduction to Emacs Lisp Byte Code and LAP::
-* Emacs Lisp Byte-Code Environment::
-* Emacs Lisp Byte-Code Instructions::  Description of all Emacs Lisp Byte-Code Instructions
+* Emacs Lisp Bytecode Environment::
+* Emacs Lisp Bytecode Instructions::  Description of all Emacs Lisp Byte-Code Instructions
 * Instruction Changes Between Emacs Releases::
 * Opcode Table::                 Table of Bytecode Instruction ordered by Opcode Number
 * References::
 * Instruction Index::
-* Byte-Code Function Index::
+* Bytecode Function Index::
 * Concept Index::
 @end menu
 
@@ -42,8 +42,8 @@
 @unnumbered Instruction Index
 @printindex ky
 
-@node Byte-Code Function Index
-@unnumbered Byte-Code Function Index
+@node Bytecode Function Index
+@unnumbered Bytecode Function Index
 @printindex fn
 
 @node Concept Index

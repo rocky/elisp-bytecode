@@ -7,16 +7,16 @@ kinds of interpreters Emacs has, what goes into a bytecode file, and
 the interoperability of bytecode between versions.
 
 @menu
-* Bytecode Objects::
-* Bytecode Compiler::
-* Bytecode Interpreter::
-* Bytecode Instructions::
-* Bytecode Files::
+* Emacs Lisp Bytecode Objects::
+* Emacs Lisp Bytecode Compiler::
+* Emacs Lisp Bytecode Interpreter::
+* Emacs Lisp Bytecode Bytes::
+* Emacs Lisp Bytecode Files::
 * Functions and Commands for working with LAP and Bytecode::
 * Bytecode Optimization::
 @end menu
 
-@SECTION Bytecode Objects
+@SECTION Emacs Lisp Bytecode Objects
 @cindex bytecode
 
 @emph{This section is expanded and edited from Chris Wellons' blog on ``Emacs byte
@@ -54,7 +54,7 @@ vector. As with a vector, elements are accessed in constant time.
 
 The print syntax of this type is similar to vector syntax, except
 @verb{|#[...]|} is displayed to display a bytecode literal instead of
-(@verb{|[...]|} as in a vector.
+@verb{|[...]|} as in a vector.
 
 In contrast to a vector object, there are no functions to index or extract
 parts of a code object once it is build, and a bytecode object can be
@@ -69,7 +69,7 @@ The elements of a bytecode function literal are:
 @iftex
 @enumerate
 @item Function Parameter (lambda) List
-@item bytecode Unibyte String
+@item Bytecode Unibyte String
 @item Constants Vector
 @item Maximum Stack Usage
 @item Docstring
@@ -110,8 +110,8 @@ Above we show raw bytecode data. Emacs after version 25
 makes an effort to hide the data.
 
 There is really no shorter way to represent the parameter list because
-preserving the argument names is critical. In dynamic
-scope, while the function body is being evaluated these variables are
+preserving the argument names is critical. With dynamic
+scoping, while the function body is being evaluated these variables are
 globally bound (eww!) to the function's arguments.
 
 On the other hand, when the function is lexically scoped, the
@@ -138,17 +138,21 @@ because each portion almost always fits inside its own ``digit.''
 
 @findex byte-compile-make-args-desc
 @verbatim
-;byte-compile-make-args-desc '())
-;; => #x000  (0 args, 0 rest, 0 required)
+ELISP> (byte-compile-make-args-desc '())
 
-(byte-compile-make-args-desc '(a b))
-;; => #x202  (2 args, 0 rest, 2 required)
+#x000  (0 args, 0 rest, 0 required)
 
-(byte-compile-make-args-desc '(a b &optional c))
-;; => #x302  (3 args, 0 rest, 2 required)
+ELISP> (byte-compile-make-args-desc '(a b))
 
-(byte-compile-make-args-desc '(a b &optional c &rest d))
-;; => #x382  (3 args, 1 rest, 2 required)
+#x202  (2 args, 0 rest, 2 required)
+
+ELISP> (byte-compile-make-args-desc '(a b &optional c))
+
+#x302  (3 args, 0 rest, 2 required)
+
+ELISP> (byte-compile-make-args-desc '(a b &optional c &rest d))
+
+#x382  (3 args, 1 rest, 2 required)
 @end verbatim
 
 The names of the arguments do not matter in lexical scope; they're
@@ -205,8 +209,7 @@ ELISP> (unibyte-string 8 127 92 135)
 It is unusual to see a bytecode string that doesn't end with 135
 (#o207, return).
 
-We describe how to decode the bytecode string in @xref{Emacs Lisp
-Byte-Code Instructions}.
+We describe how to decode the bytecode string in @ref{Instruction-Description Format}.
 
 However when a function has been defined as a result of reading a
 bytecode file, the unibyte string is a pointer into that file. This
@@ -279,7 +282,7 @@ The constants vector in the above example contains 5 elements:
 
 The properties of symbol @code{a} and symbol @code{myfunc} are
 consulted at run time, so there is no knowledge in the
-bytecode representing the fact that @code{a} is a dynamically bound
+bytecode representing the fact that @code{a} is a dynamically-bound
 parmeter while @code{my-func} is probably an external function.
 
 If the lambda were lexically scoped, the constants vector would not
@@ -373,7 +376,7 @@ by definition, this code is going to be waiting on user
 input, but it slows down keyboard macro playback.
 
 
-@SECTION Bytecode Compiler
+@SECTION Emacs Lisp Bytecode Compiler
 
 The bytecode compiler is an ahead-of-time compiler that
 accepts Emacs Lisp input and produces bytecode that can be run by
@@ -390,7 +393,7 @@ compilation, but not kept in memory or used when running bytecode.
 It is possible to go back to LAP code from bytecode. This is done in
 order to inline functions and when bytecode disassembly is requested.
 
-@SECTION Bytecode Interpreter
+@SECTION Emacs Lisp Bytecode Interpreter
 
 When a function is called and the function is represented as bytecode,
 control passes to the bytecode interpreter.  The interpreter is
@@ -424,12 +427,13 @@ instance.
 Bytecode objects contain a number safely estimating the maximum stack
 size the evaluation stack can grow to.
 
-@SECTION Byte-Code Instructions
+@SECTION Emacs Lisp Bytecode Bytes
 
 The bytecode interpreter, once it has set up the evaluation stack and
 constants vector, executes the instructions that make up the bytecode
-byte string. Each instruction is between one and three bytes long, containing an opcode in the first byte and sometimes an eight-
-or 16-bit integer in the following bytes. Those integers are usually
+byte sequence. Each instruction is between one and three bytes long,
+containing an opcode in the first byte and sometimes an eight- or
+16-bit integer in the following bytes. Those integers are usually
 unsigned, and 16-bit integers are stored in little-endian byte order,
 regardless of whether that is the natural byte order for the machine
 Emacs runs on.
@@ -460,7 +464,7 @@ First @code{a} and @code{b} are dereferenced and their values pushed
 onto the evaluation stack; then @code{plus} is executed, leaving
 only a single value, the sum of @code{a} and @code{b}, on the stack.
 
-@SECTION Byte-Code Files
+@SECTION Emacs Lisp Bytecode Files
 
 When Emacs is build from source code, there is C code for some
 primitive or built-in functions. These include Lisp functions like
@@ -482,7 +486,7 @@ When we run @code{load}, which reads and evaluates Lisp code from a
 file, at the top-level it does not matter whether the file contains
 bytecode or Emacs Lisp source code. Either way the only thing done is
 to open the file and read its contents using the normal
-Lisp reader. 
+Lisp reader.
 
 
 The difference between the two kinds of files is more
@@ -496,7 +500,7 @@ optimization was used. In earlier versions, there was information
 about the program that was used to compile the program, such
 its version number, and the source code path used to be in there as
 well. (I think these things should still be in there but that's a
-different story.)  See @xref{Instruction Changes Between Emacs Releases} where
+different story.)  See @ref{Instruction Changes Between Emacs Releases} where
 we give examples of the headers to show how they have changed.
 
 The second thing that is typically different between source code files
@@ -545,7 +549,7 @@ older version of Emacs will often still be
 interpreted in a newer version. While this is a worthwhile
 intention, my experience is that this does not always work, especially going back more than one version, and it is unrealistic to expect for a program that is 30 years old.
 
-Because there is no up-front checking, bytecode generated from a newer version of emacs will run  silently on an older version until there is opcode that the older version cannot handle. In some cases it will complete. 
+Because there is no up-front checking, bytecode generated from a newer version of emacs will run  silently on an older version until there is opcode that the older version cannot handle. In some cases it will complete.
 See  @ref{Instruction Changes Between Emacs Releases} for when this is
 likely to work and when it won't. Although running newer
 bytecode in an older version of Emacs is not explicitly considered,
@@ -628,7 +632,7 @@ call will still work right; it will just run slower.
 Return the element of @var{array} at index @var{idx}.
 
 Use this to extract the individual components of a byte-code object.
-@xref{Byte-Code Objects} for numerous examples using @code{aref}.
+@xref{Emacs Lisp Bytecode Objects} for numerous examples using @code{aref}.
 @end defun
 
 
@@ -826,7 +830,7 @@ name of an existing buffer.  Then the output goes there, at point, and
 point is left before the output.
 
 The argument @var{object} can be a function name, a lambda expression,
-or a byte-code object (@pxref{Byte-Code Objects}).  If it is a lambda
+or a byte-code object (@pxref{Emacs Lisp Bytecode Objects}).  If it is a lambda
 expression, @code{disassemble} compiles it and disassembles the
 resulting compiled code.
 
@@ -892,7 +896,8 @@ The arguments should be the @var{arglist}, bytecode-string @var{byte-code}, cons
 vector @var{constants}, maximum stack size @var{depth}, (optional) @var{docstring},
 and (optional) @var{interactive-spec}.
 
-We briefly describe parameters below. For a more detailed discussion of the parameters, @pxref{Byte-Code Objects}.
+We briefly describe parameters below. For a more detailed discussion
+of the parameters, @pxref{Emacs Lisp Bytecode Objects}.
 
 The first four arguments are required; at most six have any
 significance.  The @var{arglist} can be either like the one of
@@ -988,7 +993,7 @@ Consider a function that hasn't been is set to be autoloaded:
 @end defun
 
 
-@SECTION Byte-Code Optimization
+@SECTION Bytecode Optimization
 
 @emph{This is taken more or less from @code{bytecomp.el} comments}.
 
