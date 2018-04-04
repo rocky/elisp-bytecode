@@ -54,7 +54,7 @@ vector. As with a vector, elements are accessed in constant time.
 
 The print syntax of this type is similar to vector syntax, except
 @verb{|#[...]|} is displayed to display a bytecode literal instead of
-(@verb{|[...]|} as in a vector.
+@verb{|[...]|} as in a vector.
 
 In contrast to a vector object, there are no functions to index or extract
 parts of a code object once it is build, and a bytecode object can be
@@ -69,7 +69,7 @@ The elements of a bytecode function literal are:
 @iftex
 @enumerate
 @item Function Parameter (lambda) List
-@item bytecode Unibyte String
+@item Bytecode Unibyte String
 @item Constants Vector
 @item Maximum Stack Usage
 @item Docstring
@@ -110,8 +110,8 @@ Above we show raw bytecode data. Emacs after version 25
 makes an effort to hide the data.
 
 There is really no shorter way to represent the parameter list because
-preserving the argument names is critical. In dynamic
-scope, while the function body is being evaluated these variables are
+preserving the argument names is critical. With dynamic
+scoping, while the function body is being evaluated these variables are
 globally bound (eww!) to the function's arguments.
 
 On the other hand, when the function is lexically scoped, the
@@ -138,17 +138,21 @@ because each portion almost always fits inside its own ``digit.''
 
 @findex byte-compile-make-args-desc
 @verbatim
-;byte-compile-make-args-desc '())
-;; => #x000  (0 args, 0 rest, 0 required)
+ELISP> (byte-compile-make-args-desc '())
 
-(byte-compile-make-args-desc '(a b))
-;; => #x202  (2 args, 0 rest, 2 required)
+#x000  (0 args, 0 rest, 0 required)
 
-(byte-compile-make-args-desc '(a b &optional c))
-;; => #x302  (3 args, 0 rest, 2 required)
+ELISP> (byte-compile-make-args-desc '(a b))
 
-(byte-compile-make-args-desc '(a b &optional c &rest d))
-;; => #x382  (3 args, 1 rest, 2 required)
+#x202  (2 args, 0 rest, 2 required)
+
+ELISP> (byte-compile-make-args-desc '(a b &optional c))
+
+#x302  (3 args, 0 rest, 2 required)
+
+ELISP> (byte-compile-make-args-desc '(a b &optional c &rest d))
+
+#x382  (3 args, 1 rest, 2 required)
 @end verbatim
 
 The names of the arguments do not matter in lexical scope; they're
@@ -279,7 +283,7 @@ The constants vector in the above example contains 5 elements:
 
 The properties of symbol @code{a} and symbol @code{myfunc} are
 consulted at run time, so there is no knowledge in the
-bytecode representing the fact that @code{a} is a dynamically bound
+bytecode representing the fact that @code{a} is a dynamically-bound
 parmeter while @code{my-func} is probably an external function.
 
 If the lambda were lexically scoped, the constants vector would not
@@ -482,7 +486,7 @@ When we run @code{load}, which reads and evaluates Lisp code from a
 file, at the top-level it does not matter whether the file contains
 bytecode or Emacs Lisp source code. Either way the only thing done is
 to open the file and read its contents using the normal
-Lisp reader. 
+Lisp reader.
 
 
 The difference between the two kinds of files is more
@@ -496,7 +500,7 @@ optimization was used. In earlier versions, there was information
 about the program that was used to compile the program, such
 its version number, and the source code path used to be in there as
 well. (I think these things should still be in there but that's a
-different story.)  See @xref{Instruction Changes Between Emacs Releases} where
+different story.)  See @ref{Instruction Changes Between Emacs Releases} where
 we give examples of the headers to show how they have changed.
 
 The second thing that is typically different between source code files
@@ -545,7 +549,7 @@ older version of Emacs will often still be
 interpreted in a newer version. While this is a worthwhile
 intention, my experience is that this does not always work, especially going back more than one version, and it is unrealistic to expect for a program that is 30 years old.
 
-Because there is no up-front checking, bytecode generated from a newer version of emacs will run  silently on an older version until there is opcode that the older version cannot handle. In some cases it will complete. 
+Because there is no up-front checking, bytecode generated from a newer version of emacs will run  silently on an older version until there is opcode that the older version cannot handle. In some cases it will complete.
 See  @ref{Instruction Changes Between Emacs Releases} for when this is
 likely to work and when it won't. Although running newer
 bytecode in an older version of Emacs is not explicitly considered,
