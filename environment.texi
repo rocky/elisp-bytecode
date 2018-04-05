@@ -140,19 +140,19 @@ because each portion almost always fits inside its own ``digit.''
 @verbatim
 ELISP> (byte-compile-make-args-desc '())
 
-#x000  (0 args, 0 rest, 0 required)
+#x000  ;; (0 args, 0 rest, 0 required)
 
 ELISP> (byte-compile-make-args-desc '(a b))
 
-#x202  (2 args, 0 rest, 2 required)
+#x202  ;; (2 args, 0 rest, 2 required)
 
 ELISP> (byte-compile-make-args-desc '(a b &optional c))
 
-#x302  (3 args, 0 rest, 2 required)
+#x302  ;; (3 args, 0 rest, 2 required)
 
 ELISP> (byte-compile-make-args-desc '(a b &optional c &rest d))
 
-#x382  (3 args, 1 rest, 2 required)
+#x382  ;; (3 args, 1 rest, 2 required)
 @end verbatim
 
 The names of the arguments do not matter in lexical scope; they're
@@ -939,8 +939,7 @@ ELISP> (make-byte-code '(a) "^H211_\207" [a] 2)
 
 ELISP> (make-byte-code 1 2 3 4)
 
-#[1 2 3 4]
-;; Doesn't even do type checking!
+#[1 2 3 4]  ;; Doesn't even do type checking!
 
 @end group
 @end example
