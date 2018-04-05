@@ -2,10 +2,10 @@
 @chapter Introduction to Emacs Lisp Byte Code and LAP
 
 @menu
-* Why is Emacs Lisp Byte Code Important and How is Emacs as a Program Different?::
+* Why is Emacs Lisp Bytecode Important and How is Emacs as a Program Different?::
 * Emacs Lisp Bytecode and LAP::
 * Emacs Lisp Virtual Machine::
-* Wither Bytecode - Its Future?::
+* Wither Bytecode - Its Future::
 @end menu
 
 @SECTION{Why is Emacs Lisp Bytecode Important and How is Emacs as a Program Different?}
@@ -64,7 +64,7 @@ rules of mathematics and physics, so it is remarkable that something
 as complex as Emacs can come out of the relatively simple language,
 Lisp.
 
-@SECTION{Emacs Lisp Byte Code and LAP}
+@SECTION{Emacs Lisp Bytecode and LAP}
 
 However pervasive Emacs Lisp is in the Emacs
 ecosystem, Emacs Lisp is not and never has been a speedy language compared
@@ -175,7 +175,7 @@ is the opcode and the second and third bytes are either a single
 operand or a single immediate value. Some operands are packed into
 the opcode byte.
 
-@SECTION{Wither Bytecode - Its Future?}
+@SECTION{Wither Bytecode - Its Future}
 
 Emacs's bytecode is pretty old---about as old as Emacs itself. And
 although there have been some changes to it, there has always been lurking
