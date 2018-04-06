@@ -273,11 +273,11 @@ The above assumes that dynamic binding is in effect.
 
 The constants vector in the above example contains 5 elements:
 @itemize
-@item @code{a} \ \  the symbol @code{a} which refers to a variable
-@item @code{myfunc}\ \ the symbol @code{myfunc} which likely refers to an external function
-@item @code{("hi" "there")}\ \  a list constant containing two strings
-@item @code{nil}\ \ the nil constant
-@item @code{5}\ \ the integer constant 5
+@item @code{a} --- the symbol @code{a} which refers to a variable
+@item @code{myfunc} ---the symbol @code{myfunc} which likely refers to an external function
+@item @code{("hi" "there")} --- a list constant containing two strings
+@item @code{nil} --- the nil constant
+@item @code{5} --- the integer constant 5
 @end itemize
 
 The properties of symbol @code{a} and symbol @code{myfunc} are
