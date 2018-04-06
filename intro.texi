@@ -198,14 +198,14 @@ language until the current code base was replaced. At present (circa
 a foothold; they are not in the current Emacs distribution or in any
 of its branches.
 
-An obvious alternative language proposed is Common Lisp. However over
-time an Emacs Lisp package have been providing more and more Common
-Lisp functionality; names however are prefaced with @code{cl-}. This
-enhancement of compatibility and features has been somewhat reflected
-in changes in the run-time systems, such as the addition of lexical
-scoping. And this approach partially solves the large code-base
-migration problem. But it also reduces the need to jump cold turkey
-from Emacs Lisp Bytecode to something else.
+An obvious alternative language proposed is Common Lisp. Over time, an
+Emacs Lisp package implemention Common Lisp has been providing more
+and more Common Lisp functionality; names, however, are prefaced with
+@code{cl-}. This enhancement of compatibility and features has been
+somewhat reflected in changes in the run-time systems, such as the
+addition of lexical scoping. And this approach partially solves the
+large code-base migration problem. But it also reduces the need to
+jump cold turkey from Emacs Lisp Bytecode to something else.
 
 And what about the other possibility where Emacs incorporates JIT
 technology? The motivation for this is to speed up Emacs. This idea
@@ -216,15 +216,18 @@ Lisp Bytecode is a reasonable target to JIT: it is sufficiently low
 level, while also easy to hook a JIT into.
 
 Two alternatives to Emacs Lisp Bytecode where there is sophisticated
-JIT technology are LLVM IR and JVM IR. For each the surrounding
-run-time environment would have to be replicated. Another possibility
-might be JavaScript IRs: the ones for V8 and Spidermonkey.
+JIT technology are LLVM IR and JVM IR. For each, the surrounding
+run-time environment would have to be replicated. Another IR
+possibility might be JavaScript IRs: specifically, the ones for V8 and
+Spidermonkey.
 
 Pipcet's work that allows SpiderMonkey's garbage collector to used in
 Emacs, allows for a real possibility of using SpiderMonkey's JIT with
 either JavaScript, Emacs Lisp bytecode, or Emacs Lisp bypassing Emacs
-Lisp bytecode.
+Lisp bytecode which I think might be harder. JIT'ing from Emacs Lisp
+bytecode allows for dual Emacs Lisp and JavaScript scripting while the
+other options don't.
 
-Needless to day, such a lot of work remains in adding any JIT that I
-don't think Emacs Lisp Bytecode will be obsolete anytime soon, should
-that JIT not work off of Emacs Lisp bytecode.
+Needless to day, such a lot of work remains in adding any sort of JIT
+technology that I don't think Emacs Lisp Bytecode will be obsolete
+anytime soon, should that JIT not work off of Emacs Lisp bytecode.
