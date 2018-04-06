@@ -21,6 +21,6 @@
 @item @uref{https://ftp.gnu.org/pub/gnu/emacs/emacs-24.1.tar.gz, GNU Emacs source code for version 24.1}
 @item @uref{https://ftp.gnu.org/pub/gnu/emacs/emacs-25.3.tar.gz, GNU Emacs source code for version 25.3}
 @item @uref{https://ftp.gnu.org/pub/gnu/emacs/emacs-25.3.tar.gz, GNU Emacs source code for version 25.3}
-@item @uref{https://github.com/larsbrinkhoff/emacs-history Lars Brinkhoff's Emacs History}
+@item @uref{https://github.com/larsbrinkhoff/emacs-history, Lars Brinkhoff's Emacs History}
 
 @end itemize
