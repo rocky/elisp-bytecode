@@ -2,6 +2,13 @@
 
 @chapter Instruction Changes Between Emacs Releases
 
+The infomation in this chapter may not be as precise or granular as it
+could be. I invite those who want more detail to look at
+@uref{https://github.com/larsbrinkhoff/emacs-history Lars Brinkhoff's
+Emacs History} project.
+
+Feel free suggest changes, as github pull requests, to make this chapter more detailed.
+
 @menu
 * Emacs 18:: After 16 and Starting in 18.31
 * Emacs 19:: After 18.59 and Starting in 19.34
