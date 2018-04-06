@@ -5,6 +5,12 @@
 
 @setfilename elisp-bytecode
 
+@c Page numbers I think are at the top by default, but we need
+@c to usupr that space in the individual instruction format. So
+@c we'll put the page number centered at the bottom.
+@everyfooting @| @thispage @|
+
+
 @include macros.texi
 
 @dircategory Emacs Lisp
