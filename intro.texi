@@ -2,13 +2,13 @@
 @chapter Introduction to Emacs Lisp Byte Code and LAP
 
 @menu
-* Why is Emacs Lisp Byte Code Important and How is Emacs as a Program Different?::
-* Emacs Lisp Byte Code and LAP::
+* Why is Emacs Lisp Bytecode Important and How is Emacs as a Program Different?::
+* Emacs Lisp Bytecode and LAP::
 * Emacs Lisp Virtual Machine::
+* Wither Bytecode - Its Future::
 @end menu
 
-@node Why is Emacs Lisp Byte Code Important and How is Emacs as a Program Different?
-@section Why is Emacs Lisp Byte Code Important and How is Emacs as a Program Different?
+@SECTION{Why is Emacs Lisp Bytecode Important and How is Emacs as a Program Different?}
 
 If we were to compare two similar complex programs in around 2018,
 Firefox 53.0.3 and Emacs 25.3, we would see that the Firefox
@@ -55,7 +55,7 @@ C/C++ Header                    176       11505          34891
 If we look at the relative ratio of C++ to Javascript code in
 Firefox, and the ratio of C versus Lisp code in Emacs, we see that
  much more of Emacs written in Lisp than Firefox is written
-in Javascript. (And a lot of C code for Emacs looks like Lisp written using C syntax). 
+in Javascript. (And a lot of C code for Emacs looks like Lisp written using C syntax).
 
 My take is that Emacs a
 lot more orthogonal in its basic concepts and construction. Just as
@@ -64,7 +64,7 @@ rules of mathematics and physics, so it is remarkable that something
 as complex as Emacs can come out of the relatively simple language,
 Lisp.
 
-@SECTION{Emacs Lisp Byte Code and LAP}
+@SECTION{Emacs Lisp Bytecode and LAP}
 
 However pervasive Emacs Lisp is in the Emacs
 ecosystem, Emacs Lisp is not and never has been a speedy language compared
@@ -158,12 +158,13 @@ Control flow in Lisp bytecode is similar to a conventional assembly
 language: there are unconditional and conditional jumps. More complex
 control structures are simply built out of these.
 
-Although it may be obvious, one last thing to point out is
-that the Emacs Lisp bytecode instruction set is custom to Emacs.  In
-addition to primitives that we would expect for Lisp such ``car'' and
-``cdr'', there are primitive bytecodes for more-complex Emacs
-editor-specific concepts such as ``save-excursion''@footnote{The semantic level difference between Emacs Lisp and its bytecode is
-not great, so writing a decompiler for it more feasible than if the
+Although it may be obvious, one last thing to point out is that the
+Emacs Lisp bytecode instruction set is custom to Emacs.  In addition
+to primitives that we would expect for Lisp such @code{car} and
+@code{cdr}, there are primitive bytecodes for more-complex Emacs
+editor-specific concepts such as ``save-excursion''@footnote{The
+semantic level difference between Emacs Lisp and its bytecode is not
+great, so writing a decompiler for it more feasible than if the
 bytecode language were of a general nature such as, say, LLVM IR.}.
 
 The interpreter is largely backward compatible, but not forward
@@ -173,3 +174,60 @@ bytecode. Each instruction is between 1 and 3 bytes. The first byte
 is the opcode and the second and third bytes are either a single
 operand or a single immediate value. Some operands are packed into
 the opcode byte.
+
+@SECTION{Wither Bytecode - Its Future}
+
+Emacs's bytecode is pretty old---about as old as Emacs itself. And
+although there have been some changes to it, there has always been lurking
+in the background the question of whether it might be totally ditched,
+either as a by-product of switching out the underlying Lisp
+implementation for something else, or as a result of using JIT
+technology.
+
+Let's take these two situations where Emacs Lisp Bytecode might become
+obsolete separately. Both ideas have been floating around for a
+long time.
+
+With respect to alternate programming-language implementations, there
+have been many languages that been proposed and experimented with. The
+big obstacle in totally replacing Emacs Lisp is in rewriting the huge
+current Emacs Lisp code base. I think that if such an approach were to
+work, the language would have to be available as an additional
+language until the current code base was replaced. At present (circa
+2018), current alternate programming languages haven't gained much of
+a foothold; they are not in the current Emacs distribution or in any
+of its branches.
+
+An obvious alternative language proposed is Common Lisp. Over time, an
+Emacs Lisp package implemention Common Lisp has been providing more
+and more Common Lisp functionality; names, however, are prefaced with
+@code{cl-}. This enhancement of compatibility and features has been
+somewhat reflected in changes in the run-time systems, such as the
+addition of lexical scoping. And this approach partially solves the
+large code-base migration problem. But it also reduces the need to
+jump cold turkey from Emacs Lisp Bytecode to something else.
+
+And what about the other possibility where Emacs incorporates JIT
+technology? The motivation for this is to speed up Emacs. This idea
+too goes back over a decade, at least back to 2006. Of the JITs that
+have been proposed, at least four of them are use Emacs Lisp Bytecode
+as the basis from which to JIT from. I think that is because Emacs
+Lisp Bytecode is a reasonable target to JIT: it is sufficiently low
+level, while also easy to hook a JIT into.
+
+Two alternatives to Emacs Lisp Bytecode where there is sophisticated
+JIT technology are LLVM IR and JVM IR. For each, the surrounding
+run-time environment would have to be replicated. Another IR
+possibility might be JavaScript IRs: specifically, the ones for V8 and
+Spidermonkey.
+
+Pipcet's work that allows SpiderMonkey's garbage collector to used in
+Emacs, allows for a real possibility of using SpiderMonkey's JIT with
+either JavaScript, Emacs Lisp bytecode, or Emacs Lisp bypassing Emacs
+Lisp bytecode which I think might be harder. JIT'ing from Emacs Lisp
+bytecode allows for dual Emacs Lisp and JavaScript scripting while the
+other options don't.
+
+Needless to day, such a lot of work remains in adding any sort of JIT
+technology that I don't think Emacs Lisp Bytecode will be obsolete
+anytime soon, should that JIT not work off of Emacs Lisp bytecode.
