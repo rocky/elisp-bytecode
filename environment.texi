@@ -241,10 +241,11 @@ The third object in a bytecode-function literal is a constants
 vector. It is a normal Emacs Lisp vector and can be created with
 @code{(vector ...)} or a vector literal.
 
-In addition to the normal kinds of things we think of as constants---numbers, strings, and compositions of these---the constants
-vector also contains symbol constants of the dynamic
-variables and function names that the instructions
-of the bytecode unibyte string refers to.
+In addition to the normal kinds of things we think of as
+constants---numbers, strings, and compositions of these---the
+constants vector also contains symbol constants of the dynamic
+variables and function names that the instructions of the bytecode
+unibyte string refers to.
 
 The amount of space used by an Emacs bytecode instruction, and the
 number of ways an operand in an instruction can refer to a Lisp
@@ -533,33 +534,38 @@ files is interoperability between Emacs versions.
 
 Even though a bytecode header has a meta comment indicating the
 version of Emacs that was used to compile it, that information is not
-used in determining whether the bytecode file can be run or not.
-This has the benefit of being able to run bytecode compiled in
-a different Emacs version than the version currently
-running. Since Emacs bytecode instructions do not change often,
-this largely works. The scary part, though, is that opcode meanings have
-changed over the 30 years, and the interpreter sometimes lacks checks. (In the past the interpreter aborted
-when running an invalid bytecode.) So Emacs does not even know when
-we are running bytecode from a different interpreter, and we might run off a cliff running older or newer bytecode without a check.
+used in determining whether the bytecode file can be run or not.  This
+has the benefit of being able to run bytecode compiled in a different
+Emacs version than the version currently running. Since Emacs bytecode
+instructions do not change often, this largely works. The scary part,
+though, is that opcode meanings have changed over the 30 years, and
+the interpreter sometimes lacks checks. (In the past the interpreter
+aborted when running an invalid bytecode.) So Emacs does not even know
+when we are running bytecode from a different interpreter, and we
+might run off a cliff running older or newer bytecode without a check.
 
-Emacs developers maintain that, in practice, problems have not
-been reported very much.  Also, they try to keep backward compatability
-between versions so that bytecode generated in an
-older version of Emacs will often still be
-interpreted in a newer version. While this is a worthwhile
-intention, my experience is that this does not always work, especially going back more than one version, and it is unrealistic to expect for a program that is 30 years old.
+Emacs developers maintain that, in practice, problems have not been
+reported very much.  Also, they try to keep backward compatability
+between versions so that bytecode generated in an older version of
+Emacs will often still be interpreted in a recent newer version. While
+this is a worthwhile intention, my experience is that this does not
+always work, especially going back more than one version, and it is
+unrealistic to expect for a program that is 30 years old.
 
-Because there is no up-front checking, bytecode generated from a newer version of emacs will run  silently on an older version until there is opcode that the older version cannot handle. In some cases it will complete.
-See  @ref{Instruction Changes Between Emacs Releases} for when this is
-likely to work and when it won't. Although running newer
+Because there is no up-front checking, bytecode generated from a newer
+version of Emacs will run silently on an older version until there is
+opcode that the older version cannot handle. In some cases it will
+complete.  See @ref{Instruction Changes Between Emacs Releases} for
+when this is likely to work and when it won't. Although running newer
 bytecode in an older version of Emacs is not explicitly considered,
-since bytecode does not change very often, this can sometimes work out.
+since bytecode does not change very often, this can sometimes work
+out.
 
 Note the sharp contrast with other bytecode interpreters, such as
 Python, where the magic used in compiling has to be the same as the
 value of the running interpreter or it will refuse to run.
 
-It would be nice to have am Emacs Lisp bytecode
+It would be nice to have an Emacs Lisp bytecode
 checker, perhaps a @code{safer-load} function that looks at the
 bytecode. Its meta-comments would glean when there is something that is
 known to cause problems. Any volunteers?
@@ -572,8 +578,9 @@ that array use @code{aref}. To recover human-readable LAP code from
 a byte-compiled file use @code{dissasemble}. Perhaps in the future there
 will be a decompiler which reconstructs higher-level Lisp from LAP.
 
-You can see if a symbol's value holds one of the function types or an alias to a function with @code{functionp}.  To
-retrieve the definition of the function use @code{symbol-function}.
+You can see if a symbol's value holds one of the function types or an
+alias to a function with @code{functionp}.  To retrieve the definition
+of the function use @code{symbol-function}.
 
 You can compile a whole file with @code{byte-compile-file}, or several
 files with @code{byte-recompile-directory} or
@@ -615,10 +622,13 @@ call will still work right; it will just run slower.
 * batch-byte-recompile-directory::
 * byte-compile::
 * byte-compile-file::
+* byte-recalc-examples::
 * byte-recompile-directory::
 * byte-recompile-file::
 * compile-defun::
 * disassemble::
+* disassemble-file::
+* disassemble-full::
 * display-call-tree::
 * functionp::
 * make-byte-code::
@@ -754,6 +764,19 @@ $ ls -l push*
 @end example
 @end deffn
 
+@node byte-recalc-examples
+@subsection @code{byte-recalc-examples}
+@deffn Command byte-recalc-excaple begin end
+This command is what we use in this document to format our examples. It is
+not part of Emacs lisp but in @code{byte-pretty.el} inside the repository where
+this document lives.
+
+Since we want to show values of various kinds --- offsets, opcodes,
+operand, and constant-vector values --- this output is a more verbose than the format
+you get from the @code{disassemble} command.
+@end deffn
+
+
 @node byte-recompile-directory
 @subsection @code{byte-recompile-directory}
 
@@ -850,6 +873,34 @@ Default Value
 @tab  @verb{| 3|}
 @end multitable
 
+@end deffn
+
+@node disassemble-file
+@subsection @code{disassemble-file}
+
+@deffn Command disassemble-file filename
+
+The command is not part of GNU Emacs, but is included in an
+experimental decompiler. It disassembles the entire contents of a bytecode
+file using the @code{disassemble-full} for each function.
+@end deffn
+
+@node disassemble-full
+@subsection @code{disassemble-full}
+
+@deffn Command disassemble object &optional buffer-or-name indent
+
+The command is not part of GNU Emacs, but is included in an
+experimental decompiler. In contrast to the standard
+@code{disassemble}, the format is slightly modified to make it easier to
+decompile the code. For example, the full text of docstring is preserved and is
+preceded by a length code of the string.
+
+This functions prints disassembled code for @var{object} in
+@var{buffer-or-name}.  @var{object} can be a symbol defined as a
+function, or a function itself (a lambda expression or a
+compiled-function object).  If @var{object} is not already compiled,
+we compile it, but do not redefine @var{object} if it is a symbol."
 @end deffn
 
 @node display-call-tree
