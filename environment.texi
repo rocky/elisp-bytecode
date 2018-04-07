@@ -766,7 +766,7 @@ $ ls -l push*
 
 @node byte-recalc-examples
 @subsection @code{byte-recalc-examples}
-@deffn Command byte-recalc-excaple begin end
+@deffn Command byte-recalc-examples begin end
 This command is what we use in this document to format our examples. It is
 not part of Emacs lisp but in @code{byte-pretty.el} inside the repository where
 this document lives.
