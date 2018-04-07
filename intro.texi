@@ -208,25 +208,30 @@ large code-base migration problem. But it also reduces the need to
 jump cold turkey from Emacs Lisp Bytecode to something else.
 
 And what about the other possibility where Emacs incorporates JIT
-technology? The motivation for this is to speed up Emacs. This idea
-too goes back over a decade, at least back to 2006. Of the JITs that
-have been proposed, at least four of them are use Emacs Lisp Bytecode
-as the basis from which to JIT from. I think that is because Emacs
-Lisp Bytecode is a reasonable target to JIT: it is sufficiently low
-level, while also easy to hook a JIT into.
+technology? The motivation for this is to speed up Emacs. There is
+widespread belief among the development community that there could be
+big performance wins if this were done right. After all, it is not
+uncommon for some people to live inside a single GNU Emacs session.
 
-Two alternatives to Emacs Lisp Bytecode where there is sophisticated
-JIT technology are LLVM IR and JVM IR. For each, the surrounding
-run-time environment would have to be replicated. Another IR
-possibility might be JavaScript IRs: specifically, the ones for V8 and
-Spidermonkey.
+This idea of using a JIT to speed performance goes back over a decade,
+at least back to 2006. Of the JITs that have been proposed, at least
+four of them use Emacs Lisp Bytecode as the basis from which to JIT
+from. I think that is because Emacs Lisp Bytecode is a reasonable
+target to JIT: it is sufficiently low level, while also easy to hook a
+JIT into.
+
+Two alternatives to Emacs Lisp Bytecode which have sophisticated JIT
+technology are LLVM IR and JVM IR. For each, the surrounding run-time
+environment would have to be replicated. Another IR possibility might
+be JavaScript IRs: specifically, the ones for V8 and Spidermonkey.
 
 Pipcet's work that allows SpiderMonkey's garbage collector to used in
 Emacs, allows for a real possibility of using SpiderMonkey's JIT with
 either JavaScript, Emacs Lisp bytecode, or Emacs Lisp bypassing Emacs
-Lisp bytecode which I think might be harder. JIT'ing from Emacs Lisp
-bytecode allows for dual Emacs Lisp and JavaScript scripting while the
-other options don't.
+Lisp bytecode. That last route I think might be harder. JIT'ing from
+Emacs Lisp bytecode to via SpiderMonkey (if it is possible) would
+allow for dual Emacs Lisp and JavaScript scripting while the other
+options don't.
 
 Needless to day, such a lot of work remains in adding any sort of JIT
 technology that I don't think Emacs Lisp Bytecode will be obsolete
