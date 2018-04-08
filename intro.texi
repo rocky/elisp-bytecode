@@ -199,7 +199,7 @@ a foothold; they are not in the current Emacs distribution or in any
 of its branches.
 
 An obvious alternative language proposed is Common Lisp. Over time, an
-Emacs Lisp package implemention Common Lisp has been providing more
+Emacs Lisp package implementing Common Lisp has been providing more
 and more Common Lisp functionality; names, however, are prefaced with
 @code{cl-}. This enhancement of compatibility and features has been
 somewhat reflected in changes in the run-time systems, such as the
