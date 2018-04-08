@@ -194,16 +194,18 @@ big obstacle in totally replacing Emacs Lisp is in rewriting the huge
 current Emacs Lisp code base. I think that if such an approach were to
 work, the language would have to be available as an additional
 language until the current code base was replaced. At present (circa
-2018), current alternate programming languages haven't gained much of
+2018), alternate programming languages haven't gained much of
 a foothold; they are not in the current Emacs distribution or in any
 of its branches.
 
 An obvious alternative language proposed is Common Lisp. Over time, an
 Emacs Lisp package implemention Common Lisp has been providing more
 and more Common Lisp functionality; names, however, are prefaced with
-@code{cl-}. This enhancement of compatibility and features has been
-somewhat reflected in changes in the run-time systems, such as the
-addition of lexical scoping. And this approach partially solves the
+@code{cl-}.
+
+The addition of features in Common Lisp has been somewhat
+reflected in changes in the run-time systems, such as the
+addition of lexical scoping.  And this approach partially solves the
 large code-base migration problem. But it also reduces the need to
 jump cold turkey from Emacs Lisp Bytecode to something else.
 
