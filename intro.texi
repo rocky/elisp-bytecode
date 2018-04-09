@@ -199,7 +199,7 @@ a foothold; they are not in the current Emacs distribution or in any
 of its branches.
 
 An obvious alternative language proposed is Common Lisp. Over time, an
-Emacs Lisp package implemention Common Lisp has been providing more
+Emacs Lisp package implementing Common Lisp has been providing more
 and more Common Lisp functionality; names, however, are prefaced with
 @code{cl-}.
 
@@ -227,7 +227,7 @@ technology are LLVM IR and JVM IR. For each, the surrounding run-time
 environment would have to be replicated. Another IR possibility might
 be JavaScript IRs: specifically, the ones for V8 and Spidermonkey.
 
-Pipcet's work that allows SpiderMonkey's garbage collector to used in
+Pipcet's work that allows SpiderMonkey's garbage collector to be used in
 Emacs, allows for a real possibility of using SpiderMonkey's JIT with
 either JavaScript, Emacs Lisp bytecode, or Emacs Lisp bypassing Emacs
 Lisp bytecode. That last route I think might be harder. JIT'ing from
