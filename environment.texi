@@ -1003,8 +1003,20 @@ ELISP> (make-byte-code 1 2 3 4)
 Return @var{symbol}’s function definition, or nil if that is void.
 
 The value returned from @code{symbol-function} for a function will
-either be its Lisp source, its bytecode, or an autoload function
-call.
+when non-nil can be a number of things including:
+
+@itemize
+@item
+its Lisp expression value (type cons node)
+@item
+its bytecode value (type compiled-function)
+@item
+its C function value (type subr)
+@item
+its Rust function value, if remacs
+@item
+an autoload function call.
+@end itemize
 
 For example if we take a function that is autoloaded when Emacs starts up:
 @verbatim
@@ -1038,6 +1050,12 @@ Consider a function that hasn't been is set to be autoloaded:
     ELISP> (symbol-function 'ediff-buffers)
 
 (autoload "ediff" 975154 t nil)
+@end verbatim
+
+Finally, consider an interal function like @code{eolp}
+@verbatim
+    ELISP> (type-of (symbol-function 'eolp))
+subr
 @end verbatim
 
 @end defun
