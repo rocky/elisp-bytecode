@@ -191,12 +191,14 @@ long time.
 With respect to alternate programming-language implementations, there
 have been many languages that been proposed and experimented with. The
 big obstacle in totally replacing Emacs Lisp is in rewriting the huge
-current Emacs Lisp code base. I think that if such an approach were to
-work, the language would have to be available as an additional
-language until the current code base was replaced. At present (circa
-2018), alternate programming languages haven't gained much of
-a foothold; they are not in the current Emacs distribution or in any
-of its branches.
+current Emacs Lisp code base. (The counts given in the last section
+for Emacs 25.3 are 1.5K files and 100K lines of code.)
+
+I think that if such an approach were to work, the language would have
+to be available as an additional language until the current code base
+was replaced. At present (circa 2018), alternate programming languages
+haven't gained much of a foothold; they are not in the current Emacs
+distribution or in any of its branches.
 
 An obvious alternative language proposed is Common Lisp. Over time, an
 Emacs Lisp package implementing Common Lisp has been providing more

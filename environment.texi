@@ -19,9 +19,9 @@ the interoperability of bytecode between versions.
 @SECTION Emacs Lisp Bytecode Objects
 @cindex bytecode
 
-@emph{This section is expanded and edited from Chris Wellons' blog on ``Emacs byte
-code Internals'' and from the Emacs Lisp Reference manual. See references at
-the end of this doc.}
+@emph{This section is expanded and edited from Chris Wellons' blog on
+``Emacs byte code Internals'' and from the Emacs Lisp Reference
+manual. See references at the end of this doc.}
 
 Emacs Lisp bytecode is an encoded form of a low-level assembly format
 that is suited to running Emacs Lisp primitives and functions.
@@ -41,7 +41,7 @@ components of bytecode once it is built, The bytecode object is made
 up of other normal Emacs Lisp objects described next. Bytecode is
 created using the
 @findex make-byte-code
-@code{make-bytecode} function.
+@code{make-byte-code} function.
 
 One important component of the bytecode object is the ``constants
 vector.''  It contains important Lisp objects that are required to
@@ -118,7 +118,7 @@ On the other hand, when the function is lexically scoped, the
 parameter list is packed into an Emacs Lisp integer, indicating the
 counts of the different kinds of parameters: required,
 @verb{|&optional|}, and @verb{|&rest|}. No variable names are
-needed. In contrast to dynamically bound variables, here the arguments
+needed. In contrast to dynamically-bound variables, the arguments
 are on the stack of the byte-code interpreter before executing the
 code
 
@@ -219,7 +219,7 @@ filename and the @code{cdr} is the bytecode offset from the beginning of the fil
 @verbatim
 ELISP> (aref
         (symbol-function 'cl-gcd)
-        1)
+        1) ;; 1 is the bytecode string field
 
 "("/tmp/emacs/lisp/emacs-lisp/cl-extra.elc" . 7352)
 @end verbatim
@@ -263,7 +263,7 @@ ELISP> (aref
         (byte-compile
           (lambda (a b)
            (my-func '("hi" "there") a nil 5)))
-	 2)
+	 2) ;; 2 is the bytecode constants field
 
 [a my-func
  ("hi" "there")
@@ -326,7 +326,7 @@ ELISP> (aref
 	 (defun double(a)
 	  "double parameter A"
 	  (+ a a)))
-	4)
+	4) ;; 4 is the bytecode docstring field
 
 "double parameter A"
 
@@ -357,7 +357,7 @@ ELISP> (aref
            (lambda (n)
             (interactive "nNumber: ") n)
             )
-         5)
+         5) ;; 5 is the bytcode interactive specification field
 
 "nNumber: "
 
@@ -616,10 +616,16 @@ Inline (@code{defsubst}) functions are less troublesome. If you
 compile a call to such a function before its definition is known, the
 call will still work right; it will just run slower.
 
+In the list below, some of the functions are somewhat general and are
+not specific to bytecode. however they are mentioned because they are
+specifically have an interesting use in bytecode and their connection
+might be readily appearent.
+
 @menu
 * aref-fn::  aref
 * batch-byte-compile::
 * batch-byte-recompile-directory::
+* byte-code::
 * byte-compile::
 * byte-compile-file::
 * byte-recalc-examples::
@@ -644,6 +650,16 @@ Return the element of @var{array} at index @var{idx}.
 Use this to extract the individual components of a byte-code object.
 @xref{Emacs Lisp Bytecode Objects} for numerous examples using @code{aref}.
 @end defun
+
+@example
+@group
+ELISP> (aref
+        (symbol-function 'cl-gcd)
+        1) ;; 1 is the bytecode string field
+
+"("/tmp/emacs/lisp/emacs-lisp/cl-extra.elc" . 7352)
+@end group
+@end example
 
 
 @node batch-byte-compile
@@ -677,6 +693,27 @@ Optional argument @var{arg} is passed as second argument @var{arg} to
 @code{byte-recompile-directory}; see there for its possible values
 and corresponding effects.
 @end defun
+
+@node byte-code
+@subsection @code{byte-code}
+
+@defun byte-code bytestr vector maxdepth
+This function is executes byte code and is used internally in
+byte-compiled code.  The first argument, @var{bytestr}, is a string of
+byte code; the second, @var{vector}, a vector of constants; the third,
+@var{maxdepth}, the maximum stack depth used in this function.  If the
+third argument is incorrect, Emacs may crash.
+@end defun
+
+@example
+@group
+ELISP> (setq msg-string "hi")
+"hi"
+ELISP> (byte-code "\301!\207" [msg-string message] 2)
+"hi"
+@end group
+@end example
+
 
 @node byte-compile
 @subsection @code{byte-compile}
@@ -930,11 +967,16 @@ invoked interactively.
 @node functionp
 @subsection @code{functionp}
 
+This is a general function, regarding functions in general.
+
 @defun functionp object
 Non-nil if @var{object} is a function.
 
-Use this to see if a symbol is a function. @code{symbol-function} can then
-be used to extract the function definition.
+Use this to see if a symbol is a function, that is something that can
+be called. In most cases though @code{symbol-function} is more useful
+as it not only distinguishes functions from non-functions, but can it
+returns more information in those situations where @var{object} is a
+function.
 @end defun
 
 
@@ -998,6 +1040,9 @@ ELISP> (make-byte-code 1 2 3 4)
 @node symbol-function-fn
 @subsection @code{symbol-function}
 
+This is a general function, but it has an interesting use in
+conjunction with bytecode.
+
 @defun symbol-function symbol
 
 Return @var{symbol}’s function definition, or nil if that is void.
@@ -1019,18 +1064,21 @@ an autoload function call.
 @end itemize
 
 For example if we take a function that is autoloaded when Emacs starts up:
-@verbatim
+@example
+@group
 ELISP> (symbol-function 'insert-file)
 
 #[257 "\300^A301\"\207"
       [insert-file-1 insert-file-contents]
       4 2029839 "*fInsert file: "]
-@end verbatim
+@end group
+@end example
 
 However if you load a file redefining the function, by loading in
 emacs source, you get the last definition:
 
-@verbatim
+@example
+@group
 ELISP> (load-file "/usr/share/emacs/25.2/lisp/files.el.gz")
 
 t
@@ -1042,28 +1090,43 @@ ELISP> (symbol-function 'insert-file)
   "Insert contents of file FILENAME into buffer after point.\nSet mark after the inserted text.\n\nThis function is meant for the user to run interactively.\nDon't call it from programs!  Use `insert-file-contents' instead.\n(Its calling sequence is different; see its documentation)."
   (interactive "*fInsert file: ")
   (insert-file-1 filename #'insert-file-contents))
-@end verbatim
+@end group
+@end example
 
 Consider a function that hasn't been is set to be autoloaded:
 
-@verbatim
+@example
+@group
     ELISP> (symbol-function 'ediff-buffers)
 
 (autoload "ediff" 975154 t nil)
-@end verbatim
+@end group
+@end example
 
 Finally, consider an interal function like @code{eolp}
-@verbatim
+@example
+@group
     ELISP> (type-of (symbol-function 'eolp))
 subr
-@end verbatim
+@end group
+@end example
 
 @end defun
 
 
 @SECTION Bytecode Optimization
 
-@emph{This is taken more or less from @code{bytecomp.el} comments}.
+This section needs to be gone over.
+
+In
+@uref{https://lists.gnu.org/archive/html/emacs-devel/2018-04/msg00018.html,
+Floating-point constant folding in Emacs byte compile} the notion was
+put forth that optimization has to be portable over improving
+code. (The issue here was compiling Emacs with larger integers allowed
+for larger possibiles of constant folding).
+
+@emph{This rest is taken more or less from @code{bytecomp.el}
+comments}.
 
 @itemize
 @item
