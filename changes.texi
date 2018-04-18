@@ -66,8 +66,23 @@ The following instructions became obsolete:
 @node Emacs 19
 @section After 18.59 and Starting 19.34
 
-jwz and Hallvard made major changes and additions to the bytecode
+Jamie Zawinski and Hallvard Breien Furuseth made major changes and additions to the bytecode
 interpreter.
+
+From Hallvard:
+
+@quotation
+Originally I just generalized some stuff, made bytecomp output byte-code
+at file level, added code to skip compiling very small code snippets when
+introducing the byte-code call would be a pessimization (looks like this
+has been partly reverted now that there are #[function objects]), and
+I made some other simple optimizations.
+
+Bytecomp compiled directly to bytecode.  Jamie Zawinski invented the
+intermediate stage lapcode which made more thorough optimization
+possible (byte-opt), and we got together about optimizing more.
+@end quotation
+
 
 The following instructions were added:
 @itemize

@@ -630,6 +630,7 @@ might be readily appearent.
 * byte-code::
 * byte-compile::
 * byte-compile-file::
+* byte-compile-sexp::
 * byte-recalc-examples::
 * byte-recompile-directory::
 * byte-recompile-file::
@@ -802,6 +803,52 @@ $ ls -l push*
 @end group
 @end example
 @end deffn
+
+@node byte-compile-sexp
+@subsection @code{byte-compile-sexp}
+
+@defun byte-compile-sexp sexp
+
+Bytecode compile and return @var{sexp}.
+
+This can be useful for seeing what the byte compile does, especially
+when combined with @code{disassemble}.
+
+@example
+@group
+
+ELISP> (disassemble
+         (byte-compile-sexp '(1+ fill-column)))
+byte code:
+  args: nil
+0	varref	  fill-column
+1	add1
+2	return
+@end group
+@end example
+
+@example
+@group
+ELISP> (disassemble
+         (byte-compile-sexp
+           '(unwind-protect (1+ fill-column) (ding))))
+
+byte code:
+  args: nil
+0	constant  <compiled-function>
+      args: nil
+    0	    constant  ding
+    1	    call      0
+    2	    return
+
+1	unwind-protect
+2	varref	  fill-column
+3	add1
+4	unbind	  1
+5	return
+@end group
+@end example
+@end defun
 
 @node byte-recalc-examples
 @subsection @code{byte-recalc-examples}
