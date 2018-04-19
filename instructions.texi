@@ -1,6 +1,11 @@
 @node Emacs Lisp Bytecode Instructions
 @chapter Emacs Lisp Bytecode Instructions
 
+Although we document bytecode instructions here, the implementation of
+the bytecode interpreter and its instructions appear in
+@file{src/bytecode.c}. If there is any question, that should be
+consulted as the primary reference.
+
 
 @menu
 * Instruction-Description Format::

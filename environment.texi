@@ -44,10 +44,8 @@ created using the
 @code{make-byte-code} function.
 
 One important component of the bytecode object is the ``constants
-vector.''  It contains important Lisp objects that are required to
-make sense of the bytecode-instruction operands, because functions that share
-the same bytecode-instruction byte string, but differ in their
-constants vectors, can do very different things.
+vector.''  It is a Emacs Lisp vector. The @code{constant} instruction
+refers to one of these objects.
 
 An Emacs Lisp object of a bytecode type is analogous to an Emacs Lisp
 vector. As with a vector, elements are accessed in constant time.
@@ -56,10 +54,12 @@ The print syntax of this type is similar to vector syntax, except
 @verb{|#[...]|} is displayed to display a bytecode literal instead of
 @verb{|[...]|} as in a vector.
 
-In contrast to a vector object, there are no functions to index or extract
-parts of a code object once it is build, and a bytecode object can be
-evaluated as a function.  Valid bytecode objects have 4 to 6 elements
-and each element has a particular structure elaborated on below.
+A bytecode object is one of the several kinds of functions that Emacs
+understands. See @pxref{symbol-function} for other objects that act
+like a function.
+
+Valid bytecode objects have 4 to 6 elements and each element has a
+particular structure elaborated on below.
 
 There are two ways to create a bytecode object: using a bytecode
 object literal or with @code{make-byte-code} (@pxref{make-byte-code}). Like vector literals,
@@ -237,25 +237,29 @@ ELISP> (aref
 @subsection Constants Vector
 
 @cindex constants vector
-The third object in a bytecode-function literal is a constants
-vector. It is a normal Emacs Lisp vector and can be created with
-@code{(vector ...)} or a vector literal.
+The third object in a bytecode-function literal is the ``constants
+vector''. It is a normal Emacs Lisp vector and can be created with
+@code{(vector ...)} or using a vector literal.
 
-In addition to the normal kinds of things we think of as
-constants---numbers, strings, and compositions of these---the
-constants vector also contains symbol constants of the dynamic
-variables and function names that the instructions of the bytecode
-unibyte string refers to.
+There is a possiblity for confusion by the name ``constants vector''.
+The vector size and its values are indeed constant. Also, only the
+@code{constant} bytecode instruction refers to one of these objects.
+However, in addition to values string and integer values that do not
+change, values in this vector also can be function and variable
+names. So although a variable or function @emph{name} stored in the
+constants vector doesn't change, the @emph{binding} of that particular
+variable or function can change, even in the course of running the
+bytecode.
 
-The amount of space used by an Emacs bytecode instruction, and the
-number of ways an operand in an instruction can refer to a Lisp
-object, is rather limited. Most operands are only a few bits long,
-some fill an entire byte, and occasionally an operand can be two bytes
-long. So, we cannot have an arbitrary string or
-structured Lisp object listed directly inside an operand. Instead,
-operands reference either the constants vector or they index into the
-evaluation stack itself.
-
+The reason for the constants vector is that it reduces the amount of
+space needed in an instruction's operand. Instead of an arbitrary
+string stored as the operand of some instruction, there an only
+small-value index into a vector. (It alos happens that this appears only
+in one instruction.)  Furthermore, since the constants vector is a
+true Emacs Lisp vector, the overall bytecode interpreter is simpler:
+all Lisp objects are handled in a unified way. For example there is no
+special representation of an integer in bytecode that is different
+than the representation in the Emacs Lisp interpreter.
 
 @b{Example Showing a Constants Vector:}
 @verbatim
