@@ -253,8 +253,8 @@ bytecode.
 
 The reason for the constants vector is that it reduces the amount of
 space needed in an instruction's operand. Instead of an arbitrary
-string stored as the operand of some instruction, there an only
-small-value index into a vector. (It alos happens that this appears only
+string stored as the operand of some instruction, there is only
+a small-value index into a vector. (It alos happens that this appears only
 in one instruction.)  Furthermore, since the constants vector is a
 true Emacs Lisp vector, the overall bytecode interpreter is simpler:
 all Lisp objects are handled in a unified way. For example there is no
