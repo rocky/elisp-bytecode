@@ -1,0 +1,142 @@
+@SECTION Bytecode Optimization
+
+This section needs to be gone over.
+
+In
+@uref{https://lists.gnu.org/archive/html/emacs-devel/2018-04/msg00018.html,
+Floating-point constant folding in Emacs byte compile} the notion was
+put forth that optimization has to be portable over improving
+code. (The issue here was compiling Emacs with larger integers allowed
+for larger possibiles of constant folding).
+
+@emph{This rest is taken more or less from @code{bytecomp.el}
+comments}.
+
+@itemize
+@item
+constant propagation
+@itemize
+@item
+removal of unreachable code;
+@item
+removal of calls to side-effectless functions whose return-value is unused;
+@item
+compile-time evaluation of safe constant forms, such as
+(@code{consp},  @code{nil}, and @code{(ash 1 6)}
+@item
+open-coding of literal lambdas;
+@item
+peephole optimization of emitted code;
+@item
+trivial functions are left uncompiled for speed.
+@end itemize
+
+@item
+support for inline functions;
+@item
+compile-time evaluation of arbitrary expressions;
+@item
+compile-time warning messages for:
+
+@itemize
+@item
+functions being redefined with incompatible arglists;
+@item
+functions being redefined as macros, or vice-versa;
+@item
+functions or macros defined multiple times in the same file;
+@item
+functions being called with the incorrect number of arguments;
+@item
+functions being called which are not defined globally, in the
+file, or as autoloads;
+@item
+assignment and reference of undeclared free variables;
+@item
+various syntax errors;
+@end itemize
+
+@item
+correct compilation of nested @code{defuns}, @code{defmacros},
+@code{defvars} and @code{defsubsts};
+@item
+correct compilation of top-level uses of macros;
+@item
+the ability to generate a histogram of functions called.
+@end itemize
+
+@subsection Constant Propagation
+
+In cases were constants can be evaluated at compile time to come up with
+simpler results, that is done.
+
+@code{(defun constant-prop-eg() (+ 1 2))} generates:
+@c ((lexical . t) (optimize . nil))
+@example
+PC  Byte  Instruction
+ 0  192   constant[0] 1
+ 1  193   constant[1] 2
+ 2   92   plus
+ 3  135   return
+
+Constants Vector: [1 2]
+@end example
+
+while with optimization we get:
+@c @code{(defun constant-prop-eg() (+ 1 2))} generates:
+@c ((lexical . t) (optimize . t))
+@example
+PC  Byte  Instruction
+ 0  192   constant[0] 3
+ 1  135   return
+
+Constants Vector: [3]
+@end example
+
+Although Emacs can be compiled with different for integers and floats
+depending the setting of @code{--with-wide-int}, for portability,
+Emacs will assume in bytecode the smaller value of integers and will
+skip opportunities that would assume larger integers.
+
+@subsection Unreachable Code
+
+If there is no way code can be reached, it is removed. This optimization
+interacts with the previous optimization: constant propagation.
+
+With bytecode optimization off:
+@c @code{(defun dead-code-or-eg(a) (or t a))} generates:
+@c @c ((lexical . t) (optimize . nil))
+@example
+@group
+(defun dead-code-eg(a)
+   (or t a))
+@end group
+@end example
+
+generates:
+@example
+@group
+PC  Byte  Instruction
+ 0  192   constant[0] t
+ 1  134   goto-if-not-nil-else-pop [5]
+           5
+           0
+ 4  137   dup
+ 5  135   return
+
+Constants Vector: [t]
+@end group
+@end example
+
+On the other hand, with bytecode-optimization we get:
+@c @code{(defun dead-code-or-eg(a) (or t a))} generates:
+@c ((lexical . t) (optimize . t))
+@example
+@group
+PC  Byte  Instruction
+ 0  192   constant[0] t
+ 1  135   return
+
+Constants Vector: [t]
+@end group
+@end example
