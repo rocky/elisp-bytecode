@@ -243,23 +243,23 @@ vector''. It is a normal Emacs Lisp vector and can be created with
 
 There is a possiblity for confusion by the name ``constants vector''.
 The vector size and its values are indeed constant. Also, only the
-@code{constant} bytecode instruction refers to one of these objects.
-However, in addition to values string and integer values that do not
-change, values in this vector also can be function and variable
-names. So although a variable or function @emph{name} stored in the
-constants vector doesn't change, the @emph{binding} of that particular
-variable or function can change, even in the course of running the
-bytecode.
+@code{constant} bytecode instructions (@pxref{Constants-Vector
+Retrieval Instructions}) refers to one of these objects.  However, in
+addition to values string and integer values that do not change,
+values in this vector also can be function and variable names. So
+although a variable or function @emph{name} stored in the constants
+vector doesn't change, the @emph{binding} of that particular variable
+or function can change, even in the course of running the bytecode.
 
-The reason for the constants vector is that it reduces the amount of
-space needed in an instruction's operand. Instead of an arbitrary
-string stored as the operand of some instruction, there is only
-a small-value index into a vector. (It alos happens that this appears only
-in one instruction.)  Furthermore, since the constants vector is a
-true Emacs Lisp vector, the overall bytecode interpreter is simpler:
-all Lisp objects are handled in a unified way. For example there is no
-special representation of an integer in bytecode that is different
-than the representation in the Emacs Lisp interpreter.
+By using a constants vector, operand sizes in the bytecode
+instructions are fixed and small.  Also, operand values can be shared,
+reducing the size of the constant vector.
+
+Since the constants vector is a true Emacs Lisp vector, the overall
+bytecode interpreter is simpler: all Lisp objects are handled in a
+unified way: the representation of a integers, vectors, lists,
+strings, and other Lisp objects is no different from the
+representation in the Emacs Lisp interpreter.
 
 @b{Example Showing a Constants Vector:}
 @verbatim
