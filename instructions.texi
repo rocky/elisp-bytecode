@@ -1,6 +1,11 @@
 @node Emacs Lisp Bytecode Instructions
 @chapter Emacs Lisp Bytecode Instructions
 
+Although we document bytecode instructions here, the implementation of
+the bytecode interpreter and its instructions appear in
+@file{src/bytecode.c}. If there is any question, that should be
+consulted as the primary reference.
+
 
 @menu
 * Instruction-Description Format::
@@ -4050,8 +4055,19 @@ never used. @xref{Emacs 19}.
 
 @Subsection{Relative Goto Instructions}
 
-In Emacs 19.34, Hallvard Furuseth introduced relative goto instrucitons.
-However, they have never been generated in bytecode.
+In Emacs 19.34, Hallvard Furuseth introduced relative goto
+instructions.  However, they have rarely have been generated in
+bytecode, and currently are not.
+
+From Hallvard:
+@quotation
+Relative jump instructions: There's an apparently unanswered mail in
+my mailbox about them being buggy and asking how they worked.
+I expect they got disabled for that reason rather than someone trying
+to debug.  I don't remeber why I introduced them.  Maybe just a space
+optimization and not worth the effort.  I hadn't quite learned that
+there are times to not bother optimizing:-)
+@end quotation
 
 There have been reports however that others have used these instructions
 in alternate languages that generate bytecode.
