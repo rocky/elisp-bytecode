@@ -13,11 +13,22 @@
 
 @include macros.texi
 
+@documentencoding UTF-8
+
 @dircategory Emacs Lisp
 @direntry
 * Lisp Bytecode::  The Emacs Lisp Bytecode Manual.
 @end direntry
 
+@titlepage
+@title GNU Emacs Lisp Bytecode Reference Manual
+
+Collated and edited by Rocky Bernstein with contibutions from Pipcet,
+Chris Wellons, Stephan Monier, Hallvard Breien Furuseth, and the Emacs
+community.
+@end titlepage
+
+@summarycontents
 @contents
 
 @ifnottex
