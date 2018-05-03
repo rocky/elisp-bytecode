@@ -237,6 +237,6 @@ Emacs Lisp bytecode to via SpiderMonkey (if it is possible) would
 allow for dual Emacs Lisp and JavaScript scripting while the other
 options don't.
 
-Needless to day, such a lot of work remains in adding any sort of JIT
+Needless to say, such a lot of work remains in adding any sort of JIT
 technology that I don't think Emacs Lisp Bytecode will be obsolete
 anytime soon, should that JIT not work off of Emacs Lisp bytecode.
