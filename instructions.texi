@@ -1050,7 +1050,8 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{eq, 61}
 
-Call @code{eq}.
+Call @code{eq}. @xref{Equality Predicates, ,Equality Predicates, elisp, The GNU Emacs Lisp Reference Manual}, for a
+description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -1077,7 +1078,9 @@ PC  Byte  Instruction
 
 @kindex memq
 
-Call @code{memq}.
+Call @code{memq}. @xref{Sets And Lists, ,Using Lists as Sets, elisp, The GNU Emacs Lisp Reference Manual}, for a
+description of this Emacs Lisp function.
+
 
 @table @strong
 @item Implements:
