@@ -37,8 +37,7 @@ specially, by loading the specified libraries.  To avoid loading the
 macro definition files when someone runs the compiled program,
 write @code{eval-when-compile} around the @code{require} calls
 (@pxref{Eval During Compile,,,elisp, GNU Emacs Lisp Reference
-Manual}). @xref{Compiling Macros,,,elisp, GNU Emacs
-Lisp Reference Manual} for more details.
+Manual}). @xref{Compiling Macros, , , elisp, The GNU Emacs Lisp Reference Manual} for more details.
 
 Inline (@code{defsubst}) functions are less troublesome. If you
 compile a call to such a function before its definition is known, the

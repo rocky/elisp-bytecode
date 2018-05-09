@@ -950,7 +950,7 @@ bytecode interpreter.
 
 @FirstSubSubSecInstruction{symbolp, 57}
 
-Call @code{symbolp}.
+Call @code{symbolp}. @xref{Symbols, , Symbols, elisp, The GNU Emacs Lisp Reference Manual}, for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -974,7 +974,9 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{consp, 58}
 
-Call @code{consp}.
+Call @code{consp}. @xref{List-related Predicates, , List-related
+Predicates, elisp, The GNU Emacs Lisp Reference Manual}, for a
+description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
