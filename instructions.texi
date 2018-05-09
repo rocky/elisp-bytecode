@@ -1000,7 +1000,8 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{stringp, 59}
 
-Call @code{stringp}.
+Call @code{stringp}. @xref{Predicates for Strings, , Predicates for Strings, elisp, The GNU Emacs Lisp Reference Manual}, for a
+description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -1024,7 +1025,8 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{listp, 60}
 
-Call @code{listp}.
+Call @code{listp}. @xref{Predicates on Lists, , Predicates on Lists, elisp, The GNU Emacs Lisp Reference Manual}, for a
+description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
