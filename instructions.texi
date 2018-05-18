@@ -974,9 +974,9 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{consp, 58}
 
-Call @code{consp}. @xref{List-related Predicates, , List-related
-Predicates, elisp, The GNU Emacs Lisp Reference Manual}, for a
-description of this Emacs Lisp function.
+Call @code{consp}. @xref{List-related Predicates, , Predicates on
+Lists, The GNU Emacs Lisp Reference Manual}, for a description of this
+Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -1025,7 +1025,7 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{listp, 60}
 
-Call @code{listp}. @xref{Predicates on Lists, , Predicates on Lists, elisp, The GNU Emacs Lisp Reference Manual}, for a
+Call @code{listp}. @xref{List-related Predicates, , Predicates on Lists, elisp, The GNU Emacs Lisp Reference Manual}, for a
 description of this Emacs Lisp function.
 
 @table @strong
@@ -1107,7 +1107,12 @@ PC  Byte  Instruction
 
 @kindex not
 
-Call @code{not}.
+Call @code{not}. @xref{Combining Conditions, ,Constructs for Combining
+Conditions, elisp, The GNU Emacs Lisp Reference Manual}, for a
+description of this Emacs Lisp function.
+
+Combining Conditions
+
 
 @table @strong
 @item Implements:
@@ -1131,7 +1136,9 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{symbol-value, 74}
 
-Call @code{symbol-value}.
+Call @code{symbol-value}. @xref{Accessing Variables, ,Accessing
+Variable Values, elisp, The GNU Emacs Lisp Reference Manual}, for a
+description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
