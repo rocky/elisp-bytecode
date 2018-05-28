@@ -1215,7 +1215,9 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{fset, 77}
 
-Call @code{fset}.
+Call @code{fset}. @xref{Function Cells, ,Accessing Function Cell Contents,
+elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -1240,7 +1242,9 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{get, 78}
 
-Call @code{get}.
+Call @code{get}. @xref{Symbol Plists, ,Accessing Symbol Properties,
+elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+Emacs Lisp function.
 
 @table @strong
 @item Implements:
