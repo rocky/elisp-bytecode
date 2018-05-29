@@ -9,7 +9,7 @@ the interoperability of bytecode between versions.
 @menu
 * Emacs Lisp Bytecode Objects::
 * Emacs Lisp Bytecode Compiler::
-* Emacs Lisp Bytecode Interpreter::
+* Emacs Lisp Interpreter::
 * Emacs Lisp Bytecode Bytes::
 * Emacs Lisp Bytecode Files::
 * Functions and Commands for working with LAP and Bytecode::
@@ -400,6 +400,9 @@ It is possible to go back to LAP code from bytecode. This is done in
 order to inline functions and when bytecode disassembly is requested.
 
 @SECTION Emacs Lisp Bytecode Interpreter
+
+@emph{Note: the @strong{bytecode} interpreter that is described here should not
+be confused with the Emacs @strong{Lisp} Interpreter}.
 
 When a function is called and the function is represented as bytecode,
 control passes to the bytecode interpreter.  The interpreter is
