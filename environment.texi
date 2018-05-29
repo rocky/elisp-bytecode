@@ -9,7 +9,7 @@ the interoperability of bytecode between versions.
 @menu
 * Emacs Lisp Bytecode Objects::
 * Emacs Lisp Bytecode Compiler::
-* Emacs Lisp Interpreter::
+* Emacs Lisp Bytecode Interpreter::
 * Emacs Lisp Bytecode Bytes::
 * Emacs Lisp Bytecode Files::
 * Functions and Commands for working with LAP and Bytecode::
