@@ -1325,7 +1325,9 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{assq, 158}
 
-Call @code{assq}.
+Call @code{assq}. @xref{Association Lists, ,Association Lits,
+elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -1350,7 +1352,9 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{numberp, 167}
 
-Call @code{numberp}.
+Call @code{numberp}. @xref{Predicates on Numbers, ,Type Predicates for Numbers,
+elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -1376,7 +1380,9 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{integerp, 168}
 
-Call @code{integerp}.
+Call @code{integerp}. @xref{Predicates on Numbers, ,Type Predicates for Numbers,
+elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+Emacs Lisp function.
 
 @table @strong
 @item Implements:
