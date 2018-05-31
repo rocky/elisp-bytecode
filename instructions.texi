@@ -1437,7 +1437,9 @@ bytecode interpreter.
 
 @FirstSubSubSecInstruction{nth, 56}
 
-Call @code{nth} with two stack arguments.
+Call @code{nth} with two stack arguments. @xref{List Elements, ,Accessing Elements of Lists,
+elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -1465,7 +1467,9 @@ Constants Vector: [560]
 
 @SubSubSecInstruction{car, 64}
 
-Call @code{car} with one stack argument.
+Call @code{car} with one stack argument. @xref{List Elements, ,Accessing Elements of Lists,
+elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+Emacs Lisp function.
 
 
 @table @strong
@@ -1491,7 +1495,9 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{cdr, 65}
 
-Call @code{cdr} with one stack argument.
+Call @code{cdr} with one stack argument. @xref{List Elements, ,Accessing Elements of Lists,
+elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -1545,7 +1551,7 @@ Constants Vector: [a b]
 
 @SubSubSecInstruction{list1, 67}
 
-Call @code{list} with TOS.
+Call @code{list} with TOS. .
 
 @table @strong
 @item Implements:
@@ -1662,7 +1668,8 @@ Constants Vector: [a b c d]
 @SubSubSecInstruction{listN, 175}
 
 Call @code{list} on up to 255 items. Note that there are special
-instructions for the case where there are 1 to 4 items in the list.
+instructionffs for the case where there are 1 to 4 items in the
+list.
 
 @table @strong
 @item Implements:
