@@ -1551,7 +1551,7 @@ Constants Vector: [a b]
 
 @SubSubSecInstruction{list1, 67}
 
-Call @code{list} with TOS. .
+Call @code{list} with TOS.
 
 @table @strong
 @item Implements:
@@ -1668,7 +1668,7 @@ Constants Vector: [a b c d]
 @SubSubSecInstruction{listN, 175}
 
 Call @code{list} on up to 255 items. Note that there are special
-instructionffs for the case where there are 1 to 4 items in the
+instruction for the case where there are 1 to 4 items in the
 list.
 
 @table @strong
