@@ -1269,7 +1269,9 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{equal, 154}
 
-Call @code{equal}.
+Call @code{equal}. @xref{Equality Predicates, ,Equality Predicates,
+elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -1296,7 +1298,9 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{member, 157}
 
-Call @code{member}.
+Call @code{member}. @xref{Sets And Lists, ,Using Lists as Sets,
+elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+Emacs Lisp function.
 
 @table @strong
 @item Implements:
