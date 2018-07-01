@@ -1522,7 +1522,9 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{cons, 66}
 
-Call @code{cons} with two stack arguments.
+Call @code{cons} with two stack arguments. @xref{Building Lists, ,Building Cons Cells and Lists,
+elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -1551,7 +1553,9 @@ Constants Vector: [a b]
 
 @SubSubSecInstruction{list1, 67}
 
-Call @code{list} with TOS.
+Call @code{list} with TOS. @xref{Building Lists, ,Building Cons Cells and Lists,
+elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -1580,7 +1584,9 @@ Call @code{list} with TOS.
 
 @SubSubSecInstruction{list2, 68}
 
-Call @code{list} with two stack items.
+Call @code{list} with two stack items. @xref{Building Lists, ,Building Cons Cells and Lists,
+elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -1608,7 +1614,9 @@ Constants Vector: [a b]
 
 @SubSubSecInstruction{list3, 69}
 
-Call @code{list} with three stack items.
+Call @code{list} with three stack items. @xref{Building Lists, ,Building Cons Cells and Lists,
+elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -1637,7 +1645,9 @@ Constants Vector: [a b c]
 
 @SubSubSecInstruction{list4, 70}
 
-Call @code{list} with four stack items.
+Call @code{list} with four stack items. @xref{Building Lists, ,Building Cons Cells and Lists,
+elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -1667,7 +1677,11 @@ Constants Vector: [a b c d]
 
 @SubSubSecInstruction{listN, 175}
 
-Call @code{list} on up to 255 items. Note that there are special
+Call @code{list} on up to 255 items. @xref{Building Lists, ,Building
+Cons Cells and Lists, elisp, The GNU Emacs Lisp Reference Manual}, for
+a description of this Emacs Lisp function.
+
+Note that there are special
 instruction for the case where there are 1 to 4 items in the
 list.
 
@@ -1707,7 +1721,9 @@ Constants Vector: [a b c d e]
 
 @SubSubSecInstruction{length, 71}
 
-Call @code{length} with one stack argument.
+Call @code{length} with one stack argument. @xref{Sequence Functions, ,Sequences,
+elisp, The GNU Emacs Lisp Reference Manual}, for
+a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
