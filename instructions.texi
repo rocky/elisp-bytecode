@@ -1750,7 +1750,8 @@ Constants Vector: [(a b)]
 
 @SubSubSecInstruction{aref, 72}
 
-Call @code{aref} with two stack arguments.
+Call @code{aref} with two stack arguments. @xref{Array Functions, ,Functions that Operate on Arrays, elisp, The GNU Emacs Lisp Reference
+Manual}, for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -1778,7 +1779,8 @@ Constants Vector: [[720 721 722] 0]
 
 @SubSubSecInstruction{aset, 73}
 
-Call @code{aset} with three stack arguments.
+Call @code{aset} with three stack arguments. @xref{Array Functions, ,Functions that Operate on Arrays, elisp, The GNU Emacs Lisp Reference
+Manual}, for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
