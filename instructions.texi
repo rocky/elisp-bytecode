@@ -1938,8 +1938,7 @@ Constants Vector: [1600]
 
 @SubSubSecInstruction{setcdr, 161}
 
-Call @code{setcdr} with two stack arguments. @xref{Setcdr,
-,Altering the CDR of a List, elisp, The GNU Emacs Lisp
+Call @code{setcdr} with two stack arguments. @xref{Setcdr, ,Altering the CDR of a List, elisp, The GNU Emacs Lisp
 Reference Manual}, for a description of this Emacs Lisp function.
 
 @table @strong
@@ -1970,7 +1969,9 @@ Constants Vector: [1610]
 
 @SubSubSecInstruction{car-safe, 162}
 
-Call @code{car-safe} with one argument.
+Call @code{car-safe} with one argument. @xref{List Elements, ,
+Accessing Elements of Lists, elisp, The GNU Emacs Lisp Reference
+Manual}, for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -1997,7 +1998,8 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{cdr-safe, 163}
 
-Call @code{cdr-safe} with one stack argument.
+Call @code{cdr-safe} with one argument. @xref{List Elements, ,Accessing Elements of Lists,elisp, The GNU Emacs Lisp Reference
+Manual}, for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2024,7 +2026,10 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{nconc, 164}
 
-Call @code{nconc} with two stack arguments.
+Call @code{nconc} with two stack arguments. @xref{Setcdr, ,Altering the CDR of a List,elisp, The GNU Emacs Lisp Reference
+Manual}, for a description of this Emacs Lisp
+function.
+
 
 @table @strong
 @item Implements:
