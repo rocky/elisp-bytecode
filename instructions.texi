@@ -2081,7 +2081,8 @@ bytecode interpreter.
 
 @FirstSubSubSecInstruction{sub1, 83}
 
-Call @code{1-}.
+Call @code{1-}. @xref{Arithmetic Operations, ,Arithmetic Operations,elisp, The GNU Emacs Lisp Reference
+Manual}, for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2106,7 +2107,8 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{add1, 84}
 
-Call @code{1+}.
+Call @code{1+}. @xref{Arithmetic Operations, ,Arithmetic Operations,elisp, The GNU Emacs Lisp Reference
+Manual}, for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
