@@ -2133,7 +2133,8 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{eqlsign, 85}
 
-Call @code{=}.
+Call @code{=}. @xref{Comparison of Numbers, ,Comparison of Numbers,elisp, The GNU Emacs Lisp Reference
+Manual}, for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2160,7 +2161,8 @@ Constants Vector: [a b]
 
 @SubSubSecInstruction{gtr, 86}
 
-Call @code{>}.
+Call @code{>}. @xref{Comparison of Numbers, ,Comparison of Numbers,elisp, The GNU Emacs Lisp Reference
+Manual}, for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2186,7 +2188,8 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{lss, 87}
 
-Call @code{<}.
+Call @code{<}. @xref{Comparison of Numbers, ,Comparison of Numbers,elisp, The GNU Emacs Lisp Reference
+Manual}, for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2213,7 +2216,8 @@ Constants Vector: [a b]
 
 @SubSubSecInstruction{leq, 88}
 
-Call @code{<=}.
+Call @code{<=}. @xref{Comparison of Numbers, ,Comparison of Numbers,elisp, The GNU Emacs Lisp Reference
+Manual}, for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2242,7 +2246,8 @@ Constants Vector: [a b]
 
 @SubSubSecInstruction{geq, 89}
 
-Call @code{>=}.
+Call @code{>=}. @xref{Comparison of Numbers, ,Comparison of Numbers,elisp, The GNU Emacs Lisp Reference
+Manual}, for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2270,7 +2275,8 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{diff, 90}
 
-Call binary @code{-}.
+Call binary @code{-}. @xref{Arithmetic Operations, ,Arithmetic Operations,elisp, The GNU Emacs Lisp Reference
+Manual}, for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2298,7 +2304,8 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{negate, 91}
 
-Call unary @code{-}.
+Call unary @code{-}. @xref{Arithmetic Operations, ,Arithmetic Operations,elisp, The GNU Emacs Lisp Reference
+Manual}, for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2327,7 +2334,8 @@ Constants Vector: [a]
 
 @SubSubSecInstruction{plus, 92}
 
-Call unary @code{+}.
+Call unary @code{+}. @xref{Arithmetic Operations, ,Arithmetic Operations,elisp, The GNU Emacs Lisp Reference
+Manual}, for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2354,7 +2362,8 @@ Constants Vector: [n]
 
 @SubSubSecInstruction{mult, 95}
 
-Call @code{*}.
+Call @code{*}. @xref{Arithmetic Operations, ,Arithmetic Operations,elisp, The GNU Emacs Lisp Reference
+Manual}, for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
