@@ -2392,8 +2392,12 @@ Constants Vector: [n]
 
 @SubSubSecInstruction{max, 93}
 
-Call @code{max}. @xref{Comparison of Numbers, ,Comparison of Numbers,elisp, The GNU Emacs Lisp Reference
+Call binary @code{max}. @xref{Comparison of Numbers, ,Comparison of Numbers,elisp, The GNU Emacs Lisp Reference
 Manual}, for a description of this Emacs Lisp function.
+
+The Emacs Lisp function @code{max} can take an arbitrary number of
+arguments. The bytecode compiler breaks these up into repeated binary
+operations.
 
 @table @strong
 @item Implements:
@@ -2405,23 +2409,28 @@ Manual}, for a description of this Emacs Lisp function.
 @item Stack effect:
 @math{-2+1}.
 @item Example:
-When dynamic binding is in effect, @code{(defun max-eg(a b) (max a b))} generates:
+When dynamic binding is in effect, @code{(defun max-eg(a b c) (max a b c))} generates:
 @verbatim
 PC  Byte  Instruction
  0    8   varref[0] a
  1    9   varref[1] b
  2   93   max
- 3  135   return
+ 3   10   varref[2] c
+ 4   93   max
+ 5  135   return
 
-Constants Vector: [a b]
+Constants Vector: [a b c]
 @end verbatim
 
 @end table
 
 @SubSubSecInstruction{min, 94}
 
-Call @code{min}. @xref{Comparison of Numbers, ,Comparison of Numbers,elisp, The GNU Emacs Lisp Reference
+Call binary @code{min}. @xref{Comparison of Numbers, ,Comparison of Numbers,elisp, The GNU Emacs Lisp Reference
 Manual}, for a description of this Emacs Lisp function.
+
+The Emacs Lisp function @code{min} can take an arbitrary number of arguments. The
+bytecode compiler breaks these up into repeated binary operations.
 
 @table @strong
 @item Implements:
@@ -2433,15 +2442,17 @@ binary @code{min}.
 @item Stack effect:
 @math{-2+1}.
 @item Example:
-When dynamic binding is in effect, @code{(defun min-eg(a b) (min a b))} generates:
+When dynamic binding is in effect, @code{(defun min-eg(a b c) (min a b c))} generates:
 @verbatim
 PC  Byte  Instruction
  0    8   varref[0] a
  1    9   varref[1] b
  2   94   min
- 3  135   return
+ 3   10   varref[2] c
+ 4   94   min
+ 5  135   return
 
-Constants Vector: [a b]
+Constants Vector: [a b c]
 @end verbatim
 
 @end table
