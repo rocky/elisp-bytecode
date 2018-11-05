@@ -2278,6 +2278,8 @@ PC  Byte  Instruction
 Call binary @code{-}. @xref{Arithmetic Operations, ,Arithmetic Operations,elisp, The GNU Emacs Lisp Reference
 Manual}, for a description of this Emacs Lisp function.
 
+When the argument list is more than two, a @code{call} instruction is used instead.
+
 @table @strong
 @item Implements:
 @code{S[1] <- (- S[1] TOS); top--}.
@@ -2334,8 +2336,10 @@ Constants Vector: [a]
 
 @SubSubSecInstruction{plus, 92}
 
-Call unary @code{+}. @xref{Arithmetic Operations, ,Arithmetic Operations,elisp, The GNU Emacs Lisp Reference
+Call binary @code{+}. @xref{Arithmetic Operations, ,Arithmetic Operations,elisp, The GNU Emacs Lisp Reference
 Manual}, for a description of this Emacs Lisp function.
+
+When adding more than two numbers, a @code{call} instruction is used instead.
 
 @table @strong
 @item Implements:
@@ -2362,8 +2366,10 @@ Constants Vector: [n]
 
 @SubSubSecInstruction{mult, 95}
 
-Call @code{*}. @xref{Arithmetic Operations, ,Arithmetic Operations,elisp, The GNU Emacs Lisp Reference
+Call binary @code{*}. @xref{Arithmetic Operations, ,Arithmetic Operations,elisp, The GNU Emacs Lisp Reference
 Manual}, for a description of this Emacs Lisp function.
+
+When multiplying more than two numbers, a @code{call} instruction is used instead.
 
 @table @strong
 @item Implements:
