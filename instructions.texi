@@ -2392,7 +2392,8 @@ Constants Vector: [n]
 
 @SubSubSecInstruction{max, 93}
 
-Call @code{max}.
+Call @code{max}. @xref{Comparison of Numbers, ,Comparison of Numbers,elisp, The GNU Emacs Lisp Reference
+Manual}, for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2419,7 +2420,8 @@ Constants Vector: [a b]
 
 @SubSubSecInstruction{min, 94}
 
-Call @code{min}.
+Call @code{min}. @xref{Comparison of Numbers, ,Comparison of Numbers,elisp, The GNU Emacs Lisp Reference
+Manual}, for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2446,7 +2448,8 @@ Constants Vector: [a b]
 
 @SubSubSecInstruction{quo, 165}
 
-Call @code{/}.
+Call @code{/}. @xref{Arithmetic Operations, ,Arithmetic Operations,elisp, The GNU Emacs Lisp Reference
+Manual}, for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2473,7 +2476,8 @@ Constants Vector: [a b]
 
 @SubSubSecInstruction{rem, 166}
 
-Call @verb{|%|}.
+Call @verb{|%|}. @xref{Arithmetic Operations, ,Arithmetic Operations,elisp, The GNU Emacs Lisp Reference
+Manual}, for a description of this Emacs Lisp function.
 
 @table @strong
 @item implements:
