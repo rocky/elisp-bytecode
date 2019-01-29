@@ -54,7 +54,7 @@ C/C++ Header                    176       11505          34891
 
 If we look at the relative ratio of C++ to Javascript code in
 Firefox, and the ratio of C versus Lisp code in Emacs, we see that
- much more of Emacs written in Lisp than Firefox is written
+ much more of Emacs is written in Lisp than Firefox is written
 in Javascript. (And a lot of C code for Emacs looks like Lisp written using C syntax).
 
 My take is that Emacs a
