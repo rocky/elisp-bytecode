@@ -950,7 +950,7 @@ bytecode interpreter.
 
 @FirstSubSubSecInstruction{symbolp, 57}
 
-Call @code{symbolp}. @xref{Symbols, , Symbols, elisp, The GNU Emacs Lisp Reference Manual}, for a description of this Emacs Lisp function.
+Call @code{symbolp}. @xref{Symbols, , Symbols, elisp, The GNU Emacs Lisp Reference Manual} for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -975,7 +975,7 @@ PC  Byte  Instruction
 @SubSubSecInstruction{consp, 58}
 
 Call @code{consp}. @xref{List-related Predicates, , Predicates on
-Lists, The GNU Emacs Lisp Reference Manual}, for a description of this
+Lists, The GNU Emacs Lisp Reference Manual} for a description of this
 Emacs Lisp function.
 
 @table @strong
@@ -1000,7 +1000,7 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{stringp, 59}
 
-Call @code{stringp}. @xref{Predicates for Strings, , Predicates for Strings, elisp, The GNU Emacs Lisp Reference Manual}, for a
+Call @code{stringp}. @xref{Predicates for Strings, , Predicates for Strings, elisp, The GNU Emacs Lisp Reference Manual} for a
 description of this Emacs Lisp function.
 
 @table @strong
@@ -1025,7 +1025,7 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{listp, 60}
 
-Call @code{listp}. @xref{List-related Predicates, , Predicates on Lists, elisp, The GNU Emacs Lisp Reference Manual}, for a
+Call @code{listp}. @xref{List-related Predicates, , Predicates on Lists, elisp, The GNU Emacs Lisp Reference Manual} for a
 description of this Emacs Lisp function.
 
 @table @strong
@@ -1050,7 +1050,7 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{eq, 61}
 
-Call @code{eq}. @xref{Equality Predicates, ,Equality Predicates, elisp, The GNU Emacs Lisp Reference Manual}, for a
+Call @code{eq}. @xref{Equality Predicates, ,Equality Predicates, elisp, The GNU Emacs Lisp Reference Manual} for a
 description of this Emacs Lisp function.
 
 @table @strong
@@ -1078,7 +1078,7 @@ PC  Byte  Instruction
 
 @kindex memq
 
-Call @code{memq}. @xref{Sets And Lists, ,Using Lists as Sets, elisp, The GNU Emacs Lisp Reference Manual}, for a
+Call @code{memq}. @xref{Sets And Lists, ,Using Lists as Sets, elisp, The GNU Emacs Lisp Reference Manual} for a
 description of this Emacs Lisp function.
 
 
@@ -1108,7 +1108,7 @@ PC  Byte  Instruction
 @kindex not
 
 Call @code{not}. @xref{Combining Conditions, ,Constructs for Combining
-Conditions, elisp, The GNU Emacs Lisp Reference Manual}, for a
+Conditions, elisp, The GNU Emacs Lisp Reference Manual} for a
 description of this Emacs Lisp function.
 
 Combining Conditions
@@ -1137,7 +1137,7 @@ PC  Byte  Instruction
 @SubSubSecInstruction{symbol-value, 74}
 
 Call @code{symbol-value}. @xref{Accessing Variables, ,Accessing
-Variable Values, elisp, The GNU Emacs Lisp Reference Manual}, for a
+Variable Values, elisp, The GNU Emacs Lisp Reference Manual} for a
 description of this Emacs Lisp function.
 
 @table @strong
@@ -1163,7 +1163,7 @@ PC  Byte  Instruction
 @SubSubSecInstruction{symbol-function, 75}
 
 Call @code{symbol-function}. @xref{Function Cells, ,Accessing
-Function Cell Contents, elisp, The GNU Emacs Lisp Reference Manual}, for a
+Function Cell Contents, elisp, The GNU Emacs Lisp Reference Manual} for a
 description of this Emacs Lisp function.
 
 @table @strong
@@ -1189,7 +1189,7 @@ PC  Byte  Instruction
 @SubSubSecInstruction{set, 76}
 
 Call @code{set}. @xref{Setting Variables, ,Setting Variable Values,
-elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+elisp, The GNU Emacs Lisp Reference Manual} for a description of this
 Emacs Lisp function.
 
 @table @strong
@@ -1216,7 +1216,7 @@ PC  Byte  Instruction
 @SubSubSecInstruction{fset, 77}
 
 Call @code{fset}. @xref{Function Cells, ,Accessing Function Cell Contents,
-elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+elisp, The GNU Emacs Lisp Reference Manual} for a description of this
 Emacs Lisp function.
 
 @table @strong
@@ -1243,7 +1243,7 @@ PC  Byte  Instruction
 @SubSubSecInstruction{get, 78}
 
 Call @code{get}. @xref{Symbol Plists, ,Accessing Symbol Properties,
-elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+elisp, The GNU Emacs Lisp Reference Manual} for a description of this
 Emacs Lisp function.
 
 @table @strong
@@ -1270,7 +1270,7 @@ PC  Byte  Instruction
 @SubSubSecInstruction{equal, 154}
 
 Call @code{equal}. @xref{Equality Predicates, ,Equality Predicates,
-elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+elisp, The GNU Emacs Lisp Reference Manual} for a description of this
 Emacs Lisp function.
 
 @table @strong
@@ -1299,7 +1299,7 @@ PC  Byte  Instruction
 @SubSubSecInstruction{member, 157}
 
 Call @code{member}. @xref{Sets And Lists, ,Using Lists as Sets,
-elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+elisp, The GNU Emacs Lisp Reference Manual} for a description of this
 Emacs Lisp function.
 
 @table @strong
@@ -1326,7 +1326,7 @@ PC  Byte  Instruction
 @SubSubSecInstruction{assq, 158}
 
 Call @code{assq}. @xref{Association Lists, ,Association Lits,
-elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+elisp, The GNU Emacs Lisp Reference Manual} for a description of this
 Emacs Lisp function.
 
 @table @strong
@@ -1353,7 +1353,7 @@ PC  Byte  Instruction
 @SubSubSecInstruction{numberp, 167}
 
 Call @code{numberp}. @xref{Predicates on Numbers, ,Type Predicates for Numbers,
-elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+elisp, The GNU Emacs Lisp Reference Manual} for a description of this
 Emacs Lisp function.
 
 @table @strong
@@ -1381,7 +1381,7 @@ PC  Byte  Instruction
 @SubSubSecInstruction{integerp, 168}
 
 Call @code{integerp}. @xref{Predicates on Numbers, ,Type Predicates for Numbers,
-elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+elisp, The GNU Emacs Lisp Reference Manual} for a description of this
 Emacs Lisp function.
 
 @table @strong
@@ -1438,7 +1438,7 @@ bytecode interpreter.
 @FirstSubSubSecInstruction{nth, 56}
 
 Call @code{nth} with two stack arguments. @xref{List Elements, ,Accessing Elements of Lists,
-elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+elisp, The GNU Emacs Lisp Reference Manual} for a description of this
 Emacs Lisp function.
 
 @table @strong
@@ -1468,7 +1468,7 @@ Constants Vector: [560]
 @SubSubSecInstruction{car, 64}
 
 Call @code{car} with one stack argument. @xref{List Elements, ,Accessing Elements of Lists,
-elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+elisp, The GNU Emacs Lisp Reference Manual} for a description of this
 Emacs Lisp function.
 
 
@@ -1496,7 +1496,7 @@ PC  Byte  Instruction
 @SubSubSecInstruction{cdr, 65}
 
 Call @code{cdr} with one stack argument. @xref{List Elements, ,Accessing Elements of Lists,
-elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+elisp, The GNU Emacs Lisp Reference Manual} for a description of this
 Emacs Lisp function.
 
 @table @strong
@@ -1523,7 +1523,7 @@ PC  Byte  Instruction
 @SubSubSecInstruction{cons, 66}
 
 Call @code{cons} with two stack arguments. @xref{Building Lists, ,Building Cons Cells and Lists,
-elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+elisp, The GNU Emacs Lisp Reference Manual} for a description of this
 Emacs Lisp function.
 
 @table @strong
@@ -1554,7 +1554,7 @@ Constants Vector: [a b]
 @SubSubSecInstruction{list1, 67}
 
 Call @code{list} with TOS. @xref{Building Lists, ,Building Cons Cells and Lists,
-elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+elisp, The GNU Emacs Lisp Reference Manual} for a description of this
 Emacs Lisp function.
 
 @table @strong
@@ -1585,7 +1585,7 @@ Call @code{list} with TOS.
 @SubSubSecInstruction{list2, 68}
 
 Call @code{list} with two stack items. @xref{Building Lists, ,Building Cons Cells and Lists,
-elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+elisp, The GNU Emacs Lisp Reference Manual} for a description of this
 Emacs Lisp function.
 
 @table @strong
@@ -1615,7 +1615,7 @@ Constants Vector: [a b]
 @SubSubSecInstruction{list3, 69}
 
 Call @code{list} with three stack items. @xref{Building Lists, ,Building Cons Cells and Lists,
-elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+elisp, The GNU Emacs Lisp Reference Manual} for a description of this
 Emacs Lisp function.
 
 @table @strong
@@ -1646,7 +1646,7 @@ Constants Vector: [a b c]
 @SubSubSecInstruction{list4, 70}
 
 Call @code{list} with four stack items. @xref{Building Lists, ,Building Cons Cells and Lists,
-elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+elisp, The GNU Emacs Lisp Reference Manual} for a description of this
 Emacs Lisp function.
 
 @table @strong
@@ -1678,7 +1678,7 @@ Constants Vector: [a b c d]
 @SubSubSecInstruction{listN, 175}
 
 Call @code{list} on up to 255 items. @xref{Building Lists, ,Building
-Cons Cells and Lists, elisp, The GNU Emacs Lisp Reference Manual}, for
+Cons Cells and Lists, elisp, The GNU Emacs Lisp Reference Manual} for
 a description of this Emacs Lisp function.
 
 Note that there are special
@@ -1722,7 +1722,7 @@ Constants Vector: [a b c d e]
 @SubSubSecInstruction{length, 71}
 
 Call @code{length} with one stack argument. @xref{Sequence Functions, ,Sequences,
-elisp, The GNU Emacs Lisp Reference Manual}, for
+elisp, The GNU Emacs Lisp Reference Manual} for
 a description of this Emacs Lisp function.
 
 @table @strong
@@ -1751,7 +1751,7 @@ Constants Vector: [(a b)]
 @SubSubSecInstruction{aref, 72}
 
 Call @code{aref} with two stack arguments. @xref{Array Functions, ,Functions that Operate on Arrays, elisp, The GNU Emacs Lisp Reference
-Manual}, for a description of this Emacs Lisp function.
+Manual} for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -1780,7 +1780,7 @@ Constants Vector: [[720 721 722] 0]
 @SubSubSecInstruction{aset, 73}
 
 Call @code{aset} with three stack arguments. @xref{Array Functions, ,Functions that Operate on Arrays, elisp, The GNU Emacs Lisp Reference
-Manual}, for a description of this Emacs Lisp function.
+Manual} for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -1811,7 +1811,7 @@ Constants Vector: [array-var 0 730]
 @SubSubSecInstruction{nthcdr, 155}
 
 Call @code{nthcdr} with two stack arguments. @xref{List Elements, ,Accessing Elements of Lists,
-elisp, The GNU Emacs Lisp Reference Manual}, for a description of this
+elisp, The GNU Emacs Lisp Reference Manual} for a description of this
 Emacs Lisp function.
 
 @table @strong
@@ -1844,7 +1844,7 @@ Constants Vector: [(1550 1551 1552) 2]
 @SubSubSecInstruction{elt, 156}
 
 Call @code{elt} with two stack arguments. @xref{Sequence Functions, ,Sequences,
-elisp, The GNU Emacs Lisp Reference Manual}, for
+elisp, The GNU Emacs Lisp Reference Manual} for
 a description of this Emacs Lisp function.
 
 @table @strong
@@ -1876,7 +1876,7 @@ Constants Vector: [(1560 1561 1562) 2]
 @SubSubSecInstruction{nreverse, 159}
 
 Call @code{nreverse} with one stack argument. @xref{Sequence Functions, ,Sequences,
-elisp, The GNU Emacs Lisp Reference Manual}, for
+elisp, The GNU Emacs Lisp Reference Manual} for
 a description of this Emacs Lisp function.
 
 @table @strong
@@ -1908,7 +1908,7 @@ Constants Vector: [(1590 1591)]
 
 Call @code{setcar} with two stack arguments. @xref{Setcar, ,Altering
 List Elements with @code{setcar}, elisp, The GNU Emacs Lisp Reference
-Manual}, for a description of this Emacs Lisp function.
+Manual} for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -1939,7 +1939,7 @@ Constants Vector: [1600]
 @SubSubSecInstruction{setcdr, 161}
 
 Call @code{setcdr} with two stack arguments. @xref{Setcdr, ,Altering the CDR of a List, elisp, The GNU Emacs Lisp
-Reference Manual}, for a description of this Emacs Lisp function.
+Reference Manual} for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -1971,7 +1971,7 @@ Constants Vector: [1610]
 
 Call @code{car-safe} with one argument. @xref{List Elements, ,
 Accessing Elements of Lists, elisp, The GNU Emacs Lisp Reference
-Manual}, for a description of this Emacs Lisp function.
+Manual} for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -1999,7 +1999,7 @@ PC  Byte  Instruction
 @SubSubSecInstruction{cdr-safe, 163}
 
 Call @code{cdr-safe} with one argument. @xref{List Elements, ,Accessing Elements of Lists,elisp, The GNU Emacs Lisp Reference
-Manual}, for a description of this Emacs Lisp function.
+Manual} for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2027,7 +2027,7 @@ PC  Byte  Instruction
 @SubSubSecInstruction{nconc, 164}
 
 Call @code{nconc} with two stack arguments. @xref{Setcdr, ,Altering the CDR of a List,elisp, The GNU Emacs Lisp Reference
-Manual}, for a description of this Emacs Lisp
+Manual} for a description of this Emacs Lisp
 function.
 
 
@@ -2082,7 +2082,7 @@ bytecode interpreter.
 @FirstSubSubSecInstruction{sub1, 83}
 
 Call @code{1-}. @xref{Arithmetic Operations, ,Arithmetic Operations,elisp, The GNU Emacs Lisp Reference
-Manual}, for a description of this Emacs Lisp function.
+Manual} for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2108,7 +2108,7 @@ PC  Byte  Instruction
 @SubSubSecInstruction{add1, 84}
 
 Call @code{1+}. @xref{Arithmetic Operations, ,Arithmetic Operations,elisp, The GNU Emacs Lisp Reference
-Manual}, for a description of this Emacs Lisp function.
+Manual} for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2134,7 +2134,7 @@ PC  Byte  Instruction
 @SubSubSecInstruction{eqlsign, 85}
 
 Call @code{=}. @xref{Comparison of Numbers, ,Comparison of Numbers,elisp, The GNU Emacs Lisp Reference
-Manual}, for a description of this Emacs Lisp function.
+Manual} for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2162,7 +2162,7 @@ Constants Vector: [a b]
 @SubSubSecInstruction{gtr, 86}
 
 Call @code{>}. @xref{Comparison of Numbers, ,Comparison of Numbers,elisp, The GNU Emacs Lisp Reference
-Manual}, for a description of this Emacs Lisp function.
+Manual} for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2189,7 +2189,7 @@ PC  Byte  Instruction
 @SubSubSecInstruction{lss, 87}
 
 Call @code{<}. @xref{Comparison of Numbers, ,Comparison of Numbers,elisp, The GNU Emacs Lisp Reference
-Manual}, for a description of this Emacs Lisp function.
+Manual} for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2217,7 +2217,7 @@ Constants Vector: [a b]
 @SubSubSecInstruction{leq, 88}
 
 Call @code{<=}. @xref{Comparison of Numbers, ,Comparison of Numbers,elisp, The GNU Emacs Lisp Reference
-Manual}, for a description of this Emacs Lisp function.
+Manual} for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2247,7 +2247,7 @@ Constants Vector: [a b]
 @SubSubSecInstruction{geq, 89}
 
 Call @code{>=}. @xref{Comparison of Numbers, ,Comparison of Numbers,elisp, The GNU Emacs Lisp Reference
-Manual}, for a description of this Emacs Lisp function.
+Manual} for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2276,7 +2276,7 @@ PC  Byte  Instruction
 @SubSubSecInstruction{diff, 90}
 
 Call binary @code{-}. @xref{Arithmetic Operations, ,Arithmetic Operations,elisp, The GNU Emacs Lisp Reference
-Manual}, for a description of this Emacs Lisp function.
+Manual} for a description of this Emacs Lisp function.
 
 When the argument list is more than two, a @code{call} instruction is used instead.
 
@@ -2307,7 +2307,7 @@ PC  Byte  Instruction
 @SubSubSecInstruction{negate, 91}
 
 Call unary @code{-}. @xref{Arithmetic Operations, ,Arithmetic Operations,elisp, The GNU Emacs Lisp Reference
-Manual}, for a description of this Emacs Lisp function.
+Manual} for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2337,7 +2337,7 @@ Constants Vector: [a]
 @SubSubSecInstruction{plus, 92}
 
 Call binary @code{+}. @xref{Arithmetic Operations, ,Arithmetic Operations,elisp, The GNU Emacs Lisp Reference
-Manual}, for a description of this Emacs Lisp function.
+Manual} for a description of this Emacs Lisp function.
 
 When adding more than two numbers, a @code{call} instruction is used instead.
 
@@ -2367,7 +2367,7 @@ Constants Vector: [n]
 @SubSubSecInstruction{mult, 95}
 
 Call binary @code{*}. @xref{Arithmetic Operations, ,Arithmetic Operations,elisp, The GNU Emacs Lisp Reference
-Manual}, for a description of this Emacs Lisp function.
+Manual} for a description of this Emacs Lisp function.
 
 When multiplying more than two numbers, a @code{call} instruction is used instead.
 
@@ -2399,7 +2399,7 @@ Constants Vector: [n]
 @SubSubSecInstruction{max, 93}
 
 Call binary @code{max}. @xref{Comparison of Numbers, ,Comparison of Numbers,elisp, The GNU Emacs Lisp Reference
-Manual}, for a description of this Emacs Lisp function.
+Manual} for a description of this Emacs Lisp function.
 
 The Emacs Lisp function @code{max} can take an arbitrary number of
 arguments. The bytecode compiler breaks these up into repeated binary
@@ -2433,7 +2433,7 @@ Constants Vector: [a b c]
 @SubSubSecInstruction{min, 94}
 
 Call binary @code{min}. @xref{Comparison of Numbers, ,Comparison of Numbers,elisp, The GNU Emacs Lisp Reference
-Manual}, for a description of this Emacs Lisp function.
+Manual} for a description of this Emacs Lisp function.
 
 The Emacs Lisp function @code{min} can take an arbitrary number of arguments. The
 bytecode compiler breaks these up into repeated binary operations.
@@ -2466,7 +2466,7 @@ Constants Vector: [a b c]
 @SubSubSecInstruction{quo, 165}
 
 Call @code{/}. @xref{Arithmetic Operations, ,Arithmetic Operations,elisp, The GNU Emacs Lisp Reference
-Manual}, for a description of this Emacs Lisp function.
+Manual} for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2494,7 +2494,7 @@ Constants Vector: [a b]
 @SubSubSecInstruction{rem, 166}
 
 Call @verb{|%|}. @xref{Arithmetic Operations, ,Arithmetic Operations,elisp, The GNU Emacs Lisp Reference
-Manual}, for a description of this Emacs Lisp function.
+Manual} for a description of this Emacs Lisp function.
 
 @table @strong
 @item implements:
@@ -2540,7 +2540,7 @@ function for them.
 
 @FirstSubSubSecInstruction{substring, 79}
 
-Call @code{substring} with three stack arguments.
+Call @code{substring} with three stack arguments. @xref{Creating Strings, ,Creating Strings,elisp, The GNU Emacs Lisp Reference Manual} for a description of this Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2570,7 +2570,7 @@ Constants Vector: ["abc" 0 2]
 
 @SubSubSecInstruction{concat2, 80}
 
-Call @code{concat} with two stack arguments.
+Call @code{concat} with two stack arguments. @xref{Creating Strings, ,Creating Strings,elisp, The GNU Emacs Lisp Reference Manual}, for a description of the @code{concat} Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2600,7 +2600,7 @@ Constants Vector: ["a" "b"]
 
 @SubSubSecInstruction{concat3, 81}
 
-Call @code{concat} with three stack arguments.
+Call @code{concat} with three stack arguments. @xref{Creating Strings, ,Creating Strings,elisp, The GNU Emacs Lisp Reference Manual}, for a description of the @code{concat} Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2630,7 +2630,7 @@ Constants Vector: ["a" "b" "c"]
 
 @SubSubSecInstruction{concat4, 82}
 
-Call @code{concat} with four stack stack arguments.
+Call @code{concat} with four stack stack arguments. @xref{Creating Strings, ,Creating Strings,elisp, The GNU Emacs Lisp Reference Manual}, for a description of the @code{concat} Emacs Lisp function.
 
 @table @strong
 @item Implements:
@@ -2663,7 +2663,7 @@ Constants Vector: ["a" "b" "c" "d"]
 
 Call @code{concat} on up to 255 stack arguments.  Note there are
 special instructions for the case where there are 2 to 4 items to
-concatenate.
+concatenate. @xref{Creating Strings, ,Creating Strings,elisp, The GNU Emacs Lisp Reference Manual}, for a description of the @code{concat} Emacs Lisp function.
 
 @table @strong
 @item Implements:
