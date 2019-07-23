@@ -71,13 +71,18 @@ ecosystem, Emacs Lisp is not and never has been a speedy language compared
 to say, C, C++, Go, Rust or Java. And that's where LAP and bytecode
 come in.
 
-As stated in a commment in @code{byte-opt.el} added circa 1996:@footnote{This is from @url{https://www.goodreads.com/quotes/7745830-you-can-t-make-a-race-horse-of-a-pig-no, ``East of Eden''}. Jamie Zawinski may be the one who added it and the bit about turbocharged VW bugs below it (in Lucid Emacs, presumably) since it's present in the initial checkin of the file by Jim Blandy circa Emacs 18/19.}
+As stated in a commment in @code{byte-opt.el} added from Lucid Emacs
+circa 1992:@footnote{This likely an adaptation of dialogue from
+@url{https://www.goodreads.com/quotes/7745830-you-can-t-make-a-race-horse-of-a-pig-no,
+``East of Eden by John Steinbeck''}. Jamie Zawinski (jwz) is
+responsible for its addition (and the bit about turbocharged VW bugs
+below it) but makes no claims to its origin.}
 
 @quotation
 No matter how hard you try, you can't make a racehorse out of a pig.
 
 You can, however, make a faster pig.
-@author John Steinbeck
+@author Jamie Zawinski
 @end quotation
 
 Emacs Lisp bytecode is the custom lower-level language used by the
