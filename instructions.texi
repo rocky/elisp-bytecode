@@ -2823,7 +2823,7 @@ Constants Vector: ["b"]
 @SubSubSecInstruction{stringlss, 153}
 
 Call @code{string<} with two stack arguments, comparing two
-strings. For a description of the Emacs Lisp string function,
+strings. For a description of this Emacs Lisp string function,
 @xref{Text Comparison, ,Comparison of Characters and Strings,elisp,
 The GNU Emacs Lisp Reference Manual}.
 
@@ -2869,7 +2869,9 @@ Constants Vector: ["b"]
 
 @FirstSubSubSecInstruction{current-buffer, 112}
 
-Call @code{current-buffer}.
+Call @code{current-buffer}. For a description of this Emacs Lisp buffer function,
+@xref{Current Buffer, ,The Current Buffer,elisp,
+The GNU Emacs Lisp Reference Manual}.
 
 @table @strong
 @item Implements:
@@ -2894,7 +2896,9 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{set-buffer, 113}
 
-Call @code{set-buffer} with TOS.
+Call @code{set-buffer} with TOS. For a description of this Emacs Lisp buffer function,
+@xref{Current Buffer, ,The Current Buffer,elisp,
+The GNU Emacs Lisp Reference Manual}.
 
 @table @strong
 @item Implements:
@@ -2921,7 +2925,9 @@ Constants Vector: ["*scratch"]
 
 @SubSubSecInstruction{save-current-buffer-1, 114}
 
-Call @code{save-current-buffer}.
+Call @code{save-current-buffer}. For a description of this Emacs Lisp buffer function,
+@xref{Current Buffer, ,The Current Buffer,elisp,
+The GNU Emacs Lisp Reference Manual}.
 
 Replaces older @code{save-current-buffer}. @xref{save-current-buffer}.
 
@@ -2963,7 +2969,9 @@ Call @code{buffer-substring} with two stack arguments.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (buffer-substring S[1] TOS); top--}.
+@code{S[1] <- (buffer-substring S[1] TOS); top--}. For a description of this Emacs Lisp buffer function,
+@xref{Buffer Contents, ,Examining Buffer Contents,elisp,
+The GNU Emacs Lisp Reference Manual}.
 @item Generated via:
 @code{buffer-substring}.
 @item Instruction size:
