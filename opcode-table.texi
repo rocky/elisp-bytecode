@@ -877,7 +877,7 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{|  save-excursion|}
 @tab 1
 @tab @xref{save-excursion}.
-@tab @math{-0+0}
+@tab @math{-0+1}
 @item @verb{|0213|}
 @tab @verb{|*139|}
 @tab @verb{| *save-window-excursion|}

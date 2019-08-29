@@ -330,7 +330,7 @@ instruction operand.
 1 byte for @code{varbind[0]} .. @code{varbind[4]}; 2 bytes for @code{varbind[5]},
 8-bit operand; 3 bytes for @code{varbind[6]}, 16-bit operand.
 @item Stack effect:
-@math{-0+1}.
+@math{-0+0}.
 @item Example:
 When dynamic binding is in effect,
 @verbatim
@@ -3455,7 +3455,7 @@ Call @code{following-char}.
 @item Instruction size:
 1 byte
 @item Stack effect:
-@math{-1+1}.
+@math{-0+1}.
 @item Example:
 @code{(defun following-char-eg() (following-char))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -3480,7 +3480,7 @@ Call @code{preceding-char}.
 @item Instruction size:
 1 byte
 @item Stack effect:
-@math{-1+1}.
+@math{0+1}.
 @item Example:
 @code{(defun preceding-char-eg() (preceding-char))} generates:
 @c ((lexical . t) (optimize . nil))
