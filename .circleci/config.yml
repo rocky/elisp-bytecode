@@ -3,11 +3,11 @@ jobs:
   build:
     machine:
       pre:
-        - sudo apt-get install texlive-xetex
+        - sudo apt-get install texlive-xetex texinfo
     steps:
       - checkout
       - run:
-          name: Install Texlive
+          name: Install Texlive and TeXInfo
           command: 'sudo apt update && sudo apt install texlive texlive-xetex texlive-fonts-extra texlive-latex-extra texlive-plain-extra texinfo'
       - run: make info pdf
 
