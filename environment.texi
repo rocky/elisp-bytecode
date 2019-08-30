@@ -601,8 +601,8 @@ writing @emph{this} document since there wasn't anything nearly as
 complete when I started. There were various tables around for bytecode
 instructions, but I needed not just cumulative evaluation stack
 effects for a bytecode operation, but how many entries on the stack
-are read and then how many written, which where the motivation for
-adding that in this document. Many of the mistakes that I've found in
+are read and then how many written. This was the motivation for
+adding that to this document. Many of the mistakes that I've found in
 tables here are a direct result of working on the decompiler. And
 having the semantics of each operation was helpful in writing the
 decompiler.
