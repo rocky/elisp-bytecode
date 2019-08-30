@@ -242,7 +242,7 @@ The third object in a bytecode-function literal is the ``constants
 vector''. It is a normal Emacs Lisp vector and can be created with
 @code{(vector ...)} or using a vector literal.
 
-There is a possiblity for confusion by the name ``constants vector''.
+There is a possibility for confusion by the name ``constants vector''.
 The vector size and its values are indeed constant. Also, only the
 @code{constant} bytecode instructions (@pxref{Constants-Vector
 Retrieval Instructions}) refers to one of these objects.  However, in
@@ -289,7 +289,7 @@ The constants vector in the above example contains 5 elements:
 The properties of symbol @code{a} and symbol @code{myfunc} are
 consulted at run time, so there is no knowledge in the
 bytecode representing the fact that @code{a} is a dynamically-bound
-parmeter while @code{my-func} is probably an external function.
+parameter while @code{my-func} is probably an external function.
 
 If the lambda were lexically scoped, the constants vector would not
 have the variable symbol @code{a} listed, but instead there would be a
@@ -523,13 +523,13 @@ In fact, we can take a file with the @code{.elc} extension, rename it
 with an @code{.el} extension and @code{load} that, and it
 will run exactly the same if it had been loaded as a bytecode
 file@footnote{If we go the other way and rename a Lisp file as
-a bytecode file, Emacs will notice the discrepency because at the top
+a bytecode file, Emacs will notice the discrepancy because at the top
 of the file is a header that Emacs checks. But if we add a
 reasonable-looking header we can go that direction as well.}.
 
 Similarly, just as we can concatenate any number of independent Emacs
 Lisp source code files into one file, and this is sometimes done as a
-poor-man's way to create a package, we can also concantenate any
+poor-man's way to create a package, we can also concatenate any
 numbers of Emacs Lisp bytecode files.
 
 Of course, there are probably certain programs that are fooled when
@@ -555,7 +555,7 @@ when we are running bytecode from a different interpreter, and we
 might run off a cliff running older or newer bytecode without a check.
 
 Emacs developers maintain that, in practice, problems have not been
-reported very much.  Also, they try to keep backward compatability
+reported very much.  Also, they try to keep backward compatibility
 between versions so that bytecode generated in an older version of
 Emacs will often still be interpreted in a recent newer version. While
 this is a worthwhile intention, my experience is that this does not
@@ -583,12 +583,144 @@ known to cause problems. Any volunteers?
 @include bytecode-commands.texi
 @include optimization.texi
 
-@SECTION Bytecode Disassembly
+@SECTION LAP Decompiler
 
 Let's face it --- most of us would rather work with Emacs Lisp, a
 higher-level language than bytecode or its more human-friendly LAP
-disassembly.  There is a project in its early stages that can
-often reconstruct Emacs Lisp from bytecode generated from Emacs Lisp.
+disassembly.  There is a project in its early stages that can often
+reconstruct Emacs Lisp from bytecode generated from Emacs Lisp.
+
+See the @url{https://github.com/rocky/elisp-decompile, Elisp
+Decompiler Project} for more details.
+
+Although there is much work that needs to be done to make this work
+more of the time, quite frankly, it blows my mind that I've been able
+to get this far. For example, to do so, I needed to first start
+writing @emph{this} document since there wasn't anything nearly as
+complete when I started. There were various tables around for bytecode
+instructions, but I needed not just cumulative evaluation stack
+effects for a bytecode operation, but how many entries on the stack
+are read and then how many written, which where the motivation for
+adding that in this document. Many of the mistakes that I've found in
+tables here are a direct result of working on the decompiler. And
+having the semantics of each operation was helpful in writing the
+decompiler.
+
+@menu
+* It's GNU Emacs, so of course I have the source code!
+* Isn't it simpler to just disassemble?
+@end menu
+
+@node It's GNU Emacs, so of course I have the source code!
+@subsection{It's GNU Emacs, so of course I have the source code!}
+
+There is a difference between being able to find the source code and
+having it accessible when you need it, such as at runtime in a stack
+trace.
+
+When many people hear the word ``decompile'' they think reverse
+engineering or hacking code where source has deliberately been
+withheld. But there are other situations where a decompiler is useful.
+
+A common case is where you wrote the code, but have accidentally
+deleted the source code and just have the bytecode file.
+
+But, I know, you always use version control and emacs provides it's
+tilde backup file.
+
+So that leads us to the situation where there are @emph{several}
+possible source-code versions around, e.g. a development version and a
+stable version, or one of the various versions that correspond to
+version in your version-control system, and you'd like to know which
+one of those is stored in a bytecode file, that you have loaded.
+
+And then we come to situation where there is no source-code
+file. One can create functions on the fly and change them on the
+fly. Similarly, functions can create functions when run
+interactively. Perhaps you'd like to reconstruct the source code for a
+function that you worked on interactively.
+
+@node Isn't it simpler to just disassemble?
+@subsection{Isn't it simpler to just disassemble?}
+
+Interestingly, a number of people have proffered the suggestion that
+it might just be easier to understand LAP and disassemble than write
+this code.
+
+Most people don't know LAP. In fact, before I started writing this
+document, there really @emph{wasn't} any good documentation on LAP,
+short of reading source code.
+
+From writing this decompiler and noting all of the subtleties and
+intricacies, I am pretty convinced that those who say they understand
+LAP have to do @emph{a lot} of time-consuming tedious work to decipher
+things.
+
+This is what computers were invented for. They do this stuff very fast
+compared to humans.
+
+Here are some simple examples:
+
+@b{macros}
+
+I would find it tedious enough just to descramble something that has
+been macro expanded. And I am sure people may find that unsatisfying
+right now with our results. Now imagine how you'd feel to add another
+layer on that in going from LAP to Elisp for the expanded macros.
+
+The LAP instructions for:
+
+@verbatim
+(define-minor-mode testing-minor-mode "Testing")
+@end verbatim
+
+expand to 60 or so LAP instructions; a lot more when various parameters
+have been filled in.
+
+And then you have things like @code{dolist} which are just long and
+boring template kinds of things. Because it's long it is very easy to
+lose sight of what it is.
 
 
-See the @url{https://github.com/rocky/elisp-decompile, Github Elisp Decompiler Project} for more details.
+@b{Stacked values}
+
+Keeping track of values pushed on a stack is also tedious. Again, there
+can be some non-locality in when a value is pushed with when it is
+used and popped. As an example, consider this LAP code which is
+part of a very well-known mathematical function:
+
+@verbatim
+        constant  fn
+        dup
+        varref    1-
+        varref    n
+        call      2
+        constant  fn
+        varref    n
+        constant  2
+        diff
+        call      1
+        plus
+        call      1
+@end verbatim
+
+At what point is that duplicated function the second instruction used?
+And what are the arguments to this function?
+
+How long did it take you to figure this out? It takes a computer
+hundredths of a second to reconstruct the Lisp code.
+
+@b{Keyboard bindings}
+
+
+This is yet another piece of tedium for the few that know how to do.
+
+As before see how fast you can come up with the key names for:
+
+@verbatim
+[134217761]
+[134217854]
+[134217820]
+@end verbatim
+
+Again this is done in hundredths of a second by a computer.

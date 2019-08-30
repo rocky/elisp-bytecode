@@ -6,6 +6,7 @@
 * Emacs Lisp Bytecode and LAP::
 * Emacs Lisp Virtual Machine::
 * Wither Bytecode - Its Future::
+* LAP Decompiler::
 @end menu
 
 @SECTION{Why is Emacs Lisp Bytecode Important and How is Emacs as a Program Different?}
