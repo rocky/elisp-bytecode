@@ -298,7 +298,7 @@ A constants vector index. The constants vector item should be a variable symbol.
 1 byte for @code{varset[0]} .. @code{varset[4]}; 2 bytes for @code{varset[5]},
 8-bit operand; 3 bytes for @code{varset[6]}, 16-bit operand.
 @item Stack effect:
-@math{-0+1}.
+@math{-1+0}.
 @item Example:
 When dynamic binding is in effect,
 @verbatim

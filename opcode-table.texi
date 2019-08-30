@@ -129,7 +129,7 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{|  varset[0]|}
 @tab 1
 @tab @xref{varset}.
-@tab @math{-1}
+@tab @math{-1+0}
 @item @verb{| 021|}
 @tab @verb{|  17|}
 @tab @verb{|  varset[1]|}
