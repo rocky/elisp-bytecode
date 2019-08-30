@@ -14,7 +14,7 @@ the interoperability of bytecode between versions.
 * Emacs Lisp Bytecode Files::
 * Functions and Commands for working with LAP and Bytecode::
 * Bytecode Optimization::
-* Bytecode Disassembly::
+* LAP Decompiler::
 @end menu
 
 @SECTION Emacs Lisp Bytecode Objects
@@ -583,7 +583,8 @@ known to cause problems. Any volunteers?
 @include bytecode-commands.texi
 @include optimization.texi
 
-@SECTION LAP Decompiler
+@node LAP Decompiler
+@section LAP Decompiler
 
 Let's face it --- most of us would rather work with Emacs Lisp, a
 higher-level language than bytecode or its more human-friendly LAP
@@ -607,12 +608,12 @@ having the semantics of each operation was helpful in writing the
 decompiler.
 
 @menu
-* It's GNU Emacs, so of course I have the source code!
-* Isn't it simpler to just disassemble?
+* Of course I have the source code!::
+* Isn't it simpler to just disassemble?::
 @end menu
 
-@node It's GNU Emacs, so of course I have the source code!
-@subsection{It's GNU Emacs, so of course I have the source code!}
+@node Of course I have the source code!
+@subsection It's GNU Emacs, so of course I have the source code!
 
 There is a difference between being able to find the source code and
 having it accessible when you need it, such as at runtime in a stack
@@ -641,7 +642,7 @@ interactively. Perhaps you'd like to reconstruct the source code for a
 function that you worked on interactively.
 
 @node Isn't it simpler to just disassemble?
-@subsection{Isn't it simpler to just disassemble?}
+@subsection Isn't it simpler to just disassemble?
 
 Interestingly, a number of people have proffered the suggestion that
 it might just be easier to understand LAP and disassemble than write
