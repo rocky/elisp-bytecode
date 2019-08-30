@@ -688,14 +688,14 @@ lose sight of what it is.
 Keeping track of values pushed on a stack is also tedious. Again, there
 can be some non-locality in when a value is pushed with when it is
 used and popped. As an example, consider this LAP code which is
-part of a very well-known mathematical function:
+similar to a very well-known mathematical function:
 
 @verbatim
         constant  fn
         dup
-        varref    1-
         varref    n
-        call      2
+        sub1
+        call      1
         constant  fn
         varref    n
         constant  2
