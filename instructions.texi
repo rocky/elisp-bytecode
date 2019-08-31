@@ -63,11 +63,21 @@ amount of jargon. This jargon are explained below.
 
 @subsection Instruction Jargon
 @itemize
+@item @code{OPERAND}
+The value of operand of the instruction. Many times this is done by
+taking the value of the opcode and subtracting from it the value of
+the first opcode in the series of opcodes it is part of.  For example,
+the @code{call} opcodes span opcode values 32 to 39. The
+@code{OPERAND} value for opcode 32 then is @math{0 = 32-32}; for
+opcode 33, the value is @math{1 = 33-32}.
 @item @code{TOS}
 The value of top of the evaluation stack. Many instructions either read or push onto this.
 @item @code{S}
-This is an array of evaluation stack items. @code{S[0]} is the top of the stack, or
-@code{TOS}.
+This is an array of evaluation stack items. @code{S[0]} is the top of
+the stack, or @code{TOS}.
+
+Note that indexing starts from the top of the stack and increases as
+we move down the stack.
 @item @code{top}
 A pointer to the the top of the evaluation stack. In C this would be
 @code{&TOS}. When we want the stack to increase in size, we add to
@@ -196,8 +206,7 @@ Reference a value from the evaluation stack.
 
 @table @strong
 @item Implements:
-@code{top++; TOS <- S[i+1]} where @code{i} is the value of the
-instruction operand.
+@code{top++; TOS <- S[OPERAND+1]}
 @item Generated via:
 @code{let}, @code{let*} and lambda arguments.
 @item Operand:
@@ -360,13 +369,43 @@ function itself.
 
 @table @strong
 @item Implements:
-@code{(set_internal(constants_vector[i])} where @code{i} is the value of the
-instruction operand.
+@verbatim
+arg[0..OPERAND-1] = S[OPERAND-1..0]
+fn <- S[OPERAND];
+top -= OPERAND;
+TOS <- fn(*arg) # replace fn by the fn's return value
+@end verbatim
+
+Before the call, the top of the stack has the final call parameter, if
+there is one. If there are no parameters, the top of the stack has the
+function to be called. The function to be called is always the least
+recent evaluation stack entry followed the function parameters
+in the order they were given.
+
+For example, for @code{gcd(1, 2)} the value of @code{OPERAND} is 2.
+The evaluation stack before the function call will be:
+@verbatim
++------------+
+| S[0] : 2   |
++------------+
+| S[1] : 1   |
++------------+
+| S[2] : gcd |
++------------+
+@end verbatim
+
+After the call completes, the evaluation stack will be:
+@verbatim
++-------------------------+
+| S[0] : gcd-return-value |
++-------------------------+
+@end verbatim
+
 @item Instruction size:
 1 byte for @code{call[0]} .. @code{call[4]}; 2 bytes for @code{call[5]},
 8-bit operand; 3 bytes for @code{call[6]}, 16-bit operand.
 @item Stack effect:
-@math{-0+1}.
+@math{-(@code{OPERAND}+1)+1}.
 @item Example:
 @verbatim
 (defun call-eg()
