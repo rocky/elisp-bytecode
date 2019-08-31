@@ -129,7 +129,7 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{|  varset[0]|}
 @tab 1
 @tab @xref{varset}.
-@tab @math{-1+0}
+@tab @math{-1}
 @item @verb{| 021|}
 @tab @verb{|  17|}
 @tab @verb{|  varset[1]|}
@@ -178,49 +178,49 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{|  varbind[0]|}
 @tab 1
 @tab @xref{varbind}.
-@tab @math{-1}
+@tab @math{-1+0}
 @item @verb{| 031|}
 @tab @verb{|  25|}
 @tab @verb{|  varbind[1]|}
 @tab 1
 @tab @xref{varbind}.
-@tab @math{-1}
+@tab @math{-1+0}
 @item @verb{| 032|}
 @tab @verb{|  26|}
 @tab @verb{|  varbind[2]|}
 @tab 1
 @tab @xref{varbind}.
-@tab @math{-1}
+@tab @math{-1+0}
 @item @verb{| 033|}
 @tab @verb{|  27|}
 @tab @verb{|  varbind[3]|}
 @tab 1
 @tab @xref{varbind}.
-@tab @math{-1}
+@tab @math{-1+0}
 @item @verb{| 034|}
 @tab @verb{|  28|}
 @tab @verb{|  varbind[4]|}
 @tab 1
 @tab @xref{varbind}.
-@tab @math{-1}
+@tab @math{-1+0}
 @item @verb{| 035|}
 @tab @verb{|  29|}
 @tab @verb{|  varbind[5]|}
 @tab 1
 @tab @xref{varbind}.
-@tab @math{-1}
+@tab @math{-1+0}
 @item @verb{| 036|}
 @tab @verb{|  30|}
 @tab @verb{|  varbind[6]|}
 @tab 2
 @tab @xref{varbind}.
-@tab @math{-1}
+@tab @math{-1+0}
 @item @verb{| 037|}
 @tab @verb{|  31|}
 @tab @verb{|  varbind[7]|}
 @tab 3
 @tab @xref{varbind}.
-@tab @math{-1}
+@tab @math{-1+0}
 
 @item @verb{| 040|}
 @tab @verb{|  32|}
@@ -717,7 +717,7 @@ and for a description of how to interpret the stack-effect field.
 @tab 1
 @tab @xref{save-current-buffer-1}.
 @tab
-@math{-0+1}
+@math{-0+1}?
 
 @item @verb{|0162|}
 @tab @verb{|*114|}
@@ -894,9 +894,10 @@ and for a description of how to interpret the stack-effect field.
 @tab @tab @tab Unused
 @item @verb{|0216|}
 @tab @verb{| 142|}
-@tab @tab @tab Unused
+@tab @verb{| unwind-protect|}
+@tab @xref{unwind-protect}.
+@tab @math{-1+0}
 @item @verb{|0217|}
-
 @tab @verb{|*143|}
 @tab @verb{| *condition-case|}
 @tab 1

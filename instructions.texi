@@ -333,13 +333,13 @@ symbol to a special-bindings stack.
 
 @table @strong
 @item Implements:
-@code{(set_internal(constants_vector[i])} where @code{i} is the value of the
-instruction operand.
+@code{*constants[OPERAND]<-TOS; top--}
+@end verbatim
 @item Instruction size:
 1 byte for @code{varbind[0]} .. @code{varbind[4]}; 2 bytes for @code{varbind[5]},
 8-bit operand; 3 bytes for @code{varbind[6]}, 16-bit operand.
 @item Stack effect:
-@math{-0+0}.
+@math{-1+0}.
 @item Example:
 When dynamic binding is in effect,
 @verbatim
@@ -435,7 +435,7 @@ stack. This is done when the variable is no longer needed.
 
 @table @strong
 @item Implements:
-undo's a @code{let}, @code{unwind-protects}, and @code{save-excursions}
+undo's a @code{let}, @code{unwind-protect}s, and @code{save-excursion}s
 @item Generated via:
 @code{let} in dynamic binding. Balancing the end of @code{save-excursion}.
 @item Instruction size:
@@ -2972,14 +2972,14 @@ Replaces older @code{save-current-buffer}. @xref{save-current-buffer}.
 
 @table @strong
 @item Implements:
-@code{TOS <- (save-current-buffer)}
+@code{to be filled in...}
 
 @item Generated via:
 @code{save-current-buffer}
 @item Instruction size:
 1 byte
 @item Stack effect:
-@math{0+1}.
+@math{0+1}?
 @item Added in:
 Emacs 22. @xref{Emacs 22}.
 @item Example:
@@ -3725,6 +3725,7 @@ simply call the corresponding C function.
 @menu
 * char-syntax::
 * save-excursion::
+* unwind-protect::
 * set-marker::
 * match-beginning::
 * match-end::
@@ -3758,6 +3759,46 @@ Constants Vector: [97]
 @end verbatim
 
 @end table
+
+@SubSubSecInstruction{unwind-protect, 142}
+
+To be completed...
+
+@table @strong
+@item Implements:
+@code{(unwind-protect)}.
+@item Generated via:
+@code{unwind-protect}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+0}.
+@item Example:
+When lexical binding is in effect,
+@code{(defun unwind-protect-eg() (unwind-protect (toggle-read-only)))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] #[0 "\300\207" [nil] 1]
+ 1  142   unwind-protect
+ 2  193   constant[1] toggle-read-only
+ 3   32   call[0]
+ 4   41   unbind[1]
+ 5  135   return
+
+Constants Vector: [#[0 "\300\207" [nil] 1] toggle-read-only]
+@end verbatim
+
+In the above, @code{constant[0]} is a nilary function that returns @code{nil}.
+The disassembly of @code{\300\207} is:
+@verbatim
+PC  Byte  Instruction
+ 0  constant  nil
+ 1  return
+@end verbatim
+which is used when no unwind form was given.
+@end table
+
 
 @SubSubSecInstruction{save-excursion, 138}
 
