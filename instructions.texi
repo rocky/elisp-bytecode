@@ -334,7 +334,6 @@ symbol to a special-bindings stack.
 @table @strong
 @item Implements:
 @code{*constants[OPERAND]<-TOS; top--}
-@end verbatim
 @item Instruction size:
 1 byte for @code{varbind[0]} .. @code{varbind[4]}; 2 bytes for @code{varbind[5]},
 8-bit operand; 3 bytes for @code{varbind[6]}, 16-bit operand.
@@ -3724,8 +3723,8 @@ simply call the corresponding C function.
 
 @menu
 * char-syntax::
-* save-excursion::
 * unwind-protect::
+* save-excursion::
 * set-marker::
 * match-beginning::
 * match-end::
