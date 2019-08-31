@@ -596,16 +596,17 @@ Decompiler Project} for more details.
 
 Although there is much work that needs to be done to make this work
 more of the time, quite frankly, it blows my mind that I've been able
-to get this far. For example, to do so, I needed to first start
-writing @emph{this} document since there wasn't anything nearly as
-complete when I started. There were various tables around for bytecode
+to get this far. And it was a lot of work to get this far.  First
+there is setup just to have some sort of decompilation framework,
+albeit in Python. And then, I needed to first start writing
+@emph{this} document since there wasn't anything nearly as complete
+when I started. There were various tables around for bytecode
 instructions, but I needed not just cumulative evaluation stack
 effects for a bytecode operation, but how many entries on the stack
-are read and then how many written. This was the motivation for
-adding that to this document. Many of the mistakes that I've found in
-tables here are a direct result of working on the decompiler. And
-having the semantics of each operation was helpful in writing the
-decompiler.
+are read and then how many written. This was the motivation for adding
+that to this document. Many of the mistakes that I've found here are a
+direct result of working on the decompiler. And having the semantics
+of each operation was helpful in writing the decompiler.
 
 @menu
 * Of course I have the source code!::
