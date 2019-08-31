@@ -608,6 +608,10 @@ that to this document. Many of the mistakes that I've found here are a
 direct result of working on the decompiler. And having the semantics
 of each operation was helpful in writing the decompiler.
 
+A number of people have opined that you really don't need a
+decompiler. Below are the arguments offered and why I think they are
+inadequate.
+
 @menu
 * Of course I have the source code!::
 * Isn't it simpler to just disassemble?::
@@ -645,21 +649,22 @@ function that you worked on interactively.
 @node Isn't it simpler to just disassemble?
 @subsection Isn't it simpler to just disassemble?
 
-Interestingly, a number of people have proffered the suggestion that
-it might just be easier to understand LAP and disassemble than write
-this code.
+Interestingly, a number of people suggested that programmers who want
+to understand bytecode should use LAP and decompile mentally.
 
 Most people don't know LAP. In fact, before I started writing this
 document, there really @emph{wasn't} any good documentation on LAP,
-short of reading source code.
+short of reading source code. So a side benefit is that the process of
+writing a decompiler has made the documention of what's there in
+bytecode more easily accessible.
 
-From writing this decompiler and noting all of the subtleties and
+But from writing this decompiler and noting all of the subtleties and
 intricacies, I am pretty convinced that those who say they understand
-LAP have to do @emph{a lot} of time-consuming tedious work to decipher
-things.
+LAP have to spend a bit of time-consuming tedious work to decipher
+things. I sure do.
 
-This is what computers were invented for. They do this stuff very fast
-compared to humans.
+This isn't is what computers were invented for? They do this kind of
+thing very fast compared to humans.
 
 Here are some simple examples:
 
