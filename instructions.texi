@@ -264,8 +264,7 @@ evaluation stack.
 @kindex varref
 @table @strong
 @item Implements:
-@code{top++; TOS <- (eval constants_vector[i])} where @code{i} is the
-value of instruction operand
+@code{top++; TOS <- (eval constants[OPERAND])}
 @item Generated via:
 dynamic variable access
 @item Operand:
@@ -299,8 +298,7 @@ of the stack.
 @kindex varset
 @table @strong
 @item Implements:
-@code{constants_vector[i] <- TOS; top--} where @code{i} is the value of the
-instruction operand.
+@code{constants[OPERAND] <- TOS; top--}
 @item Operand:
 A constants vector index. The constants vector item should be a variable symbol.
 @item Instruction size:
