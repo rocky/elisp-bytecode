@@ -4,7 +4,7 @@
 In this chapter we discuss the ways Emacs creates, modifies and
 uses bytecode in order to run code. We describe a little of the two
 kinds of interpreters Emacs has, what goes into a bytecode file, and
-the interoperability of bytecode between versions.
+the inter-operability of bytecode between versions.
 
 @menu
 * Emacs Lisp Bytecode Objects::
@@ -655,7 +655,7 @@ to understand bytecode should use LAP and decompile mentally.
 Most people don't know LAP. In fact, before I started writing this
 document, there really @emph{wasn't} any good documentation on LAP,
 short of reading source code. So a side benefit is that the process of
-writing a decompiler has made the documention of what's there in
+writing a decompiler has made the documentation of what's there in
 bytecode more easily accessible.
 
 But from writing this decompiler and noting all of the subtleties and

@@ -124,7 +124,7 @@ situations within that construct. We'll only give one or a few of the
 constructs, and we'll try to indicate a limiting condition where
 possible.
 @item Operand:
-When an instruction has an operand, this descripts the type of the
+When an instruction has an operand, this describes the type of the
 operand.  Note that the size of the operand (or in some cases the
 operand value) will determine the instruction size.
 @item Instruction size:
@@ -894,11 +894,11 @@ Constants Vector: [1350]
 
 @SubSecInstruction{switch, 183}
 
-Jumps to entry in a jumptable.
+Jumps to entry in a jump table.
 
 @table @strong
 @item Implements:
-switch-like jumptable. Top of stack is a variable reference. Below that
+switch-like jump table. Top of stack is a variable reference. Below that
 is a hash table mapping compared values to instructions offsets.
 @item Generated via:
 @code{cond} with several clauses that use the same test function and variable.
@@ -1363,7 +1363,7 @@ PC  Byte  Instruction
 @SubSubSecInstruction{assq, 158}
 
 Call @code{assq}. For a description of this
-Emacs Lisp function, @xref{Association Lists, ,Association Lits,
+Emacs Lisp function, @xref{Association Lists, ,Association Lists,
 elisp, The GNU Emacs Lisp Reference Manual}.
 
 @table @strong
@@ -2382,7 +2382,7 @@ Constants Vector: [a]
 
 @SubSubSecInstruction{plus, 92}
 
-Call binary @code{+}. For a description of this Emacs Lisp airthmetic
+Call binary @code{+}. For a description of this Emacs Lisp arithmetic
 operation, @xref{Arithmetic Operations, ,Arithmetic Operations,elisp,
 The GNU Emacs Lisp Reference Manual}.
 
@@ -4118,7 +4118,7 @@ generation. In some cases, they were generated in a older version of
 Emacs. In some cases the instructions may have been planned to being used but
 never were. In some cases, the instructions are still handled if they
 appear (such as from older bytecode), but in other cases they are no
-longer accepted by the interperter.
+longer accepted by the interpreter.
 
 It is also possible that code outside of the Emacs Lisp distribution
 generates these instructions.
@@ -4286,7 +4286,7 @@ From Hallvard:
 Relative jump instructions: There's an apparently unanswered mail in
 my mailbox about them being buggy and asking how they worked.
 I expect they got disabled for that reason rather than someone trying
-to debug.  I don't remeber why I introduced them.  Maybe just a space
+to debug.  I don't remember why I introduced them.  Maybe just a space
 optimization and not worth the effort.  I hadn't quite learned that
 there are times to not bother optimizing:-)
 @end quotation

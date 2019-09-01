@@ -21,6 +21,8 @@ buildinfodir = .
 
 all: elisp-bytecode.pdf elisp-bytecode.info
 
+$(buildinfodir)/elisp-bytecode.info: $(srcs)
+
 info: $(buildinfodir)/elisp-bytecode.info
 dvi: $(DVI_TARGETS)
 html: $(HTML_TARGETS)
