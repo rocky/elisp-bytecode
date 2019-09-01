@@ -517,8 +517,7 @@ a value beyond one the first 64 entries.
 
 @table @strong
 @item Implements:
-@code{top++; TOS <- constants_vector[i]} where @code{i} is the value of the
-instruction operand.
+@code{top++; TOS <- constants[OPERAND]}
 @item Operand:
 a 16-bit index into the constants vector.
 @item Instruction size:
