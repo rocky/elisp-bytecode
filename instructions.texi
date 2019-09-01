@@ -483,8 +483,7 @@ There are special instructions to push any one of the first
 
 @table @strong
 @item Implements:
-@code{top++; TOS <- constants_vector[i]}  where @code{i} is the value of the
-instruction operand.
+@code{top++; TOS <- constants[OPERAND]}
 @item Instruction size:
 1 byte
 @item Stack effect:
