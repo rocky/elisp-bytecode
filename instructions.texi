@@ -95,6 +95,7 @@ the stack effect for the nil branch. So @math{\phi(0,-1)} which is
 seen in @code{goto-if-not-nil-else-pop} means that if the jump is
 taken, the stack effect is 0, otherwise the effect removes or pops an
 evaluation-stack entry.
+
 @item instruction-name subscripting (@code{[]})
 In many instructions such as @code{constant}, @code{varref}, you will
 find an index after the instruction name. What's going on is that
@@ -110,6 +111,12 @@ The former has opcode 192 while the latter has opcode 193. In terms of
 semantics, the former is the first or zeroth-index entry in a function's constant
 vector while the latter is the second or 1-index entry.
 
+@item eval stack types
+Just as in Emacs Lisp, many functions expect their arguments to be of
+a certain type, so it is true in Bytecode. Although the information
+here mirrors what is described in the Emacs Lisp Reference Manual
+(@pxref{Lisp Data Types, , Lisp Data Types, elisp, The GNU Emacs Lisp
+Reference Manual}), for convenience we include that here as well.
 @end itemize
 
 @subsection Instruction Description Fields
@@ -1485,6 +1492,16 @@ elisp, The GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: List; S[1]: Number}
+
+@strong{after:} @code{TOS: Object}
+
+Note the that the order of the stack values is opposite @code{nthcdr} even though
+in Emacs Lisp the order of the parameters is the same for both functions.
+
 @item Example:
 When lexical binding is in effect, @code{(defun nth-eg(l) (nth 560 l))} generates:
 @c ((lexical . t))
@@ -1508,14 +1525,25 @@ elisp, The GNU Emacs Lisp Reference Manual}.
 
 
 @table @strong
+
 @item Implements:
 @code{TOS <- (car TOS)}.
+
 @item Generated via:
 @code{car}.
+
 @item Instruction size:
 1 byte
+
 @item Stack effect:
 @math{-1+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: Cons-cell}
+
+@strong{after:} @code{TOS: Object}
+
 @item Example:
 When lexical binding is in effect, @code{(defun car-eg(l) (car l))} generates:
 @c ((lexical . t))
@@ -1543,6 +1571,14 @@ elisp, The GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-1+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: Cons-cell}
+
+@strong{after:} @code{TOS: Object}
+
+
 @item Example:
 When lexical binding is in effect, @code{(defun cdr-eg(l) (cdr l))} generates:
 @c ((lexical . t))
@@ -1722,8 +1758,7 @@ list.
 
 @table @strong
 @item Implements:
-@code{S[n-1] <- (list S[n-1] S[n-2] ... TOS); top -= (n-1)} where @code{n}
-is the value of the operand.
+@code{S[n-1] <- (list S[n-1] S[n-2] ... TOS); top -= (OPERAND-1)}
 @item Generated via:
 @code{list}.
 @item Operand:
@@ -1731,7 +1766,7 @@ is the value of the operand.
 @item Instruction size:
 2 bytes
 @item Stack effect:
-@math{-n+1} where @math{n} is the value of the instruction operand.
+@math{-@code{OPERAND}+1}
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
@@ -1860,6 +1895,16 @@ elisp, The GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: Number; S[1]: List}
+
+@strong{after:} @code{TOS: Object}
+
+Note the that the order of the stack values is opposite @code{nth} even though
+in Emacs Lisp the order of the parameters is the same for both functions.
+
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
@@ -1956,6 +2001,13 @@ Manual}.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: object; S[1]: cons}
+
+@strong{after:} @code{TOS: Object}
+
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
@@ -1988,6 +2040,13 @@ The GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: Object; S[1]: Cons-cell}
+
+@strong{after:} @code{TOS: Object}
+
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
@@ -2020,6 +2079,13 @@ Manual}.
 1 byte
 @item Stack effect:
 @math{-1+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: Cons-cell}
+
+@strong{after:} @code{TOS: Object}
+
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
@@ -2049,6 +2115,13 @@ Lists,elisp, The GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-1+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: Cons-cell}
+
+@strong{after:} @code{TOS: Object}
+
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
@@ -2132,6 +2205,14 @@ Manual}.
 1 byte
 @item Stack effect:
 @math{-1+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: Number}
+
+@strong{after:} @code{TOS: Number}
+
+
 @item Example:
 When lexical binding is in effect, @code{(defun sub1-eg(n) (1- n))} generates:
 @c ((lexical . t))
@@ -2159,6 +2240,13 @@ unary @code{-}.
 1 byte
 @item Stack effect:
 @math{-1+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: Number}
+
+@strong{after:} @code{TOS: Number}
+
 @item Example:
 When lexical binding is in effect, @code{(defun add1-eg(n) (1+ n))} generates:
 @c ((lexical . t))
@@ -2186,6 +2274,13 @@ binary @code{=}.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: Number; S[1]: Number}
+
+@strong{after:} @code{TOS: Number}
+
 @item Example:
 When dynamic binding is in effect, @code{(defun eqlsign-eg(a b) (= a b))} generates:
 @verbatim
@@ -2215,6 +2310,13 @@ Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: Number; S[1]: Number}
+
+@strong{after:} @code{TOS: Number}
+
 @item Example:
 When lexical binding is in effect, @code{(defun gtr-eg(a b) (> a b))} generates:
 @c ((lexical . t))
@@ -2242,6 +2344,14 @@ Manual}.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: Number; S[1]: Number}
+
+@strong{after:} @code{TOS: Number}
+
+
 @item Example:
 When dynamic binding is in effect, @code{(defun lss-eg(a b) (< a b))} generates:
 @verbatim
@@ -2272,6 +2382,14 @@ Manual}.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: Number; S[1]: Number}
+
+@strong{after:} @code{TOS: Number}
+
+
 @item Example:
 When dynamic binding is in effect, @code{(defun leq-eg(a b) (<= a b))} generates:
 @verbatim
@@ -2303,6 +2421,14 @@ Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: Number; S[1]: Number}
+
+@strong{after:} @code{TOS: Number}
+
+
 @item Example:
 When lexical binding is in effect, @code{(defun geq-eg(a b) (>= a b))} generates:
 @c ((lexical . t))
@@ -2335,6 +2461,13 @@ binary @code{-}.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: Number; S[1]: Number}
+
+@strong{after:} @code{TOS: Number}
+
 @item Example:
 When lexical binding is in effect, @code{(defun diff-eg(a b) (- a b))} generates:
 @c ((lexical . t))
@@ -2364,6 +2497,13 @@ unary @code{-}.
 1 byte
 @item Stack effect:
 @math{-1+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: Number}
+
+@strong{after:} @code{TOS: Number}
+
 @item Example:
 When lexical binding is in effect, @code{(defun negate-eg(a) (- a))} generates:
 @c ((lexical . t))
@@ -2395,6 +2535,13 @@ When adding more than two numbers, a @code{call} instruction is used instead.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: Number; S[1]: Number}
+
+@strong{after:} @code{TOS: Number}
+
 @item Example:
 When dynamic binding is in effect, @code{(defun plus-eg(n) (+ n n))} generates:
 @verbatim
@@ -2426,6 +2573,14 @@ When multiplying more than two numbers, a @code{call} instruction is used instea
 1 byte
 @item Stack effect:
 @math{-2+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: Number; S[1]: Number}
+
+@strong{after:} @code{TOS: Number}
+
+
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
@@ -2461,6 +2616,14 @@ operations.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: Number; S[1]: Number}
+
+@strong{after:} @code{TOS: Number}
+
+
 @item Example:
 When dynamic binding is in effect, @code{(defun max-eg(a b c) (max a b c))} generates:
 @verbatim
@@ -2495,6 +2658,13 @@ binary @code{min}.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: Number; S[1]: Number}
+
+@strong{after:} @code{TOS: Number}
+
 @item Example:
 When dynamic binding is in effect, @code{(defun min-eg(a b c) (min a b c))} generates:
 @verbatim
@@ -2526,6 +2696,15 @@ The GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+
+@item Type Information:
+
+@strong{before:} @code{TOS: Number; S[1]: Number}
+
+@strong{after:} @code{TOS: Number}
+
+A zero value for @code{TOS} will raise an arithmetic error.
+
 @item Example:
 When dynamic binding is in effect, @code{(defun min-quo(a b) (/ a b))} generates:
 @verbatim
@@ -2555,6 +2734,16 @@ The GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-2+1}
+
+@item Type Information:
+
+@strong{before:} @code{TOS: Number; S[1]: Number}
+
+@strong{after:} @code{TOS: Number}
+
+A zero value for @code{TOS} will raise an arithmetic error.
+
+
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
@@ -3380,6 +3569,7 @@ call the corresponding C function.
 * following-char::
 * preceding-char::
 * current-column::
+* indent-to::
 * eolp::
 * eobp::
 * bolp::
@@ -3547,6 +3737,34 @@ Call @code{current-column}.
 PC  Byte  Instruction
  0  105   current-column
  1  135   return
+@end verbatim
+
+@end table
+
+@SubSubSecInstruction{indent-to, 106}
+
+Call @code{indent-to}.
+
+@table @strong
+@item Implements:
+@code{TOS <- (indent-to TOS)}
+
+@item Generated via:
+@code{indent-to}
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-1+1}.
+@item Example:
+@code{(defun indent-to-eg() (indent-to 5))} generates:
+@c ((lexical . t) (optimize . nil))
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] 5
+ 1  106   indent-to
+ 2  135   return
+
+Constants Vector: [5]
 @end verbatim
 
 @end table

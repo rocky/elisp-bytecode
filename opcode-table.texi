@@ -220,7 +220,7 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{|  varbind[7]|}
 @tab 3
 @tab @xref{varbind}.
-@tab @math{-1+0}
+@tab @math{-1}
 
 @item @verb{| 040|}
 @tab @verb{|  32|}
@@ -669,6 +669,12 @@ and for a description of how to interpret the stack-effect field.
 @tab 1
 @tab @xref{current-column}.
 @tab @math{-0+1}
+@item @verb{|0152|}
+@tab @verb{| 106|}
+@tab @verb{|  indent-to|}
+@tab 1
+@tab @xref{indent-to}.
+@tab @math{-1+1}
 @item @verb{|0153|}
 @tab @verb{|*107|}
 @tab @verb{| *scan-buffer|}
