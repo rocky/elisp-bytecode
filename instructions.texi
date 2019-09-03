@@ -1002,6 +1002,12 @@ Call @code{symbolp}. For a description of this Emacs Lisp function, @xref{Symbol
 1 byte
 @item Stack effect:
 @math{-1+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: Object}
+
+@strong{after:} @code{TOS: Bool}
+
 @item Example:
 When lexical binding is in effect, @code{(defun symbolp-eg(n) (symbolp n))} generates:
 @c ((lexical . t))
@@ -1028,6 +1034,12 @@ Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-1+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: Object}
+
+@strong{after:} @code{TOS: Bool}
+
 @item Example:
 When lexical binding is in effect, @code{(defun consp-eg(n) (consp n))} generates:
 @c ((lexical . t))
@@ -1054,6 +1066,12 @@ unary @code{stringp}.
 1 byte
 @item Stack effect:
 @math{-1+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: Object}
+
+@strong{after:} @code{TOS: Bool}
+
 @item Example:
 When lexical binding is in effect, @code{(defun stringp-eg(n) (stringp n))} generates:
 @c ((lexical . t))
@@ -1080,6 +1098,12 @@ unary @code{listp}.
 1 byte
 @item Stack effect:
 @math{-1+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: Object}
+
+@strong{after:} @code{TOS: Bool}
+
 @item Example:
 When lexical binding is in effect, @code{(defun listp-eg(n) (listp n))} generates:
 @c ((lexical . t))
@@ -1136,6 +1160,12 @@ binary @code{memq}.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: List; S[1]: Object}
+
+@strong{after:} @code{TOS: Object}
+
 @item Example:
 When lexical binding is in effect, @code{(defun memq-eg(a b) (memq a b))} generates:
 @c ((lexical . t))
@@ -1165,6 +1195,13 @@ unary @code{not}.
 1 byte
 @item Stack effect:
 @math{-1+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: Object}
+
+@strong{after:} @code{TOS: Bool}
+
+
 @item Example:
 When lexical binding is in effect, @code{(defun not-eg(a) (not a))} generates:
 @c ((lexical . t))
@@ -1407,6 +1444,12 @@ elisp, The GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-1+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: Object}
+
+@strong{after:} @code{TOS: Bool}
+
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
@@ -1435,6 +1478,12 @@ GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-1+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: Object}
+
+@strong{after:} @code{TOS: Bool}
+
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
