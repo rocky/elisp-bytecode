@@ -2201,6 +2201,13 @@ The GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: List; S[1]: List}
+
+@strong{after:} @code{TOS: List}
+
+
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
@@ -2625,9 +2632,9 @@ When multiplying more than two numbers, a @code{call} instruction is used instea
 
 @item Type Information:
 
-@strong{before:} @code{TOS: Number; S[1]: Number}
+@strong{before:} @code{TOS: String; S[1]: String}
 
-@strong{after:} @code{TOS: Number}
+@strong{after:} @code{TOS: Bool}
 
 
 @item Added in:
@@ -3070,6 +3077,14 @@ The GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: Number; S[1]: Number}
+
+@strong{after:} @code{TOS: Number}
+
+
+
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
@@ -3108,6 +3123,13 @@ The GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: String; S[1]: String}
+
+@strong{after:} @code{TOS: Bool}
+
+
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
