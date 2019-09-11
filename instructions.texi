@@ -223,6 +223,10 @@ A stack index
 3 bytes for @code{stack-ref[6]}, 16-bit operand.
 @item Stack effect:
 @math{-0+1}.
+@item Type Information:
+
+@strong{after:} @code{TOS: Object}
+
 @item Added in:
 Emacs 24.1. @xref{Emacs 24}.
 @item Example:
@@ -281,6 +285,10 @@ A constants vector index. The constants vector item should be a variable symbol.
 8-bit operand; 3 bytes for @code{varref[6]}, 16-bit operand.
 @item Stack effect:
 @math{-0+1}.
+@item Type Information:
+
+@strong{after:} @code{TOS: Object}
+
 @item Example:
 When dynamic binding is in effect,
 @verbatim
@@ -313,6 +321,10 @@ A constants vector index. The constants vector item should be a variable symbol.
 8-bit operand; 3 bytes for @code{varset[6]}, 16-bit operand.
 @item Stack effect:
 @math{-1+0}.
+@item Type Information:
+
+@strong{before:} @code{TOS: Object}
+
 @item Example:
 When dynamic binding is in effect,
 @verbatim
@@ -344,6 +356,10 @@ symbol to a special-bindings stack.
 8-bit operand; 3 bytes for @code{varbind[6]}, 16-bit operand.
 @item Stack effect:
 @math{-1+0}.
+@item Type Information:
+
+@strong{before:} @code{TOS: Object}
+
 @item Example:
 When dynamic binding is in effect,
 @verbatim
