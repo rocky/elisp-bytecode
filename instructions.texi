@@ -511,6 +511,11 @@ There are special instructions to push any one of the first
 1 byte
 @item Stack effect:
 @math{-0+1}.
+
+@item Type Information:
+
+@strong{after:} @code{TOS: Object}
+
 @item Example:
 @verbatim
 defun n3(n)
@@ -1702,6 +1707,13 @@ elisp, The GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-1+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: Object}
+
+@strong{after:} @code{TOS: List}
+
+
 @item Example:
 @code{(defun list1-eg() (list 'a))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1733,6 +1745,13 @@ elisp, The GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+@item Type Information:
+
+@strong{before:} @code{S[1]: Object; TOS: Object}
+
+@strong{after:} @code{TOS: List}
+
+
 @item Example:
 @code{(defun list2-eg() (list 'a 'b))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1763,6 +1782,13 @@ elisp, The GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-3+1}.
+
+@item Type Information:
+
+@strong{before:} @code{S[2]: Object; S[1]: Object; TOS: Object}
+
+@strong{after:} @code{TOS: List}
+
 @item Example:
 @code{(defun list3-eg() (list 'a 'b 'c))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1794,6 +1820,12 @@ elisp, The GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-4+1}.
+@item Type Information:
+
+@strong{before:} @code{S[3]: Object; S[2]: Object; S[1]: Object; TOS: Object}
+
+@strong{after:} @code{TOS: List}
+
 @item Example:
 @code{(defun list4-eg() (list 'a 'b 'c 'd))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1832,6 +1864,12 @@ list.
 2 bytes
 @item Stack effect:
 @math{-@code{OPERAND}+1}
+
+@strong{before:} @code{S[OPERAND-1]: Object; ... S[1]: Object; TOS: Object}
+
+@strong{after:} @code{TOS: List}
+
+
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
