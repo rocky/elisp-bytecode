@@ -2245,6 +2245,9 @@ Call @code{nconc} with two stack arguments. For a description of this
 Emacs Lisp function, @xref{Setcdr, ,Altering the CDR of a List,elisp,
 The GNU Emacs Lisp Reference Manual}.
 
+The Emacs Lisp function @code{nconc} can take an arbitrary number of
+arguments. The bytecode compiler breaks these up into repeated binary
+operations.
 
 @table @strong
 @item Implements:
@@ -2265,14 +2268,16 @@ The GNU Emacs Lisp Reference Manual}.
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
-With lexical binding in effect, @code{(defun nconc-eg(a b) (nconc a b))} generates:
+With lexical binding in effect, @code{(defun nconc-eg(l1 l2 l3) (nconc l1 l2 l3))} generates:
 @c ((lexical . t) (optimize . nil))
 @verbatim
 PC  Byte  Instruction
- 0    1   stack-ref[1]
- 1    1   stack-ref[1]
+ 0    2   stack-ref[2]
+ 1    2   stack-ref[2]
  2  164   nconc
- 3  135   return
+ 3    1   stack-ref[1]
+ 4  164   nconc
+ 5  135   return
 @end verbatim
 
 @end table
