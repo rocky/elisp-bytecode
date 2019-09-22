@@ -1909,7 +1909,7 @@ GNU Emacs Lisp Reference Manual}.
 @math{-1+1}.
 @item Type Information:
 
-@strong{before:} @code{TOS: List}
+@strong{before:} @code{TOS: Sequence}
 
 @strong{after:} @code{TOS: Number}
 
