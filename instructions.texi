@@ -1907,6 +1907,12 @@ GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-1+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: List}
+
+@strong{after:} @code{TOS: Number}
+
 @item Example:
 @code{(defun length-eg() (length '(a b)))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -2041,6 +2047,12 @@ GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: Number: S[1]: Sequence}
+
+@strong{after:} @code{TOS: Object}
+
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
@@ -2107,7 +2119,7 @@ Manual}.
 
 @item Type Information:
 
-@strong{before:} @code{TOS: object; S[1]: cons}
+@strong{before:} @code{TOS: Object; S[1]: cons}
 
 @strong{after:} @code{TOS: Object}
 
@@ -2906,7 +2918,13 @@ Strings,elisp, The GNU Emacs Lisp Reference Manual}.
 @item Instruction size:
 1 byte
 @item Stack effect:
-@math{-2+1}.
+@math{-3+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: Number: S[1]: Number; S[2]: String}
+
+@strong{after:} @code{TOS: String}
+
 @item Example:
 @code{(defun substring-eg() (substring "abc" 0 2))} generates:
 @c ((lexical . t) (optimize . nil))
