@@ -2085,6 +2085,12 @@ The GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-1+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: Sequence}
+
+@strong{after:} @code{TOS: Sequence}
+
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
