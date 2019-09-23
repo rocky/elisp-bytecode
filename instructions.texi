@@ -1971,7 +1971,13 @@ Arrays, elisp, The GNU Emacs Lisp Reference Manual}.
 @item Instruction size:
 1 byte
 @item Stack effect:
-@math{-2+1}.
+@math{-3+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: Object: S[1]: Number; S[2]: Array}
+
+@strong{after:} @code{TOS: Object}
+
 @item Example:
 @code{(defun aset-eg() (aset array-var 0 730))} generates:
 @c ((lexical . t) (optimize . nil))
