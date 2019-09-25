@@ -3113,8 +3113,7 @@ PC  Byte  Instruction
  2  194   constant[2] "c"
  3  195   constant[3] "d"
  4  196   constant[4] "e"
- 5  176   concatN [5]
-           5
+ 5  176   concatN [5]  5
  7  135   return
 
 Constants Vector: ["a" "b" "c" "d" "e"]
