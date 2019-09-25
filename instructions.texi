@@ -3079,7 +3079,7 @@ Constants Vector: ["a" "b" "c" "d"]
 Call @code{concat} on up to 255 stack arguments.  Note there are
 special instructions for the case where there are 2 to 4 items to
 concatenate. For a description of this Emacs Lisp function string
-function, q@xref{Creating Strings, ,Creating Strings,elisp, The GNU
+function, @xref{Creating Strings, ,Creating Strings,elisp, The GNU
 Emacs Lisp Reference Manual}.
 
 @table @strong
