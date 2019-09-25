@@ -609,8 +609,17 @@ direct result of working on the decompiler. And having the semantics
 of each operation was helpful in writing the decompiler.
 
 A number of people have opined that you really don't need a
-decompiler. Below are the arguments offered and why I think they are
-inadequate.
+decompiler.@footnote{Whenever something new or novel comes along, in
+addition to the group that says ``Why not?!'' there is the ``Why
+bother?'' group.  In my (rocky) lifetime, I have experienced this
+attitude when undo and regular expressions were added to GNU Emacs,
+adding a debugger to languages where debugging support didn't exist or
+was weak, using decomplation to give more precise error location
+information, and here. Convincing the crowd that is happy with the
+status quo is hard. The next section is more for those who have an
+open mind and want to see a @emph{better} world.}
+
+Below are the arguments offered and why I think they are inadequate.
 
 @menu
 * Of course I have the source code!::
@@ -621,8 +630,8 @@ inadequate.
 @subsection It's GNU Emacs, so of course I have the source code!
 
 There is a difference between being able to find the source code and
-having it accessible when you need it, such as at runtime in a stack
-trace.
+having it @emph{accessible} when you need it, such as in an
+interactive session or at runtime from a stack trace.
 
 When many people hear the word ``decompile'' they think reverse
 engineering or hacking code where source has deliberately been
@@ -631,7 +640,7 @@ withheld. But there are other situations where a decompiler is useful.
 A common case is where you wrote the code, but have accidentally
 deleted the source code and just have the bytecode file.
 
-But, I know, you always use version control and emacs provides it's
+But, I know, you always use version control and GNU Emacs provides it's
 tilde backup file.
 
 So that leads us to the situation where there are @emph{several}
@@ -640,10 +649,12 @@ stable version, or one of the various versions that correspond to
 version in your version-control system, and you'd like to know which
 one of those is stored in a bytecode file, that you have loaded.
 
-And then we come to situation where there is no source-code
+And then we come to situation where there @emph{is} no source-code
 file. One can create functions on the fly and change them on the
-fly. Similarly, functions can create functions when run
-interactively. Perhaps you'd like to reconstruct the source code for a
+fly. Lisp is known for its culture in having programs create programs;
+it is possible such a program doesn't have a ``debug'' switch (that
+you know about) to either save or show the result before it was
+byte-compiled. Perhaps you'd like to reconstruct the source code for a
 function that you worked on interactively.
 
 @node Isn't it simpler to just disassemble?
@@ -803,7 +814,7 @@ Looking at Figure @ref{fig:lap-decompile} we see that:
 4 CALL_1     1
 @end verbatim
 
-is a function call which contains the unary expression:
+contains a function call and its parameters; One of the parameters is the unary expression:
 @verbatim
 2 VARREF     n
 3 SUB1
