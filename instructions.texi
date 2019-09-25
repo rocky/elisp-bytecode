@@ -1676,6 +1676,12 @@ elisp, The GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: Object; S[1]: Object}
+
+@strong{after:} @code{TOS: Cons}
+
 @item Example:
 @code{(defun cons-eg() (cons 'a 'b))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -1747,7 +1753,7 @@ elisp, The GNU Emacs Lisp Reference Manual}.
 @math{-2+1}.
 @item Type Information:
 
-@strong{before:} @code{S[1]: Object; TOS: Object}
+@strong{before:} @code{TOS: Object; S[1]: Object}
 
 @strong{after:} @code{TOS: List}
 
@@ -1785,7 +1791,7 @@ elisp, The GNU Emacs Lisp Reference Manual}.
 
 @item Type Information:
 
-@strong{before:} @code{S[2]: Object; S[1]: Object; TOS: Object}
+@strong{before:} @code{TOS: Object; S[1]: Object; S[2]: Object}
 
 @strong{after:} @code{TOS: List}
 
@@ -1822,7 +1828,7 @@ elisp, The GNU Emacs Lisp Reference Manual}.
 @math{-4+1}.
 @item Type Information:
 
-@strong{before:} @code{S[3]: Object; S[2]: Object; S[1]: Object; TOS: Object}
+@strong{before:} @code{TOS: Object; S[1]: Object; S[3]: Object; S[2]: Object}
 
 @strong{after:} @code{TOS: List}
 
@@ -1855,7 +1861,7 @@ list.
 
 @table @strong
 @item Implements:
-@code{S[n-1] <- (list S[n-1] S[n-2] ... TOS); top -= (OPERAND-1)}
+@code{S[OPERAND-1] <- (list S[OPERAND-1] S[OPERAND-2] ... TOS); top -= (OPERAND-1)}
 @item Generated via:
 @code{list}.
 @item Operand:
@@ -1865,6 +1871,7 @@ list.
 @item Stack effect:
 @math{-@code{OPERAND}+1}
 
+@item Type Information:
 @strong{before:} @code{S[OPERAND-1]: Object; ... S[1]: Object; TOS: Object}
 
 @strong{after:} @code{TOS: List}
@@ -1907,6 +1914,7 @@ GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-1+1}.
+
 @item Type Information:
 
 @strong{before:} @code{TOS: Sequence}
@@ -2968,6 +2976,12 @@ function, @xref{Creating Strings, ,Creating Strings,elisp, The GNU Emacs Lisp Re
 1 byte
 @item Stack effect:
 @math{-2+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: String: S[1]: String}
+
+@strong{after:} @code{TOS: String}
+
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
@@ -2998,7 +3012,13 @@ function, @xref{Creating Strings, ,Creating Strings,elisp, The GNU Emacs Lisp Re
 @item Instruction size:
 1 byte
 @item Stack effect:
-@math{-2+1}.
+@math{-3+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: String: S[1]: String; S[2]: String}
+
+@strong{after:} @code{TOS: String}
+
 @item Example:
 @code{(defun concat3-eg() (concat "a" "b" "c"))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -3023,13 +3043,19 @@ function, @xref{Creating Strings, ,Creating Strings,elisp, The GNU Emacs Lisp Re
 
 @table @strong
 @item Implements:
-@code{S[3] <- (concat S[3] S[2] S[1] TOS); top -= 2}.
+@code{S[3] <- (concat S[3] S[2] S[1] TOS); top -= 3}.
 @item Generated via:
 @code{concat}.
 @item Instruction size:
 1 byte
 @item Stack effect:
 @math{-4+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: String: S[1]: String; S[2]: String; S[3]: String}
+
+@strong{after:} @code{TOS: String}
+
 @item Example:
 @code{(defun concat4-eg() (concat "a" "b" "c" "d"))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -3058,7 +3084,7 @@ Emacs Lisp Reference Manual}.
 
 @table @strong
 @item Implements:
-@code{S[n-1] <- (concat S[n-1] S[n-2] ... TOS); top -= (n-1)}.
+@code{S[n-1] <- (concat S[OPERAND-1] S[OPERAND-2] ... TOS); top -= (OPERAND-1)}.
 @item Generated via:
 @code{concat}.
 @item Operand:
@@ -3067,6 +3093,14 @@ Emacs Lisp Reference Manual}.
 2 bytes
 @item Stack effect:
 @math{-n+1} where @math{n} is the value of the instruction operand.
+
+@item Type Information:
+@strong{before:} @code{S[OPERAND-1]: String; ... S[1]: String; TOS: String}
+
+@strong{after:} @code{TOS: String}
+
+
+
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
