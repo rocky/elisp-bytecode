@@ -3084,7 +3084,7 @@ Emacs Lisp Reference Manual}.
 
 @table @strong
 @item Implements:
-@code{S[n-1] <- (concat S[OPERAND-1] S[OPERAND-2] ... TOS); top -= (OPERAND-1)}.
+@code{S[OPERAND-1] <- (concat S[OPERAND-1] S[OPERAND-2] ... TOS); top -= (OPERAND-1)}.
 @item Generated via:
 @code{concat}.
 @item Operand:
