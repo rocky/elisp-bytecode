@@ -871,13 +871,13 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{|  discard|}
 @tab 1
 @tab @xref{discard}.
-@tab @math{-1+0}
+@tab @math{-n+0}
 @item @verb{|0211|}
 @tab @verb{| 137|}
 @tab @verb{|  dup|}
 @tab 1
 @tab @xref{dup}.
-@tab @math{-0+1}
+@tab @math{-1+2}
 @item @verb{|0212|}
 @tab @verb{| 138|}
 @tab @verb{|  save-excursion|}

@@ -1889,8 +1889,7 @@ PC  Byte  Instruction
  2  194   constant[2] c
  3  195   constant[3] d
  4  196   constant[4] e
- 5  175   listN [5]
-           5
+ 5  175   listN[5] 5
  7  135   return
 
 Constants Vector: [a b c d e]
@@ -4381,8 +4380,7 @@ instruction when there is only one argument.
 @kindex discardN
 @table @strong
 @item Implements:
-@code{if (n & 8) S[n] <- TOS; top -= n & 7;  } where @code{n} where @code{n}
-is the value of the operand.
+@code{S[OPERAND] <- TOS; top -= OPERAND;  }
 @item operand:
 7-bit number of items to discard. The top 8th bit when set indicates to keep
 the old TOS value after discarding.
@@ -4392,7 +4390,11 @@ the old TOS value after discarding.
 Function calls that do not use the returned value; the end of @code{let} forms
 in lexical binding with optimization to remove locally-bound variables.
 @item Stack effect:
-@math{-n+0}
+@math{-OPERAND+0}
+@item Type Information:
+
+@strong{before:} @code{TOS: Object; S[1]: Object; ... S[OPERAND-1]: Object}
+
 @item Added in:
 Emacs 24.1. @xref{Emacs 24}.
 @item Example:
@@ -4432,7 +4434,12 @@ first argument parameter.
 @item Instruction size:
 1 byte
 @item Stack effect:
-@math{-0+1}.
+@math{-1+2}.
+@item Type Information:
+
+@strong{before:} @code{TOS: Object}
+@strong{after:} @code{TOS: Object; S[1]: Object}
+
 @item Example:
 When lexical binding is in effect,
 @verbatim{(defun dup-eg(n) n)
