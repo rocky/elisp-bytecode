@@ -645,9 +645,9 @@ tilde backup file.
 
 So that leads us to the situation where there are @emph{several}
 possible source-code versions around, e.g. a development version and a
-stable version, or one of the various versions that correspond to
-version in your version-control system, and you'd like to know which
-one of those is stored in a bytecode file, that you have loaded.
+stable version, or one of the various versions in your version-control
+system, and you'd like to know which one of those is stored in a
+bytecode file, that you have loaded.
 
 And then we come to situation where there @emph{is} no source-code
 file. One can create functions on the fly and change them on the
