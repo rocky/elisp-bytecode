@@ -1151,6 +1151,13 @@ binary @code{eq}.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: Object; S[1]: Object}
+
+@strong{after:} @code{TOS: Bool}
+
+
 @item Example:
 When lexical binding is in effect, @code{(defun eq-eg(a b) (eq a b))} generates:
 @c ((lexical . t))
@@ -1382,6 +1389,12 @@ binary @code{equal}.
 1 byte
 @item Stack effect:
 @math{-2+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: Object; S[1]: Object}
+
+@strong{after:} @code{TOS: Bool}
+
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
