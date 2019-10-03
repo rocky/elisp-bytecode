@@ -2810,7 +2810,7 @@ bytecode compiler breaks these up into repeated binary operations.
 
 @table @strong
 @item Implements:
-@code{TOS <- (min(S[1] TOS)}.
+@code{S[1] <- (+ S[1] TOS); top--}.
 @item Generated via:
 binary @code{min}.
 @item Instruction size:
@@ -3303,7 +3303,7 @@ The GNU Emacs Lisp Reference Manual}.
 
 @table @strong
 @item Implements:
-@code{TOS <- (current-buffer)}
+@code{top++; TOS <- (current_buffer)}
 
 @item Generated via:
 @code{current-buffer}
@@ -3311,6 +3311,10 @@ The GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-0+1}.
+@item Type Information:
+
+@strong{after:} @code{TOS: Buffer}
+
 @item Example:
 @code{(defun current-buffer-eg() (current-buffer))} generates:
 @c ((lexical . t) (optimize . nil))
@@ -3338,15 +3342,21 @@ The GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-1+1}.
+@item Type Information:
+
+@strong{before:} @code{TOS: String}
+
+@strong{after:} @code{TOS: Buffer}
+
 @item Example:
-@code{(defun set-buffer-eg() (set-buffer "*scratch"))} generates:
+@code{(defun set-buffer-eg() (set-buffer "*scratch*"))} generates:
 @verbatim
 PC  Byte  Instruction
- 0  192   constant[0] "*scratch"
+ 0  192   constant[0] "*scratch*"
  1  113   set-buffer
  2  135   return
 
-Constants Vector: ["*scratch"]
+Constants Vector: ["*scratch*"]
 @end verbatim
 
 @end table
