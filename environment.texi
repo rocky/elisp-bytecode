@@ -13,7 +13,7 @@ the inter-operability of bytecode between versions.
 * Emacs Lisp Bytecode Bytes::
 * Emacs Lisp Bytecode Files::
 * Functions and Commands for working with LAP and Bytecode::
-* Bytecode Optimization::
+* Source and Bytecode Optimization::
 * LAP Decompiler::
 @end menu
 
