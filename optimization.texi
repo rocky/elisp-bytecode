@@ -1,27 +1,38 @@
-@SECTION Bytecode Optimization
+@SECTION Source and Bytecode Optimization
 
 This section needs to be gone over.
 
-The bytecode optimizer takes bytecode, turns it into a more symbolic
-form, LAP instructions, and then looks for ways to speed up the code.
+The bytecode optimizer works on two levels: source-to-source
+optimizing transformations and LAP-level peephole optimizations. It's
+possible to control optimization level by setting the
+@code{byte-optimize} variable (defined in @code{bytecomp.el}) to
+@code{none}, @code{all}, @code{source-level} or @code{byte-level}.
 
-In
-@uref{https://lists.gnu.org/archive/html/emacs-devel/2018-04/msg00018.html,
-Floating-point constant folding in Emacs byte compile} the notion was
-put forth that optimization has to be portable over improving
-code. (The issue here was compiling Emacs with larger integers allowed
-for larger possibiles of constant folding).
+The source-to-source optimizer entry point is the
+@code{byte-optimize-form} function (see @code{byte-opt.el}). It works
+on macroexpanded forms, recursively looking for function calls and
+special forms that have optimising functions defined for them.
 
-Much of this is taken from @code{bytecomp.el}.
+The peephole optimizer (see the @code{byte-optimize-lapcode} function
+in @code{byte-opt.el}) works on LAP directly. It goes through the
+instruction sequence using a window of 3 instructions to look for
+subsequences that can be dropped or replaced with more efficient
+versions.
+
+Both optimizers work until a fixpoint is reached, i.e. all the
+transformations are applied until there are not further changes
+possible.
+
+Much of this is taken from @code{bytecomp.el} and @code{byte-opt.el}.
 
 @itemize
 @item
-constant propagation
+constant folding
 @itemize
 @item
 removal of unreachable code;
 @item
-detecting and replacing sequences of operations with an equivalent primative
+detecting and replacing sequences of operations with an equivalent primitive
 @item
 removal of calls to side-effectless functions whose return-value is unused;
 @item
@@ -69,12 +80,12 @@ correct compilation of top-level uses of macros;
 the ability to generate a histogram of functions called.
 @end itemize
 
-@subsection Constant Propagation
+@subsection Constant Folding
 
-In cases were constants can be evaluated at compile time to come up with
-simpler results, that is done.
+In cases were constants can be evaluated at compile time to come up
+with simpler results, that is done.
 
-@code{(defun constant-prop-eg() (+ 1 2))} generates:
+@code{(defun constant-fold-eg() (+ 1 2))} generates:
 @c ((lexical . t) (optimize . nil))
 @example
 PC  Byte  Instruction
@@ -87,7 +98,7 @@ Constants Vector: [1 2]
 @end example
 
 while with optimization we get:
-@c @code{(defun constant-prop-eg() (+ 1 2))} generates:
+@c @code{(defun constant-fold-eg() (+ 1 2))} generates:
 @c ((lexical . t) (optimize . t))
 @example
 PC  Byte  Instruction
@@ -96,6 +107,13 @@ PC  Byte  Instruction
 
 Constants Vector: [3]
 @end example
+
+In
+@uref{https://lists.gnu.org/archive/html/emacs-devel/2018-04/msg00018.html,
+Floating-point constant folding in Emacs byte compile} the notion was
+put forth that optimization has to be portable over improving
+code. (The issue here was compiling Emacs with larger integers allowed
+for larger possibiles of constant folding).
 
 Although Emacs can be compiled with different for integers and floats
 depending the setting of @code{--with-wide-int}, for portability,
