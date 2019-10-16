@@ -3,7 +3,7 @@
 The bytecode optimizer works on two levels: source-to-source
 optimizing transformations and LAP-level peephole optimizations. It's
 possible to control optimization level by setting the
-@code{byte-optimize} variable (defined in @file{bytecomp.el}) to
+@var{byte-optimize} variable (defined in @file{bytecomp.el}) to
 @code{none}, @code{all}, @code{source-level} or @code{byte-level}.
 
 The optimizing framework itself resides in @file{byte-opt.el}.
@@ -82,20 +82,19 @@ the ability to generate a histogram of functions called.
 
 All source-to-source transformations are performed by the
 @code{byte-optimize-form} function. It's possible to run
-@code{byte-optimize-form} on any well-formed form.
-@code{(byte-optimize-form '(if t 1 2))} generates:
-@c 1
+@code{byte-optimize-form} on any well-formed form. E.g.,
+@code{(byte-optimize-form '(if t 1 2))} returns @code{1}.
 
-The @code{byte-optimize-form} function given a form performs
-transformations in 2 ways: by running a
-@code{byte-optimize-form-code-walker} function first; additionally it
-checks if the current form is both a function application and the
-function symbol has a specialized optimizing function defined for it
-in the @code{byte-optimizer} property.
+Given a form the @code{byte-optimize-form} function performs
+transformations in two ways: first it runs the
+@code{byte-optimize-form-code-walker} function; then it checks if the
+current form is both a function application and the function symbol
+has a specialized optimizing function defined for it in the
+@code{byte-optimizer} property.
 
 @code{byte-optimize-form-code-walker} recognizes special forms
 (@code{if}, @code{let}, @code{let*}, @code{lambda}, @code{closure},
-...) and, after performing basic sanity checks, recursively runs
+...) and, having performed some sanity checks, recursively runs
 @code{byte-optimize-form} on subforms. Here's an example
 transformation of the @code{if} special form:
 
@@ -104,7 +103,7 @@ transformation of the @code{if} special form:
 (when (< (length form) 3)
 	     (byte-compile-warn "too few arguments for `if'"))
 
-;; reconstruct the form by optimizing all the subforms
+;; simplify the form by optimizing subforms
 (cons fn
   (cons (byte-optimize-form (nth 1 form) nil)
     (cons
