@@ -1,29 +1,27 @@
 @SECTION Source and Bytecode Optimization
 
-This section needs to be gone over.
-
 The bytecode optimizer works on two levels: source-to-source
 optimizing transformations and LAP-level peephole optimizations. It's
 possible to control optimization level by setting the
-@code{byte-optimize} variable (defined in @code{bytecomp.el}) to
+@code{byte-optimize} variable (defined in @file{bytecomp.el}) to
 @code{none}, @code{all}, @code{source-level} or @code{byte-level}.
 
-The source-to-source optimizer entry point is the
-@code{byte-optimize-form} function (see @code{byte-opt.el}). It works
-on macroexpanded forms, recursively looking for function calls and
-special forms that have optimising functions defined for them.
+The optimizing framework itself resides in @file{byte-opt.el}.
 
-The peephole optimizer (see the @code{byte-optimize-lapcode} function
-in @code{byte-opt.el}) works on LAP directly. It goes through the
-instruction sequence using a window of 3 instructions to look for
-subsequences that can be dropped or replaced with more efficient
-versions.
+The source-to-source optimizer entry point is the
+@code{byte-optimize-form} function. It works on macroexpanded forms,
+recursively looking for function calls and special forms that have
+optimising functions defined for them.
+
+The peephole optimizer (see @code{byte-optimize-lapcode}) function
+works on LAP directly. It goes through the instruction sequence using
+a window of 3 instructions to look for subsequences that can be
+dropped or replaced with more efficient versions.
 
 Both optimizers work until a fixpoint is reached, i.e. all the
 transformations are applied until there are not further changes
 possible.
 
-Much of this is taken from @code{bytecomp.el} and @code{byte-opt.el}.
 
 @itemize
 @item
@@ -79,6 +77,68 @@ correct compilation of top-level uses of macros;
 @item
 the ability to generate a histogram of functions called.
 @end itemize
+
+@subsection Source-to-source Transformations
+
+All source-to-source transformations are performed by the
+@code{byte-optimize-form} function. It's possible to run
+@code{byte-optimize-form} on any well-formed form.
+@code{(byte-optimize-form '(if t 1 2))} generates:
+@c 1
+
+The @code{byte-optimize-form} function given a form performs
+transformations in 2 ways: by running a
+@code{byte-optimize-form-code-walker} function first; additionally it
+checks if the current form is both a function application and the
+function symbol has a specialized optimizing function defined for it
+in the @code{byte-optimizer} property.
+
+@code{byte-optimize-form-code-walker} recognizes special forms
+(@code{if}, @code{let}, @code{let*}, @code{lambda}, @code{closure},
+...) and, after performing basic sanity checks, recursively runs
+@code{byte-optimize-form} on subforms. Here's an example
+transformation of the @code{if} special form:
+
+@example
+;; sanity checks
+(when (< (length form) 3)
+	     (byte-compile-warn "too few arguments for `if'"))
+
+;; reconstruct the form by optimizing all the subforms
+(cons fn
+  (cons (byte-optimize-form (nth 1 form) nil)
+    (cons
+      (byte-optimize-form (nth 2 form) for-effect)
+      (byte-optimize-body (nthcdr 3 form) for-effect))))
+@end example
+
+The @code{byte-optimizer} symbol property is defined for most of the
+built-in side-effect-free functions. E.g. it is defined for some of
+the basic math functions in @file{byte-opt.el}:
+
+@example
+(put '+   'byte-optimizer 'byte-optimize-plus)
+(put '*   'byte-optimizer 'byte-optimize-multiply)
+(put '-   'byte-optimizer 'byte-optimize-minus)
+(put '/   'byte-optimizer 'byte-optimize-divide)
+(put 'max 'byte-optimizer 'byte-optimize-associative-math)
+(put 'min 'byte-optimizer 'byte-optimize-associative-math)
+@end example
+
+This is how constant folding works in the compiler. The same approach
+is also used for dead code elimination for built-in forms:
+
+@example
+(put 'and   'byte-optimizer 'byte-optimize-and)
+(put 'or    'byte-optimizer 'byte-optimize-or)
+(put 'cond  'byte-optimizer 'byte-optimize-cond)
+(put 'if    'byte-optimizer 'byte-optimize-if)
+(put 'while 'byte-optimizer 'byte-optimize-while)
+@end example
+
+@subsection Peephole Optimization
+
+TODO
 
 @subsection Constant Folding
 
