@@ -9,7 +9,7 @@ possible to control optimization level by setting the
 The optimizing framework itself resides in @file{byte-opt.el}.
 
 The source-to-source optimizer entry point is the
-@code{byte-optimize-form} function. It works on macroexpanded forms,
+@code{byte-optimize-form} function. It works on macro-expanded forms,
 recursively looking for function calls and special forms that have
 optimising functions defined for them.
 
@@ -22,61 +22,62 @@ Both optimizers work until a fixpoint is reached, i.e. all the
 transformations are applied until there are not further changes
 possible.
 
+@c TODO:
+@c
+@c @itemize
+@c @item
+@c constant folding
+@c @itemize
+@c @item
+@c removal of unreachable code;
+@c @item
+@c detecting and replacing sequences of operations with an equivalent primitive
+@c @item
+@c removal of calls to side-effectless functions whose return-value is unused;
+@c @item
+@c compile-time evaluation of safe constant forms, such as
+@c (@code{consp},  @code{nil}, and @code{(ash 1 6)}
+@c @item
+@c open-coding of literal lambdas;
+@c @item
+@c peephole optimization of emitted code;
+@c @item
+@c trivial functions are left uncompiled for speed.
+@c @end itemize
 
-@itemize
-@item
-constant folding
-@itemize
-@item
-removal of unreachable code;
-@item
-detecting and replacing sequences of operations with an equivalent primitive
-@item
-removal of calls to side-effectless functions whose return-value is unused;
-@item
-compile-time evaluation of safe constant forms, such as
-(@code{consp},  @code{nil}, and @code{(ash 1 6)}
-@item
-open-coding of literal lambdas;
-@item
-peephole optimization of emitted code;
-@item
-trivial functions are left uncompiled for speed.
-@end itemize
+@c @item
+@c support for inline functions;
+@c @item
+@c compile-time evaluation of arbitrary expressions;
+@c @item
+@c compile-time warning messages for:
 
-@item
-support for inline functions;
-@item
-compile-time evaluation of arbitrary expressions;
-@item
-compile-time warning messages for:
+@c @itemize
+@c @item
+@c functions being redefined with incompatible arglists;
+@c @item
+@c functions being redefined as macros, or vice-versa;
+@c @item
+@c functions or macros defined multiple times in the same file;
+@c @item
+@c functions being called with the incorrect number of arguments;
+@c @item
+@c functions being called which are not defined globally, in the
+@c file, or as autoloads;
+@c @item
+@c assignment and reference of undeclared free variables;
+@c @item
+@c various syntax errors;
+@c @end itemize
 
-@itemize
-@item
-functions being redefined with incompatible arglists;
-@item
-functions being redefined as macros, or vice-versa;
-@item
-functions or macros defined multiple times in the same file;
-@item
-functions being called with the incorrect number of arguments;
-@item
-functions being called which are not defined globally, in the
-file, or as autoloads;
-@item
-assignment and reference of undeclared free variables;
-@item
-various syntax errors;
-@end itemize
-
-@item
-correct compilation of nested @code{defuns}, @code{defmacros},
-@code{defvars} and @code{defsubsts};
-@item
-correct compilation of top-level uses of macros;
-@item
-the ability to generate a histogram of functions called.
-@end itemize
+@c @item
+@c correct compilation of nested @code{defuns}, @code{defmacros},
+@c @code{defvars} and @code{defsubsts};
+@c @item
+@c correct compilation of top-level uses of macros;
+@c @item
+@c the ability to generate a histogram of functions called.
+@c @end itemize
 
 @subsection Source-to-source Transformations
 
@@ -124,8 +125,9 @@ the basic math functions in @file{byte-opt.el}:
 (put 'min 'byte-optimizer 'byte-optimize-associative-math)
 @end example
 
-This is how constant folding works in the compiler. The same approach
-is also used for dead code elimination for built-in forms:
+This is how constant folding (@xref{Constant Folding}) works in the
+compiler. The same approach is used for dead code elimination
+(@xref{Dead Code Elimination}) in built-in forms:
 
 @example
 (put 'and   'byte-optimizer 'byte-optimize-and)
@@ -138,7 +140,7 @@ is also used for dead code elimination for built-in forms:
 @subsection Peephole Optimization
 
 TODO
-
+@node Constant Folding
 @subsection Constant Folding
 
 In cases were constants can be evaluated at compile time to come up
@@ -179,10 +181,11 @@ depending the setting of @code{--with-wide-int}, for portability,
 Emacs will assume in bytecode the smaller value of integers and will
 skip opportunities that would assume larger integers.
 
-@subsection Unreachable Code
+@node Dead Code Elimination
+@subsection Dead Code Elimination
 
 If there is no way code can be reached, it is removed. This optimization
-interacts with the previous optimization: constant propagation.
+interacts with the previous optimization: constant folding.
 
 With bytecode optimization and lexicals scoping off:
 @c @code{(defun dead-code-or-eg(a) (or t a))} generates:
