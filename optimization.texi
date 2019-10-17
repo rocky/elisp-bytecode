@@ -80,6 +80,14 @@ possible.
 @c the ability to generate a histogram of functions called.
 @c @end itemize
 
+@menu
+* Source-to-source Transformations::
+* Peephole Optimization::
+* Adding Optimizing Transformations::
+* Constant Folding::
+* Dead Code Elimination::
+@end menu
+
 @node Source-to-source Transformations
 @subsection Source-to-source Transformations
 
