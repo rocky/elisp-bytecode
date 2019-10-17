@@ -22,6 +22,15 @@ Both optimizers work until a fixpoint is reached, i.e. all the
 transformations are applied until there are not further changes
 possible.
 
+@menu
+* Source-to-source Transformations::
+* Peephole Optimization::
+* Adding an Optimizing Transformation::
+* Constant Folding::
+* Dead Code Elimination::
+* Strength Reduction::
+@end menu
+
 @c TODO:
 @c
 @c @itemize
@@ -78,6 +87,8 @@ possible.
 @c @item
 @c the ability to generate a histogram of functions called.
 @c @end itemize
+
+
 
 @FirstSubsection Source-to-source Transformations
 
