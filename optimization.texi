@@ -1,4 +1,5 @@
-@SECTION Source and Bytecode Optimization
+@node Source and Bytecode Optimization
+@section Source and Bytecode Optimization
 
 The bytecode optimizer works on two levels: source-to-source
 optimizing transformations and LAP-level peephole optimizations. It's
@@ -79,6 +80,7 @@ possible.
 @c the ability to generate a histogram of functions called.
 @c @end itemize
 
+@node Source-to-source Transformations
 @subsection Source-to-source Transformations
 
 All source-to-source transformations are performed by the
@@ -137,7 +139,12 @@ compiler. The same approach is used for dead code elimination
 (put 'while 'byte-optimizer 'byte-optimize-while)
 @end example
 
+@node Peephole Optimization
 @subsection Peephole Optimization
+
+TODO
+@node Adding Optimizing Transformations
+@subsection Adding an Optimizing Transformation
 
 TODO
 @node Constant Folding
