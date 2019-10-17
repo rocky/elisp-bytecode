@@ -1,5 +1,4 @@
-@node Source and Bytecode Optimization
-@section Source and Bytecode Optimization
+@SECTION Source and Bytecode Optimization
 
 The bytecode optimizer works on two levels: source-to-source
 optimizing transformations and LAP-level peephole optimizations. It's
@@ -80,16 +79,7 @@ possible.
 @c the ability to generate a histogram of functions called.
 @c @end itemize
 
-@menu
-* Source-to-source Transformations::
-* Peephole Optimization::
-* Adding Optimizing Transformations::
-* Constant Folding::
-* Dead Code Elimination::
-@end menu
-
-@node Source-to-source Transformations
-@subsection Source-to-source Transformations
+@FirstSubsection Source-to-source Transformations
 
 All source-to-source transformations are performed by the
 @code{byte-optimize-form} function. It's possible to run
@@ -147,16 +137,13 @@ compiler. The same approach is used for dead code elimination
 (put 'while 'byte-optimizer 'byte-optimize-while)
 @end example
 
-@node Peephole Optimization
-@subsection Peephole Optimization
+@FirstSubsection Peephole Optimization
 
 TODO
-@node Adding Optimizing Transformations
-@subsection Adding an Optimizing Transformation
+@FirstSubsection Adding an Optimizing Transformation
 
 TODO
-@node Constant Folding
-@subsection Constant Folding
+@Subsection Constant Folding
 
 In cases were constants can be evaluated at compile time to come up
 with simpler results, that is done.
@@ -196,8 +183,7 @@ depending the setting of @code{--with-wide-int}, for portability,
 Emacs will assume in bytecode the smaller value of integers and will
 skip opportunities that would assume larger integers.
 
-@node Dead Code Elimination
-@subsection Dead Code Elimination
+@Subsection Dead Code Elimination
 
 If there is no way code can be reached, it is removed. This optimization
 interacts with the previous optimization: constant folding.
@@ -241,7 +227,7 @@ Constants Vector: [t]
 @end group
 @end example
 
-@subsection Strength Reduction
+@Subsection Strength Reduction
 
 The optimizer can recognize when there is primative instructions that
 implements an equivalent longer set of instructions.
