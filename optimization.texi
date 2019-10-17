@@ -125,9 +125,9 @@ the basic math functions in @file{byte-opt.el}:
 (put 'min 'byte-optimizer 'byte-optimize-associative-math)
 @end example
 
-This is how constant folding (@xref{Constant Folding}) works in the
+This is how constant folding (@pxref{Constant Folding}) works in the
 compiler. The same approach is used for dead code elimination
-(@xref{Dead Code Elimination}) in built-in forms:
+(@pxref{Dead Code Elimination}) in built-in forms:
 
 @example
 (put 'and   'byte-optimizer 'byte-optimize-and)
