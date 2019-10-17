@@ -150,7 +150,58 @@ compiler. The same approach is used for dead code elimination
 
 @FirstSubsection Peephole Optimization
 
-TODO
+Peephole optimization is implemented by the
+@code{byte-optimize-lapcode} function. Patterns to be replaced are
+represented as @code{cond} condition cases. The instruction window is
+3 instructions long.
+
+There are two groups of replacements: transformations applied until no
+further work can be done and transformations that should only be
+applied once.
+
+Example transformation dropping side-effect-free instructions followed
+by the @code{discard} (drop the top of the stack) instruction:
+
+@example
+;; <side-effect-free> pop -->  <deleted>
+;;  ...including:
+;; const-X pop   -->  <deleted>
+;; varref-X pop  -->  <deleted>
+;; dup pop       -->  <deleted>
+((and ;; drop the top of the stack in the 2nd op?
+      (eq 'byte-discard (car lap1))
+      ;; and the 1st op has no side effects?
+      (memq (car lap0) side-effect-free))
+            ;; safely discard both instructions
+
+            ;; make sure there will be one more pass
+            (setq keep-going t)
+
+            ;; we'll need to correct stack alignment info
+            (setq tmp (aref byte-stack+-info (symbol-value (car lap0))))
+
+            ;; next pass will start from the next instruction
+            (setq rest (cdr rest))
+
+            ;; drop instructions depending on what should be on the stack
+            (cond ((= tmp 1)
+                   (byte-compile-log-lap
+                     "  %s discard\t-->\t<deleted>" lap0)
+                   (setq lap (delq lap0 (delq lap1 lap))))
+                  ((= tmp 0)
+                   (byte-compile-log-lap
+                    "  %s discard\t-->\t<deleted> discard" lap0)
+                   (setq lap (delq lap0 lap)))
+                  ((= tmp -1)
+                   (byte-compile-log-lap
+                    "  %s discard\t-->\tdiscard discard" lap0)
+                   (setcar lap0 'byte-discard)
+                   (setcdr lap0 0))
+                  ((error "Optimizer error: too much on the
+                                stack"))))
+;; more transformations...
+@end example
+
 @FirstSubsection Adding an Optimizing Transformation
 
 TODO
