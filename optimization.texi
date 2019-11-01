@@ -4,7 +4,7 @@ The bytecode optimizer works on two levels: source-to-source
 optimizing transformations and LAP-level peephole optimizations. It's
 possible to control optimization level by setting the
 @var{byte-optimize} variable (defined in @file{bytecomp.el}) to
-@code{none}, @code{all}, @code{source-level} or @code{byte-level}.
+@code{nil}, @code{t}, @code{source} or @code{byte}.
 
 The optimizing framework itself resides in @file{byte-opt.el}.
 
