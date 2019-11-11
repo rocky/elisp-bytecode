@@ -3403,13 +3403,13 @@ Constants Vector: [prog 5]
 
 @SubSubSecInstruction{buffer-substring, 123}
 
-Call @code{buffer-substring} with two stack arguments.
+Call @code{buffer-substring} with two stack arguments.  For a description of this Emacs Lisp buffer function,
+@xref{Buffer Contents, ,Examining Buffer Contents,elisp,
+The GNU Emacs Lisp Reference Manual}.
 
 @table @strong
 @item Implements:
-@code{S[1] <- (buffer-substring S[1] TOS); top--}. For a description of this Emacs Lisp buffer function,
-@xref{Buffer Contents, ,Examining Buffer Contents,elisp,
-The GNU Emacs Lisp Reference Manual}.
+@code{S[1] <- (buffer-substring S[1] TOS); top--}.
 @item Generated via:
 @code{buffer-substring}.
 @item Instruction size:
@@ -3456,7 +3456,8 @@ call the corresponding C function.
 
 @FirstSubSubSecInstruction{point, 96}
 
-Call @code{point}.
+Call @code{point}. For a description of this Emacs Lisp position function,
+@xref{Point, ,Point,elisp, The GNU Emacs Lisp Reference Manual}.
 
 @table @strong
 @item Implements:
@@ -3484,7 +3485,8 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{goto-char, 98}
 
-Call @code{goto-char} with one stack argument.
+Call @code{goto-char} with one stack argument. For a description of this Emacs Lisp motion function,
+@xref{Character Motion, ,Motion by Characters,elisp, The GNU Emacs Lisp Reference Manual}.
 
 @table @strong
 @item Implements:
@@ -3510,7 +3512,7 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{point-max, 100}
 
-Call @code{point-max}.
+Call @code{point-max}. For a description of this Emacs Lisp position function, @xref{Point, ,Point,elisp, The GNU Emacs Lisp Reference Manual}.
 
 @table @strong
 @item Implements:
@@ -3537,7 +3539,7 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{point-min, 101}
 
-Call @code{point-min}.
+Call @code{point-min}. For a description of this Emacs Lisp position function, @xref{Point, ,Point,elisp, The GNU Emacs Lisp Reference Manual}.
 
 @table @strong
 @item Implements:
@@ -3564,7 +3566,7 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{forward-char, 117}
 
-Call @code{forward-char} with one stack argument.
+Call @code{forward-char} with one stack argument. For a description of this Emacs Lisp motion function, @xref{Character Motion, ,Motion by Characters,elisp, The GNU Emacs Lisp Reference Manual}.
 
 @table @strong
 @item Implements:
@@ -3594,7 +3596,8 @@ Constants Vector: [1]
 
 @SubSubSecInstruction{forward-word, 118}
 
-Call @code{forward-word} with one stack argument.
+Call @code{forward-word} with one stack argument. For a description of this Emacs Lisp motion function,
+@xref{Word Motion, ,Motion by Words,elisp, The GNU Emacs Lisp Reference Manual}.
 
 @table @strong
 @item Implements:
@@ -3624,7 +3627,7 @@ Constants Vector: [1]
 
 @SubSubSecInstruction{forward-line, 121}
 
-Call @code{forward-line} with one stack argument.
+Call @code{forward-line} with one stack argument. For a description of this Emacs Lisp motion function, @xref{Text Lines, ,Motion by Text Lines,elisp, The GNU Emacs Lisp Reference Manual}.
 
 @table @strong
 @item Implements:
@@ -3655,7 +3658,7 @@ Constants Vector: [1]
 @SubSubSecInstruction{skip-chars-forward, 119}
 
 @kindex skip-chars-forward
-Call @code{skip-chars-forward} with two stack arguments.
+Call @code{skip-chars-forward} with two stack arguments. For a description of this Emacs Lisp motion function, @xref{Skipping Characters, ,Skipping Characters,elisp, The GNU Emacs Lisp Reference Manual}.
 
 @table @strong
 @item Implements:
@@ -3685,7 +3688,7 @@ Constants Vector: ["aeiou" 3]
 
 @SubSubSecInstruction{skip-chars-backward, 120}
 
-Call @code{skip-chars-backward} with two stack arguments.
+Call @code{skip-chars-backward} with two stack arguments. For a description of this Emacs Lisp motion function, @xref{Skipping Characters, ,Skipping Characters,elisp, The GNU Emacs Lisp Reference Manual}.
 
 @table @strong
 @item Implements:
@@ -4118,7 +4121,7 @@ Constants Vector: [1240 1241]
 
 @SubSubSecInstruction{end-of-line, 127}
 
-Call @code{end-of-line} with one stack argument.
+Call @code{end-of-line} with one stack argument. For a description of this Emacs Lisp motion function, @xref{Text Lines, ,Motion by Text Lines,elisp, The GNU Emacs Lisp Reference Manual}.
 
 @table @strong
 @item Implements:
