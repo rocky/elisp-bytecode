@@ -11,6 +11,12 @@
 @section \name\
 @end macro
 
+@macro APPENDIX{name}
+@page
+@node \name\
+@appendix \name\
+@end macro
+
 @macro FirstSubsection{name}
 @node \name\
 @subsection \name\

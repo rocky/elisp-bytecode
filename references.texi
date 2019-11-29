@@ -1,5 +1,4 @@
-@node References
-@chapter References
+@SECTION{References}
 
 @itemize
 @item @uref{http://git.savannah.gnu.org/cgit/emacs.git/tree/src/bytecode.c, Execution of byte code produced by bytecomp.el}

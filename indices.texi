@@ -1,0 +1,20 @@
+@node Indices
+@appendix
+
+@menu
+* References::
+* Instruction Index::
+* Bytecode Function Index::
+* Concept Index::
+@end menu
+
+@include references.texi
+
+@SECTION{Instruction Index}
+
+@printindex ky
+@SECTION{Bytecode Function Index}
+@printindex fn
+
+@SECTION{Concept Index}
+@printindex cp

@@ -41,10 +41,7 @@ Chris Wellons, Stefan Monnier, Hallvard Breien Furuseth, Vladimir Kazanov, and t
 * Emacs Lisp Bytecode Instructions::  Description of all Emacs Lisp Byte-Code Instructions
 * Instruction Changes Between Emacs Releases::
 * Opcode Table::                 Table of Bytecode Instruction ordered by Opcode Number
-* References::
-* Instruction Index::
-* Bytecode Function Index::
-* Concept Index::
+* Indices::
 @end menu
 
 @include intro.texi
@@ -52,18 +49,6 @@ Chris Wellons, Stefan Monnier, Hallvard Breien Furuseth, Vladimir Kazanov, and t
 @include instructions.texi
 @include changes.texi
 @include opcode-table.texi
-@include references.texi
-
-@node Instruction Index
-@unnumbered Instruction Index
-@printindex ky
-
-@node Bytecode Function Index
-@unnumbered Bytecode Function Index
-@printindex fn
-
-@node Concept Index
-@unnumbered Concept Index
-@printindex cp
+@include indices.texi
 
 @bye
