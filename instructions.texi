@@ -402,13 +402,15 @@ function to be called. The function to be called is always the least
 recent evaluation stack entry followed the function parameters
 in the order they were given.
 
-For example, for @code{gcd(1, 2)} the value of @code{OPERAND} is 2.
-The evaluation stack before the function call will be:
+For example, for @code{gcd(3, 5)} the operator is @code{call[2]} and
+the value of @code{OPERAND} is 2.  The evaluation stack before the
+function call (but after the @code{call[2]} operator was popped) for
+this example would be:
 @verbatim
 +------------+
-| S[0] : 2   |
+| S[0] : 5   |
 +------------+
-| S[1] : 1   |
+| S[1] : 3   |
 +------------+
 | S[2] : gcd |
 +------------+
@@ -3148,6 +3150,12 @@ Lisp,elisp, The GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-1+1}.
+
+@item Type Information:
+@strong{before:} @code{S[TOS]: Character or String}
+
+@strong{after:} @code{TOS: same type as before operation}
+
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
@@ -3179,6 +3187,12 @@ Lisp,elisp, The GNU Emacs Lisp Reference Manual}.
 1 byte
 @item Stack effect:
 @math{-1+1}.
+
+@item Type Information:
+@strong{before:} @code{S[TOS]: Character or String}
+
+@strong{after:} @code{TOS: same type as before operation}
+
 @item Added in:
 Emacs 19.34. @xref{Emacs 19}.
 @item Example:
