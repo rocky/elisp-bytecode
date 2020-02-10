@@ -404,8 +404,7 @@ in the order they were given.
 
 For example, for @code{gcd(3, 5)} the operator is @code{call[2]} and
 the value of @code{OPERAND} is 2.  The evaluation stack before the
-function call (but after the @code{call[2]} operator was popped) for
-this example would be:
+function call for this example would be:
 @verbatim
 +------------+
 | S[0] : 5   |
