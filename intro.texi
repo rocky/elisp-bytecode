@@ -191,8 +191,11 @@ implementation for something else, or as a result of using JIT
 technology.
 
 Let's take these two situations where Emacs Lisp Bytecode might become
-obsolete separately. Both ideas have been floating around for a
-long time.
+obsolete separately. Both ideas have been floating around for a long
+time.@footnote{Tom Tromey says about the same thing in his FOSDEM 2020
+talk @url{https://fosdem.org/2020/schedule/event/emacsthoughts/} or at
+least he seems to come up with similar conclusions.}
+
 
 With respect to alternate programming-language implementations, there
 have been many languages that been proposed and experimented with. The
