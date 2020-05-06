@@ -10,8 +10,10 @@ You can see if a symbol's value holds one of the function types or an
 alias to a function with @code{functionp}.  To retrieve the definition
 of the function use @code{symbol-function}.
 
-You can compile a whole file with @code{byte-compile-file}, or several
-files with @code{byte-recompile-directory} or
+You can compile a buffer with @code{emacs-lisp-byte-compile},
+or a whole file with @code{byte-compile-file}.
+
+Several can be compiled with @code{byte-recompile-directory} or
 @code{batch-byte-compile}.
 
 @vindex byte-compile-debug
@@ -64,6 +66,7 @@ might be readily appearent.
 * disassemble-file::
 * disassemble-full::
 * display-call-tree::
+* emacs-lisp-byte-compile::
 * functionp::
 * make-byte-code::
 * symbol-function-fn:: symbol-function
@@ -437,6 +440,13 @@ The call tree also lists those functions which are not known to be called
 (that is, to which no calls have been compiled), and which cannot be
 invoked interactively.
 @end deffn
+
+@node emacs-lisp-byte-compile
+@subsection @code{emacs-lisp-byte-compile}
+
+Byte compile the file containing the current buffer.  If you want to
+do that and also load the file, use
+@code{emacs-lisp-byte-compile-and-load}.
 
 @node functionp
 @subsection @code{functionp}
