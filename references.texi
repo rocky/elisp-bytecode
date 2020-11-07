@@ -21,6 +21,7 @@
 @item @uref{https://ftp.gnu.org/pub/gnu/emacs/emacs-25.3.tar.gz, GNU Emacs source code for version 25.3}
 @item @uref{https://ftp.gnu.org/pub/gnu/emacs/emacs-25.3.tar.gz, GNU Emacs source code for version 25.3}
 @item @uref{https://ftp.gnu.org/pub/gnu/emacs/emacs-26.3.tar.gz, GNU Emacs source code for version 26.3}
+@item @uref{https://ftp.gnu.org/pub/gnu/emacs/emacs-27.0.90.tar.gz, GNU Emacs source code for version 27.0.90}
 @item @uref{https://github.com/larsbrinkhoff/emacs-history, Lars Brinkhoff's Emacs History}
 @item @uref{https://github.com/rocky/elisp-decompile, Github Elisp Decompiler Project}
 @item @uref{https://rocky.github.io/NYC-Emacs-April-2018, NYC Emacs Lisp Meetup talk: Bytecode and miscellaneous thoughts on the Emacs Runtime}

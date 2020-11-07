@@ -19,7 +19,8 @@ Feel free suggest changes, as github pull requests, to make this chapter more de
 * Emacs 24::  After 23.4 and Starting in 24.1
 * Emacs 25::  After 24.5 and Starting in 25.1
 * Emacs 26::  After 25.3 and Starting in 26.1
-* Emacs 27::  After 26.1 and Starting in 27.1
+* Emacs 27::  After 26.1 and Starting in 27.0.90
+
 @end menu
 
 @node Emacs 18
@@ -395,6 +396,6 @@ The following instruction was added:
 @end itemize
 
 @node Emacs 27
-@section After 26.1 and Starting in 27.1
+@section After 26.1 and Starting in 27.0.90
 
 No changes yet.

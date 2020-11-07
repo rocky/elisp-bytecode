@@ -3731,7 +3731,9 @@ Constants Vector: ["aeiou" 3]
 
 @SubSubSecInstruction{narrow-to-region, 125}
 
-Call @code{narrow-to-region} with two stack arguments.
+Call @code{narrow-to-region} with two stack arguments. For a
+description of this Emacs Lisp narrowing function, @xref{Narrowing, ,Narrowing,elisp, The GNU Emacs Lisp Reference
+Manual}.
 
 @table @strong
 @item Implements:
@@ -3761,7 +3763,8 @@ Constants Vector: [1250 1251]
 
 @SubSubSecInstruction{widen, 126}
 
-Call @code{widen}.
+Call @code{widen}.  For a description of this Emacs Lisp function, @xref{Narrowing, ,Narrowing,elisp, The GNU Emacs Lisp Reference
+Manual}.
 
 @table @strong
 @item Implements:
@@ -3811,7 +3814,8 @@ call the corresponding C function.
 
 @FirstSubSubSecInstruction{insert, 99}
 
-Call @code{insert} with one stack argument.
+Call @code{insert} with one stack argument. For a description of this Emacs Lisp text function, @xref{Inserting Text, ,Inserting Text,elisp, The GNU Emacs Lisp Reference
+Manual}.
 
 @table @strong
 @item Implements:
@@ -3838,7 +3842,8 @@ PC  Byte  Instruction
 @SubSubSecInstruction{insertN, 99}
 
 Call @code{insert} on up to 255 stack arguments.  Note there is a special
-instruction when there is only one stack argument.
+instruction when there is only one stack argument. For a description of this Emacs Lisp text function, @xref{Inserting Text, ,Inserting Text,elisp, The GNU Emacs Lisp Reference
+Manual}.w
 
 @table @strong
 @item Implements:
@@ -3871,7 +3876,8 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{char-after, 102}
 
-Call @code{char-after} with one stack argument.
+Call @code{char-after} with one stack argument. For a description of this Emacs Lisp text function, @xref{Examining Text Near Point, ,Examining Text Near Point,elisp, The GNU Emacs Lisp Reference
+Manual}.
 
 @table @strong
 @item Implements:
@@ -3899,7 +3905,8 @@ Constants Vector: [nil]
 
 @SubSubSecInstruction{following-char, 103}
 
-Call @code{following-char}.
+Call @code{following-char}. For a description of this Emacs Lisp text function, @xref{Examining Text Near Point, ,Examining Text Near Point,elisp, The GNU Emacs Lisp Reference
+Manual}.
 
 @table @strong
 @item Implements:
@@ -3924,7 +3931,8 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{preceding-char, 104}
 
-Call @code{preceding-char}.
+Call @code{preceding-char}. For a description of this Emacs Lisp text function, @xref{Examining Text Near Point, ,Examining Text Near Point,elisp, The GNU Emacs Lisp Reference
+Manual}.
 
 @table @strong
 @item Implements:
@@ -3949,7 +3957,8 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{current-column, 105}
 
-Call @code{current-column}.
+Call @code{current-column}. For a description of this Emacs Lisp function, @xref{Counting Columns, ,Counting Columns,elisp, The GNU Emacs Lisp Reference
+Manual}.
 
 @table @strong
 @item Implements:
@@ -3974,7 +3983,8 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{indent-to, 106}
 
-Call @code{indent-to}.
+Call @code{indent-to}. For a description of this Emacs Lisp indentation function, @xref{Indentation Primitives, ,Indentation Primitives,elisp, The GNU Emacs Lisp Reference
+Manual}.
 
 @table @strong
 @item Implements:
@@ -4002,7 +4012,8 @@ Constants Vector: [5]
 
 @SubSubSecInstruction{eolp, 108}
 
-Call @code{eolp}.
+Call @code{eolp}. For a description of this Emacs Lisp text function, @xref{Examining Text Near Point, ,Examining Text Near Point,elisp, The GNU Emacs Lisp Reference
+Manual}.
 
 @table @strong
 @item Implements:
@@ -4027,7 +4038,8 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{eobp, 109}
 
-Call @code{eobp}.
+Call @code{eobp}. For a description of this Emacs Lisp text function, @xref{Examining Text Near Point, ,Examining Text Near Point,elisp, The GNU Emacs Lisp Reference
+Manual}.
 
 @table @strong
 @item Implements:
@@ -4052,7 +4064,8 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{bolp, 110}
 
-Call @code{bolp}.
+Call @code{bolp}. For a description of this Emacs Lisp text function, @xref{Examining Text Near Point, ,Examining Text Near Point,elisp, The GNU Emacs Lisp Reference
+Manual}.
 
 @table @strong
 @item Implements:
@@ -4077,7 +4090,8 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{bobp, 111}
 
-Call @code{bobp}.
+Call @code{bobp}. For a description of this Emacs Lisp text function, @xref{Examining Text Near Point, ,Examining Text Near Point,elisp, The GNU Emacs Lisp Reference
+Manual}.
 
 @table @strong
 @item Implements:
@@ -4102,9 +4116,9 @@ PC  Byte  Instruction
 
 @SubSubSecInstruction{delete-region, 124}
 
-Call @code{delete-region} with two stack arguments.
+Call @code{delete-region} with two stack arguments. For a description of this Emacs Lisp deletion function, @xref{Deleting Text, ,Deleting Text,elisp, The GNU Emacs Lisp Reference
+Manual}.
 
-Call @code{delete-region} with two stack arguments.
 
 @table @strong
 @item Implements:
