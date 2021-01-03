@@ -19,7 +19,7 @@ Feel free suggest changes, as github pull requests, to make this chapter more de
 * Emacs 24::  After 23.4 and Starting in 24.1
 * Emacs 25::  After 24.5 and Starting in 25.1
 * Emacs 26::  After 25.3 and Starting in 26.1
-* Emacs 27::  After 26.1 and Starting in 27.0.90
+* Emacs 27::  After 26.1 and Starting in 27.1
 
 @end menu
 
@@ -390,12 +390,23 @@ Bytecode meta-comments look like this:
 @node Emacs 26
 @section After 25.3 and Starting in 26.1
 
+@itemize
+@item Emacs 26.1 tarball is dated May 28, 2018
+@item Emacs 26.2 tarball is dated Apr 12, 2019
+@item Emacs 26.3 tarball is dated Aug 28, 2019
+@end itemize
+
 The following instruction was added:
 @itemize
 @item @code{switch} (183) See commit 88549ec38e9bb30e338a9985d0de4e6263b40fb7.
 @end itemize
 
 @node Emacs 27
-@section After 26.1 and Starting in 27.0.90
+@section After 26.3 and Starting in 27.1
+
+@unnumberedsubsec Version 27 Release History
+@itemize
+@item Emacs 27.1 tarball is dated Aug 10, 2020
+@end itemize
 
 No changes yet.
