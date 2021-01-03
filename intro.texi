@@ -246,7 +246,10 @@ Emacs Lisp bytecode to via SpiderMonkey (if it is possible) would
 allow for dual Emacs Lisp and JavaScript scripting while the other
 options don't.
 
-In late 2019 Andrea Corallo proposed a prototype for adding native
+@cindex LIMPLE
+@cindex gccemacs
+
+In late 2019, Andrea Corallo proposed a prototype for adding native
 compilation to Emacs Lisp.  The idea behind this is to use LAP as main
 input for the compilation, this is lowered into LIMPLE, an SSA based
 intermediate representation, where several compiler passes are used to

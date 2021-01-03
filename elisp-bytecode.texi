@@ -24,7 +24,7 @@
 @title GNU Emacs Lisp Bytecode Reference Manual
 
 Collated and edited by Rocky Bernstein with contibutions from Pipcet,
-Chris Wellons, Stefan Monnier, Hallvard Breien Furuseth, Vladimir Kazanov, and the Emacs community.
+Chris Wellons, Stefan Monnier, Hallvard Breien Furuseth, Vladimir Kazanov, Andrea Corallo, and the Emacs community.
 @end titlepage
 
 @summarycontents
