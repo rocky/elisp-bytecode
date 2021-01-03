@@ -246,6 +246,29 @@ Emacs Lisp bytecode to via SpiderMonkey (if it is possible) would
 allow for dual Emacs Lisp and JavaScript scripting while the other
 options don't.
 
+In late 2019 Andrea Corallo proposed a prototype for adding native
+compilation to Emacs Lisp.  The idea behind this is to use LAP as main
+input for the compilation, this is lowered into LIMPLE, an SSA based
+intermediate representation, where several compiler passes are used to
+perform a number of Lisp specific optimizations.  Eventually LIMPLE is
+translated into libgccjit IR and libgccjit is used to plug into the GCC
+infrastructure and achieve native code generation.
+
+The approach of a dedicated SSA based Intermediate Representation allow
+for advanced value/type inference within the code enabling effective
+optimizations as type check removal.  Also Elisp is extended for
+allowing the programmer to provide compiler hints.
+
+The so called Emacs Lisp native compiler (AKA gccemacs @footnote{Andrea
+Corallo gccemacs development blog.
+@url{http://akrl.sdf.org/gccemacs.html}}) is capable of AOT as well as
+parallel asynchronous JIT compilation.  In the later case byte compiled
+functions are used till the native compiled version is available and
+function hot swap is performed.
+
+As of January 2021 this work is being integrated in Emacs and is
+planned to released as part of Emacs 28.
+
 Needless to say, such a lot of work remains in adding any sort of JIT
 technology that I don't think Emacs Lisp Bytecode will be obsolete
 anytime soon, should that JIT not work off of Emacs Lisp bytecode.
