@@ -250,12 +250,14 @@ options don't.
 @cindex gccemacs
 
 In late 2019, Andrea Corallo proposed a prototype for adding native
-compilation to Emacs Lisp.  The idea behind this is to use LAP as main
-input for the compilation, this is lowered into LIMPLE, an SSA based
-intermediate representation, where several compiler passes are used to
-perform a number of Lisp specific optimizations.  Eventually LIMPLE is
-translated into libgccjit IR and libgccjit is used to plug into the GCC
-infrastructure and achieve native code generation.
+compilation to Emacs Lisp.  The work is described in
+@url{https://zenodo.org/record/3736363#.X_LeOFNKjMU}. The idea behind
+this is to use LAP as main input for the compilation, this is lowered
+into LIMPLE, an SSA based intermediate representation, where several
+compiler passes are used to perform a number of Lisp specific
+optimizations.  Eventually LIMPLE is translated into libgccjit IR and
+libgccjit is used to plug into the GCC infrastructure and achieve
+native code generation.
 
 The approach of a dedicated SSA based Intermediate Representation allow
 for advanced value/type inference within the code enabling effective
@@ -272,6 +274,6 @@ function hot swap is performed.
 As of January 2021 this work is being integrated in Emacs and is
 planned to released as part of Emacs 28.
 
-Needless to say, such a lot of work remains in adding any sort of JIT
-technology that I don't think Emacs Lisp Bytecode will be obsolete
-anytime soon, should that JIT not work off of Emacs Lisp bytecode.
+Needless to say, such a lot of work is involved in adding any sort of
+JIT technology; it will not totally replace Emacs Lisp Bytecode in the
+near future.

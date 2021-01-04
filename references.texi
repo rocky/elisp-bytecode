@@ -26,5 +26,6 @@
 @item @uref{https://github.com/rocky/elisp-decompile, Github Elisp Decompiler Project}
 @item @uref{https://rocky.github.io/NYC-Emacs-April-2018, NYC Emacs Lisp Meetup talk: Bytecode and miscellaneous thoughts on the Emacs Runtime}
 @item @uref{http://akrl.sdf.org/gccemacs.html, gccemacs}
+@item @uref{https://zenodo.org/record/3736363#.X_LeOFNKjMU, Bringing GNU Emacs to Native Code}
 
 @end itemize
