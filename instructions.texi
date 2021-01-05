@@ -926,7 +926,8 @@ Jumps to entry in a jump table.
 @table @strong
 @item Implements:
 switch-like jump table. Top of stack is a variable reference. Below that
-is a hash table mapping compared values to instructions offsets.
+is a hash table mapping compared values to instruction addresses.
+@code{v, ht <- TOS, S[1]; top -=2; pc = ht.lookup(v)}
 @item Generated via:
 @code{cond} with several clauses that use the same test function and variable.
 @item Instruction size:
