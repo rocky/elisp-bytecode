@@ -202,7 +202,7 @@ Constants Vector: [n]
 
 To encode the byte sequence then for this we could use:
 @verbatim
-ELISP> (unibyte-string 8 127 92 135)
+ELISP> (unibyte-string 8 137 92 135)
 
 "^H^?\\\207"
 @end verbatim
