@@ -4501,7 +4501,8 @@ first argument parameter.
 
 @item Example:
 When lexical binding is in effect,
-@verbatim{(defun dup-eg(n) n)
+@verbatim
+(defun dup-eg(n) n)
 @end verbatim
 generates:
 @c ((lexical . t) (optimize . nil))
