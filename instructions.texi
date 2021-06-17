@@ -724,7 +724,7 @@ Jump to label given in the 16-bit operand
 @item Instruction size:
 3 bytes
 @item Stack effect:
-@math{-1+0}
+@math{-0+0}
 @item Example:
 @code{(defun goto-eg(n) (while (n) 1300))} generates:
 @verbatim

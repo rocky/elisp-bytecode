@@ -833,7 +833,7 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{|  goto|}
 @tab 1
 @tab @xref{goto}.
-@tab @math{-1+0}
+@tab @math{-0+0}
 @item @verb{|0203|}
 @tab @verb{| 131|}
 @tab @verb{|  goto-if-nil|}
