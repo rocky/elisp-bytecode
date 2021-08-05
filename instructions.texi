@@ -4198,6 +4198,8 @@ simply call the corresponding C function.
 @FirstSubSubSecInstruction{char-syntax, 122}
 
 Call @code{char-syntax} with one stack argument.
+For a description of this Emacs Lisp syntax table function, @xref{Syntax Tables, , Syntax Table Functions,elisp, The GNU Emacs Lisp Reference Manual}.
+
 @table @strong
 @item Implements:
 @code{TOS <- (char-syntax TOS)}
@@ -4225,6 +4227,8 @@ Constants Vector: [97]
 @end table
 
 @SubSubSecInstruction{unwind-protect, 142}
+
+For a description of this Emacs Lisp nonlocal exit function, @xref{Nonlocal Exits, , Cleaning Up from Nonlocal Exits,elisp, The GNU Emacs Lisp Reference Manual}.
 
 To be completed...
 
@@ -4271,6 +4275,8 @@ Make a binding recording buffer, point, and mark.
 This instruction manipulates the special-bindings stack by creating a
 new binding when executed.  It needs to be balanced with
 @code{unbind} instructions.
+
+For a description of this Emacs Lisp Form, @xref{Forms, , Special Forms,elisp, The GNU Emacs Lisp Reference Manual}.
 
 @table @strong
 @item Implements:
