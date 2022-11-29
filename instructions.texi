@@ -4465,7 +4465,7 @@ Emacs 24.1. @xref{Emacs 24}.
 @item Example:
 When lexical binding is in effect and optimization are in effect,
 @verbatim{(defun discardN-eg()
-  (1+ (let ((a 1) (_b) (_c)) a)))
+  (1+ (let ((a 1) (_b) (_c)) a))
 @end verbatim
 generates:
 @c ((lexical . t) (optimize . t))
