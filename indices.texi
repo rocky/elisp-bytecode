@@ -1,5 +1,5 @@
 @node Indices
-@appendix
+@appendix Indices
 
 @menu
 * References::
