@@ -1,6 +1,13 @@
 version: 2
 jobs:
   build:
+    working_directory: ~/rocky/python-xdis
+    parallelism: 1
+    shell: /bin/bash --login
+    environment:
+      CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
+      CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
+      COMPILE: --compile
     machine:
       pre:
         - sudo apt-get install texlive-xetex texinfo
@@ -8,8 +15,11 @@ jobs:
       - checkout
       - run:
           name: Install Texlive and TeXInfo
-          command: 'sudo apt update && sudo apt install texlive texlive-xetex texlive-fonts-extra texlive-latex-extra texlive-plain-extra texinfo'
+          command: 'sudo apt update && sudo apt install texlive texlive-xetex
+            texlive-fonts-extra texlive-latex-extra texinfo'
       - run: make info pdf
 
       - store_artifacts:
           path: /tmp/artifacts
+    # The resource_class feature allows configuring CPU and RAM resources for each job. Different resource classes are available for different executors. https://circleci.com/docs/2.0/configuration-reference/#resourceclass
+    resource_class: medium
