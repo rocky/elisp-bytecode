@@ -328,7 +328,7 @@ A constants vector index. The constants vector item should be a variable symbol.
 @item Example:
 When dynamic binding is in effect,
 @verbatim
-defun varset-eg(n)
+(defun varset-eg(n)
   (setq n 5))
 @end verbatim
 generates:
@@ -363,7 +363,7 @@ symbol to a special-bindings stack.
 @item Example:
 When dynamic binding is in effect,
 @verbatim
-defun varbind-eg()
+(defun varbind-eg()
   (let ((c 1))
     (1+ c)))
 @end verbatim
@@ -467,7 +467,7 @@ undo's a @code{let}, @code{unwind-protect}s, and @code{save-excursion}s
 @item Example:
 When dynamic binding is in effect,
 @verbatim
-defun varbind-eg()
+(defun varbind-eg()
   (let ((c 1))
     (1+ c)))
 @end verbatim
@@ -519,7 +519,7 @@ There are special instructions to push any one of the first
 
 @item Example:
 @verbatim
-defun n3(n)
+(defun n3(n)
   (+ n 10 11 12))
 @end verbatim
 generates:
@@ -4548,8 +4548,8 @@ Emacs 24.1. @xref{Emacs 24}.
 @item Example:
 When lexical binding is in effect and optimization
 @verbatim
-defun stack-set-eg()
-(let ((a 5) a)))
+(defun stack-set-eg()
+  (let ((a 5) a)))
 @end verbatim
 generates:
 @c ((lexical . t) (optimize . t))
