@@ -423,8 +423,8 @@ After the call completes, the evaluation stack will be:
 @end verbatim
 
 @item Instruction size:
-1 byte for @code{call[0]} .. @code{call[4]}; 2 bytes for @code{call[5]},
-8-bit operand; 3 bytes for @code{call[6]}, 16-bit operand.
+1 byte for @code{call[0]} .. @code{call[5]}; 2 bytes for @code{call[6]},
+8-bit operand; 3 bytes for @code{call[7]}, 16-bit operand.
 @item Stack effect:
 @math{-(@code{OPERAND}+1)+1}.
 @item Example:
