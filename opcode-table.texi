@@ -896,11 +896,15 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{| 140|}
 @tab @tab @tab Unused
 @item @verb{|0215|}
-@tab @verb{| 141|}
-@tab @tab @tab Unused
+@tab @verb{|*141|}
+@tab @verb{| *catch|}
+@tab 1
+@tab @xref{catch}
+@tab @math{-2+1}
 @item @verb{|0216|}
 @tab @verb{| 142|}
 @tab @verb{| unwind-protect|}
+@tab 1
 @tab @xref{unwind-protect}.
 @tab @math{-1+0}
 @item @verb{|0217|}
