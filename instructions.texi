@@ -281,8 +281,8 @@ dynamic variable access
 @item Operand:
 A constants vector index. The constants vector item should be a variable symbol.
 @item Instruction size:
-1 byte for @code{varref[0]} .. @code{varref[4]}; 2 bytes for @code{varref[5]},
-8-bit operand; 3 bytes for @code{varref[6]}, 16-bit operand.
+1 byte for @code{varref[0]} .. @code{varref[5]}; 2 bytes for @code{varref[6]},
+8-bit operand; 3 bytes for @code{varref[7]}, 16-bit operand.
 @item Stack effect:
 @math{-0+1}.
 @item Type Information:
@@ -317,8 +317,8 @@ of the stack.
 @item Operand:
 A constants vector index. The constants vector item should be a variable symbol.
 @item Instruction size:
-1 byte for @code{varset[0]} .. @code{varset[4]}; 2 bytes for @code{varset[5]},
-8-bit operand; 3 bytes for @code{varset[6]}, 16-bit operand.
+1 byte for @code{varset[0]} .. @code{varset[5]}; 2 bytes for @code{varset[6]},
+8-bit operand; 3 bytes for @code{varset[7]}, 16-bit operand.
 @item Stack effect:
 @math{-1+0}.
 @item Type Information:
@@ -352,8 +352,8 @@ symbol to a special-bindings stack.
 @item Implements:
 @code{*constants[OPERAND]<-TOS; top--}
 @item Instruction size:
-1 byte for @code{varbind[0]} .. @code{varbind[4]}; 2 bytes for @code{varbind[5]},
-8-bit operand; 3 bytes for @code{varbind[6]}, 16-bit operand.
+1 byte for @code{varbind[0]} .. @code{varbind[5]}; 2 bytes for @code{varbind[6]},
+8-bit operand; 3 bytes for @code{varbind[7]}, 16-bit operand.
 @item Stack effect:
 @math{-1+0}.
 @item Type Information:
@@ -460,8 +460,8 @@ undo's a @code{let}, @code{unwind-protect}s, and @code{save-excursion}s
 @item Generated via:
 @code{let} in dynamic binding. Balancing the end of @code{save-excursion}.
 @item Instruction size:
-1 byte for @code{unbind[0]} .. @code{unbind[4]}; 2 bytes for @code{unbind[5]},
-8-bit operand; 3 bytes for @code{unbind[6]}, 16-bit operand.
+1 byte for @code{unbind[0]} .. @code{unbind[5]}; 2 bytes for @code{unbind[6]},
+8-bit operand; 3 bytes for @code{unbind[7]}, 16-bit operand.
 @item Stack effect:
 @math{-0+0}.
 @item Example:
@@ -649,9 +649,13 @@ Constants Vector: [(another-error) (one-error) 5 6 7]
 
 @table @strong
 @item Implements:
-Pops the TOS which is some sort of condition to test on and
-registers that. If any of the instructions errors with that condition,
-a jump to the operand occurs.
+Pops the TOS which is some sort of condition to test on, registers that
+and remembers the stack position @code{S_top}. If any of the
+instructions errors with that condition, the stack is restored to
+@code{S_top}, an error value of the form @code{(ERROR-SYMBOL .
+SIGNAL-DATA)} is pushed onto the stack and a jump to the operand occurs.
+@item Generated via:
+@code{condition-case}
 @item Operand:
 16-bit PC address
 @item Instruction size:
@@ -697,8 +701,45 @@ Constants Vector: [(another-error) (one-error) 5 6 7]
 
 @SubSecInstruction{pushcatch, 50}
 
-?
+@table @strong
+@item Implements:
+Pops the TOS which is a tag used by nonlocal exits, registers that. and
+remembers the stack position @code{S_top}. If any of the instructions
+throws with that tag, the stack is restored to @code{S_top}, the thrown
+value is pushed onto the stack and a jump to the operand occurs.
+@item Generated via:
+@code{catch}
+@item Operand:
+16-bit PC address
+@item Instruction size:
+3 bytes
+@item Stack effect:
+@math{-1+0}.
+@item Added in:
+Emacs 24.4. @xref{Emacs 24}.
+@item Example:
+@verbatim
+(defun pushcatch-eg()
+  (catch 'break
+    (throw 'break 42)))
+@end verbatim
+generates:
+@verbatim
+PC  Byte  Instruction
+ 0  192   constant[0] break
+ 1   50   pushcatch [9]
+           9
+           0
+ 4  193   constant[1] throw
+ 5  192   constant[0] break
+ 6  194   constant[2] 42
+ 7   34   call[2]
+ 8   48   pophandler
+ 9  135   return
 
+Constants Vector: [break throw 42]
+@end verbatim
+@end table
 
 @SECTION{Control-Flow Instructions}
 
@@ -4614,6 +4655,7 @@ generates these instructions.
 * set-mark::
 * interactive-p::
 * save-window-excursion::
+* catch::
 * condition-case::
 * temp-output-buffer-setup::
 * temp-output-buffer-show::
@@ -4673,6 +4715,26 @@ PC  Byte  Instruction
 
 Constants Vector: [(1390)]
 @end verbatim
+@end table
+
+@FirstSubSecInstruction{catch, 141}
+
+Replaced by @code{pushcatch}. @xref{pushcatch}
+
+@table @strong
+@item Implements:
+Pops the TOS which is a tag used by nonlocal exits, pops the TOS again
+and evaluates it. If the evaluated form throws with that tag, the thrown
+value is pushed onto the stack.
+@item Generated via:
+?
+@item Instruction size:
+1 byte
+@item Stack effect:
+@math{-2+1}.
+@item Obsolete since:
+Emacs 24.4. @xref{Emacs 24}.
+
 @end table
 
 @FirstSubSecInstruction{condition-case, 143}
