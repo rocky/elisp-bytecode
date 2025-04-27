@@ -324,20 +324,20 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{|  48|}
 @tab @verb{|  pophandler|}
 @tab 1
-@tab
+@tab @xref{pophandler}
 @tab @math{-0}
 @item @verb{| 061|}
 @tab @verb{|  49|}
-@tab @verb{|  conditioncase|}
+@tab @verb{|  pushconditioncase|}
 @tab 3
-@tab
-@tab @math{-1+\phi(0,+1)}
+@tab @xref{pushconditioncase}
+@tab @math{-1+0}
 @item @verb{| 062|}
 @tab @verb{|  50|}
-@tab @verb{|  pushconditioncase|}
-@tab 1
-@tab
-@tab @math{-0}
+@tab @verb{|  pushcatch|}
+@tab 3
+@tab @xref{pushcatch}
+@tab @math{-1+0}
 
 @item @verb{| 063|}
 @tab @verb{|  51|}
@@ -825,39 +825,39 @@ and for a description of how to interpret the stack-effect field.
 @item @verb{|0201|}
 @tab @verb{| 129|}
 @tab @verb{|  constant2|}
-@tab 1
+@tab 3
 @tab @xref{constant2}.
 @tab @math{+1}
 @item @verb{|0202|}
 @tab @verb{| 130|}
 @tab @verb{|  goto|}
-@tab 1
+@tab 3
 @tab @xref{goto}.
 @tab @math{-0+0}
 @item @verb{|0203|}
 @tab @verb{| 131|}
 @tab @verb{|  goto-if-nil|}
-@tab 1
+@tab 3
 @tab @xref{goto-if-nil}.
 @tab @math{-1+0}
 @item @verb{|0204|}
 @tab @verb{| 132|}
 @tab @verb{|  goto-if-not-nil|}
-@tab 1
+@tab 3
 @tab @xref{goto-if-not-nil}.
 @tab @math{-1+0}
 @item @verb{|0205|}
 @tab @verb{| 133|}
 @tab @verb{|  goto-if-nil-
  else-pop|}
-@tab 1
+@tab 3
 @tab @xref{goto-if-nil-else-pop}.
 @tab @math{\phi(-1,0)+0}
 @item @verb{|0206|}
 @tab @verb{| 134|}
 @tab @verb{|  goto-if-not-
  nil-else-pop|}
-@tab 1
+@tab 3
 @tab @xref{goto-if-not-nil-else-pop}.
 @tab @math{\phi(-1,0)+0}
 @item @verb{|0207|}
@@ -926,48 +926,6 @@ and for a description of how to interpret the stack-effect field.
 @tab 1
 @tab @xref{temp-output-buffer-show}.
 @tab @math{-0+0}
-
-@item @verb{|0222|}
-@tab @verb{| 146|}
-@tab @tab @tab Unused
-@item @verb{|0223|}
-@tab @verb{| 147|}
-@tab @tab @tab Unused
-
-@item @verb{|0256|}
-@tab @verb{| 174|}
-@tab @tab @tab Unused
-
-@item @verb{|0257|}
-@tab @verb{| 175|}
-@tab @verb{|  listN|}
-@tab 2
-@tab @xref{listN}.
-@tab @math{-n+1}
-@item @verb{|0260|}
-@tab @verb{| 176|}
-@tab @verb{|  concatN|}
-@tab 2
-@tab @xref{concatN}.
-@tab @math{-n+1}
-@item @verb{|0261|}
-@tab @verb{| 177|}
-@tab @verb{|  insertN|}
-@tab 2
-@tab @xref{insertN}.
-@tab @math{-n+1}
-@item @verb{|0262|}
-@tab @verb{| 178|}
-@tab @verb{|  stack-set|}
-@tab 1
-@tab @xref{stack-set}.
-@tab @math{-1}
-@item @verb{|0263|}
-@tab @verb{| 179|}
-@tab @verb{|  stack-set2|}
-@tab 1
-@tab @xref{stack-set2}.
-@tab @math{-1}
 
 @item @verb{|0222|}
 @tab @verb{|*146|}
@@ -1154,25 +1112,26 @@ and for a description of how to interpret the stack-effect field.
 @tab @verb{|  concatN|}
 @tab 2
 @tab @xref{concatN}.
+@tab @math{-n+1}
 @item @verb{|0261|}
 @tab @verb{| 177|}
 @tab @verb{|  insertN|}
-@tab 1
+@tab 2
 @tab @xref{insertN}.
 @tab @math{-n+1}
 
 @item @verb{|0262|}
 @tab @verb{| 178|}
 @tab @verb{|  stack-set|}
-@tab 1
+@tab 2
 @tab @xref{stack-set}.
-@tab @math{-0+0}
+@tab @math{-1+0}
 @item @verb{|0263|}
 @tab @verb{| 179|}
 @tab @verb{|  stack-set2|}
-@tab 2
+@tab 3
 @tab @xref{stack-set2}.
-@tab @math{-0+0}
+@tab @math{-1+0}
 
 @item @verb{|0264|}
 @tab @verb{| 180|}
@@ -1184,7 +1143,7 @@ and for a description of how to interpret the stack-effect field.
 @item @verb{|0266|}
 @tab @verb{| 182|}
 @tab @verb{|  discardN|}
-@tab 1
+@tab 2
 @tab @xref{discardN}.
 @tab @math{-n+0}
 @item @verb{|0267|}
